@@ -10,7 +10,7 @@ https://github.com/SpinalHDL/VexRiscv
 ## Supported HW
 + UART (Briey SoC, 115200bps)
 + SDRAM (Briey SoC)
-+ [IceSugar LCD] @ PMOD P3 Connector (https://github.com/wuxx/icesugar/blob/master/schematic/pmod_rgblcd-v1.3.pdf)  (SDRAM FrameBuffer:480x800 16bpp for Sipeed Tang Nano LCD)
++ [PMOD-RGBLCD by Muse Lab](https://github.com/wuxx/icesugar/blob/master/schematic/pmod_rgblcd-v1.3.pdf)  (SDRAM FrameBuffer:480x800 16bpp for Sipeed Tang Nano LCD)  @ PMOD P3 Connector 
 + TFCARD (Intel Hex Loader Support on Sample FW)
 + JTAG DEBUG @ iCELink 2nd JTAG (VexRiscv)
 
