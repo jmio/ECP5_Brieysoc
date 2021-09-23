@@ -1,0 +1,1 @@
+C:\gccriscv\8.2.0\bin\riscv-none-embed-gdb.exe progmem.elf -ex "target remote localhost:3333"
