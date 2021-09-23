@@ -176,7 +176,7 @@ case class MyAxi4VgaCtrl(g : Axi4VgaCtrlGenerics) extends Component{
     val axi = master(Axi4ReadOnly(axi4Config))
     val apb = slave(Apb3(apb3Config))
     val vga = master(Vga(rgbConfig))
-    val frameStart = out Bool
+    val frameStart = out Bool()
   }
 
   val apbCtrl = Apb3SlaveFactory(io.apb)
@@ -224,9 +224,9 @@ class Briey(config: BrieyConfig) extends Component{
   def extAPBConfig2 = Apb3Config(addressWidth = 16,dataWidth = 32,selWidth = 1,useSlaveError = false) // 0xF0050000 - 0xF005FFFF : 64KB
   val io = new Bundle{
     //Clocks / reset
-    val asyncReset = in Bool
-    val axiClk     = in Bool
-    val vgaClk     = in Bool
+    val asyncReset = in Bool()
+    val axiClk     = in Bool()
+    val vgaClk     = in Bool()
 
     //Main components IO
     val jtag       = slave(Jtag())
@@ -237,13 +237,13 @@ class Briey(config: BrieyConfig) extends Component{
     val gpioB         = master(TriStateArray(32 bits))
     val uart          = master(Uart())
     val vga           = master(Vga(vgaRgbConfig))
-    val vgaFrameStart = out Bool
+    val vgaFrameStart = out Bool()
     val timerExternal = in(PinsecTimerCtrlExternal())
-    val coreInterrupt = in Bool
+    val coreInterrupt = in Bool()
 
     // EXT APB BUS
     val extAPB        = master(Apb3(extAPBConfig))
-    val extAPB2       = master(Apb3(extAPBConfig2))
+    val extAPB2       = master(Apb3(extAPBConfig2))    
   }
 
   val resetCtrlClockDomain = ClockDomain(
