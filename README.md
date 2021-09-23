@@ -1,8 +1,8 @@
 # Briey SoC on [ICESugar Pro](https://github.com/wuxx/icesugar-pro) (Lattice ECP5)
 
+
 ## About Briey Soc
-+ The Briey SoC is a sample SoC included in the VexRiscv project.
-https://github.com/SpinalHDL/VexRiscv
++ The [Briey SoC](https://github.com/SpinalHDL/VexRiscv#briey-soc) is a sample SoC included in the [VexRiscv](https://github.com/SpinalHDL/VexRiscv).
 
 ## Similar Projects
 - [Briey SoC on Sipeed Tang Primer](https://github.com/jmio/testvex)
