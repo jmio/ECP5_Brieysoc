@@ -1,0 +1,36 @@
+{
+    // IntelliSense を使用して利用可能な属性を学べます。
+    // 既存の属性の説明をホバーして表示します。
+    // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name":"(gdb) Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/progmem.elf",
+            "args": [],
+            "stopAtEntry": true,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "debugServerPath": "${workspaceFolder}/openocd.exe",
+            "debugServerArgs": "-c \"set VEXRISCV_YAML C:/Users/mio/Desktop/ECP5_Brieysoc/briey/Briey.yaml\" -f ${workspaceFolder}/vexriscv_dap.cfg",
+            "serverLaunchTimeout": 20000,
+            "filterStderr": true,
+            "filterStdout": false,
+            "setupCommands": [
+                {"text": "set arch riscv:rv32","description": "set architecture","ignoreFailures": false},
+                {"text": "-target-select remote localhost:3333","description": "set architecture","ignoreFailures": false},
+                {"text": "-file-exec-and-symbols C:/Users/mio/Desktop/ECP5_Brieysoc/briey/progmem.elf","description": "set architecture","ignoreFailures": false},
+                {"text": "-interpreter-exec console \"monitor reset halt\"", "ignoreFailures": false },                
+                {"text": "-interpreter-exec console \"load\"", "ignoreFailures": false },                
+                //{"text": "monitor reset halt","description": "set architecture","ignoreFailures": false},
+                //{"text": "load","description": "set architecture","ignoreFailures": false},
+            ],
+            "MIMode": "gdb",
+            //"miDebuggerServerAddress": "localhost:3333",
+            "miDebuggerPath": "C:\\gccriscv\\8.2.0\\bin\\riscv-none-embed-gdb.exe",
+        }
+    ]
+}
