@@ -98,7 +98,7 @@ git checkout 2de35e6116e623e2d5465f753a1c84104fa127cb
 ```
 cp ~/(This Project)/Briey.scala ~/VexRiscv/src/main/scala/vexriscv/demo/
 cd ~/VexRiscv/
-sbt "runMain vexriscv.demo.BrieyTangPrimer"
+sbt "runMain vexriscv.demo.BrieyICESugarPro"
 ```
 
 3. Replace the $readmem section of the generated Briey.v with the following (included in the project as progmemh.v.txt)
