@@ -1,6 +1,6 @@
 // Generator : SpinalHDL v1.6.1    git head : 8addf7fa9969a9cb92e967e4bc42178878175609
 // Component : Briey
-// Git hash  : 5f5f4afbf2594cf95d9c1e0c71880dea83828a34
+// Git hash  : 35754a070963a216a6673e454f0db4565ba8d993
 
 
 
@@ -489,9 +489,9 @@ module Briey (
   wire       [2:0]    _zz_dbus_axi_arw_payload_len;
   reg                 resetCtrl_systemResetUnbuffered;
   reg        [5:0]    resetCtrl_systemResetCounter = 6'h0;
-  wire       [5:0]    _zz_when_Briey_l263;
-  wire                when_Briey_l263;
-  wire                when_Briey_l267;
+  wire       [5:0]    _zz_when_Briey_l265;
+  wire                when_Briey_l265;
+  wire                when_Briey_l269;
   reg                 resetCtrl_systemReset;
   reg                 resetCtrl_axiReset;
   wire                resetCtrl_vgaReset;
@@ -1716,14 +1716,14 @@ module Briey (
   );
   always @(*) begin
     resetCtrl_systemResetUnbuffered = 1'b0;
-    if(when_Briey_l263) begin
+    if(when_Briey_l265) begin
       resetCtrl_systemResetUnbuffered = 1'b1;
     end
   end
 
-  assign _zz_when_Briey_l263[5 : 0] = 6'h3f;
-  assign when_Briey_l263 = (resetCtrl_systemResetCounter != _zz_when_Briey_l263);
-  assign when_Briey_l267 = io_asyncReset_buffercc_io_dataOut;
+  assign _zz_when_Briey_l265[5 : 0] = 6'h3f;
+  assign when_Briey_l265 = (resetCtrl_systemResetCounter != _zz_when_Briey_l265);
+  assign when_Briey_l269 = io_asyncReset_buffercc_io_dataOut;
   assign resetCtrl_vgaReset = resetCtrl_axiReset_buffercc_io_dataOut;
   assign axi_core_cpu_iBus_rsp_payload_error = (! (axi4ReadOnlyDecoder_2_io_input_r_payload_resp == 2'b00));
   always @(*) begin
@@ -2125,10 +2125,10 @@ module Briey (
   assign io_vga_color_b = axi_vgaCtrl_io_vga_color_b;
   assign io_vgaFrameStart = axi_vgaCtrl_io_frameStart;
   always @(posedge io_axiClk) begin
-    if(when_Briey_l263) begin
+    if(when_Briey_l265) begin
       resetCtrl_systemResetCounter <= (resetCtrl_systemResetCounter + 6'h01);
     end
-    if(when_Briey_l267) begin
+    if(when_Briey_l269) begin
       resetCtrl_systemResetCounter <= 6'h0;
     end
   end
@@ -10552,7 +10552,7 @@ module MyAxi4VgaCtrl (
   wire                when_VgaCtrl_l225;
   wire                when_VgaCtrl_l229;
   wire                when_VgaCtrl_l230;
-  wire                when_Briey_l197;
+  wire                when_Briey_l199;
   reg        [11:0]   _zz_io_timings_h_syncStart;
   reg        [11:0]   _zz_io_timings_h_syncEnd;
   reg        [11:0]   _zz_io_timings_h_colorStart;
@@ -10659,7 +10659,7 @@ module MyAxi4VgaCtrl (
   assign dma_io_frame_translated_valid = dma_io_frame_valid;
   always @(*) begin
     dma_io_frame_ready = dma_io_frame_translated_ready;
-    if(when_Briey_l197) begin
+    if(when_Briey_l199) begin
       dma_io_frame_ready = 1'b1;
     end
   end
@@ -10691,7 +10691,7 @@ module MyAxi4VgaCtrl (
   assign when_VgaCtrl_l225 = (dma_io_frame_fire_2 && dma_io_frame_payload_last);
   assign when_VgaCtrl_l229 = ((! _zz_dma_io_frame_translated_thrown_ready) && (! when_Stream_l408));
   assign when_VgaCtrl_l230 = ((vga_ctrl_io_error || (vga_run && (! vga_run_regNext))) || ((_zz_when_VgaCtrl_l230 && dma_io_frame_valid) && (! dma_io_frame_payload_first)));
-  assign when_Briey_l197 = (! vga_run);
+  assign when_Briey_l199 = (! vga_run);
   assign vga_ctrl_io_softReset = (! vga_run);
   assign io_vga_vSync = vga_ctrl_io_vga_vSync;
   assign io_vga_hSync = vga_ctrl_io_vga_hSync;
@@ -10820,13 +10820,13 @@ module MyAxi4VgaCtrl (
 endmodule
 
 module Apb3UartCtrl (
-  input      [4:0]    io_apb_PADDR,
-  input      [0:0]    io_apb_PSEL,
-  input               io_apb_PENABLE,
-  output              io_apb_PREADY,
-  input               io_apb_PWRITE,
-  input      [31:0]   io_apb_PWDATA,
-  output reg [31:0]   io_apb_PRDATA,
+  input      [4:0]    io_apb_PADDR /* verilator public */ ,
+  input      [0:0]    io_apb_PSEL /* verilator public */ ,
+  input               io_apb_PENABLE /* verilator public */ ,
+  output              io_apb_PREADY /* verilator public */ ,
+  input               io_apb_PWRITE /* verilator public */ ,
+  input      [31:0]   io_apb_PWDATA /* verilator public */ ,
+  output reg [31:0]   io_apb_PRDATA /* verilator public */ ,
   output              io_uart_txd,
   input               io_uart_rxd,
   output              io_interrupt,
@@ -12993,10 +12993,10 @@ module Axi4SharedOnChipRam (
   assign _zz_Axi4Incr_result_11 = Axi4Incr_base[11 : 6];
   assign _zz_Axi4Incr_result_12 = Axi4Incr_baseIncr[5 : 0];
   initial begin
-    $readmemh("briey/progmem0.hex",ram_symbol0);
-    $readmemh("briey/progmem1.hex",ram_symbol1);
-    $readmemh("briey/progmem2.hex",ram_symbol2);
-    $readmemh("briey/progmem3.hex",ram_symbol3);
+    $readmemb("Briey.v_toplevel_axi_ram_ram_symbol0.bin",ram_symbol0);
+    $readmemb("Briey.v_toplevel_axi_ram_ram_symbol1.bin",ram_symbol1);
+    $readmemb("Briey.v_toplevel_axi_ram_ram_symbol2.bin",ram_symbol2);
+    $readmemb("Briey.v_toplevel_axi_ram_ram_symbol3.bin",ram_symbol3);
   end
   always @(posedge io_axiClk) begin
     if(stage0_fire) begin

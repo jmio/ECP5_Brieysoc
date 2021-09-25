@@ -549,7 +549,7 @@ object BrieyICESugarPro{
       val toplevel = new Briey(BrieyConfig.default.copy(sdramLayout = IS42S16160.layout, sdramTimings = IS42S16160.timingGrade7))
       toplevel.axi.vgaCtrl.vga.ctrl.io.error.addAttribute(Verilator.public)
       toplevel.axi.vgaCtrl.vga.ctrl.io.frameStart.addAttribute(Verilator.public)
-      HexTools.initRam(toplevel.axi.ram.ram, "src/main/ressource/hex/muraxDemo.hex", 0x80000000l)
+      HexTools.initRam(toplevel.axi.ram.ram, "progmem.hex", 0x80000000l)
       toplevel
     })
   }
