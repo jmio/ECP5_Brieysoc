@@ -9,6 +9,8 @@ import spinal.lib._
 import spinal.lib.bus.amba3.apb._
 import spinal.lib.bus.amba4.axi._
 import spinal.lib.com.jtag.Jtag
+import spinal.lib.com.jtag.sim.JtagTcp
+import spinal.lib.com.uart.sim.{UartDecoder, UartEncoder}
 import spinal.lib.com.uart.{Apb3UartCtrl, Uart, UartCtrlGenerics, UartCtrlMemoryMappedConfig}
 //import spinal.lib.graphic.RgbConfig
 import spinal.lib.graphic.{Rgb, VideoDmaGeneric, VideoDma, RgbConfig}
@@ -16,6 +18,7 @@ import spinal.lib.graphic.vga.{Axi4VgaCtrl, Axi4VgaCtrlGenerics, Vga, VgaCtrl}
 import spinal.lib.io.TriStateArray
 import spinal.lib.memory.sdram.SdramGeneration.SDR
 import spinal.lib.memory.sdram._
+import spinal.lib.memory.sdram.sdr.sim.SdramModel
 import spinal.lib.memory.sdram.sdr.{Axi4SharedSdramCtrl, IS42x320D, SdramInterface, SdramTimings}
 import spinal.lib.misc.HexTools
 import spinal.lib.soc.pinsec.{PinsecTimerCtrl, PinsecTimerCtrlExternal}
@@ -82,7 +85,6 @@ object BrieyConfig{
           //              portTlbSize = 4
           //            )
         ),
-
         //                    new DBusSimplePlugin(
         //                      catchAddressMisaligned = true,
         //                      catchAccessFault = true
@@ -209,7 +211,7 @@ case class MyAxi4VgaCtrl(g : Axi4VgaCtrlGenerics) extends Component{
 
 
 
-class Briey(config: BrieyConfig) extends Component{
+class Briey(val config: BrieyConfig) extends Component{
 
   //Legacy constructor
   def this(axiFrequency: HertzNumber) {
@@ -255,7 +257,7 @@ class Briey(config: BrieyConfig) extends Component{
 
   val resetCtrl = new ClockingArea(resetCtrlClockDomain) {
     val systemResetUnbuffered  = False
-//    val coreResetUnbuffered = False
+    //    val coreResetUnbuffered = False
 
     //Implement an counter to keep the reset axiResetOrder high 64 cycles
     // Also this counter will automaticly do a reset when the system boot.
@@ -331,6 +333,7 @@ class Briey(config: BrieyConfig) extends Component{
 
 
     val uartCtrl = Apb3UartCtrl(uartCtrlConfig)
+    uartCtrl.io.apb.addAttribute(Verilator.public)
 
 
     val vgaCtrlConfig = Axi4VgaCtrlGenerics(
@@ -586,5 +589,44 @@ object BrieyTangPrimer{
       HexTools.initRam(toplevel.axi.ram.ram, "src/main/ressource/hex/muraxDemo.hex", 0x80000000l)
       toplevel
     })
+  }
+}
+
+import spinal.core.sim._
+object BrieySim {
+  def main(args: Array[String]): Unit = {
+    val simSlowDown = false
+    SimConfig.allOptimisation.compile(new Briey(BrieyConfig.default)).doSimUntilVoid{dut =>
+      val mainClkPeriod = (1e12/dut.config.axiFrequency.toDouble).toLong
+      val jtagClkPeriod = mainClkPeriod*4
+      val uartBaudRate = 115200
+      val uartBaudPeriod = (1e12/uartBaudRate).toLong
+
+      val clockDomain = ClockDomain(dut.io.axiClk, dut.io.asyncReset)
+      clockDomain.forkStimulus(mainClkPeriod)
+
+      val tcpJtag = JtagTcp(
+        jtag = dut.io.jtag,
+        jtagClkPeriod = jtagClkPeriod
+      )
+
+      val uartTx = UartDecoder(
+        uartPin = dut.io.uart.txd,
+        baudPeriod = uartBaudPeriod
+      )
+
+      val uartRx = UartEncoder(
+        uartPin = dut.io.uart.rxd,
+        baudPeriod = uartBaudPeriod
+      )
+
+      val sdram = SdramModel(
+        dut.io.sdram,
+        dut.config.sdramLayout,
+        clockDomain
+      )
+
+      dut.io.coreInterrupt #= false
+    }
   }
 }
