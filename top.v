@@ -1,13 +1,10 @@
 module top(
 	input wire clk25,
 	input wire cpu_reset_n,
+  output[2:0] led,
 
 	output wire serial_tx,
 	input wire serial_rx,
-
-	output reg user_led_n0,
-	output reg user_led_n1,
-	output reg user_led_n2,
 
 	output wire spiflash_cs_n,
 	input wire spiflash_mosi,
@@ -55,6 +52,7 @@ reg lcdclk;
 reg[19:0] counter; // RESET COUNTER
 wire locked;
 
+assign led[2:0] = io_gpioA_write[2:0];
 
 EHXPLLL #(
   .CLKFB_DIV(5'd16),

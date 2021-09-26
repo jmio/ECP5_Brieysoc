@@ -1,4 +1,4 @@
-// Generator : SpinalHDL v1.6.1    git head : 8addf7fa9969a9cb92e967e4bc42178878175609
+// Generator : SpinalHDL v1.6.1    git head : 3100c81b37a04715d05d9b9873c3df07a0786a9b
 // Component : Briey
 // Git hash  : 35754a070963a216a6673e454f0db4565ba8d993
 
@@ -4759,6 +4759,8 @@ module JtagBridge (
   wire                flowCCByToggle_1_io_output_valid;
   wire                flowCCByToggle_1_io_output_payload_last;
   wire       [0:0]    flowCCByToggle_1_io_output_payload_fragment;
+  wire       [3:0]    _zz_jtag_tap_isBypass;
+  wire       [3:0]    _zz_jtag_tap_isBypass_1;
   wire       [1:0]    _zz_jtag_tap_instructionShift;
   wire                system_cmd_valid;
   wire                system_cmd_payload_last;
@@ -4776,10 +4778,11 @@ module JtagBridge (
   reg                 jtag_tap_tdoUnbufferd;
   reg                 jtag_tap_tdoDr;
   wire                jtag_tap_tdoIr;
+  wire                jtag_tap_isBypass;
   reg                 jtag_tap_tdoUnbufferd_regNext;
   wire                _zz_1;
   reg        [31:0]   _zz_jtag_tap_tdoDr;
-  wire                when_JtagTap_l115;
+  wire                when_JtagTap_l120;
   wire                _zz_io_input_valid;
   wire                _zz_io_input_valid_1;
   wire       [0:0]    _zz_io_input_payload_fragment;
@@ -4794,6 +4797,8 @@ module JtagBridge (
   `endif
 
 
+  assign _zz_jtag_tap_isBypass = jtag_tap_instruction;
+  assign _zz_jtag_tap_isBypass_1 = 4'b1111;
   assign _zz_jtag_tap_instructionShift = 2'b01;
   FlowCCByToggle flowCCByToggle_1 (
     .io_input_valid                (_zz_io_input_valid_2                         ), //i
@@ -4938,7 +4943,11 @@ module JtagBridge (
         jtag_tap_tdoUnbufferd = jtag_tap_tdoIr;
       end
       JtagState_DR_SHIFT : begin
-        jtag_tap_tdoUnbufferd = jtag_tap_tdoDr;
+        if(jtag_tap_isBypass) begin
+          jtag_tap_tdoUnbufferd = jtag_tap_bypass;
+        end else begin
+          jtag_tap_tdoUnbufferd = jtag_tap_tdoDr;
+        end
       end
       default : begin
       end
@@ -4959,9 +4968,10 @@ module JtagBridge (
   end
 
   assign jtag_tap_tdoIr = jtag_tap_instructionShift[0];
+  assign jtag_tap_isBypass = ($signed(_zz_jtag_tap_isBypass) == $signed(_zz_jtag_tap_isBypass_1));
   assign io_jtag_tdo = jtag_tap_tdoUnbufferd_regNext;
   assign _zz_1 = (jtag_tap_instruction == 4'b0001);
-  assign when_JtagTap_l115 = (jtag_tap_fsm_state == JtagState_RESET);
+  assign when_JtagTap_l120 = (jtag_tap_fsm_state == JtagState_RESET);
   assign _zz_io_input_payload_fragment[0] = _zz_io_input_payload_fragment_1;
   assign flowCCByToggle_1_io_input_payload_last = (! (_zz_io_input_valid && _zz_io_input_valid_1));
   assign system_cmd_valid = flowCCByToggle_1_io_output_valid;
@@ -5008,7 +5018,7 @@ module JtagBridge (
     if((jtag_tap_fsm_state == JtagState_DR_CAPTURE)) begin
       _zz_jtag_tap_tdoDr <= 32'h10001fff;
     end
-    if(when_JtagTap_l115) begin
+    if(when_JtagTap_l120) begin
       jtag_tap_instruction <= 4'b0001;
     end
     _zz_io_input_valid_2 <= (_zz_io_input_valid && _zz_io_input_valid_1);
@@ -12993,10 +13003,10 @@ module Axi4SharedOnChipRam (
   assign _zz_Axi4Incr_result_11 = Axi4Incr_base[11 : 6];
   assign _zz_Axi4Incr_result_12 = Axi4Incr_baseIncr[5 : 0];
   initial begin
-    $readmemb("Briey.v_toplevel_axi_ram_ram_symbol0.bin",ram_symbol0);
-    $readmemb("Briey.v_toplevel_axi_ram_ram_symbol1.bin",ram_symbol1);
-    $readmemb("Briey.v_toplevel_axi_ram_ram_symbol2.bin",ram_symbol2);
-    $readmemb("Briey.v_toplevel_axi_ram_ram_symbol3.bin",ram_symbol3);
+    $readmemh("briey/progmem0.hex",ram_symbol0);
+    $readmemh("briey/progmem1.hex",ram_symbol1);
+    $readmemh("briey/progmem2.hex",ram_symbol2);
+    $readmemh("briey/progmem3.hex",ram_symbol3);
   end
   always @(posedge io_axiClk) begin
     if(stage0_fire) begin
