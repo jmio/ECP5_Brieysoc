@@ -131,6 +131,15 @@ T:TP TEST   (NOP , It's the same FW as the Sipeed Tang project.)
 
 + Run MicroPython Port Demo
 
+   + [micropython port for this monitor](https://github.com/jmio/micropython)
+
+```
+cd port/rv32
+make V=1
+```
+
+then v.hex and v.elf created at ports/rv32/build/.
+
 ![MicroPythonImage on ICESugar Pro](./lcd.jpg)
 
 1. Copy [v.hex](https://github.com/jmio/testvex/blob/main/mpybin/v.hex) and [boot.py](https://github.com/jmio/testvex/blob/main/mpybin/boot.py) to TFCARD
