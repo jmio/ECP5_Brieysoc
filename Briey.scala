@@ -66,6 +66,7 @@ object BrieyConfig{
           resetVector = 0x80000000l,
           prediction = STATIC,
           compressedGen = true, // for compressed instruction
+          injectorStage = true, // for speed up
           config = InstructionCacheConfig(
             cacheSize = 4096,
             bytePerLine =32,
