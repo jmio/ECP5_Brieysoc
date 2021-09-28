@@ -1,4 +1,4 @@
-// Generator : SpinalHDL v1.6.1    git head : 3100c81b37a04715d05d9b9873c3df07a0786a9b
+// Generator : SpinalHDL v1.6.1    git head : f6915910fa9fa690f7cec1332af67db753dc2a17
 // Component : Briey
 // Git hash  : 35754a070963a216a6673e454f0db4565ba8d993
 
@@ -5184,6 +5184,10 @@ module VexRiscv (
   input               resetCtrl_axiReset,
   input               resetCtrl_systemReset
 );
+  localparam ShiftCtrlEnum_DISABLE_1 = 2'd0;
+  localparam ShiftCtrlEnum_SLL_1 = 2'd1;
+  localparam ShiftCtrlEnum_SRL_1 = 2'd2;
+  localparam ShiftCtrlEnum_SRA_1 = 2'd3;
   localparam EnvCtrlEnum_NONE = 2'd0;
   localparam EnvCtrlEnum_XRET = 2'd1;
   localparam EnvCtrlEnum_ECALL = 2'd2;
@@ -5191,10 +5195,6 @@ module VexRiscv (
   localparam BranchCtrlEnum_B = 2'd1;
   localparam BranchCtrlEnum_JAL = 2'd2;
   localparam BranchCtrlEnum_JALR = 2'd3;
-  localparam ShiftCtrlEnum_DISABLE_1 = 2'd0;
-  localparam ShiftCtrlEnum_SLL_1 = 2'd1;
-  localparam ShiftCtrlEnum_SRL_1 = 2'd2;
-  localparam ShiftCtrlEnum_SRA_1 = 2'd3;
   localparam AluBitwiseCtrlEnum_XOR_1 = 2'd0;
   localparam AluBitwiseCtrlEnum_OR_1 = 2'd1;
   localparam AluBitwiseCtrlEnum_AND_1 = 2'd2;
@@ -12611,6 +12611,10 @@ module Axi4SharedOnChipRam_1 (
   reg [7:0] ram_symbol1 [0:4095];
   reg [7:0] ram_symbol2 [0:4095];
   reg [7:0] ram_symbol3 [0:4095];
+  reg [7:0] _zz_ramsymbol_read;
+  reg [7:0] _zz_ramsymbol_read_1;
+  reg [7:0] _zz_ramsymbol_read_2;
+  reg [7:0] _zz_ramsymbol_read_3;
 
   assign _zz_Axi4Incr_alignMask = {(2'b01 < Axi4Incr_validSize),(2'b00 < Axi4Incr_validSize)};
   assign _zz_Axi4Incr_base_1 = unburstify_buffer_transaction_addr[11 : 0];
@@ -12630,12 +12634,15 @@ module Axi4SharedOnChipRam_1 (
   assign _zz_Axi4Incr_result_10 = Axi4Incr_baseIncr[4 : 0];
   assign _zz_Axi4Incr_result_11 = Axi4Incr_base[11 : 6];
   assign _zz_Axi4Incr_result_12 = Axi4Incr_baseIncr[5 : 0];
+  always @(*) begin
+    _zz_ram_port0 = {_zz_ramsymbol_read_3, _zz_ramsymbol_read_2, _zz_ramsymbol_read_1, _zz_ramsymbol_read};
+  end
   always @(posedge io_axiClk) begin
     if(stage0_fire) begin
-      _zz_ram_port0[7:0] <= ram_symbol0[_zz_io_axi_r_payload_data];
-      _zz_ram_port0[15:8] <= ram_symbol1[_zz_io_axi_r_payload_data];
-      _zz_ram_port0[23:16] <= ram_symbol2[_zz_io_axi_r_payload_data];
-      _zz_ram_port0[31:24] <= ram_symbol3[_zz_io_axi_r_payload_data];
+      _zz_ramsymbol_read <= ram_symbol0[_zz_io_axi_r_payload_data];
+      _zz_ramsymbol_read_1 <= ram_symbol1[_zz_io_axi_r_payload_data];
+      _zz_ramsymbol_read_2 <= ram_symbol2[_zz_io_axi_r_payload_data];
+      _zz_ramsymbol_read_3 <= ram_symbol3[_zz_io_axi_r_payload_data];
     end
   end
 
@@ -12983,6 +12990,10 @@ module Axi4SharedOnChipRam (
   reg [7:0] ram_symbol1 [0:8191];
   reg [7:0] ram_symbol2 [0:8191];
   reg [7:0] ram_symbol3 [0:8191];
+  reg [7:0] _zz_ramsymbol_read;
+  reg [7:0] _zz_ramsymbol_read_1;
+  reg [7:0] _zz_ramsymbol_read_2;
+  reg [7:0] _zz_ramsymbol_read_3;
 
   assign _zz_Axi4Incr_alignMask = {(2'b01 < Axi4Incr_validSize),(2'b00 < Axi4Incr_validSize)};
   assign _zz_Axi4Incr_base_1 = unburstify_buffer_transaction_addr[11 : 0];
@@ -13008,12 +13019,15 @@ module Axi4SharedOnChipRam (
     $readmemh("briey/progmem2.hex",ram_symbol2);
     $readmemh("briey/progmem3.hex",ram_symbol3);
   end
+  always @(*) begin
+    _zz_ram_port0 = {_zz_ramsymbol_read_3, _zz_ramsymbol_read_2, _zz_ramsymbol_read_1, _zz_ramsymbol_read};
+  end
   always @(posedge io_axiClk) begin
     if(stage0_fire) begin
-      _zz_ram_port0[7:0] <= ram_symbol0[_zz_io_axi_r_payload_data];
-      _zz_ram_port0[15:8] <= ram_symbol1[_zz_io_axi_r_payload_data];
-      _zz_ram_port0[23:16] <= ram_symbol2[_zz_io_axi_r_payload_data];
-      _zz_ram_port0[31:24] <= ram_symbol3[_zz_io_axi_r_payload_data];
+      _zz_ramsymbol_read <= ram_symbol0[_zz_io_axi_r_payload_data];
+      _zz_ramsymbol_read_1 <= ram_symbol1[_zz_io_axi_r_payload_data];
+      _zz_ramsymbol_read_2 <= ram_symbol2[_zz_io_axi_r_payload_data];
+      _zz_ramsymbol_read_3 <= ram_symbol3[_zz_io_axi_r_payload_data];
     end
   end
 
@@ -14642,6 +14656,10 @@ module DataCache (
   reg [7:0] ways_0_data_symbol1 [0:1023];
   reg [7:0] ways_0_data_symbol2 [0:1023];
   reg [7:0] ways_0_data_symbol3 [0:1023];
+  reg [7:0] _zz_ways_0_datasymbol_read;
+  reg [7:0] _zz_ways_0_datasymbol_read_1;
+  reg [7:0] _zz_ways_0_datasymbol_read_2;
+  reg [7:0] _zz_ways_0_datasymbol_read_3;
 
   assign _zz_stage0_dataColisions = (io_cpu_execute_address[11 : 2] >>> 0);
   assign _zz__zz_stageA_dataColisions = (io_cpu_memory_address[11 : 2] >>> 0);
@@ -14657,12 +14675,15 @@ module DataCache (
     end
   end
 
+  always @(*) begin
+    _zz_ways_0_data_port0 = {_zz_ways_0_datasymbol_read_3, _zz_ways_0_datasymbol_read_2, _zz_ways_0_datasymbol_read_1, _zz_ways_0_datasymbol_read};
+  end
   always @(posedge io_axiClk) begin
     if(_zz_ways_0_dataReadRspMem) begin
-      _zz_ways_0_data_port0[7:0] <= ways_0_data_symbol0[dataReadCmd_payload];
-      _zz_ways_0_data_port0[15:8] <= ways_0_data_symbol1[dataReadCmd_payload];
-      _zz_ways_0_data_port0[23:16] <= ways_0_data_symbol2[dataReadCmd_payload];
-      _zz_ways_0_data_port0[31:24] <= ways_0_data_symbol3[dataReadCmd_payload];
+      _zz_ways_0_datasymbol_read <= ways_0_data_symbol0[dataReadCmd_payload];
+      _zz_ways_0_datasymbol_read_1 <= ways_0_data_symbol1[dataReadCmd_payload];
+      _zz_ways_0_datasymbol_read_2 <= ways_0_data_symbol2[dataReadCmd_payload];
+      _zz_ways_0_datasymbol_read_3 <= ways_0_data_symbol3[dataReadCmd_payload];
     end
   end
 
