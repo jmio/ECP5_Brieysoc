@@ -58,6 +58,10 @@ $ cd (Project Folder)
 $ ./build_top.sh
 ```
 
+For those of you using ICESugarPro, I would like to add that drag-and-drop writing using the JTAG chip (iCELink) may fail.
+
+If it does not work properly, please try re-writing using icesprog or ecpdap.
+
 ## FW Build Tool , JTAG Debug
 + VS Code (IDE : Tested on Windows)
 
