@@ -2,7 +2,7 @@
 
 
 ## About Saxon Soc
-+ The [Saxon SoC](https://github.com/SpinalHDL/VexRiscv#briey-soc) is a SoC using the [VexRiscv](https://github.com/SpinalHDL/VexRiscv).
++ The [Saxon SoC](https://github.com/SpinalHDL/SaxonSoc) is a SoC using the [VexRiscv](https://github.com/SpinalHDL/VexRiscv).
 
 ## Similar Projects
 - [Briey SoC on ECP5](https://github.com/jmio/ECP5_Brieysoc)
