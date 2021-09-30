@@ -62,13 +62,13 @@ If it does not work properly, please try re-writing using icesprog or ecpdap.
 ## FW Build Tool (Saxon Soc BSP and Sample)
 ```
 cd ~/SaxonSoc/software/standalone/blinkAndEcho
-make BSP_PATH=../../../bsp/radiona/ulx3s/minimal
+make BSP_PATH=../../../bsp/muselab/ICESugarPro/minimal/
 ```
 
 ## Create Custom XXXXXXXX.v for this project
 1. Clone SaxonSoc Repo.
 ```
-git clone https://github.com/jmio/SaxonSoc.git -b dev-0.3 --recursive SaxonSoc
+git clone https://github.com/jmio/SaxonSoc.git -b dev-0.3-jmio --recursive SaxonSoc
 (ignore warning)
 ```
 
@@ -76,11 +76,11 @@ git clone https://github.com/jmio/SaxonSoc.git -b dev-0.3 --recursive SaxonSoc
 ```
 # Compile the software
 cd ~/SaxonSoc/software/standalone/blinkAndEcho
-make BSP_PATH=../../../bsp/radiona/ulx3s/minimal
+make BSP_PATH=../../../bsp/muselab/ICESugarPro/minimal/
 
 # Generate the netlist
 cd ~/SaxonSoc
-sbt "runMain saxon.board.radiona.ulx3s.Ulx3sMinimal"
+sbt "runMain saxon.board.muselab.ICESugarPro.ICESugarProMinimal"
 ```
 The synthesized .v will be generated in ~SaxonSoc/hardware/netlist.
 

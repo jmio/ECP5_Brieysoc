@@ -132,7 +132,7 @@ assign	gpdi_data2_p = 1'b0;
 // wire [5:0]io_vga_color_g;
 // wire [4:0]io_vga_color_b;
 
-Ulx3sMinimal u_saxon (
+ICESugarProMinimal u_saxon (
   .debugCdCtrl_external_clk(clk25),
   .debugCdCtrl_external_reset(reset),
 

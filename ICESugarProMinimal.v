@@ -1,10 +1,10 @@
-// Generator : SpinalHDL v1.6.1    git head : daeb320cd1ee3311dc94b48c77910a10a059c4bb
-// Component : Ulx3sMinimal
-// Git hash  : 321e4465f18fb432fa9cf71c9e82678919eee30c
+// Generator : SpinalHDL v1.6.1    git head : 8434600e3b32dc561f4e361e99a6085b79085453
+// Component : ICESugarProMinimal
+// Git hash  : ef3e320ab4715b97d9dd4f12732d7721f8662117
 
 
 
-module Ulx3sMinimal (
+module ICESugarProMinimal (
   input               debugCdCtrl_external_clk,
   input               debugCdCtrl_external_reset,
   input               system_cpu_jtag_tms,
@@ -2517,31 +2517,41 @@ module BmbOnChipRam (
   reg [7:0] ram_symbol1 [0:8191];
   reg [7:0] ram_symbol2 [0:8191];
   reg [7:0] ram_symbol3 [0:8191];
+  reg [7:0] _zz_ramsymbol_read;
+  reg [7:0] _zz_ramsymbol_read_1;
+  reg [7:0] _zz_ramsymbol_read_2;
+  reg [7:0] _zz_ramsymbol_read_3;
 
   initial begin
-    $readmemb("Ulx3sMinimal.v_toplevel_system_ramA_logic_ram_symbol0.bin",ram_symbol0);
-    $readmemb("Ulx3sMinimal.v_toplevel_system_ramA_logic_ram_symbol1.bin",ram_symbol1);
-    $readmemb("Ulx3sMinimal.v_toplevel_system_ramA_logic_ram_symbol2.bin",ram_symbol2);
-    $readmemb("Ulx3sMinimal.v_toplevel_system_ramA_logic_ram_symbol3.bin",ram_symbol3);
+    $readmemb("ICESugarProMinimal.v_toplevel_system_ramA_logic_ram_symbol0.bin",ram_symbol0);
+    $readmemb("ICESugarProMinimal.v_toplevel_system_ramA_logic_ram_symbol1.bin",ram_symbol1);
+    $readmemb("ICESugarProMinimal.v_toplevel_system_ramA_logic_ram_symbol2.bin",ram_symbol2);
+    $readmemb("ICESugarProMinimal.v_toplevel_system_ramA_logic_ram_symbol3.bin",ram_symbol3);
+  end
+  always @(*) begin
+    _zz_ram_port0 = {_zz_ramsymbol_read_3, _zz_ramsymbol_read_2, _zz_ramsymbol_read_1, _zz_ramsymbol_read};
   end
   always @(posedge debugCdCtrl_external_clk) begin
     if(io_bus_cmd_fire) begin
-      _zz_ram_port0[7:0] <= ram_symbol0[_zz_io_bus_rsp_payload_fragment_data];
-      _zz_ram_port0[15:8] <= ram_symbol1[_zz_io_bus_rsp_payload_fragment_data];
-      _zz_ram_port0[23:16] <= ram_symbol2[_zz_io_bus_rsp_payload_fragment_data];
-      _zz_ram_port0[31:24] <= ram_symbol3[_zz_io_bus_rsp_payload_fragment_data];
-      if(io_bus_cmd_payload_fragment_mask[0] && _zz_io_bus_rsp_payload_fragment_data_1) begin
-        ram_symbol0[_zz_io_bus_rsp_payload_fragment_data] <= _zz_io_bus_rsp_payload_fragment_data_2[7 : 0];
-      end
-      if(io_bus_cmd_payload_fragment_mask[1] && _zz_io_bus_rsp_payload_fragment_data_1) begin
-        ram_symbol1[_zz_io_bus_rsp_payload_fragment_data] <= _zz_io_bus_rsp_payload_fragment_data_2[15 : 8];
-      end
-      if(io_bus_cmd_payload_fragment_mask[2] && _zz_io_bus_rsp_payload_fragment_data_1) begin
-        ram_symbol2[_zz_io_bus_rsp_payload_fragment_data] <= _zz_io_bus_rsp_payload_fragment_data_2[23 : 16];
-      end
-      if(io_bus_cmd_payload_fragment_mask[3] && _zz_io_bus_rsp_payload_fragment_data_1) begin
-        ram_symbol3[_zz_io_bus_rsp_payload_fragment_data] <= _zz_io_bus_rsp_payload_fragment_data_2[31 : 24];
-      end
+      _zz_ramsymbol_read <= ram_symbol0[_zz_io_bus_rsp_payload_fragment_data];
+      _zz_ramsymbol_read_1 <= ram_symbol1[_zz_io_bus_rsp_payload_fragment_data];
+      _zz_ramsymbol_read_2 <= ram_symbol2[_zz_io_bus_rsp_payload_fragment_data];
+      _zz_ramsymbol_read_3 <= ram_symbol3[_zz_io_bus_rsp_payload_fragment_data];
+    end
+  end
+
+  always @(posedge debugCdCtrl_external_clk) begin
+    if(io_bus_cmd_payload_fragment_mask[0] && io_bus_cmd_fire && _zz_io_bus_rsp_payload_fragment_data_1 ) begin
+      ram_symbol0[_zz_io_bus_rsp_payload_fragment_data] <= _zz_io_bus_rsp_payload_fragment_data_2[7 : 0];
+    end
+    if(io_bus_cmd_payload_fragment_mask[1] && io_bus_cmd_fire && _zz_io_bus_rsp_payload_fragment_data_1 ) begin
+      ram_symbol1[_zz_io_bus_rsp_payload_fragment_data] <= _zz_io_bus_rsp_payload_fragment_data_2[15 : 8];
+    end
+    if(io_bus_cmd_payload_fragment_mask[2] && io_bus_cmd_fire && _zz_io_bus_rsp_payload_fragment_data_1 ) begin
+      ram_symbol2[_zz_io_bus_rsp_payload_fragment_data] <= _zz_io_bus_rsp_payload_fragment_data_2[23 : 16];
+    end
+    if(io_bus_cmd_payload_fragment_mask[3] && io_bus_cmd_fire && _zz_io_bus_rsp_payload_fragment_data_1 ) begin
+      ram_symbol3[_zz_io_bus_rsp_payload_fragment_data] <= _zz_io_bus_rsp_payload_fragment_data_2[31 : 24];
     end
   end
 
@@ -3126,6 +3136,8 @@ module JtagBridge (
   wire                flowCCByToggle_1_io_output_valid;
   wire                flowCCByToggle_1_io_output_payload_last;
   wire       [0:0]    flowCCByToggle_1_io_output_payload_fragment;
+  wire       [3:0]    _zz_jtag_tap_isBypass;
+  wire       [3:0]    _zz_jtag_tap_isBypass_1;
   wire       [1:0]    _zz_jtag_tap_instructionShift;
   wire                system_cmd_valid;
   wire                system_cmd_payload_last;
@@ -3143,10 +3155,11 @@ module JtagBridge (
   reg                 jtag_tap_tdoUnbufferd;
   reg                 jtag_tap_tdoDr;
   wire                jtag_tap_tdoIr;
+  wire                jtag_tap_isBypass;
   reg                 jtag_tap_tdoUnbufferd_regNext;
   wire                _zz_1;
   reg        [31:0]   _zz_jtag_tap_tdoDr;
-  wire                when_JtagTap_l115;
+  wire                when_JtagTap_l120;
   wire                _zz_io_input_valid;
   wire                _zz_io_input_valid_1;
   wire       [0:0]    _zz_io_input_payload_fragment;
@@ -3161,6 +3174,8 @@ module JtagBridge (
   `endif
 
 
+  assign _zz_jtag_tap_isBypass = jtag_tap_instruction;
+  assign _zz_jtag_tap_isBypass_1 = 4'b1111;
   assign _zz_jtag_tap_instructionShift = 2'b01;
   FlowCCByToggle flowCCByToggle_1 (
     .io_input_valid                   (_zz_io_input_valid_2                         ), //i
@@ -3305,7 +3320,11 @@ module JtagBridge (
         jtag_tap_tdoUnbufferd = jtag_tap_tdoIr;
       end
       JtagState_DR_SHIFT : begin
-        jtag_tap_tdoUnbufferd = jtag_tap_tdoDr;
+        if(jtag_tap_isBypass) begin
+          jtag_tap_tdoUnbufferd = jtag_tap_bypass;
+        end else begin
+          jtag_tap_tdoUnbufferd = jtag_tap_tdoDr;
+        end
       end
       default : begin
       end
@@ -3326,9 +3345,10 @@ module JtagBridge (
   end
 
   assign jtag_tap_tdoIr = jtag_tap_instructionShift[0];
+  assign jtag_tap_isBypass = ($signed(_zz_jtag_tap_isBypass) == $signed(_zz_jtag_tap_isBypass_1));
   assign io_jtag_tdo = jtag_tap_tdoUnbufferd_regNext;
   assign _zz_1 = (jtag_tap_instruction == 4'b0001);
-  assign when_JtagTap_l115 = (jtag_tap_fsm_state == JtagState_RESET);
+  assign when_JtagTap_l120 = (jtag_tap_fsm_state == JtagState_RESET);
   assign _zz_io_input_payload_fragment[0] = _zz_io_input_payload_fragment_1;
   assign flowCCByToggle_1_io_input_payload_last = (! (_zz_io_input_valid && _zz_io_input_valid_1));
   assign system_cmd_valid = flowCCByToggle_1_io_output_valid;
@@ -3375,7 +3395,7 @@ module JtagBridge (
     if((jtag_tap_fsm_state == JtagState_DR_CAPTURE)) begin
       _zz_jtag_tap_tdoDr <= 32'h10001fff;
     end
-    if(when_JtagTap_l115) begin
+    if(when_JtagTap_l120) begin
       jtag_tap_instruction <= 4'b0001;
     end
     _zz_io_input_valid_2 <= (_zz_io_input_valid && _zz_io_input_valid_1);
@@ -4111,7 +4131,7 @@ module VexRiscv (
   assign _zz__zz_decode_BRANCH_CTRL_2_74 = ((decode_INSTRUCTION & 32'h00000014) == 32'h00000004);
   assign _zz__zz_decode_BRANCH_CTRL_2_75 = ((decode_INSTRUCTION & 32'h00000044) == 32'h00000004);
   initial begin
-    $readmemb("Ulx3sMinimal.v_toplevel_system_cpu_logic_cpu_RegFilePlugin_regFile.bin",RegFilePlugin_regFile);
+    $readmemb("ICESugarProMinimal.v_toplevel_system_cpu_logic_cpu_RegFilePlugin_regFile.bin",RegFilePlugin_regFile);
   end
   always @(posedge debugCdCtrl_external_clk) begin
     if(_zz_execute_RegFilePlugin_rs1Data) begin
