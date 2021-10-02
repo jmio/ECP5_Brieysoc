@@ -59,13 +59,32 @@ For those of you using ICESugarPro, I would like to add that drag-and-drop writi
 
 If it does not work properly, please try re-writing using icesprog or ecpdap.
 
-## FW Build Tool (Saxon Soc BSP and Sample)
+## FW Build Tool (Saxon Soc BSP or VSCode Sample with BSP)
+Original BSP
 ```
 cd ~/SaxonSoc/software/standalone/blinkAndEcho
 make BSP_PATH=../../../bsp/muselab/ICESugarPro/minimal/
 ```
 
-## Create Custom XXXXXXXX.v for this project
+VS Code (IDE : Tested on Windows)
++ GNU MCU Eclipse RISC-V Embedded GCC 8.2.0 (Tested on Windows)
++ make.exe
++ openocd for vexriscv
+https://github.com/SpinalHDL/openocd_riscv
+(libUSB FT2232 Dongle, Windows Binary included)
+
++ The folder names are embedded in "tasks.json" and "launch.json", so you need to rewrite them.
+Make sure that riscv-none-embed-gcc, make and openocd work properly.
+
+Example of embedding
+```
+            "debugServerArgs": "-c \"set VEXRISCV_YAML C:/(PROJECT FOLDER)/ECP5_Briey/saxon/Briey.yaml\" -f ${workspaceFolder}/vexriscv_dual.cfg",
+
+                {"text": "-file-exec-and-symbols C:/(PROJECT FOLDER)/ECP5_Briey/briey/progmem.elf","description": "set architecture","ignoreFailures": false},
+ 
+```
+
+## Create Custom ICESugarPro.v for this project
 1. Clone SaxonSoc Repo.
 ```
 git clone https://github.com/jmio/SaxonSoc.git -b dev-0.3-jmio --recursive SaxonSoc
@@ -84,7 +103,15 @@ sbt "runMain saxon.board.muselab.ICESugarPro.ICESugarProMinimal"
 ```
 The synthesized .v will be generated in ~SaxonSoc/hardware/netlist.
 
-## Sample FW
-(~/SaxonSoc/software/standalone/blinkAndEcho)
+## Embedding the boot code
 
-UART 115200bps Echo, and Blink LED.
+Replace the $readmem section of the generated ICESugarProMinimal.v with the following (included in the project as progmemh.v.txt)
+
+```
+    initial begin
+        $readmemh("briey/progmem0.hex",ram_symbol0);
+        $readmemh("briey/progmem1.hex",ram_symbol1);
+        $readmemh("briey/progmem2.hex",ram_symbol2);
+        $readmemh("briey/progmem3.hex",ram_symbol3);
+    end
+```

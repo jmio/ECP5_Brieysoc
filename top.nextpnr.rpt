@@ -1,13 +1,13 @@
 Info: constraining clock net 'clk25' to 25.00 MHz
 
 Info: Logic utilisation before packing:
-Info:     Total LUT4s:      2050/24288     8%
-Info:         logic LUTs:   1624/24288     6%
-Info:         carry LUTs:    234/24288     0%
-Info:           RAM LUTs:    128/12144     1%
-Info:          RAMW LUTs:     64/ 6072     1%
+Info:     Total LUT4s:      5118/24288    21%
+Info:         logic LUTs:   4274/24288    17%
+Info:         carry LUTs:    628/24288     2%
+Info:           RAM LUTs:    144/12144     1%
+Info:          RAMW LUTs:     72/ 6072     1%
 
-Info:      Total DFFs:      2166/24288     8%
+Info:      Total DFFs:      4550/24288    18%
 
 Info: Packing IOs..
 Info: $led[2]$iobuf_i: led_$_TBUF__Y_2.Y
@@ -44,17 +44,17 @@ Info: Promoting globals...
 Info:     promoting clock net clk25$TRELLIS_IO_IN to global network
 Info:     promoting clock net io_jtag_tck$TRELLIS_IO_IN to global network
 Info:     promoting clock net clk to global network
-Info: Checksum: 0x99ec7c79
+Info: Checksum: 0xf9eeba6e
 
 Info: Annotating ports with timing budgets for target frequency 12.00 MHz
-Info: Checksum: 0xc98676f7
+Info: Checksum: 0xf148a000
 
 Info: Device utilisation:
-Info: 	       TRELLIS_SLICE:  1640/12144    13%
+Info: 	       TRELLIS_SLICE:  3919/12144    32%
 Info: 	          TRELLIS_IO:    15/  197     7%
 Info: 	                DCCA:     3/   56     5%
-Info: 	              DP16KD:    16/   56    28%
-Info: 	          MULT18X18D:     0/   28     0%
+Info: 	              DP16KD:    40/   56    71%
+Info: 	          MULT18X18D:     4/   28    14%
 Info: 	              ALU54B:     0/   14     0%
 Info: 	             EHXPLLL:     1/    2    50%
 Info: 	             EXTREFB:     0/    1     0%
@@ -78,93 +78,83 @@ Info: 	        ECLKBRIDGECS:     0/    2     0%
 Info: 	                DCSC:     0/    2     0%
 
 Info: Placed 16 cells based on constraints.
-Info: Creating initial analytic placement for 1375 cells, random placement wirelen = 108521.
-Info:     at initial placer iter 0, wirelen = 1077
-Info:     at initial placer iter 1, wirelen = 1162
-Info:     at initial placer iter 2, wirelen = 1143
-Info:     at initial placer iter 3, wirelen = 1131
+Info: Creating initial analytic placement for 3343 cells, random placement wirelen = 270844.
+Info:     at initial placer iter 0, wirelen = 2214
+Info:     at initial placer iter 1, wirelen = 2080
+Info:     at initial placer iter 2, wirelen = 2034
+Info:     at initial placer iter 3, wirelen = 2128
 Info: Running main analytical placer.
-Info:     at iteration #1, type ALL: wirelen solved = 1165, spread = 20418, legal = 23247; time = 0.05s
-Info:     at iteration #2, type ALL: wirelen solved = 1547, spread = 18681, legal = 21332; time = 0.06s
-Info:     at iteration #3, type ALL: wirelen solved = 2028, spread = 16116, legal = 18644; time = 0.05s
-Info:     at iteration #4, type ALL: wirelen solved = 2399, spread = 15649, legal = 18334; time = 0.05s
-Info:     at iteration #5, type ALL: wirelen solved = 3134, spread = 14743, legal = 17101; time = 0.05s
-Info:     at iteration #6, type ALL: wirelen solved = 3501, spread = 14732, legal = 17118; time = 0.05s
-Info:     at iteration #7, type ALL: wirelen solved = 4023, spread = 14443, legal = 16755; time = 0.04s
-Info:     at iteration #8, type ALL: wirelen solved = 4554, spread = 13847, legal = 15734; time = 0.05s
-Info:     at iteration #9, type ALL: wirelen solved = 4823, spread = 13852, legal = 15691; time = 0.05s
-Info:     at iteration #10, type ALL: wirelen solved = 5202, spread = 13652, legal = 15640; time = 0.04s
-Info:     at iteration #11, type ALL: wirelen solved = 5321, spread = 14957, legal = 15722; time = 0.04s
-Info:     at iteration #12, type ALL: wirelen solved = 5883, spread = 14572, legal = 15373; time = 0.05s
-Info:     at iteration #13, type ALL: wirelen solved = 6196, spread = 14005, legal = 14956; time = 0.05s
-Info:     at iteration #14, type ALL: wirelen solved = 6150, spread = 13870, legal = 14622; time = 0.04s
-Info:     at iteration #15, type ALL: wirelen solved = 6536, spread = 13539, legal = 14520; time = 0.04s
-Info:     at iteration #16, type ALL: wirelen solved = 6591, spread = 13612, legal = 14710; time = 0.05s
-Info:     at iteration #17, type ALL: wirelen solved = 7010, spread = 13351, legal = 14646; time = 0.05s
-Info:     at iteration #18, type ALL: wirelen solved = 6976, spread = 13298, legal = 14395; time = 0.04s
-Info:     at iteration #19, type ALL: wirelen solved = 7331, spread = 13192, legal = 14450; time = 0.04s
-Info:     at iteration #20, type ALL: wirelen solved = 7338, spread = 12854, legal = 14015; time = 0.04s
-Info:     at iteration #21, type ALL: wirelen solved = 7581, spread = 12889, legal = 13905; time = 0.04s
-Info:     at iteration #22, type ALL: wirelen solved = 7827, spread = 12964, legal = 14160; time = 0.04s
-Info:     at iteration #23, type ALL: wirelen solved = 7730, spread = 12953, legal = 14204; time = 0.04s
-Info:     at iteration #24, type ALL: wirelen solved = 7920, spread = 12860, legal = 13918; time = 0.04s
-Info:     at iteration #25, type ALL: wirelen solved = 8031, spread = 12774, legal = 13883; time = 0.04s
-Info:     at iteration #26, type ALL: wirelen solved = 8110, spread = 12996, legal = 14245; time = 0.05s
-Info:     at iteration #27, type ALL: wirelen solved = 8415, spread = 12860, legal = 13949; time = 0.04s
-Info:     at iteration #28, type ALL: wirelen solved = 8610, spread = 13506, legal = 14428; time = 0.04s
-Info:     at iteration #29, type ALL: wirelen solved = 9079, spread = 13248, legal = 14125; time = 0.04s
-Info:     at iteration #30, type ALL: wirelen solved = 9086, spread = 13157, legal = 13975; time = 0.04s
-Info: HeAP Placer Time: 2.20s
-Info:   of which solving equations: 1.17s
-Info:   of which spreading cells: 0.15s
-Info:   of which strict legalisation: 0.11s
+Info:     at iteration #1, type ALL: wirelen solved = 2063, spread = 84834, legal = 85487; time = 0.13s
+Info:     at iteration #2, type ALL: wirelen solved = 3465, spread = 76692, legal = 78113; time = 0.13s
+Info:     at iteration #3, type ALL: wirelen solved = 4775, spread = 69274, legal = 71918; time = 0.12s
+Info:     at iteration #4, type ALL: wirelen solved = 6924, spread = 59202, legal = 61777; time = 0.12s
+Info:     at iteration #5, type ALL: wirelen solved = 10716, spread = 55187, legal = 58564; time = 0.11s
+Info:     at iteration #6, type ALL: wirelen solved = 13756, spread = 54439, legal = 57964; time = 0.12s
+Info:     at iteration #7, type ALL: wirelen solved = 17220, spread = 49928, legal = 55155; time = 0.11s
+Info:     at iteration #8, type ALL: wirelen solved = 18113, spread = 52212, legal = 55966; time = 0.11s
+Info:     at iteration #9, type ALL: wirelen solved = 21494, spread = 52734, legal = 56044; time = 0.12s
+Info:     at iteration #10, type ALL: wirelen solved = 23661, spread = 51264, legal = 55176; time = 0.12s
+Info:     at iteration #11, type ALL: wirelen solved = 24925, spread = 48513, legal = 53012; time = 0.11s
+Info:     at iteration #12, type ALL: wirelen solved = 23847, spread = 47082, legal = 51266; time = 0.12s
+Info:     at iteration #13, type ALL: wirelen solved = 23964, spread = 45836, legal = 50284; time = 0.11s
+Info:     at iteration #14, type ALL: wirelen solved = 24324, spread = 45180, legal = 50158; time = 0.11s
+Info:     at iteration #15, type ALL: wirelen solved = 24211, spread = 44658, legal = 49454; time = 0.11s
+Info:     at iteration #16, type ALL: wirelen solved = 24613, spread = 45861, legal = 50697; time = 0.11s
+Info:     at iteration #17, type ALL: wirelen solved = 26135, spread = 43701, legal = 50472; time = 0.11s
+Info:     at iteration #18, type ALL: wirelen solved = 25333, spread = 44039, legal = 49630; time = 0.11s
+Info:     at iteration #19, type ALL: wirelen solved = 25686, spread = 43407, legal = 49847; time = 0.12s
+Info:     at iteration #20, type ALL: wirelen solved = 25882, spread = 43220, legal = 50682; time = 0.11s
+Info: HeAP Placer Time: 3.84s
+Info:   of which solving equations: 2.21s
+Info:   of which spreading cells: 0.29s
+Info:   of which strict legalisation: 0.13s
 
 Info: Running simulated annealing placer for refinement.
-Info:   at iteration #1: temp = 0.000000, timing cost = 1378, wirelen = 13883
-Info:   at iteration #5: temp = 0.000000, timing cost = 1116, wirelen = 12508
-Info:   at iteration #10: temp = 0.000000, timing cost = 1165, wirelen = 12040
-Info:   at iteration #15: temp = 0.000000, timing cost = 1146, wirelen = 11893
-Info:   at iteration #16: temp = 0.000000, timing cost = 1060, wirelen = 11891 
-Info: SA placement time 2.60s
+Info:   at iteration #1: temp = 0.000000, timing cost = 2203, wirelen = 49454
+Info:   at iteration #5: temp = 0.000000, timing cost = 1432, wirelen = 40406
+Info:   at iteration #10: temp = 0.000000, timing cost = 2457, wirelen = 39081
+Info:   at iteration #15: temp = 0.000000, timing cost = 2537, wirelen = 38274
+Info:   at iteration #18: temp = 0.000000, timing cost = 2165, wirelen = 38080 
+Info: SA placement time 9.70s
 
-Info: Max frequency for clock       '$glbnet$clk25$TRELLIS_IO_IN': 33.39 MHz (PASS at 25.00 MHz)
-Info: Max frequency for clock '$glbnet$io_jtag_tck$TRELLIS_IO_IN': 65.50 MHz (PASS at 12.00 MHz)
-Info: Max frequency for clock                       '$glbnet$clk': 242.13 MHz (PASS at 50.00 MHz)
+Info: Max frequency for clock       '$glbnet$clk25$TRELLIS_IO_IN': 38.79 MHz (PASS at 25.00 MHz)
+Info: Max frequency for clock '$glbnet$io_jtag_tck$TRELLIS_IO_IN': 74.09 MHz (PASS at 12.00 MHz)
+Info: Max frequency for clock                       '$glbnet$clk': 234.08 MHz (PASS at 50.00 MHz)
 
-Info: Max delay <async>                                   -> posedge $glbnet$clk                      : 7.62 ns
-Info: Max delay <async>                                   -> posedge $glbnet$clk25$TRELLIS_IO_IN      : 5.88 ns
-Info: Max delay <async>                                   -> posedge $glbnet$io_jtag_tck$TRELLIS_IO_IN: 6.72 ns
+Info: Max delay <async>                                   -> posedge $glbnet$clk                      : 7.14 ns
+Info: Max delay <async>                                   -> posedge $glbnet$clk25$TRELLIS_IO_IN      : 6.36 ns
+Info: Max delay <async>                                   -> posedge $glbnet$io_jtag_tck$TRELLIS_IO_IN: 6.48 ns
 Info: Max delay posedge $glbnet$clk                       -> posedge $glbnet$clk25$TRELLIS_IO_IN      : 3.11 ns
-Info: Max delay posedge $glbnet$clk25$TRELLIS_IO_IN       -> <async>                                  : 24.87 ns
-Info: Max delay posedge $glbnet$clk25$TRELLIS_IO_IN       -> posedge $glbnet$io_jtag_tck$TRELLIS_IO_IN: 2.92 ns
-Info: Max delay posedge $glbnet$io_jtag_tck$TRELLIS_IO_IN -> <async>                                  : 4.36 ns
+Info: Max delay posedge $glbnet$clk25$TRELLIS_IO_IN       -> <async>                                  : 23.00 ns
+Info: Max delay posedge $glbnet$clk25$TRELLIS_IO_IN       -> posedge $glbnet$io_jtag_tck$TRELLIS_IO_IN: 3.16 ns
+Info: Max delay posedge $glbnet$io_jtag_tck$TRELLIS_IO_IN -> <async>                                  : 3.88 ns
 Info: Max delay posedge $glbnet$io_jtag_tck$TRELLIS_IO_IN -> posedge $glbnet$clk25$TRELLIS_IO_IN      : 1.49 ns
-Info: Max delay negedge $glbnet$io_jtag_tck$TRELLIS_IO_IN -> <async>                                  : 3.77 ns
+Info: Max delay negedge $glbnet$io_jtag_tck$TRELLIS_IO_IN -> <async>                                  : 4.36 ns
 
 Info: Slack histogram:
-Info:  legend: * represents 14 endpoint(s)
-Info:          + represents [1,14) endpoint(s)
-Info: [ 10053,  13655) |************+
-Info: [ 13655,  17257) |***************************+
-Info: [ 17257,  20859) |**************+
-Info: [ 20859,  24461) |*******+
-Info: [ 24461,  28063) |********+
-Info: [ 28063,  31665) |******************+
-Info: [ 31665,  35267) |********************+
-Info: [ 35267,  38869) |************************************************************ 
-Info: [ 38869,  42471) | 
-Info: [ 42471,  46073) | 
-Info: [ 46073,  49675) | 
-Info: [ 49675,  53277) | 
-Info: [ 53277,  56879) | 
-Info: [ 56879,  60481) |*+
-Info: [ 60481,  64083) |+
-Info: [ 64083,  67685) |+
-Info: [ 67685,  71287) |+
-Info: [ 71287,  74889) |**+
-Info: [ 74889,  78491) |*********+
-Info: [ 78491,  82093) |*******************+
-Info: Checksum: 0x56908a65
+Info:  legend: * represents 18 endpoint(s)
+Info:          + represents [1,18) endpoint(s)
+Info: [ 12860,  16322) |*********+
+Info: [ 16322,  19784) |************************************************+
+Info: [ 19784,  23246) |******************************************+
+Info: [ 23246,  26708) |**************************************************+
+Info: [ 26708,  30170) |*******************************+
+Info: [ 30170,  33632) |****************************+
+Info: [ 33632,  37094) |************************************************************ 
+Info: [ 37094,  40556) |*****************************************+
+Info: [ 40556,  44018) | 
+Info: [ 44018,  47480) | 
+Info: [ 47480,  50942) | 
+Info: [ 50942,  54404) | 
+Info: [ 54404,  57866) | 
+Info: [ 57866,  61328) |+
+Info: [ 61328,  64790) |*******+
+Info: [ 64790,  68252) |**+
+Info: [ 68252,  71714) |**+
+Info: [ 71714,  75176) |*****+
+Info: [ 75176,  78638) |************+
+Info: [ 78638,  82100) |***********************+
+Info: Checksum: 0x5c410072
 Info: Routing globals...
 Info:     routing clock net $glbnet$clk using global 0
 Info:     routing clock net $glbnet$io_jtag_tck$TRELLIS_IO_IN using global 1
@@ -172,277 +162,223 @@ Info:     routing clock net $glbnet$clk25$TRELLIS_IO_IN using global 2
 
 Info: Routing..
 Info: Setting up routing queue.
-Info: Routing 9136 arcs.
+Info: Routing 21541 arcs.
 Info:            |   (re-)routed arcs  |   delta    | remaining|       time spent     |
 Info:    IterCnt |  w/ripup   wo/ripup |  w/r  wo/r |      arcs| batch(sec) total(sec)|
-Info:       1000 |       19        980 |   19   980 |      8159|       0.12       0.12|
-Info:       2000 |       28       1971 |    9   991 |      7172|       0.22       0.34|
-Info:       3000 |       47       2952 |   19   981 |      6195|       0.15       0.49|
-Info:       4000 |       71       3928 |   24   976 |      5232|       0.14       0.63|
-Info:       5000 |      101       4898 |   30   970 |      4265|       0.17       0.80|
-Info:       6000 |      168       5831 |   67   933 |      3348|       0.24       1.03|
-Info:       7000 |      221       6778 |   53   947 |      2493|       0.19       1.23|
-Info:       8000 |      315       7684 |   94   906 |      1644|       0.29       1.51|
-Info:       9000 |      447       8552 |  132   868 |       836|       0.39       1.90|
-Info:      10000 |      581       9418 |  134   866 |       115|       0.47       2.38|
-Info:      10114 |      581       9533 |    0   115 |         0|       0.02       2.39|
+Info:       1000 |       36        963 |   36   963 |     20655|       0.33       0.33|
+Info:       2000 |       43       1956 |    7   993 |     19679|       0.15       0.49|
+Info:       3000 |       53       2946 |   10   990 |     18692|       0.23       0.72|
+Info:       4000 |       82       3917 |   29   971 |     17788|       0.20       0.92|
+Info:       5000 |      122       4877 |   40   960 |     16874|       0.19       1.11|
+Info:       6000 |      146       5853 |   24   976 |     15915|       0.16       1.27|
+Info:       7000 |      163       6836 |   17   983 |     14946|       0.15       1.42|
+Info:       8000 |      195       7804 |   32   968 |     14000|       0.20       1.63|
+Info:       9000 |      252       8747 |   57   943 |     13133|       0.20       1.83|
+Info:      10000 |      308       9691 |   56   944 |     12273|       0.23       2.06|
+Info:      11000 |      393      10606 |   85   915 |     11517|       0.31       2.37|
+Info:      12000 |      454      11545 |   61   939 |     10610|       0.33       2.70|
+Info:      13000 |      522      12477 |   68   932 |      9732|       0.31       3.01|
+Info:      14000 |      611      13388 |   89   911 |      9023|       0.40       3.41|
+Info:      15000 |      760      14239 |  149   851 |      8376|       0.35       3.76|
+Info:      16000 |      902      15097 |  142   858 |      7635|       0.39       4.16|
+Info:      17000 |     1040      15959 |  138   862 |      6841|       0.39       4.54|
+Info:      18000 |     1257      16742 |  217   783 |      6417|       0.47       5.01|
+Info:      19000 |     1486      17513 |  229   771 |      6115|       0.52       5.53|
+Info:      20000 |     1669      18330 |  183   817 |      5555|       0.57       6.10|
+Info:      21000 |     1791      19208 |  122   878 |      4918|       0.42       6.52|
+Info:      22000 |     2026      19973 |  235   765 |      4391|       0.76       7.28|
+Info:      23000 |     2256      20743 |  230   770 |      3910|       0.51       7.79|
+Info:      24000 |     2479      21520 |  223   777 |      3335|       0.53       8.32|
+Info:      25000 |     2802      22197 |  323   677 |      2941|       0.76       9.08|
+Info:      26000 |     3126      22873 |  324   676 |      2812|       0.85       9.93|
+Info:      27000 |     3447      23552 |  321   679 |      2580|       1.02      10.95|
+Info:      28000 |     3764      24235 |  317   683 |      2262|       0.92      11.86|
+Info:      29000 |     4043      24956 |  279   721 |      1794|       0.74      12.60|
+Info:      30000 |     4329      25670 |  286   714 |      1304|       0.72      13.32|
+Info:      31000 |     4701      26298 |  372   628 |      1062|       1.17      14.49|
+Info:      32000 |     5056      26943 |  355   645 |       804|       1.00      15.49|
+Info:      33000 |     5424      27575 |  368   632 |       702|       1.10      16.60|
+Info:      34000 |     5793      28206 |  369   631 |       567|       1.04      17.63|
+Info:      34932 |     5999      28933 |  206   727 |         0|       0.61      18.24|
 Info: Routing complete.
-Info: Router1 time 2.39s
-Info: Checksum: 0x30c71015
+Info: Router1 time 18.24s
+Info: Checksum: 0x94457e7a
 
 Info: Critical path report for clock '$glbnet$clk25$TRELLIS_IO_IN' (posedge -> posedge):
 Info: curr total
-Info:  0.5  0.5  Source u_saxon.system_cpu_logic_cpu.RegFilePlugin_regFile.3.0.0_DO_LUT4_B_SLICE.Q1
-Info:  1.3  1.8    Net u_saxon.system_cpu_logic_cpu._zz_RegFilePlugin_regFile_port1[15] budget 0.197000 ns (12,20) -> (12,14)
-Info:                Sink u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_3_LUT4_Z_16_C_PFUMX_Z_SLICE.D0
-Info:                Defined in:
-Info:                  ./top.v:135.20-148.2
-Info:                  ./ICESugarProMinimal.v:3844.23-3844.52
-Info:                  ./ICESugarProMinimal.v:411.12-437.4
-Info:  0.4  2.2  Source u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_3_LUT4_Z_16_C_PFUMX_Z_SLICE.OFX0
-Info:  1.0  3.3    Net u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_3_LUT4_Z_16_C[3] budget 0.197000 ns (12,14) -> (13,10)
-Info:                Sink u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_3_LUT4_Z_16_SLICE.D0
+Info:  5.6  5.6  Source u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0.DOA10
+Info:  2.4  8.1    Net u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO28[3] budget 1.223000 ns (15,25) -> (15,7)
+Info:                Sink u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO3_LUT4_D_2_Z_PFUMX_ALUT_SLICE.C1
 Info:                Defined in:
 Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:109.23-109.24
-Info:  0.2  3.5  Source u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_3_LUT4_Z_16_SLICE.F0
-Info:  1.9  5.4    Net u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_3[15] budget 0.197000 ns (13,10) -> (13,9)
-Info:                Sink u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_12$CCU2_SLICE.B1
-Info:                Defined in:
-Info:                  ./top.v:135.20-148.2
-Info:                  ./ICESugarProMinimal.v:3576.23-3576.53
-Info:                  ./ICESugarProMinimal.v:411.12-437.4
-Info:  0.4  5.8  Source u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_12$CCU2_SLICE.FCO
-Info:  0.0  5.8    Net u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_3_COUT[15] budget 0.000000 ns (13,9) -> (13,9)
-Info:                Sink u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_11$CCU2_SLICE.FCI
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
-Info:  0.1  5.9  Source u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_11$CCU2_SLICE.FCO
-Info:  0.0  5.9    Net u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_3_COUT[17] budget 0.000000 ns (13,9) -> (13,9)
-Info:                Sink u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_10$CCU2_SLICE.FCI
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
-Info:  0.1  6.0  Source u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_10$CCU2_SLICE.FCO
-Info:  0.0  6.0    Net u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_3_COUT[19] budget 0.000000 ns (13,9) -> (13,9)
-Info:                Sink u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_9$CCU2_SLICE.FCI
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
-Info:  0.1  6.0  Source u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_9$CCU2_SLICE.FCO
-Info:  0.0  6.0    Net u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_3_COUT[21] budget 0.000000 ns (13,9) -> (14,9)
-Info:                Sink u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_8$CCU2_SLICE.FCI
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
-Info:  0.1  6.1  Source u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_8$CCU2_SLICE.FCO
-Info:  0.0  6.1    Net u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_3_COUT[23] budget 0.000000 ns (14,9) -> (14,9)
-Info:                Sink u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_7$CCU2_SLICE.FCI
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
-Info:  0.1  6.2  Source u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_7$CCU2_SLICE.FCO
-Info:  0.0  6.2    Net u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_3_COUT[25] budget 0.000000 ns (14,9) -> (14,9)
-Info:                Sink u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_6$CCU2_SLICE.FCI
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
-Info:  0.1  6.3  Source u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_6$CCU2_SLICE.FCO
-Info:  0.0  6.3    Net u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_3_COUT[27] budget 0.000000 ns (14,9) -> (14,9)
-Info:                Sink u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_5$CCU2_SLICE.FCI
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
-Info:  0.1  6.3  Source u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_5$CCU2_SLICE.FCO
-Info:  0.0  6.3    Net u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_3_COUT[29] budget 0.000000 ns (14,9) -> (15,9)
-Info:                Sink u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_3$CCU2_SLICE.FCI
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
-Info:  0.5  6.8  Source u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_3$CCU2_SLICE.F1
-Info:  0.8  7.6    Net u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub[31] budget 0.197000 ns (15,9) -> (15,6)
-Info:                Sink u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_2_LUT4_Z_4_SLICE.D1
-Info:                Defined in:
-Info:                  ./top.v:135.20-148.2
-Info:                  ./ICESugarProMinimal.v:3573.23-3573.51
-Info:                  ./ICESugarProMinimal.v:411.12-437.4
-Info:  0.2  7.8  Source u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_2_LUT4_Z_4_SLICE.F1
-Info:  0.5  8.3    Net u_saxon.system_cpu_dBus_cmd_payload_fragment_address[31] budget 0.197000 ns (15,6) -> (15,6)
-Info:                Sink u_saxon.system_cpu_logic_cpu.decode_to_execute_SRC_LESS_UNSIGNED_L6MUX21_SD_D1_PFUMX_Z_SLICE.D1
-Info:                Defined in:
-Info:                  ./top.v:135.20-148.2
-Info:                  ./ICESugarProMinimal.v:34.23-34.68
-Info:  0.4  8.7  Source u_saxon.system_cpu_logic_cpu.decode_to_execute_SRC_LESS_UNSIGNED_L6MUX21_SD_D1_PFUMX_Z_SLICE.OFX0
-Info:  0.0  8.7    Net u_saxon.system_cpu_logic_cpu.decode_to_execute_SRC_LESS_UNSIGNED_L6MUX21_SD_D1 budget 0.000000 ns (15,6) -> (15,6)
-Info:                Sink u_saxon.system_cpu_logic_cpu.decode_to_execute_SRC_LESS_UNSIGNED_L6MUX21_SD_D1_PFUMX_Z_SLICE.FXB
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:142.38-142.40
-Info:  0.2  8.9  Source u_saxon.system_cpu_logic_cpu.decode_to_execute_SRC_LESS_UNSIGNED_L6MUX21_SD_D1_PFUMX_Z_SLICE.OFX1
-Info:  1.5 10.4    Net u_saxon.system_cpu_logic_cpu.decode_to_execute_SRC_LESS_UNSIGNED_L6MUX21_SD_Z[0] budget 0.985000 ns (15,6) -> (18,16)
-Info:                Sink u_saxon.system_cpu_logic_cpu.IBusSimplePlugin_cmd_payload_pc_LUT4_Z_1_C_CCU2C_S0_S1_L6MUX21_Z_D1_L6MUX21_Z_D1_PFUMX_Z_SLICE.D1
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:109.23-109.24
-Info:  0.4 10.8  Source u_saxon.system_cpu_logic_cpu.IBusSimplePlugin_cmd_payload_pc_LUT4_Z_1_C_CCU2C_S0_S1_L6MUX21_Z_D1_L6MUX21_Z_D1_PFUMX_Z_SLICE.OFX0
-Info:  0.0 10.8    Net u_saxon.system_cpu_logic_cpu.IBusSimplePlugin_cmd_payload_pc_LUT4_Z_1_C_CCU2C_S0_S1_L6MUX21_Z_D1_L6MUX21_Z_D1 budget 0.000000 ns (18,16) -> (18,16)
-Info:                Sink u_saxon.system_cpu_logic_cpu.IBusSimplePlugin_cmd_payload_pc_LUT4_Z_1_C_CCU2C_S0_S1_L6MUX21_Z_D1_L6MUX21_Z_D1_PFUMX_Z_SLICE.FXB
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:158.62-158.64
-Info:  0.2 11.1  Source u_saxon.system_cpu_logic_cpu.IBusSimplePlugin_cmd_payload_pc_LUT4_Z_1_C_CCU2C_S0_S1_L6MUX21_Z_D1_L6MUX21_Z_D1_PFUMX_Z_SLICE.OFX1
-Info:  0.0 11.1    Net u_saxon.system_cpu_logic_cpu.IBusSimplePlugin_cmd_payload_pc_LUT4_Z_1_C_CCU2C_S0_S1_L6MUX21_Z_D1 budget 0.000000 ns (18,16) -> (18,16)
-Info:                Sink u_saxon.system_cpu_logic_cpu.IBusSimplePlugin_cmd_payload_pc_LUT4_Z_1_C_CCU2C_S0_S1_L6MUX21_Z_D1_L6MUX21_Z_D0_PFUMX_Z_SLICE.FXB
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:158.70-158.72
-Info:  0.2 11.3  Source u_saxon.system_cpu_logic_cpu.IBusSimplePlugin_cmd_payload_pc_LUT4_Z_1_C_CCU2C_S0_S1_L6MUX21_Z_D1_L6MUX21_Z_D0_PFUMX_Z_SLICE.OFX1
-Info:  1.0 12.3    Net u_saxon.system_cpu_logic_cpu.IBusSimplePlugin_cmd_payload_pc_LUT4_Z_1_C[1] budget 1.970000 ns (18,16) -> (20,18)
-Info:                Sink u_saxon.system_cpu_iBus_decoder.io_input_cmd_payload_fragment_address_L6MUX21_Z_14_D0_L6MUX21_Z_D1_PFUMX_Z_SLICE.D0
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:109.23-109.24
-Info:  0.4 12.7  Source u_saxon.system_cpu_iBus_decoder.io_input_cmd_payload_fragment_address_L6MUX21_Z_14_D0_L6MUX21_Z_D1_PFUMX_Z_SLICE.OFX0
-Info:  0.0 12.7    Net u_saxon.system_cpu_iBus_decoder.io_input_cmd_payload_fragment_address_L6MUX21_Z_14_D0_L6MUX21_Z_D1 budget 0.000000 ns (20,18) -> (20,18)
-Info:                Sink u_saxon.system_cpu_iBus_decoder.io_input_cmd_payload_fragment_address_L6MUX21_Z_14_D0_L6MUX21_Z_D1_PFUMX_Z_SLICE.FXB
+Info:  0.4  8.5  Source u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO3_LUT4_D_2_Z_PFUMX_ALUT_SLICE.OFX0
+Info:  0.0  8.5    Net u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO3_LUT4_D_2_Z_PFUMX_ALUT_Z budget 0.000000 ns (15,7) -> (15,7)
+Info:                Sink u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO3_LUT4_D_2_Z_PFUMX_ALUT_SLICE.FXB
 Info:                Defined in:
 Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:158.54-158.56
-Info:  0.2 13.0  Source u_saxon.system_cpu_iBus_decoder.io_input_cmd_payload_fragment_address_L6MUX21_Z_14_D0_L6MUX21_Z_D1_PFUMX_Z_SLICE.OFX1
-Info:  0.0 13.0    Net u_saxon.system_cpu_iBus_decoder.io_input_cmd_payload_fragment_address_L6MUX21_Z_14_D0 budget 0.000000 ns (20,18) -> (20,18)
-Info:                Sink u_saxon.system_cpu_iBus_decoder.io_input_cmd_payload_fragment_address_L6MUX21_Z_14_D1_L6MUX21_Z_D0_PFUMX_Z_SLICE.FXA
+Info:  0.2  8.7  Source u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO3_LUT4_D_2_Z_PFUMX_ALUT_SLICE.OFX1
+Info:  0.0  8.7    Net u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO19_LUT4_A_Z_L6MUX21_Z_2_SD_L6MUX21_Z_2_D0 budget 0.000000 ns (15,7) -> (15,7)
+Info:                Sink u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO3_LUT4_D_1_Z_PFUMX_ALUT_SLICE.FXA
 Info:                Defined in:
 Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:158.66-158.68
-Info:  0.2 13.2  Source u_saxon.system_cpu_iBus_decoder.io_input_cmd_payload_fragment_address_L6MUX21_Z_14_D1_L6MUX21_Z_D0_PFUMX_Z_SLICE.OFX1
-Info:  1.0 14.2    Net u_saxon.system_cpu_iBus_cmd_payload_fragment_address[21] budget 3.940000 ns (20,18) -> (21,19)
-Info:                Sink u_saxon.system_cpu_iBus_decoder.logic_rspHits_0_LUT4_D_Z_L6MUX21_Z_2_D1_PFUMX_Z_SLICE.A0
-Info:                Defined in:
-Info:                  ./top.v:135.20-148.2
-Info:                  ./ICESugarProMinimal.v:28.23-28.63
-Info:  0.4 14.6  Source u_saxon.system_cpu_iBus_decoder.logic_rspHits_0_LUT4_D_Z_L6MUX21_Z_2_D1_PFUMX_Z_SLICE.OFX0
-Info:  0.0 14.6    Net u_saxon.system_cpu_iBus_decoder.logic_rspHits_0_LUT4_D_Z_L6MUX21_Z_2_D1 budget 0.000000 ns (21,19) -> (21,19)
-Info:                Sink u_saxon.system_cpu_iBus_decoder.logic_rspHits_0_LUT4_D_Z_L6MUX21_Z_2_D1_PFUMX_Z_SLICE.FXB
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:142.38-142.40
-Info:  0.2 14.9  Source u_saxon.system_cpu_iBus_decoder.logic_rspHits_0_LUT4_D_Z_L6MUX21_Z_2_D1_PFUMX_Z_SLICE.OFX1
-Info:  0.8 15.7    Net u_saxon.system_cpu_iBus_decoder.logic_rspHits_0_LUT4_D_Z[2] budget 4.378000 ns (21,19) -> (20,19)
-Info:                Sink u_saxon.system_cpu_iBus_decoder.when_BmbDecoder_l56_L6MUX21_Z_D0_L6MUX21_Z_D0_PFUMX_Z_SLICE.C1
+Info:  0.2  8.9  Source u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO3_LUT4_D_1_Z_PFUMX_ALUT_SLICE.OFX1
+Info:  1.0 10.0    Net u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO19_LUT4_A_Z_L6MUX21_Z_2_SD[1] budget 1.223000 ns (15,7) -> (13,11)
+Info:                Sink u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO19_LUT4_A_Z_L6MUX21_Z_2_D1_PFUMX_Z_SLICE.D1
 Info:                Defined in:
 Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:109.23-109.24
-Info:  0.4 16.1  Source u_saxon.system_cpu_iBus_decoder.when_BmbDecoder_l56_L6MUX21_Z_D0_L6MUX21_Z_D0_PFUMX_Z_SLICE.OFX0
-Info:  0.0 16.1    Net u_saxon.system_cpu_iBus_decoder.when_BmbDecoder_l56_L6MUX21_Z_D0_L6MUX21_Z_D0 budget 0.000000 ns (20,19) -> (20,19)
-Info:                Sink u_saxon.system_cpu_iBus_decoder.when_BmbDecoder_l56_L6MUX21_Z_D0_L6MUX21_Z_D1_PFUMX_Z_SLICE.FXA
+Info:  0.4 10.4  Source u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO19_LUT4_A_Z_L6MUX21_Z_2_D1_PFUMX_Z_SLICE.OFX0
+Info:  0.0 10.4    Net u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO19_LUT4_A_Z_L6MUX21_Z_2_D1 budget 0.000000 ns (13,11) -> (13,11)
+Info:                Sink u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO19_LUT4_A_Z_L6MUX21_Z_2_D1_PFUMX_Z_SLICE.FXB
 Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:158.50-158.52
-Info:  0.2 16.3  Source u_saxon.system_cpu_iBus_decoder.when_BmbDecoder_l56_L6MUX21_Z_D0_L6MUX21_Z_D1_PFUMX_Z_SLICE.OFX1
-Info:  0.0 16.3    Net u_saxon.system_cpu_iBus_decoder.when_BmbDecoder_l56_L6MUX21_Z_D0 budget 0.000000 ns (20,19) -> (20,19)
-Info:                Sink u_saxon.system_cpu_iBus_decoder.when_BmbDecoder_l56_L6MUX21_Z_D1_L6MUX21_Z_D0_PFUMX_Z_SLICE.FXA
+Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:142.38-142.40
+Info:  0.2 10.6  Source u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO19_LUT4_A_Z_L6MUX21_Z_2_D1_PFUMX_Z_SLICE.OFX1
+Info:  1.2 11.8    Net u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_decompressor_throw2BytesReg_LUT4_C_Z[2] budget 1.665000 ns (13,11) -> (10,9)
+Info:                Sink u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_decompressor_bufferValidPatched_L6MUX21_Z_D0_L6MUX21_Z_D1_PFUMX_Z_SLICE.D1
+Info:                Defined in:
+Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:109.23-109.24
+Info:  0.4 12.2  Source u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_decompressor_bufferValidPatched_L6MUX21_Z_D0_L6MUX21_Z_D1_PFUMX_Z_SLICE.OFX0
+Info:  0.0 12.2    Net u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_decompressor_bufferValidPatched_L6MUX21_Z_D0_L6MUX21_Z_D1 budget 0.000000 ns (10,9) -> (10,9)
+Info:                Sink u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_decompressor_bufferValidPatched_L6MUX21_Z_D0_L6MUX21_Z_D1_PFUMX_Z_SLICE.FXB
+Info:                Defined in:
+Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:158.54-158.56
+Info:  0.2 12.4  Source u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_decompressor_bufferValidPatched_L6MUX21_Z_D0_L6MUX21_Z_D1_PFUMX_Z_SLICE.OFX1
+Info:  0.0 12.4    Net u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_decompressor_bufferValidPatched_L6MUX21_Z_D0 budget 0.000000 ns (10,9) -> (10,9)
+Info:                Sink u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_decompressor_bufferValidPatched_L6MUX21_Z_D1_L6MUX21_Z_D0_PFUMX_Z_SLICE.FXA
 Info:                Defined in:
 Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:158.66-158.68
-Info:  0.2 16.5  Source u_saxon.system_cpu_iBus_decoder.when_BmbDecoder_l56_L6MUX21_Z_D1_L6MUX21_Z_D0_PFUMX_Z_SLICE.OFX1
-Info:  1.2 17.8    Net u_saxon.system_cpu_dBus_cmd_rData_fragment_context_LUT4_D_Z[4] budget 12.652000 ns (20,19) -> (19,21)
-Info:                Sink u_saxon.system_cpu_dBus_cmd_rData_fragment_mask_L6MUX21_SD_1_D1_L6MUX21_Z_D1_PFUMX_Z_SLICE.M0
+Info:  0.2 12.7  Source u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_decompressor_bufferValidPatched_L6MUX21_Z_D1_L6MUX21_Z_D0_PFUMX_Z_SLICE.OFX1
+Info:  1.2 13.9    Net u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_decompressor_bufferValidPatched budget 37.498001 ns (10,9) -> (10,10)
+Info:                Sink u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_decompressor_throw2BytesPatched_LUT4_D_11_Z_PFUMX_BLUT_SLICE.M0
 Info:                Defined in:
 Info:                  ./top.v:135.20-148.2
-Info:                  ./ICESugarProMinimal.v:2904.23-2904.42
-Info:                  ./ICESugarProMinimal.v:474.14-499.4
-Info:  0.3 18.0  Source u_saxon.system_cpu_dBus_cmd_rData_fragment_mask_L6MUX21_SD_1_D1_L6MUX21_Z_D1_PFUMX_Z_SLICE.OFX0
-Info:  0.0 18.0    Net u_saxon.system_cpu_dBus_cmd_rData_fragment_mask_L6MUX21_SD_1_D1_L6MUX21_Z_D1 budget 0.000000 ns (19,21) -> (19,21)
-Info:                Sink u_saxon.system_cpu_dBus_cmd_rData_fragment_mask_L6MUX21_SD_1_D1_L6MUX21_Z_D1_PFUMX_Z_SLICE.FXB
+Info:                  ./ICESugarProMinimal.v:5147.23-5147.71
+Info:                  ./ICESugarProMinimal.v:555.12-589.4
+Info:  0.3 14.1  Source u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_decompressor_throw2BytesPatched_LUT4_D_11_Z_PFUMX_BLUT_SLICE.OFX0
+Info:  1.3 15.5    Net u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_decompressor_throw2BytesPatched_LUT4_D_9_Z_PFUMX_BLUT_Z[4] budget 3.667000 ns (10,10) -> (8,8)
+Info:                Sink u_saxon.system_cpu_logic_cpu._zz_IBusCachedPlugin_injector_decodeInput_payload_rsp_inst_TRELLIS_FF_Q_21_DI_LUT4_Z_B_LUT4_C_1_Z_L6MUX21_Z_D0_PFUMX_Z_C0_L6MUX21_Z_D1_PFUMX_Z_SLICE.B1
 Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:158.62-158.64
-Info:  0.2 18.3  Source u_saxon.system_cpu_dBus_cmd_rData_fragment_mask_L6MUX21_SD_1_D1_L6MUX21_Z_D1_PFUMX_Z_SLICE.OFX1
-Info:  0.0 18.3    Net u_saxon.system_cpu_dBus_cmd_rData_fragment_mask_L6MUX21_SD_1_D1 budget 0.000000 ns (19,21) -> (19,21)
-Info:                Sink u_saxon.system_cpu_dBus_cmd_rData_fragment_mask_L6MUX21_SD_1_D1_L6MUX21_Z_D0_PFUMX_Z_SLICE.FXB
+Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:109.23-109.24
+Info:  0.4 15.9  Source u_saxon.system_cpu_logic_cpu._zz_IBusCachedPlugin_injector_decodeInput_payload_rsp_inst_TRELLIS_FF_Q_21_DI_LUT4_Z_B_LUT4_C_1_Z_L6MUX21_Z_D0_PFUMX_Z_C0_L6MUX21_Z_D1_PFUMX_Z_SLICE.OFX0
+Info:  0.0 15.9    Net u_saxon.system_cpu_logic_cpu._zz_IBusCachedPlugin_injector_decodeInput_payload_rsp_inst_TRELLIS_FF_Q_21_DI_LUT4_Z_B_LUT4_C_1_Z_L6MUX21_Z_D0_PFUMX_Z_C0_L6MUX21_Z_D1 budget 0.000000 ns (8,8) -> (8,8)
+Info:                Sink u_saxon.system_cpu_logic_cpu._zz_IBusCachedPlugin_injector_decodeInput_payload_rsp_inst_TRELLIS_FF_Q_21_DI_LUT4_Z_B_LUT4_C_1_Z_L6MUX21_Z_D0_PFUMX_Z_C0_L6MUX21_Z_D1_PFUMX_Z_SLICE.FXB
 Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:158.70-158.72
-Info:  0.2 18.5  Source u_saxon.system_cpu_dBus_cmd_rData_fragment_mask_L6MUX21_SD_1_D1_L6MUX21_Z_D0_PFUMX_Z_SLICE.OFX1
-Info:  2.0 20.5    Net u_saxon.system_ramA_logic.ram_symbol2.0.0.0_WEA budget 15.852000 ns (19,21) -> (10,37)
-Info:                Sink u_saxon.system_ramA_logic.ram_symbol2.3.0.0.WEA
+Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:142.38-142.40
+Info:  0.2 16.1  Source u_saxon.system_cpu_logic_cpu._zz_IBusCachedPlugin_injector_decodeInput_payload_rsp_inst_TRELLIS_FF_Q_21_DI_LUT4_Z_B_LUT4_C_1_Z_L6MUX21_Z_D0_PFUMX_Z_C0_L6MUX21_Z_D1_PFUMX_Z_SLICE.OFX1
+Info:  1.3 17.4    Net u_saxon.system_cpu_logic_cpu._zz_IBusCachedPlugin_injector_decodeInput_payload_rsp_inst_TRELLIS_FF_Q_1_DI_PFUMX_Z_ALUT_LUT4_Z_C_L6MUX21_Z_SD[0] budget 3.667000 ns (8,8) -> (5,8)
+Info:                Sink u_saxon.system_cpu_logic_cpu._zz_IBusCachedPlugin_injector_decodeInput_payload_rsp_inst_TRELLIS_FF_Q_21_DI_LUT4_Z_B_LUT4_C_1_Z_L6MUX21_Z_D0_PFUMX_Z_SLICE.C1
+Info:                Defined in:
+Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:109.23-109.24
+Info:  0.4 17.8  Source u_saxon.system_cpu_logic_cpu._zz_IBusCachedPlugin_injector_decodeInput_payload_rsp_inst_TRELLIS_FF_Q_21_DI_LUT4_Z_B_LUT4_C_1_Z_L6MUX21_Z_D0_PFUMX_Z_SLICE.OFX0
+Info:  0.0 17.8    Net u_saxon.system_cpu_logic_cpu._zz_IBusCachedPlugin_injector_decodeInput_payload_rsp_inst_TRELLIS_FF_Q_21_DI_LUT4_Z_B_LUT4_C_1_Z_L6MUX21_Z_D0 budget 0.000000 ns (5,8) -> (5,8)
+Info:                Sink u_saxon.system_cpu_logic_cpu._zz_IBusCachedPlugin_injector_decodeInput_payload_rsp_inst_TRELLIS_FF_Q_21_DI_LUT4_Z_B_LUT4_C_1_Z_L6MUX21_Z_D1_PFUMX_Z_SLICE.FXA
+Info:                Defined in:
+Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:142.34-142.36
+Info:  0.2 18.0  Source u_saxon.system_cpu_logic_cpu._zz_IBusCachedPlugin_injector_decodeInput_payload_rsp_inst_TRELLIS_FF_Q_21_DI_LUT4_Z_B_LUT4_C_1_Z_L6MUX21_Z_D1_PFUMX_Z_SLICE.OFX1
+Info:  1.1 19.1    Net u_saxon.system_cpu_logic_cpu._zz_IBusCachedPlugin_injector_decodeInput_payload_rsp_inst_TRELLIS_FF_Q_21_DI_LUT4_Z_B_LUT4_C_1_Z[2] budget 6.162000 ns (5,8) -> (5,11)
+Info:                Sink u_saxon.system_cpu_logic_cpu._zz_IBusCachedPlugin_injector_decodeInput_payload_rsp_inst_TRELLIS_FF_Q_5_DI_PFUMX_Z_SLICE.D0
+Info:                Defined in:
+Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:109.23-109.24
+Info:  0.4 19.5  Source u_saxon.system_cpu_logic_cpu._zz_IBusCachedPlugin_injector_decodeInput_payload_rsp_inst_TRELLIS_FF_Q_5_DI_PFUMX_Z_SLICE.OFX0
+Info:  0.1 19.6    Net u_saxon.system_cpu_logic_cpu._zz_IBusCachedPlugin_injector_decodeInput_payload_rsp_inst_TRELLIS_FF_Q_5_DI budget 4.929000 ns (5,11) -> (5,11)
+Info:                Sink u_saxon.system_cpu_logic_cpu._zz_IBusCachedPlugin_injector_decodeInput_payload_rsp_inst_TRELLIS_FF_Q_5_DI_PFUMX_Z_SLICE.DI0
 Info:                Defined in:
 Info:                  ./top.v:135.20-148.2
-Info:                  ./ICESugarProMinimal.v:2543.3-2556.6
-Info:                  ./ICESugarProMinimal.v:555.16-575.4
-Info:  0.1 20.6  Setup u_saxon.system_ramA_logic.ram_symbol2.3.0.0.WEA
-Info: 7.6 ns logic, 13.0 ns routing
+Info:                  ./ICESugarProMinimal.v:9327.3-9642.6
+Info:                  ./ICESugarProMinimal.v:555.12-589.4
+Info:  0.0 19.6  Setup u_saxon.system_cpu_logic_cpu._zz_IBusCachedPlugin_injector_decodeInput_payload_rsp_inst_TRELLIS_FF_Q_5_DI_PFUMX_Z_SLICE.DI0
+Info: 10.0 ns logic, 9.6 ns routing
 
 Info: Critical path report for clock '$glbnet$io_jtag_tck$TRELLIS_IO_IN' (posedge -> negedge):
 Info: curr total
-Info:  0.5  0.5  Source u_saxon.jtagBridge_1._zz_jtag_tap_fsm_stateNext_PFUMX_Z_SLICE.Q0
-Info:  1.6  2.1    Net u_saxon.jtagBridge_1.jtag_tap_fsm_state[0] budget 8.007000 ns (3,17) -> (5,21)
-Info:                Sink u_saxon.jtagBridge_1.system_rsp_valid_LUT4_C_SLICE.D1
+Info:  0.5  0.5  Source u_saxon.jtagBridge_1.jtag_tap_fsm_state_TRELLIS_FF_Q_3_DI_PFUMX_Z_1_SLICE.Q0
+Info:  1.4  1.9    Net u_saxon.jtagBridge_1.jtag_tap_fsm_state[2] budget 8.007000 ns (4,24) -> (7,26)
+Info:                Sink u_saxon.jtagBridge_1._zz_io_input_valid_2_TRELLIS_FF_Q_DI_LUT4_Z_B_LUT4_Z_1_SLICE.B0
 Info:                Defined in:
 Info:                  ./top.v:135.20-148.2
-Info:                  ./ICESugarProMinimal.v:3150.23-3150.41
-Info:                  ./ICESugarProMinimal.v:438.14-453.4
-Info:  0.2  2.4  Source u_saxon.jtagBridge_1.system_rsp_valid_LUT4_C_SLICE.F1
-Info:  0.7  3.0    Net u_saxon.jtagBridge_1.jtag_tap_instruction_LUT4_A_Z[0] budget 8.007000 ns (5,21) -> (4,21)
-Info:                Sink u_saxon.jtagBridge_1.jtag_tap_bypass_LUT4_D_Z_LUT4_Z_1_SLICE.C1
+Info:                  ./ICESugarProMinimal.v:4134.23-4134.41
+Info:                  ./ICESugarProMinimal.v:590.14-605.4
+Info:  0.2  2.2  Source u_saxon.jtagBridge_1._zz_io_input_valid_2_TRELLIS_FF_Q_DI_LUT4_Z_B_LUT4_Z_1_SLICE.F0
+Info:  0.7  2.9    Net u_saxon.jtagBridge_1._zz_io_input_valid_2_TRELLIS_FF_Q_DI_LUT4_Z_B[0] budget 8.007000 ns (7,26) -> (7,26)
+Info:                Sink u_saxon.jtagBridge_1._zz_io_input_valid_2_TRELLIS_FF_Q_DI_LUT4_Z_B_LUT4_Z_1_SLICE.D1
 Info:                Defined in:
 Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:109.23-109.24
-Info:  0.2  3.3  Source u_saxon.jtagBridge_1.jtag_tap_bypass_LUT4_D_Z_LUT4_Z_1_SLICE.F1
-Info:  0.7  3.9    Net u_saxon.jtagBridge_1.jtag_tap_bypass_LUT4_D_Z[1] budget 8.006000 ns (4,21) -> (4,21)
-Info:                Sink u_saxon.jtagBridge_1.jtag_tap_tdoUnbufferd_LUT4_Z_D_PFUMX_Z_SLICE.C0
+Info:  0.2  3.1  Source u_saxon.jtagBridge_1._zz_io_input_valid_2_TRELLIS_FF_Q_DI_LUT4_Z_B_LUT4_Z_1_SLICE.F1
+Info:  0.5  3.6    Net u_saxon.jtagBridge_1._zz_io_input_valid_2_TRELLIS_FF_Q_DI_LUT4_Z_B_LUT4_C_Z[0] budget 8.006000 ns (7,26) -> (7,26)
+Info:                Sink u_saxon.jtagBridge_1.jtag_tap_tdoUnbufferd_LUT4_Z_SLICE.D1
 Info:                Defined in:
 Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:109.23-109.24
-Info:  0.4  4.3  Source u_saxon.jtagBridge_1.jtag_tap_tdoUnbufferd_LUT4_Z_D_PFUMX_Z_SLICE.OFX0
-Info:  0.6  5.0    Net u_saxon.jtagBridge_1.jtag_tap_tdoUnbufferd_LUT4_Z_D[3] budget 8.006000 ns (4,21) -> (5,23)
-Info:                Sink u_saxon.jtagBridge_1.jtag_tap_tdoUnbufferd_LUT4_Z_SLICE.D0
+Info:  0.2  3.8  Source u_saxon.jtagBridge_1.jtag_tap_tdoUnbufferd_LUT4_Z_SLICE.F1
+Info:  0.9  4.7    Net u_saxon.jtagBridge_1.jtag_tap_tdoIr_LUT4_D_Z_PFUMX_ALUT_Z[0] budget 8.006000 ns (7,26) -> (7,26)
+Info:                Sink u_saxon.jtagBridge_1.jtag_tap_tdoUnbufferd_LUT4_Z_SLICE.B0
 Info:                Defined in:
 Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:109.23-109.24
-Info:  0.2  5.2  Source u_saxon.jtagBridge_1.jtag_tap_tdoUnbufferd_LUT4_Z_SLICE.F0
-Info:  0.1  5.3    Net u_saxon.jtagBridge_1.jtag_tap_tdoUnbufferd budget 8.006000 ns (5,23) -> (5,23)
+Info:  0.2  4.9  Source u_saxon.jtagBridge_1.jtag_tap_tdoUnbufferd_LUT4_Z_SLICE.F0
+Info:  0.1  5.1    Net u_saxon.jtagBridge_1.jtag_tap_tdoUnbufferd budget 8.006000 ns (7,26) -> (7,26)
 Info:                Sink u_saxon.jtagBridge_1.jtag_tap_tdoUnbufferd_LUT4_Z_SLICE.DI0
 Info:                Defined in:
 Info:                  ./top.v:135.20-148.2
-Info:                  ./ICESugarProMinimal.v:3155.23-3155.44
-Info:                  ./ICESugarProMinimal.v:438.14-453.4
-Info:  0.0  5.3  Setup u_saxon.jtagBridge_1.jtag_tap_tdoUnbufferd_LUT4_Z_SLICE.DI0
-Info: 1.6 ns logic, 3.7 ns routing
+Info:                  ./ICESugarProMinimal.v:4139.23-4139.44
+Info:                  ./ICESugarProMinimal.v:590.14-605.4
+Info:  0.0  5.1  Setup u_saxon.jtagBridge_1.jtag_tap_tdoUnbufferd_LUT4_Z_SLICE.DI0
+Info: 1.5 ns logic, 3.6 ns routing
 
 Info: Critical path report for clock '$glbnet$clk' (posedge -> posedge):
 Info: curr total
 Info:  0.5  0.5  Source counter_TRELLIS_FF_Q_14_SLICE.Q0
-Info:  1.1  1.7    Net counter[1] budget 9.064000 ns (57,14) -> (58,15)
-Info:                Sink counter_CCU2C_B0_7$CCU2_SLICE.B1
+Info:  1.1  1.7    Net counter[1] budget 9.064000 ns (59,14) -> (60,15)
+Info:                Sink counter_TRELLIS_FF_Q_DI_CCU2C_S0_7$CCU2_SLICE.B1
 Info:                Defined in:
 Info:                  ./top.v:52.11-52.18
-Info:  0.4  2.1  Source counter_CCU2C_B0_7$CCU2_SLICE.FCO
-Info:  0.0  2.1    Net counter_CCU2C_B0_COUT[2] budget 0.000000 ns (58,15) -> (58,15)
-Info:                Sink counter_CCU2C_B0_3$CCU2_SLICE.FCI
+Info:  0.4  2.1  Source counter_TRELLIS_FF_Q_DI_CCU2C_S0_7$CCU2_SLICE.FCO
+Info:  0.0  2.1    Net counter_TRELLIS_FF_Q_DI_CCU2C_S0_COUT[2] budget 0.000000 ns (60,15) -> (60,15)
+Info:                Sink counter_TRELLIS_FF_Q_DI_CCU2C_S0_3$CCU2_SLICE.FCI
 Info:                Defined in:
 Info:                  ./top.v:86.18-86.32
 Info:                  /usr/local/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
-Info:  0.1  2.2  Source counter_CCU2C_B0_3$CCU2_SLICE.FCO
-Info:  0.0  2.2    Net counter_CCU2C_B0_COUT[4] budget 0.000000 ns (58,15) -> (58,15)
-Info:                Sink counter_CCU2C_B0_2$CCU2_SLICE.FCI
+Info:  0.1  2.2  Source counter_TRELLIS_FF_Q_DI_CCU2C_S0_3$CCU2_SLICE.FCO
+Info:  0.0  2.2    Net counter_TRELLIS_FF_Q_DI_CCU2C_S0_COUT[4] budget 0.000000 ns (60,15) -> (60,15)
+Info:                Sink counter_TRELLIS_FF_Q_DI_CCU2C_S0_2$CCU2_SLICE.FCI
 Info:                Defined in:
 Info:                  ./top.v:86.18-86.32
 Info:                  /usr/local/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
-Info:  0.1  2.2  Source counter_CCU2C_B0_2$CCU2_SLICE.FCO
-Info:  0.0  2.2    Net counter_CCU2C_B0_COUT[6] budget 0.000000 ns (58,15) -> (59,15)
-Info:                Sink counter_CCU2C_B0_1$CCU2_SLICE.FCI
+Info:  0.1  2.2  Source counter_TRELLIS_FF_Q_DI_CCU2C_S0_2$CCU2_SLICE.FCO
+Info:  0.0  2.2    Net counter_TRELLIS_FF_Q_DI_CCU2C_S0_COUT[6] budget 0.000000 ns (60,15) -> (61,15)
+Info:                Sink counter_TRELLIS_FF_Q_DI_CCU2C_S0_1$CCU2_SLICE.FCI
 Info:                Defined in:
 Info:                  ./top.v:86.18-86.32
 Info:                  /usr/local/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
-Info:  0.1  2.3  Source counter_CCU2C_B0_1$CCU2_SLICE.FCO
-Info:  0.0  2.3    Net counter_CCU2C_B0_COUT[8] budget 0.000000 ns (59,15) -> (59,15)
-Info:                Sink counter_CCU2C_B0$CCU2_SLICE.FCI
+Info:  0.1  2.3  Source counter_TRELLIS_FF_Q_DI_CCU2C_S0_1$CCU2_SLICE.FCO
+Info:  0.0  2.3    Net counter_TRELLIS_FF_Q_DI_CCU2C_S0_COUT[8] budget 0.000000 ns (61,15) -> (61,15)
+Info:                Sink counter_TRELLIS_FF_Q_DI_CCU2C_S0$CCU2_SLICE.FCI
 Info:                Defined in:
 Info:                  ./top.v:86.18-86.32
 Info:                  /usr/local/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
-Info:  0.5  2.8  Source counter_CCU2C_B0$CCU2_SLICE.F1
-Info:  0.9  3.7    Net counter_TRELLIS_FF_Q_DI[9] budget 9.170000 ns (59,15) -> (58,16)
-Info:                Sink counter_TRELLIS_FF_Q_6_SLICE.M0
+Info:  0.4  2.8  Source counter_TRELLIS_FF_Q_DI_CCU2C_S0$CCU2_SLICE.F0
+Info:  0.9  3.7    Net counter_TRELLIS_FF_Q_DI[8] budget 9.186000 ns (61,15) -> (60,16)
+Info:                Sink counter_TRELLIS_FF_Q_7_SLICE.M0
 Info:                Defined in:
 Info:                  ./top.v:86.18-86.32
 Info:                  /usr/local/bin/../share/yosys/ecp5/arith_map.v:34.26-34.27
-Info:  0.0  3.7  Setup counter_TRELLIS_FF_Q_6_SLICE.M0
-Info: 1.7 ns logic, 2.1 ns routing
+Info:  0.0  3.7  Setup counter_TRELLIS_FF_Q_7_SLICE.M0
+Info: 1.6 ns logic, 2.1 ns routing
 
 Info: Critical path report for cross-domain path '<async>' -> 'posedge $glbnet$clk':
 Info: curr total
 Info:  0.0  0.0  Source cpu_reset_n$tr_io.O
-Info:  2.3  2.3    Net cpu_reset_n$TRELLIS_IO_IN budget 9.670000 ns (72,32) -> (56,14)
-Info:                Sink reset_TRELLIS_FF_Q_LSR_LUT4_Z_SLICE.D1
+Info:  2.4  2.4    Net cpu_reset_n$TRELLIS_IO_IN budget 9.670000 ns (72,32) -> (61,14)
+Info:                Sink counter_TRELLIS_FF_Q_9_LSR_LUT4_Z_SLICE.D1
 Info:                Defined in:
 Info:                  ./top.v:3.13-3.24
-Info:  0.2  2.5  Source reset_TRELLIS_FF_Q_LSR_LUT4_Z_SLICE.F1
-Info:  0.5  3.0    Net reset_TRELLIS_FF_Q_LSR budget 9.670000 ns (56,14) -> (55,14)
-Info:                Sink reset_TRELLIS_FF_Q_SLICE.LSR
-Info:  0.4  3.5  Setup reset_TRELLIS_FF_Q_SLICE.LSR
-Info: 0.7 ns logic, 2.8 ns routing
+Info:  0.2  2.6  Source counter_TRELLIS_FF_Q_9_LSR_LUT4_Z_SLICE.F1
+Info:  0.6  3.2    Net counter_TRELLIS_FF_Q_9_LSR budget 9.670000 ns (61,14) -> (61,15)
+Info:                Sink counter_TRELLIS_FF_Q_DI_CCU2C_S0_1$CCU2_SLICE.LSR
+Info:  0.4  3.6  Setup counter_TRELLIS_FF_Q_DI_CCU2C_S0_1$CCU2_SLICE.LSR
+Info: 0.7 ns logic, 3.0 ns routing
 
 Info: Critical path report for cross-domain path '<async>' -> 'posedge $glbnet$clk25$TRELLIS_IO_IN':
 Info: curr total
 Info:  0.0  0.0  Source serial_rx$tr_io.O
-Info:  2.7  2.7    Net serial_rx$TRELLIS_IO_IN budget 40.000000 ns (42,0) -> (8,2)
+Info:  2.7  2.7    Net serial_rx$TRELLIS_IO_IN budget 40.000000 ns (42,0) -> (4,2)
 Info:                Sink u_saxon.system_uartA_logic.uartCtrl_1.rx.io_rxd_buffercc.buffers_0_TRELLIS_FF_Q_SLICE.M0
 Info:                Defined in:
 Info:                  ./top.v:135.20-148.2
@@ -453,267 +389,195 @@ Info: 0.0 ns logic, 2.7 ns routing
 Info: Critical path report for cross-domain path '<async>' -> 'posedge $glbnet$io_jtag_tck$TRELLIS_IO_IN':
 Info: curr total
 Info:  0.0  0.0  Source io_jtag_tdi$tr_io.O
-Info:  2.6  2.6    Net io_jtag_tdi$TRELLIS_IO_IN budget 41.549000 ns (0,38) -> (17,23)
+Info:  2.3  2.3    Net io_jtag_tdi$TRELLIS_IO_IN budget 41.549000 ns (0,38) -> (18,26)
 Info:                Sink u_saxon.jtagBridge_1._zz_jtag_tap_tdoDr_1_TRELLIS_FF_Q_2_DI_LUT4_Z_SLICE.B1
 Info:                Defined in:
 Info:                  ./top.v:135.20-148.2
 Info:                  ./ICESugarProMinimal.v:11.23-11.42
-Info:  0.2  2.9  Source u_saxon.jtagBridge_1._zz_jtag_tap_tdoDr_1_TRELLIS_FF_Q_2_DI_LUT4_Z_SLICE.F1
-Info:  0.1  3.0    Net u_saxon.jtagBridge_1._zz_jtag_tap_tdoDr_1_TRELLIS_FF_Q_1_DI budget 27.445000 ns (17,23) -> (17,23)
+Info:  0.2  2.6  Source u_saxon.jtagBridge_1._zz_jtag_tap_tdoDr_1_TRELLIS_FF_Q_2_DI_LUT4_Z_SLICE.F1
+Info:  0.1  2.7    Net u_saxon.jtagBridge_1._zz_jtag_tap_tdoDr_1_TRELLIS_FF_Q_1_DI budget 20.525000 ns (18,26) -> (18,26)
 Info:                Sink u_saxon.jtagBridge_1._zz_jtag_tap_tdoDr_1_TRELLIS_FF_Q_2_DI_LUT4_Z_SLICE.DI1
-Info:  0.0  3.0  Setup u_saxon.jtagBridge_1._zz_jtag_tap_tdoDr_1_TRELLIS_FF_Q_2_DI_LUT4_Z_SLICE.DI1
-Info: 0.2 ns logic, 2.8 ns routing
+Info:  0.0  2.7  Setup u_saxon.jtagBridge_1._zz_jtag_tap_tdoDr_1_TRELLIS_FF_Q_2_DI_LUT4_Z_SLICE.DI1
+Info: 0.2 ns logic, 2.5 ns routing
 
 Info: Critical path report for cross-domain path 'posedge $glbnet$clk' -> 'posedge $glbnet$clk25$TRELLIS_IO_IN':
 Info: curr total
 Info:  0.5  0.5  Source reset_TRELLIS_FF_Q_SLICE.Q0
-Info:  0.5  1.0    Net reset budget 19.408001 ns (55,14) -> (54,14)
+Info:  0.5  1.0    Net reset budget 19.408001 ns (58,17) -> (57,17)
 Info:                Sink reset_LUT4_D_1_SLICE.D0
 Info:                Defined in:
 Info:                  ./top.v:135.20-148.2
 Info:                  ./ICESugarProMinimal.v:9.23-9.49
-Info:  0.2  1.2  Source reset_LUT4_D_1_SLICE.F0
-Info:  0.5  1.7    Net u_saxon.bufferCC_5.buffers_0_TRELLIS_FF_Q_LSR budget 19.407000 ns (54,14) -> (53,14)
+Info:  0.2  1.3  Source reset_LUT4_D_1_SLICE.F0
+Info:  0.6  1.9    Net u_saxon.bufferCC_5.buffers_0_TRELLIS_FF_Q_LSR budget 19.407000 ns (57,17) -> (57,16)
 Info:                Sink u_saxon.bufferCC_5.buffers_0_TRELLIS_FF_Q_SLICE.LSR
-Info:  0.4  2.2  Setup u_saxon.bufferCC_5.buffers_0_TRELLIS_FF_Q_SLICE.LSR
-Info: 1.2 ns logic, 1.0 ns routing
+Info:  0.4  2.3  Setup u_saxon.bufferCC_5.buffers_0_TRELLIS_FF_Q_SLICE.LSR
+Info: 1.2 ns logic, 1.1 ns routing
 
 Info: Critical path report for cross-domain path 'posedge $glbnet$clk25$TRELLIS_IO_IN' -> '<async>':
 Info: curr total
-Info:  0.5  0.5  Source u_saxon.system_cpu_logic_cpu.RegFilePlugin_regFile.3.0.0_DO_LUT4_B_SLICE.Q1
-Info:  1.3  1.8    Net u_saxon.system_cpu_logic_cpu._zz_RegFilePlugin_regFile_port1[15] budget 0.197000 ns (12,20) -> (12,14)
-Info:                Sink u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_3_LUT4_Z_16_C_PFUMX_Z_SLICE.D0
-Info:                Defined in:
-Info:                  ./top.v:135.20-148.2
-Info:                  ./ICESugarProMinimal.v:3844.23-3844.52
-Info:                  ./ICESugarProMinimal.v:411.12-437.4
-Info:  0.4  2.2  Source u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_3_LUT4_Z_16_C_PFUMX_Z_SLICE.OFX0
-Info:  1.0  3.3    Net u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_3_LUT4_Z_16_C[3] budget 0.197000 ns (12,14) -> (13,10)
-Info:                Sink u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_3_LUT4_Z_16_SLICE.D0
+Info:  5.8  5.8  Source u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0.DOB1
+Info:  2.4  8.3    Net u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO1[3] budget 38.311001 ns (15,25) -> (17,9)
+Info:                Sink u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO1_LUT4_D_2_Z_PFUMX_ALUT_SLICE.D1
 Info:                Defined in:
 Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:109.23-109.24
-Info:  0.2  3.5  Source u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_3_LUT4_Z_16_SLICE.F0
-Info:  1.9  5.4    Net u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_3[15] budget 0.197000 ns (13,10) -> (13,9)
-Info:                Sink u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_12$CCU2_SLICE.B1
-Info:                Defined in:
-Info:                  ./top.v:135.20-148.2
-Info:                  ./ICESugarProMinimal.v:3576.23-3576.53
-Info:                  ./ICESugarProMinimal.v:411.12-437.4
-Info:  0.4  5.8  Source u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_12$CCU2_SLICE.FCO
-Info:  0.0  5.8    Net u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_3_COUT[15] budget 0.000000 ns (13,9) -> (13,9)
-Info:                Sink u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_11$CCU2_SLICE.FCI
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
-Info:  0.1  5.9  Source u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_11$CCU2_SLICE.FCO
-Info:  0.0  5.9    Net u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_3_COUT[17] budget 0.000000 ns (13,9) -> (13,9)
-Info:                Sink u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_10$CCU2_SLICE.FCI
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
-Info:  0.1  6.0  Source u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_10$CCU2_SLICE.FCO
-Info:  0.0  6.0    Net u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_3_COUT[19] budget 0.000000 ns (13,9) -> (13,9)
-Info:                Sink u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_9$CCU2_SLICE.FCI
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
-Info:  0.1  6.0  Source u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_9$CCU2_SLICE.FCO
-Info:  0.0  6.0    Net u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_3_COUT[21] budget 0.000000 ns (13,9) -> (14,9)
-Info:                Sink u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_8$CCU2_SLICE.FCI
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
-Info:  0.1  6.1  Source u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_8$CCU2_SLICE.FCO
-Info:  0.0  6.1    Net u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_3_COUT[23] budget 0.000000 ns (14,9) -> (14,9)
-Info:                Sink u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_7$CCU2_SLICE.FCI
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
-Info:  0.1  6.2  Source u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_7$CCU2_SLICE.FCO
-Info:  0.0  6.2    Net u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_3_COUT[25] budget 0.000000 ns (14,9) -> (14,9)
-Info:                Sink u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_6$CCU2_SLICE.FCI
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
-Info:  0.1  6.3  Source u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_6$CCU2_SLICE.FCO
-Info:  0.0  6.3    Net u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_3_COUT[27] budget 0.000000 ns (14,9) -> (14,9)
-Info:                Sink u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_5$CCU2_SLICE.FCI
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
-Info:  0.1  6.3  Source u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_5$CCU2_SLICE.FCO
-Info:  0.0  6.3    Net u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_3_COUT[29] budget 0.000000 ns (14,9) -> (15,9)
-Info:                Sink u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_3$CCU2_SLICE.FCI
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
-Info:  0.5  6.8  Source u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_CCU2C_S0_3$CCU2_SLICE.F1
-Info:  0.8  7.6    Net u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub[31] budget 0.197000 ns (15,9) -> (15,6)
-Info:                Sink u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_2_LUT4_Z_4_SLICE.D1
-Info:                Defined in:
-Info:                  ./top.v:135.20-148.2
-Info:                  ./ICESugarProMinimal.v:3573.23-3573.51
-Info:                  ./ICESugarProMinimal.v:411.12-437.4
-Info:  0.2  7.8  Source u_saxon.system_cpu_logic_cpu._zz_execute_SrcPlugin_addSub_2_LUT4_Z_4_SLICE.F1
-Info:  0.5  8.3    Net u_saxon.system_cpu_dBus_cmd_payload_fragment_address[31] budget 0.197000 ns (15,6) -> (15,6)
-Info:                Sink u_saxon.system_cpu_logic_cpu.decode_to_execute_SRC_LESS_UNSIGNED_L6MUX21_SD_D1_PFUMX_Z_SLICE.D1
-Info:                Defined in:
-Info:                  ./top.v:135.20-148.2
-Info:                  ./ICESugarProMinimal.v:34.23-34.68
-Info:  0.4  8.7  Source u_saxon.system_cpu_logic_cpu.decode_to_execute_SRC_LESS_UNSIGNED_L6MUX21_SD_D1_PFUMX_Z_SLICE.OFX0
-Info:  0.0  8.7    Net u_saxon.system_cpu_logic_cpu.decode_to_execute_SRC_LESS_UNSIGNED_L6MUX21_SD_D1 budget 0.000000 ns (15,6) -> (15,6)
-Info:                Sink u_saxon.system_cpu_logic_cpu.decode_to_execute_SRC_LESS_UNSIGNED_L6MUX21_SD_D1_PFUMX_Z_SLICE.FXB
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:142.38-142.40
-Info:  0.2  8.9  Source u_saxon.system_cpu_logic_cpu.decode_to_execute_SRC_LESS_UNSIGNED_L6MUX21_SD_D1_PFUMX_Z_SLICE.OFX1
-Info:  1.5 10.4    Net u_saxon.system_cpu_logic_cpu.decode_to_execute_SRC_LESS_UNSIGNED_L6MUX21_SD_Z[0] budget 0.985000 ns (15,6) -> (18,16)
-Info:                Sink u_saxon.system_cpu_logic_cpu.IBusSimplePlugin_cmd_payload_pc_LUT4_Z_1_C_CCU2C_S0_S1_L6MUX21_Z_D1_L6MUX21_Z_D1_PFUMX_Z_SLICE.D1
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:109.23-109.24
-Info:  0.4 10.8  Source u_saxon.system_cpu_logic_cpu.IBusSimplePlugin_cmd_payload_pc_LUT4_Z_1_C_CCU2C_S0_S1_L6MUX21_Z_D1_L6MUX21_Z_D1_PFUMX_Z_SLICE.OFX0
-Info:  0.0 10.8    Net u_saxon.system_cpu_logic_cpu.IBusSimplePlugin_cmd_payload_pc_LUT4_Z_1_C_CCU2C_S0_S1_L6MUX21_Z_D1_L6MUX21_Z_D1 budget 0.000000 ns (18,16) -> (18,16)
-Info:                Sink u_saxon.system_cpu_logic_cpu.IBusSimplePlugin_cmd_payload_pc_LUT4_Z_1_C_CCU2C_S0_S1_L6MUX21_Z_D1_L6MUX21_Z_D1_PFUMX_Z_SLICE.FXB
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:158.62-158.64
-Info:  0.2 11.1  Source u_saxon.system_cpu_logic_cpu.IBusSimplePlugin_cmd_payload_pc_LUT4_Z_1_C_CCU2C_S0_S1_L6MUX21_Z_D1_L6MUX21_Z_D1_PFUMX_Z_SLICE.OFX1
-Info:  0.0 11.1    Net u_saxon.system_cpu_logic_cpu.IBusSimplePlugin_cmd_payload_pc_LUT4_Z_1_C_CCU2C_S0_S1_L6MUX21_Z_D1 budget 0.000000 ns (18,16) -> (18,16)
-Info:                Sink u_saxon.system_cpu_logic_cpu.IBusSimplePlugin_cmd_payload_pc_LUT4_Z_1_C_CCU2C_S0_S1_L6MUX21_Z_D1_L6MUX21_Z_D0_PFUMX_Z_SLICE.FXB
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:158.70-158.72
-Info:  0.2 11.3  Source u_saxon.system_cpu_logic_cpu.IBusSimplePlugin_cmd_payload_pc_LUT4_Z_1_C_CCU2C_S0_S1_L6MUX21_Z_D1_L6MUX21_Z_D0_PFUMX_Z_SLICE.OFX1
-Info:  1.0 12.3    Net u_saxon.system_cpu_logic_cpu.IBusSimplePlugin_cmd_payload_pc_LUT4_Z_1_C[1] budget 1.970000 ns (18,16) -> (20,18)
-Info:                Sink u_saxon.system_cpu_iBus_decoder.io_input_cmd_payload_fragment_address_L6MUX21_Z_14_D0_L6MUX21_Z_D1_PFUMX_Z_SLICE.D0
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:109.23-109.24
-Info:  0.4 12.7  Source u_saxon.system_cpu_iBus_decoder.io_input_cmd_payload_fragment_address_L6MUX21_Z_14_D0_L6MUX21_Z_D1_PFUMX_Z_SLICE.OFX0
-Info:  0.0 12.7    Net u_saxon.system_cpu_iBus_decoder.io_input_cmd_payload_fragment_address_L6MUX21_Z_14_D0_L6MUX21_Z_D1 budget 0.000000 ns (20,18) -> (20,18)
-Info:                Sink u_saxon.system_cpu_iBus_decoder.io_input_cmd_payload_fragment_address_L6MUX21_Z_14_D0_L6MUX21_Z_D1_PFUMX_Z_SLICE.FXB
+Info:  0.4  8.7  Source u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO1_LUT4_D_2_Z_PFUMX_ALUT_SLICE.OFX0
+Info:  0.0  8.7    Net u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO1_LUT4_D_2_Z_PFUMX_ALUT_Z budget 0.000000 ns (17,9) -> (17,9)
+Info:                Sink u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO1_LUT4_D_2_Z_PFUMX_ALUT_SLICE.FXB
 Info:                Defined in:
 Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:158.54-158.56
-Info:  0.2 13.0  Source u_saxon.system_cpu_iBus_decoder.io_input_cmd_payload_fragment_address_L6MUX21_Z_14_D0_L6MUX21_Z_D1_PFUMX_Z_SLICE.OFX1
-Info:  0.0 13.0    Net u_saxon.system_cpu_iBus_decoder.io_input_cmd_payload_fragment_address_L6MUX21_Z_14_D0 budget 0.000000 ns (20,18) -> (20,18)
-Info:                Sink u_saxon.system_cpu_iBus_decoder.io_input_cmd_payload_fragment_address_L6MUX21_Z_14_D1_L6MUX21_Z_D0_PFUMX_Z_SLICE.FXA
+Info:  0.2  8.9  Source u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO1_LUT4_D_2_Z_PFUMX_ALUT_SLICE.OFX1
+Info:  0.0  8.9    Net u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO1_LUT4_D_3_Z_PFUMX_ALUT_Z_L6MUX21_D0_Z budget 0.000000 ns (17,9) -> (17,9)
+Info:                Sink u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO1_LUT4_D_1_Z_PFUMX_ALUT_SLICE.FXA
 Info:                Defined in:
 Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:158.66-158.68
-Info:  0.2 13.2  Source u_saxon.system_cpu_iBus_decoder.io_input_cmd_payload_fragment_address_L6MUX21_Z_14_D1_L6MUX21_Z_D0_PFUMX_Z_SLICE.OFX1
-Info:  1.0 14.2    Net u_saxon.system_cpu_iBus_cmd_payload_fragment_address[21] budget 3.940000 ns (20,18) -> (21,19)
-Info:                Sink u_saxon.system_cpu_iBus_decoder.logic_rspHits_0_LUT4_D_Z_L6MUX21_Z_2_D1_PFUMX_Z_SLICE.A0
-Info:                Defined in:
-Info:                  ./top.v:135.20-148.2
-Info:                  ./ICESugarProMinimal.v:28.23-28.63
-Info:  0.4 14.6  Source u_saxon.system_cpu_iBus_decoder.logic_rspHits_0_LUT4_D_Z_L6MUX21_Z_2_D1_PFUMX_Z_SLICE.OFX0
-Info:  0.0 14.6    Net u_saxon.system_cpu_iBus_decoder.logic_rspHits_0_LUT4_D_Z_L6MUX21_Z_2_D1 budget 0.000000 ns (21,19) -> (21,19)
-Info:                Sink u_saxon.system_cpu_iBus_decoder.logic_rspHits_0_LUT4_D_Z_L6MUX21_Z_2_D1_PFUMX_Z_SLICE.FXB
-Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:142.38-142.40
-Info:  0.2 14.9  Source u_saxon.system_cpu_iBus_decoder.logic_rspHits_0_LUT4_D_Z_L6MUX21_Z_2_D1_PFUMX_Z_SLICE.OFX1
-Info:  0.8 15.7    Net u_saxon.system_cpu_iBus_decoder.logic_rspHits_0_LUT4_D_Z[2] budget 4.378000 ns (21,19) -> (20,19)
-Info:                Sink u_saxon.system_cpu_iBus_decoder.when_BmbDecoder_l56_L6MUX21_Z_D0_L6MUX21_Z_D0_PFUMX_Z_SLICE.C1
+Info:  0.2  9.2  Source u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO1_LUT4_D_1_Z_PFUMX_ALUT_SLICE.OFX1
+Info:  0.6  9.8    Net u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO1_LUT4_D_Z_PFUMX_ALUT_Z_L6MUX21_D1_Z_L6MUX21_D1_Z[4] budget 38.310001 ns (17,9) -> (16,9)
+Info:                Sink u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO19_LUT4_A_Z_L6MUX21_Z_1_D1_L6MUX21_Z_D1_PFUMX_Z_SLICE.M0
 Info:                Defined in:
 Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:109.23-109.24
-Info:  0.4 16.1  Source u_saxon.system_cpu_iBus_decoder.when_BmbDecoder_l56_L6MUX21_Z_D0_L6MUX21_Z_D0_PFUMX_Z_SLICE.OFX0
-Info:  0.0 16.1    Net u_saxon.system_cpu_iBus_decoder.when_BmbDecoder_l56_L6MUX21_Z_D0_L6MUX21_Z_D0 budget 0.000000 ns (20,19) -> (20,19)
-Info:                Sink u_saxon.system_cpu_iBus_decoder.when_BmbDecoder_l56_L6MUX21_Z_D0_L6MUX21_Z_D1_PFUMX_Z_SLICE.FXA
+Info:  0.3 10.0  Source u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO19_LUT4_A_Z_L6MUX21_Z_1_D1_L6MUX21_Z_D1_PFUMX_Z_SLICE.OFX0
+Info:  0.0 10.0    Net u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO19_LUT4_A_Z_L6MUX21_Z_1_D1_L6MUX21_Z_D1 budget 0.000000 ns (16,9) -> (16,9)
+Info:                Sink u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO19_LUT4_A_Z_L6MUX21_Z_1_D1_L6MUX21_Z_D1_PFUMX_Z_SLICE.FXB
 Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:158.50-158.52
-Info:  0.2 16.3  Source u_saxon.system_cpu_iBus_decoder.when_BmbDecoder_l56_L6MUX21_Z_D0_L6MUX21_Z_D1_PFUMX_Z_SLICE.OFX1
-Info:  0.0 16.3    Net u_saxon.system_cpu_iBus_decoder.when_BmbDecoder_l56_L6MUX21_Z_D0 budget 0.000000 ns (20,19) -> (20,19)
-Info:                Sink u_saxon.system_cpu_iBus_decoder.when_BmbDecoder_l56_L6MUX21_Z_D1_L6MUX21_Z_D0_PFUMX_Z_SLICE.FXA
+Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:158.62-158.64
+Info:  0.2 10.3  Source u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO19_LUT4_A_Z_L6MUX21_Z_1_D1_L6MUX21_Z_D1_PFUMX_Z_SLICE.OFX1
+Info:  0.0 10.3    Net u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO19_LUT4_A_Z_L6MUX21_Z_1_D1 budget 0.000000 ns (16,9) -> (16,9)
+Info:                Sink u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO19_LUT4_A_Z_L6MUX21_Z_1_D1_L6MUX21_Z_D0_PFUMX_Z_SLICE.FXB
 Info:                Defined in:
-Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:158.66-158.68
-Info:  0.2 16.5  Source u_saxon.system_cpu_iBus_decoder.when_BmbDecoder_l56_L6MUX21_Z_D1_L6MUX21_Z_D0_PFUMX_Z_SLICE.OFX1
-Info:  1.2 17.8    Net u_saxon.system_cpu_dBus_cmd_rData_fragment_context_LUT4_D_Z[4] budget 12.652000 ns (20,19) -> (19,21)
-Info:                Sink u_saxon.system_cpu_dBus_cmd_rData_fragment_mask_L6MUX21_SD_1_D0_L6MUX21_Z_D0_PFUMX_Z_SLICE.M0
+Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:158.70-158.72
+Info:  0.2 10.5  Source u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_cache.ways_0_tags.0.0.0_DO19_LUT4_A_Z_L6MUX21_Z_1_D1_L6MUX21_Z_D0_PFUMX_Z_SLICE.OFX1
+Info:  1.1 11.7    Net u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_decompressor_throw2BytesReg_LUT4_C_Z[3] budget 1.222000 ns (16,9) -> (11,9)
+Info:                Sink u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_decompressor_throw2BytesPatched_L6MUX21_Z_D1_L6MUX21_Z_D1_PFUMX_Z_SLICE.C1
+Info:                Defined in:
+Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:109.23-109.24
+Info:  0.4 12.1  Source u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_decompressor_throw2BytesPatched_L6MUX21_Z_D1_L6MUX21_Z_D1_PFUMX_Z_SLICE.OFX0
+Info:  0.0 12.1    Net u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_decompressor_throw2BytesPatched_L6MUX21_Z_D1_L6MUX21_Z_D1 budget 0.000000 ns (11,9) -> (11,9)
+Info:                Sink u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_decompressor_throw2BytesPatched_L6MUX21_Z_D1_L6MUX21_Z_D1_PFUMX_Z_SLICE.FXB
+Info:                Defined in:
+Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:158.62-158.64
+Info:  0.2 12.3  Source u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_decompressor_throw2BytesPatched_L6MUX21_Z_D1_L6MUX21_Z_D1_PFUMX_Z_SLICE.OFX1
+Info:  0.0 12.3    Net u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_decompressor_throw2BytesPatched_L6MUX21_Z_D1 budget 0.000000 ns (11,9) -> (11,9)
+Info:                Sink u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_decompressor_throw2BytesPatched_L6MUX21_Z_D1_L6MUX21_Z_D0_PFUMX_Z_SLICE.FXB
+Info:                Defined in:
+Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:158.70-158.72
+Info:  0.2 12.5  Source u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_decompressor_throw2BytesPatched_L6MUX21_Z_D1_L6MUX21_Z_D0_PFUMX_Z_SLICE.OFX1
+Info:  1.2 13.8    Net u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_decompressor_throw2BytesPatched budget 3.667000 ns (11,9) -> (7,9)
+Info:                Sink u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_decompressor_throw2BytesPatched_LUT4_D_12_Z_PFUMX_BLUT_SLICE.D0
 Info:                Defined in:
 Info:                  ./top.v:135.20-148.2
-Info:                  ./ICESugarProMinimal.v:2904.23-2904.42
-Info:                  ./ICESugarProMinimal.v:474.14-499.4
-Info:  0.0 17.8  Setup u_saxon.system_cpu_dBus_cmd_rData_fragment_mask_L6MUX21_SD_1_D0_L6MUX21_Z_D0_PFUMX_Z_SLICE.M0
-Info: 6.7 ns logic, 11.0 ns routing
+Info:                  ./ICESugarProMinimal.v:5148.23-5148.71
+Info:                  ./ICESugarProMinimal.v:555.12-589.4
+Info:  0.4 14.2  Source u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_decompressor_throw2BytesPatched_LUT4_D_12_Z_PFUMX_BLUT_SLICE.OFX0
+Info:  1.6 15.7    Net u_saxon.system_cpu_logic_cpu.IBusCachedPlugin_decompressor_throw2BytesPatched_LUT4_D_15_Z_PFUMX_BLUT_Z[3] budget 5.037000 ns (7,9) -> (6,9)
+Info:                Sink u_saxon.system_cpu_logic_cpu._zz_IBusCachedPlugin_injector_decodeInput_payload_rsp_inst_TRELLIS_FF_Q_20_DI_PFUMX_Z_ALUT_LUT4_Z_C_LUT4_Z_1_D_PFUMX_Z_SLICE.A1
+Info:                Defined in:
+Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:109.23-109.24
+Info:  0.4 16.1  Source u_saxon.system_cpu_logic_cpu._zz_IBusCachedPlugin_injector_decodeInput_payload_rsp_inst_TRELLIS_FF_Q_20_DI_PFUMX_Z_ALUT_LUT4_Z_C_LUT4_Z_1_D_PFUMX_Z_SLICE.OFX0
+Info:  1.1 17.2    Net u_saxon.system_cpu_logic_cpu._zz_IBusCachedPlugin_injector_decodeInput_payload_rsp_inst_TRELLIS_FF_Q_20_DI_PFUMX_Z_ALUT_LUT4_Z_C_LUT4_Z_1_D[3] budget 6.092000 ns (6,9) -> (4,10)
+Info:                Sink u_saxon.system_cpu_logic_cpu._zz_IBusCachedPlugin_predictionJumpInterface_payload_8_TRELLIS_FF_Q_DI_L6MUX21_Z_D0_PFUMX_Z_C0_PFUMX_Z_SLICE.A0
+Info:                Defined in:
+Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:109.23-109.24
+Info:  0.4 17.6  Source u_saxon.system_cpu_logic_cpu._zz_IBusCachedPlugin_predictionJumpInterface_payload_8_TRELLIS_FF_Q_DI_L6MUX21_Z_D0_PFUMX_Z_C0_PFUMX_Z_SLICE.OFX0
+Info:  0.9 18.5    Net u_saxon.system_cpu_logic_cpu._zz_IBusCachedPlugin_predictionJumpInterface_payload_8_TRELLIS_FF_Q_DI_L6MUX21_Z_D0_PFUMX_Z_C0[4] budget 14.758000 ns (4,10) -> (3,9)
+Info:                Sink u_saxon.system_cpu_logic_cpu._zz_IBusCachedPlugin_predictionJumpInterface_payload_8_TRELLIS_FF_Q_DI_L6MUX21_Z_D0_PFUMX_Z_SLICE.M0
+Info:                Defined in:
+Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:109.23-109.24
+Info:  0.0 18.5  Setup u_saxon.system_cpu_logic_cpu._zz_IBusCachedPlugin_predictionJumpInterface_payload_8_TRELLIS_FF_Q_DI_L6MUX21_Z_D0_PFUMX_Z_SLICE.M0
+Info: 9.5 ns logic, 9.0 ns routing
 
 Info: Critical path report for cross-domain path 'posedge $glbnet$clk25$TRELLIS_IO_IN' -> 'posedge $glbnet$io_jtag_tck$TRELLIS_IO_IN':
 Info: curr total
 Info:  0.5  0.5  Source u_saxon.jtagBridge_1.system_rsp_payload_data_TRELLIS_FF_Q_5_SLICE.Q0
-Info:  1.2  1.7    Net u_saxon.jtagBridge_1.system_rsp_payload_data[26] budget 41.285999 ns (18,23) -> (17,23)
+Info:  1.2  1.7    Net u_saxon.jtagBridge_1.system_rsp_payload_data[26] budget 41.285999 ns (30,27) -> (29,26)
 Info:                Sink u_saxon.jtagBridge_1._zz_jtag_tap_tdoDr_1_TRELLIS_FF_Q_6_DI_LUT4_Z_SLICE.C0
 Info:                Defined in:
 Info:                  ./top.v:135.20-148.2
-Info:                  ./ICESugarProMinimal.v:3147.48-3147.71
-Info:                  ./ICESugarProMinimal.v:438.14-453.4
-Info:  0.2  2.0  Source u_saxon.jtagBridge_1._zz_jtag_tap_tdoDr_1_TRELLIS_FF_Q_6_DI_LUT4_Z_SLICE.F0
-Info:  0.1  2.1    Net u_saxon.jtagBridge_1._zz_jtag_tap_tdoDr_1_TRELLIS_FF_Q_6_DI budget 27.445000 ns (17,23) -> (17,23)
+Info:                  ./ICESugarProMinimal.v:4131.48-4131.71
+Info:                  ./ICESugarProMinimal.v:590.14-605.4
+Info:  0.2  1.9  Source u_saxon.jtagBridge_1._zz_jtag_tap_tdoDr_1_TRELLIS_FF_Q_6_DI_LUT4_Z_SLICE.F0
+Info:  0.1  2.0    Net u_saxon.jtagBridge_1._zz_jtag_tap_tdoDr_1_TRELLIS_FF_Q_6_DI budget 20.525000 ns (29,26) -> (29,26)
 Info:                Sink u_saxon.jtagBridge_1._zz_jtag_tap_tdoDr_1_TRELLIS_FF_Q_6_DI_LUT4_Z_SLICE.DI0
-Info:  0.0  2.1  Setup u_saxon.jtagBridge_1._zz_jtag_tap_tdoDr_1_TRELLIS_FF_Q_6_DI_LUT4_Z_SLICE.DI0
+Info:  0.0  2.0  Setup u_saxon.jtagBridge_1._zz_jtag_tap_tdoDr_1_TRELLIS_FF_Q_6_DI_LUT4_Z_SLICE.DI0
 Info: 0.8 ns logic, 1.3 ns routing
 
 Info: Critical path report for cross-domain path 'posedge $glbnet$io_jtag_tck$TRELLIS_IO_IN' -> '<async>':
 Info: curr total
-Info:  0.5  0.5  Source u_saxon.jtagBridge_1._zz_jtag_tap_fsm_stateNext_PFUMX_Z_SLICE.Q0
-Info:  1.1  1.6    Net u_saxon.jtagBridge_1.jtag_tap_fsm_state[0] budget 41.285999 ns (3,17) -> (5,22)
-Info:                Sink u_saxon.jtagBridge_1.jtag_tap_bypass_LUT4_D_Z_LUT4_Z_SLICE.D1
+Info:  0.5  0.5  Source u_saxon.jtagBridge_1.jtag_tap_fsm_state_TRELLIS_FF_Q_3_DI_PFUMX_Z_SLICE.Q0
+Info:  1.3  1.9    Net u_saxon.jtagBridge_1.jtag_tap_fsm_state[3] budget 41.285999 ns (4,24) -> (3,26)
+Info:                Sink u_saxon.jtagBridge_1._zz_io_input_valid_2_TRELLIS_FF_Q_DI_LUT4_Z_B_LUT4_C_Z_LUT4_Z_1_SLICE.B0
 Info:                Defined in:
 Info:                  ./top.v:135.20-148.2
-Info:                  ./ICESugarProMinimal.v:3150.23-3150.41
-Info:                  ./ICESugarProMinimal.v:438.14-453.4
-Info:  0.2  1.9  Source u_saxon.jtagBridge_1.jtag_tap_bypass_LUT4_D_Z_LUT4_Z_SLICE.F1
-Info:  0.7  2.6    Net u_saxon.jtagBridge_1.jtag_tap_bypass_LUT4_D_Z[4] budget 41.285999 ns (5,22) -> (4,21)
-Info:                Sink u_saxon.jtagBridge_1.jtag_tap_tdoUnbufferd_LUT4_Z_D_PFUMX_Z_SLICE.M0
+Info:                  ./ICESugarProMinimal.v:4134.23-4134.41
+Info:                  ./ICESugarProMinimal.v:590.14-605.4
+Info:  0.2  2.1  Source u_saxon.jtagBridge_1._zz_io_input_valid_2_TRELLIS_FF_Q_DI_LUT4_Z_B_LUT4_C_Z_LUT4_Z_1_SLICE.F0
+Info:  1.0  3.1    Net u_saxon.jtagBridge_1._zz_io_input_valid_2_TRELLIS_FF_Q_DI_LUT4_Z_B_LUT4_C_Z[4] budget 41.285999 ns (3,26) -> (7,26)
+Info:                Sink u_saxon.jtagBridge_1.jtag_tap_tdoIr_LUT4_D_Z_PFUMX_ALUT_SLICE.M0
 Info:                Defined in:
 Info:                  /usr/local/bin/../share/yosys/ecp5/cells_map.v:109.23-109.24
-Info:  0.0  2.6  Setup u_saxon.jtagBridge_1.jtag_tap_tdoUnbufferd_LUT4_Z_D_PFUMX_Z_SLICE.M0
-Info: 0.8 ns logic, 1.8 ns routing
+Info:  0.0  3.1  Setup u_saxon.jtagBridge_1.jtag_tap_tdoIr_LUT4_D_Z_PFUMX_ALUT_SLICE.M0
+Info: 0.8 ns logic, 2.4 ns routing
 
 Info: Critical path report for cross-domain path 'posedge $glbnet$io_jtag_tck$TRELLIS_IO_IN' -> 'posedge $glbnet$clk25$TRELLIS_IO_IN':
 Info: curr total
-Info:  0.5  0.5  Source u_saxon.jtagBridge_1.flowCCByToggle_1.inputArea_data_fragment_TRELLIS_FF_Q_SLICE.Q0
-Info:  0.7  1.2    Net u_saxon.jtagBridge_1.flowCCByToggle_1.inputArea_data_fragment budget 39.474998 ns (4,20) -> (4,19)
-Info:                Sink u_saxon.jtagBridge_1.flowCCByToggle_1.outputArea_flow_m2sPipe_payload_fragment_TRELLIS_FF_Q_SLICE.M0
+Info:  0.5  0.5  Source u_saxon.jtagBridge_1.flowCCByToggle_1.inputArea_target_LUT4_D_SLICE.Q1
+Info:  0.7  1.2    Net u_saxon.jtagBridge_1.flowCCByToggle_1.inputArea_target budget 39.478001 ns (4,26) -> (5,26)
+Info:                Sink u_saxon.jtagBridge_1.flowCCByToggle_1.inputArea_target_buffercc.buffers_0_TRELLIS_FF_Q_SLICE.M0
 Info:                Defined in:
 Info:                  ./top.v:135.20-148.2
-Info:                  ./ICESugarProMinimal.v:3180.18-3190.4
-Info:                  ./ICESugarProMinimal.v:6217.23-6217.55
-Info:                  ./ICESugarProMinimal.v:438.14-453.4
-Info:  0.0  1.2  Setup u_saxon.jtagBridge_1.flowCCByToggle_1.outputArea_flow_m2sPipe_payload_fragment_TRELLIS_FF_Q_SLICE.M0
+Info:                  ./ICESugarProMinimal.v:4164.18-4174.4
+Info:                  ./ICESugarProMinimal.v:11809.23-11809.32
+Info:                  ./ICESugarProMinimal.v:10184.14-10189.4
+Info:                  ./ICESugarProMinimal.v:590.14-605.4
+Info:  0.0  1.2  Setup u_saxon.jtagBridge_1.flowCCByToggle_1.inputArea_target_buffercc.buffers_0_TRELLIS_FF_Q_SLICE.M0
 Info: 0.5 ns logic, 0.7 ns routing
 
 Info: Critical path report for cross-domain path 'negedge $glbnet$io_jtag_tck$TRELLIS_IO_IN' -> '<async>':
 Info: curr total
 Info:  0.5  0.5  Source u_saxon.jtagBridge_1.jtag_tap_tdoUnbufferd_LUT4_Z_SLICE.Q0
-Info:  1.8  2.3    Net io_jtag_tdo$TRELLIS_IO_OUT budget 41.140999 ns (5,23) -> (0,17)
+Info:  1.5  2.0    Net io_jtag_tdo$TRELLIS_IO_OUT budget 41.140999 ns (7,26) -> (0,17)
 Info:                Sink io_jtag_tdo$tr_io.I
 Info:                Defined in:
 Info:                  ./top.v:135.20-148.2
 Info:                  ./ICESugarProMinimal.v:12.23-12.42
-Info: 0.5 ns logic, 1.8 ns routing
+Info: 0.5 ns logic, 1.5 ns routing
 
-Info: Max frequency for clock       '$glbnet$clk25$TRELLIS_IO_IN': 48.51 MHz (PASS at 25.00 MHz)
-Info: Max frequency for clock '$glbnet$io_jtag_tck$TRELLIS_IO_IN': 93.83 MHz (PASS at 12.00 MHz)
-Info: Max frequency for clock                       '$glbnet$clk': 268.31 MHz (PASS at 50.00 MHz)
+Info: Max frequency for clock       '$glbnet$clk25$TRELLIS_IO_IN': 51.11 MHz (PASS at 25.00 MHz)
+Info: Max frequency for clock '$glbnet$io_jtag_tck$TRELLIS_IO_IN': 98.78 MHz (PASS at 12.00 MHz)
+Info: Max frequency for clock                       '$glbnet$clk': 270.56 MHz (PASS at 50.00 MHz)
 
-Info: Max delay <async>                                   -> posedge $glbnet$clk                      : 3.46 ns
-Info: Max delay <async>                                   -> posedge $glbnet$clk25$TRELLIS_IO_IN      : 2.70 ns
-Info: Max delay <async>                                   -> posedge $glbnet$io_jtag_tck$TRELLIS_IO_IN: 3.00 ns
-Info: Max delay posedge $glbnet$clk                       -> posedge $glbnet$clk25$TRELLIS_IO_IN      : 2.16 ns
-Info: Max delay posedge $glbnet$clk25$TRELLIS_IO_IN       -> <async>                                  : 17.77 ns
-Info: Max delay posedge $glbnet$clk25$TRELLIS_IO_IN       -> posedge $glbnet$io_jtag_tck$TRELLIS_IO_IN: 2.10 ns
-Info: Max delay posedge $glbnet$io_jtag_tck$TRELLIS_IO_IN -> <async>                                  : 2.59 ns
-Info: Max delay posedge $glbnet$io_jtag_tck$TRELLIS_IO_IN -> posedge $glbnet$clk25$TRELLIS_IO_IN      : 1.24 ns
-Info: Max delay negedge $glbnet$io_jtag_tck$TRELLIS_IO_IN -> <async>                                  : 2.31 ns
+Info: Max delay <async>                                   -> posedge $glbnet$clk                      : 3.64 ns
+Info: Max delay <async>                                   -> posedge $glbnet$clk25$TRELLIS_IO_IN      : 2.73 ns
+Info: Max delay <async>                                   -> posedge $glbnet$io_jtag_tck$TRELLIS_IO_IN: 2.71 ns
+Info: Max delay posedge $glbnet$clk                       -> posedge $glbnet$clk25$TRELLIS_IO_IN      : 2.30 ns
+Info: Max delay posedge $glbnet$clk25$TRELLIS_IO_IN       -> <async>                                  : 18.53 ns
+Info: Max delay posedge $glbnet$clk25$TRELLIS_IO_IN       -> posedge $glbnet$io_jtag_tck$TRELLIS_IO_IN: 2.05 ns
+Info: Max delay posedge $glbnet$io_jtag_tck$TRELLIS_IO_IN -> <async>                                  : 3.14 ns
+Info: Max delay posedge $glbnet$io_jtag_tck$TRELLIS_IO_IN -> posedge $glbnet$clk25$TRELLIS_IO_IN      : 1.21 ns
+Info: Max delay negedge $glbnet$io_jtag_tck$TRELLIS_IO_IN -> <async>                                  : 1.99 ns
 
 Info: Slack histogram:
-Info:  legend: * represents 17 endpoint(s)
-Info:          + represents [1,17) endpoint(s)
-Info: [ 16273,  19579) |**+
-Info: [ 19579,  22885) |*****************+
-Info: [ 22885,  26191) |***************+
-Info: [ 26191,  29497) |*************+
-Info: [ 29497,  32803) |****************+
-Info: [ 32803,  36109) |****************+
-Info: [ 36109,  39415) |************************************************************ 
-Info: [ 39415,  42721) | 
-Info: [ 42721,  46027) | 
-Info: [ 46027,  49333) | 
-Info: [ 49333,  52639) | 
-Info: [ 52639,  55945) | 
-Info: [ 55945,  59251) | 
-Info: [ 59251,  62557) | 
-Info: [ 62557,  65863) |+
-Info: [ 65863,  69169) |+
-Info: [ 69169,  72475) |+
-Info: [ 72475,  75781) |+
-Info: [ 75781,  79087) |****+
-Info: [ 79087,  82393) |*********************+
+Info:  legend: * represents 31 endpoint(s)
+Info:          + represents [1,31) endpoint(s)
+Info: [ 16304,  19609) |*+
+Info: [ 19609,  22914) |*+
+Info: [ 22914,  26219) |***********+
+Info: [ 26219,  29524) |********************************************************+
+Info: [ 29524,  32829) |********************************+
+Info: [ 32829,  36134) |******************+
+Info: [ 36134,  39439) |************************************************************ 
+Info: [ 39439,  42744) |+
+Info: [ 42744,  46049) | 
+Info: [ 46049,  49354) | 
+Info: [ 49354,  52659) | 
+Info: [ 52659,  55964) | 
+Info: [ 55964,  59269) | 
+Info: [ 59269,  62574) | 
+Info: [ 62574,  65879) |+
+Info: [ 65879,  69184) |****+
+Info: [ 69184,  72489) |**+
+Info: [ 72489,  75794) |*+
+Info: [ 75794,  79099) |*******+
+Info: [ 79099,  82404) |*****************+
 
 Info: Program finished normally.
