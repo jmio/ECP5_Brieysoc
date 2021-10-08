@@ -10,6 +10,7 @@
 ## Supported HW
 + UART (Saxon SoC, 115200bps)
 + JTAG DEBUG @ iCELink 2nd JTAG (VexRiscv)
++ SDRAM (0x4000000~ @100MHz, I haven't properly tested it yet.)
 
 ## HW Build Tool
 + [yosys](https://github.com/YosysHQ/yosys)
@@ -59,16 +60,13 @@ For those of you using ICESugarPro, I would like to add that drag-and-drop writi
 
 If it does not work properly, please try re-writing using icesprog or ecpdap.
 
-## FW Build Tool (Saxon Soc BSP or VSCode Sample with BSP)
-Original BSP
-```
-cd ~/SaxonSoc/software/standalone/blinkAndEcho
-make BSP_PATH=../../../bsp/muselab/ICESugarPro/minimal/
-```
+## FW Build Tool (VSCode Sample with BSP)
+Open VS Code in ~/saxon, and Build(Ctrl+Shift+B). 
+You can also debug it, but you will need to change the configuration file.
 
-VS Code (IDE : Tested on Windows)
-+ GNU MCU Eclipse RISC-V Embedded GCC 8.2.0 (Tested on Windows)
-+ make.exe
+Toolchain (Tested on Windows)
++ GNU MCU Eclipse RISC-V Embedded GCC 8.2.0
++ make.exe (incuded)
 + openocd for vexriscv
 https://github.com/SpinalHDL/openocd_riscv
 (libUSB FT2232 Dongle, Windows Binary included)
