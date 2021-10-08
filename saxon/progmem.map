@@ -11,7 +11,7 @@ c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(flo
 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(muldi3.o)
                               ff.o (__mulsi3)
 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(div.o)
-                              ff.o (__udivsi3)
+                              main.o (__divsi3)
 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(_clzsi2.o)
                               c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(divdf3.o) (__clzsi2)
 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(_clz.o)
@@ -174,7 +174,7 @@ Discarded input sections
                 0x0000000000000000      0x18a xprintf.o
  .text          0x0000000000000000        0x0 main.o
  .data          0x0000000000000000        0x0 main.o
- .bss           0x0000000000000000        0x0 main.o
+ .bss           0x0000000000000000        0x2 main.o
  .text.uart_readOccupancy
                 0x0000000000000000       0x2a main.o
  .text.uart_writeHex
@@ -183,16 +183,28 @@ Discarded input sections
                 0x0000000000000000       0x3a main.o
  .text.uart_applyConfig
                 0x0000000000000000       0x62 main.o
- .text.clint_getTimeLow
-                0x0000000000000000       0x2c main.o
  .text.clint_getTimeHigh
                 0x0000000000000000       0x2c main.o
  .text.clint_setCmp
                 0x0000000000000000       0x84 main.o
  .text.clint_getTime
                 0x0000000000000000       0x90 main.o
- .text.clint_uDelay
-                0x0000000000000000       0x7e main.o
+ .text.sdram_ddr2_init
+                0x0000000000000000      0x1e4 main.o
+ .text.sdram_ddr3_init
+                0x0000000000000000      0x168 main.o
+ .text.lfsrReset
+                0x0000000000000000       0x1c main.o
+ .text.lfsr16   0x0000000000000000       0x92 main.o
+ .text.lfsr32   0x0000000000000000       0x30 main.o
+ .text.sdram_mem_init
+                0x0000000000000000       0x5e main.o
+ .text.sdram_mem_test
+                0x0000000000000000       0x74 main.o
+ .text.sdram_phy_s7_scan
+                0x0000000000000000       0x94 main.o
+ .text.sdram_phy_s7
+                0x0000000000000000      0x1d6 main.o
  COMMON         0x0000000000000000      0x800 main.o
  .text          0x0000000000000000        0x0 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
  .data          0x0000000000000000        0x0 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
@@ -673,184 +685,226 @@ Linker script and memory map
  .text.write_u32
                 0x0000000080004432       0x20 main.o
 
+.text.write_u32_ad
+                0x0000000080004452       0x20
+ .text.write_u32_ad
+                0x0000000080004452       0x20 main.o
+
 .text.uart_writeAvailability
-                0x0000000080004452       0x2e
+                0x0000000080004472       0x2e
  .text.uart_writeAvailability
-                0x0000000080004452       0x2e main.o
+                0x0000000080004472       0x2e main.o
 
 .text.uart_write
-                0x0000000080004480       0x40
+                0x00000000800044a0       0x40
  .text.uart_write
-                0x0000000080004480       0x40 main.o
+                0x00000000800044a0       0x40 main.o
 
 .text.uart_writeStr
-                0x00000000800044c0       0x44
+                0x00000000800044e0       0x44
  .text.uart_writeStr
-                0x00000000800044c0       0x44 main.o
+                0x00000000800044e0       0x44 main.o
+
+.text.clint_getTimeLow
+                0x0000000080004524       0x2c
+ .text.clint_getTimeLow
+                0x0000000080004524       0x2c main.o
+
+.text.clint_uDelay
+                0x0000000080004550       0x7e
+ .text.clint_uDelay
+                0x0000000080004550       0x7e main.o
 
 .text.gpio_setOutput
-                0x0000000080004504       0x2e
+                0x00000000800045ce       0x2e
  .text.gpio_setOutput
-                0x0000000080004504       0x2e main.o
+                0x00000000800045ce       0x2e main.o
 
 .text.gpio_setOutputEnable
-                0x0000000080004532       0x2e
+                0x00000000800045fc       0x2e
  .text.gpio_setOutputEnable
-                0x0000000080004532       0x2e main.o
+                0x00000000800045fc       0x2e main.o
 
-.text.putcon    0x0000000080004560       0x2a
- .text.putcon   0x0000000080004560       0x2a main.o
-                0x0000000080004560                putcon
+.text.t2c       0x000000008000462a       0x68
+ .text.t2c      0x000000008000462a       0x68 main.o
 
-.text.main      0x000000008000458a       0x5c
- .text.main     0x000000008000458a       0x5c main.o
-                0x000000008000458a                main
+.text.sat       0x0000000080004692       0x1c
+ .text.sat      0x0000000080004692       0x1c main.o
 
-.text.__divdf3  0x00000000800045e8      0x904
+.text.sdram_udelay
+                0x00000000800046ae       0x2e
+ .text.sdram_udelay
+                0x00000000800046ae       0x2e main.o
+
+.text.sdram_command
+                0x00000000800046dc       0x82
+ .text.sdram_command
+                0x00000000800046dc       0x82 main.o
+
+.text.sdram_init
+                0x000000008000475e      0x584
+ .text.sdram_init
+                0x000000008000475e      0x584 main.o
+
+.text.sdram_sdr_init
+                0x0000000080004ce2      0x14c
+ .text.sdram_sdr_init
+                0x0000000080004ce2      0x14c main.o
+
+.text.putcon    0x0000000080004e2e       0x2a
+ .text.putcon   0x0000000080004e2e       0x2a main.o
+                0x0000000080004e2e                putcon
+
+.text.main      0x0000000080004e58      0x104
+ .text.main     0x0000000080004e58      0x104 main.o
+                0x0000000080004e58                main
+
+.text.__divdf3  0x0000000080004f5c      0x904
  .text.__divdf3
-                0x00000000800045e8      0x904 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
-                0x00000000800045e8                __divdf3
+                0x0000000080004f5c      0x904 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
+                0x0000000080004f5c                __divdf3
 
-.text.__muldf3  0x0000000080004eec      0x764
+.text.__muldf3  0x0000000080005860      0x764
  .text.__muldf3
-                0x0000000080004eec      0x764 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(muldf3.o)
-                0x0000000080004eec                __muldf3
+                0x0000000080005860      0x764 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(muldf3.o)
+                0x0000000080005860                __muldf3
 
 .text.__fixunsdfsi
-                0x0000000080005650       0x78
+                0x0000000080005fc4       0x78
  .text.__fixunsdfsi
-                0x0000000080005650       0x78 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(fixunsdfsi.o)
-                0x0000000080005650                __fixunsdfsi
+                0x0000000080005fc4       0x78 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(fixunsdfsi.o)
+                0x0000000080005fc4                __fixunsdfsi
 
 .text.__floatunsidf
-                0x00000000800056c8       0xb4
+                0x000000008000603c       0xb4
  .text.__floatunsidf
-                0x00000000800056c8       0xb4 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(floatunsidf.o)
-                0x00000000800056c8                __floatunsidf
+                0x000000008000603c       0xb4 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(floatunsidf.o)
+                0x000000008000603c                __floatunsidf
 
-.text.__clzsi2  0x000000008000577c       0x94
+.text.__clzsi2  0x00000000800060f0       0x94
  .text.__clzsi2
-                0x000000008000577c       0x94 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(_clzsi2.o)
-                0x000000008000577c                __clzsi2
+                0x00000000800060f0       0x94 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(_clzsi2.o)
+                0x00000000800060f0                __clzsi2
 
 .text.__locale_ctype_ptr
-                0x0000000080005810       0x2c
+                0x0000000080006184       0x2c
  .text.__locale_ctype_ptr
-                0x0000000080005810       0x2c c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-locale.o)
-                0x0000000080005810                __locale_ctype_ptr
+                0x0000000080006184       0x2c c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-locale.o)
+                0x0000000080006184                __locale_ctype_ptr
 
 .text.__ascii_mbtowc
-                0x000000008000583c       0x68
+                0x00000000800061b0       0x68
  .text.__ascii_mbtowc
-                0x000000008000583c       0x68 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-mbtowc_r.o)
-                0x000000008000583c                __ascii_mbtowc
+                0x00000000800061b0       0x68 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-mbtowc_r.o)
+                0x00000000800061b0                __ascii_mbtowc
 
 .text.__ascii_wctomb
-                0x00000000800058a4       0x30
+                0x0000000080006218       0x30
  .text.__ascii_wctomb
-                0x00000000800058a4       0x30 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-wctomb_r.o)
-                0x00000000800058a4                __ascii_wctomb
+                0x0000000080006218       0x30 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-wctomb_r.o)
+                0x0000000080006218                __ascii_wctomb
 
-.rela.dyn       0x00000000800058d4        0x0
- .rela.text     0x00000000800058d4        0x0 crt.o
+.rela.dyn       0x0000000080006248        0x0
+ .rela.text     0x0000000080006248        0x0 crt.o
  .rela.text.putch
-                0x00000000800058d4        0x0 crt.o
+                0x0000000080006248        0x0 crt.o
  .rela.text.getline
-                0x00000000800058d4        0x0 crt.o
+                0x0000000080006248        0x0 crt.o
  .rela.text.gethex
-                0x00000000800058d4        0x0 crt.o
+                0x0000000080006248        0x0 crt.o
  .rela.text.getdata
-                0x00000000800058d4        0x0 crt.o
+                0x0000000080006248        0x0 crt.o
  .rela.text.ogetdata
-                0x00000000800058d4        0x0 crt.o
+                0x0000000080006248        0x0 crt.o
  .rela.text.xdump
-                0x00000000800058d4        0x0 crt.o
+                0x0000000080006248        0x0 crt.o
  .rela.text.xsubst
-                0x00000000800058d4        0x0 crt.o
+                0x0000000080006248        0x0 crt.o
  .rela.text.xfill
-                0x00000000800058d4        0x0 crt.o
+                0x0000000080006248        0x0 crt.o
  .rela.text.hxbyte
-                0x00000000800058d4        0x0 crt.o
+                0x0000000080006248        0x0 crt.o
  .rela.text.xread
-                0x00000000800058d4        0x0 crt.o
+                0x0000000080006248        0x0 crt.o
  .rela.text.hx1lp
-                0x00000000800058d4        0x0 crt.o
+                0x0000000080006248        0x0 crt.o
  .rela.text.hxbytelp
-                0x00000000800058d4        0x0 crt.o
+                0x0000000080006248        0x0 crt.o
  .rela.text.xdir
-                0x00000000800058d4        0x0 crt.o
+                0x0000000080006248        0x0 crt.o
  .rela.text.xsdread
-                0x00000000800058d4        0x0 crt.o
+                0x0000000080006248        0x0 crt.o
  .rela.text._main
-                0x00000000800058d4        0x0 crt.o
+                0x0000000080006248        0x0 crt.o
  .rela.text.irqCallback
-                0x00000000800058d4        0x0 crt.o
+                0x0000000080006248        0x0 crt.o
  .rela.text.sysCallback
-                0x00000000800058d4        0x0 crt.o
+                0x0000000080006248        0x0 crt.o
  .rela.text.xputc
-                0x00000000800058d4        0x0 crt.o
+                0x0000000080006248        0x0 crt.o
  .rela.text.main
-                0x00000000800058d4        0x0 crt.o
+                0x0000000080006248        0x0 crt.o
 
-.data           0x00000000800058e0      0xb88
+.data           0x0000000080006250      0xc78
  *(.rdata)
  *(.rodata .rodata.*)
- .rodata        0x00000000800058e0       0x26 ff.o
- *fill*         0x0000000080005906        0x2 
- .rodata        0x0000000080005908      0x169 deb.o
- *fill*         0x0000000080005a71        0x7 
- .rodata        0x0000000080005a78       0xb0 traphandler.o
- .rodata        0x0000000080005b28       0x7b xprintf.o
- *fill*         0x0000000080005ba3        0x1 
- .rodata        0x0000000080005ba4       0x18 main.o
+ .rodata        0x0000000080006250       0x26 ff.o
+ *fill*         0x0000000080006276        0x2 
+ .rodata        0x0000000080006278      0x169 deb.o
+ *fill*         0x00000000800063e1        0x7 
+ .rodata        0x00000000800063e8       0xb0 traphandler.o
+ .rodata        0x0000000080006498       0x7b xprintf.o
+ *fill*         0x0000000080006513        0x1 
+ .rodata        0x0000000080006514      0x106 main.o
+ *fill*         0x000000008000661a        0x2 
  .rodata.__divdf3
-                0x0000000080005bbc       0x40 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
+                0x000000008000661c       0x40 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
  .rodata.__muldf3
-                0x0000000080005bfc       0x40 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(muldf3.o)
+                0x000000008000665c       0x40 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(muldf3.o)
  .rodata.__clz_tab
-                0x0000000080005c3c      0x100 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(_clz.o)
-                0x0000000080005c3c                __clz_tab
+                0x000000008000669c      0x100 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(_clz.o)
+                0x000000008000669c                __clz_tab
  .rodata._setlocale_r.str1.4
-                0x0000000080005d3c        0xd c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-locale.o)
- *fill*         0x0000000080005d49        0x3 
+                0x000000008000679c        0xd c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-locale.o)
+ *fill*         0x00000000800067a9        0x3 
  .rodata.str1.4
-                0x0000000080005d4c        0x4 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-locale.o)
+                0x00000000800067ac        0x4 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-locale.o)
                                           0x2 (size before relaxing)
  .rodata._ctype_
-                0x0000000080005d50      0x101 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-ctype_.o)
-                0x0000000080005d50                _ctype_
+                0x00000000800067b0      0x101 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-ctype_.o)
+                0x00000000800067b0                _ctype_
  *(.gnu.linkonce.r.*)
  *(.data .data.*)
- *fill*         0x0000000080005e51        0xf 
- .data          0x0000000080005e60       0x18 crt.o
-                0x0000000080005e60                sys_mcause
-                0x0000000080005e64                sys_mepc
-                0x0000000080005e68                sys_ucause
-                0x0000000080005e6c                sys_uepc
-                0x0000000080005e70                sys_irqcause
-                0x0000000080005e74                sys_irqpc
- .data          0x0000000080005e78       0x48 deb.o
-                0x0000000080005e78                comtbl
+ *fill*         0x00000000800068b1        0xf 
+ .data          0x00000000800068c0       0x18 crt.o
+                0x00000000800068c0                sys_mcause
+                0x00000000800068c4                sys_mepc
+                0x00000000800068c8                sys_ucause
+                0x00000000800068cc                sys_uepc
+                0x00000000800068d0                sys_irqcause
+                0x00000000800068d4                sys_irqpc
+ .data          0x00000000800068d8       0x48 deb.o
+                0x00000000800068d8                comtbl
  .data.__global_locale
-                0x0000000080005ec0      0x16c c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-locale.o)
-                0x0000000080005ec0                __global_locale
- *fill*         0x000000008000602c        0x4 
+                0x0000000080006920      0x16c c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-locale.o)
+                0x0000000080006920                __global_locale
+ *fill*         0x0000000080006a8c        0x4 
  .data.impure_data
-                0x0000000080006030      0x428 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-impure.o)
+                0x0000000080006a90      0x428 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-impure.o)
  *(.gnu.linkonce.d.*)
-                0x0000000080006458                . = ALIGN (0x8)
+                0x0000000080006eb8                . = ALIGN (0x8)
                 [!provide]                        PROVIDE (__global_pointer$ = (. + 0x800))
  *(.sdata .sdata.*)
- .sdata         0x0000000080006458        0x1 sdmm.o
- *fill*         0x0000000080006459        0x3 
- .sdata         0x000000008000645c        0x8 deb.o
-                0x000000008000645c                STARTADDR
-                0x0000000080006460                HelpMsg
+ .sdata         0x0000000080006eb8        0x1 sdmm.o
+ *fill*         0x0000000080006eb9        0x3 
+ .sdata         0x0000000080006ebc        0x8 deb.o
+                0x0000000080006ebc                STARTADDR
+                0x0000000080006ec0                HelpMsg
  .sdata._impure_ptr
-                0x0000000080006464        0x4 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-impure.o)
-                0x0000000080006464                _impure_ptr
+                0x0000000080006ec4        0x4 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-impure.o)
+                0x0000000080006ec4                _impure_ptr
  *(.gnu.linkonce.s.*)
-                0x0000000080006468                . = ALIGN (0x8)
+                0x0000000080006ec8                . = ALIGN (0x8)
  *(.srodata.cst16)
  *(.srodata.cst8)
  *(.srodata.cst4)
@@ -916,14 +970,14 @@ Linker script and memory map
 .appram         0x0000000040200000        0x0
                 0x0000000040200000                . = ALIGN (0x4)
 
-.ctors          0x0000000080006468        0x0
-                0x0000000080006468                . = ALIGN (0x4)
-                0x0000000080006468                _ctors_start = .
+.ctors          0x0000000080006ec8        0x0
+                0x0000000080006ec8                . = ALIGN (0x4)
+                0x0000000080006ec8                _ctors_start = .
  *(.init_array*)
  *(SORT_BY_NAME(.ctors.*))
  *(.ctors)
-                0x0000000080006468                . = ALIGN (0x4)
-                0x0000000080006468                _ctors_end = .
+                0x0000000080006ec8                . = ALIGN (0x4)
+                0x0000000080006ec8                _ctors_end = .
                 [!provide]                        PROVIDE (END_OF_SW_IMAGE = .)
 
 ._user_heap     0x0000000040100000   0x100000
@@ -965,25 +1019,25 @@ END GROUP
 LOAD c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a
 OUTPUT(progmem.elf elf32-littleriscv)
 
-.debug_info     0x0000000000000000     0x4cb9
+.debug_info     0x0000000000000000     0x555c
  .debug_info    0x0000000000000000      0x6dd sdmm.o
  .debug_info    0x00000000000006dd     0x1414 ff.o
  .debug_info    0x0000000000001af1      0xfff deb.o
  .debug_info    0x0000000000002af0      0xb58 symtable.o
  .debug_info    0x0000000000003648      0x37b traphandler.o
  .debug_info    0x00000000000039c3      0x407 xprintf.o
- .debug_info    0x0000000000003dca      0xeef main.o
+ .debug_info    0x0000000000003dca     0x1792 main.o
 
-.debug_abbrev   0x0000000000000000      0xfef
+.debug_abbrev   0x0000000000000000     0x1101
  .debug_abbrev  0x0000000000000000      0x200 sdmm.o
  .debug_abbrev  0x0000000000000200      0x1f6 ff.o
  .debug_abbrev  0x00000000000003f6      0x3e8 deb.o
  .debug_abbrev  0x00000000000007de      0x259 symtable.o
  .debug_abbrev  0x0000000000000a37      0x139 traphandler.o
  .debug_abbrev  0x0000000000000b70      0x183 xprintf.o
- .debug_abbrev  0x0000000000000cf3      0x2fc main.o
+ .debug_abbrev  0x0000000000000cf3      0x40e main.o
 
-.debug_aranges  0x0000000000000000      0x4b0
+.debug_aranges  0x0000000000000000      0x530
  .debug_aranges
                 0x0000000000000000       0x88 sdmm.o
  .debug_aranges
@@ -997,27 +1051,27 @@ OUTPUT(progmem.elf elf32-littleriscv)
  .debug_aranges
                 0x00000000000003a8       0x60 xprintf.o
  .debug_aranges
-                0x0000000000000408       0xa8 main.o
+                0x0000000000000408      0x128 main.o
 
-.debug_ranges   0x0000000000000000      0x440
+.debug_ranges   0x0000000000000000      0x4d8
  .debug_ranges  0x0000000000000000       0x78 sdmm.o
  .debug_ranges  0x0000000000000078      0x130 ff.o
  .debug_ranges  0x00000000000001a8      0x170 deb.o
  .debug_ranges  0x0000000000000318       0x28 symtable.o
  .debug_ranges  0x0000000000000340       0x18 traphandler.o
  .debug_ranges  0x0000000000000358       0x50 xprintf.o
- .debug_ranges  0x00000000000003a8       0x98 main.o
+ .debug_ranges  0x00000000000003a8      0x130 main.o
 
-.debug_line     0x0000000000000000     0x60da
+.debug_line     0x0000000000000000     0x6c24
  .debug_line    0x0000000000000000      0xd9a sdmm.o
  .debug_line    0x0000000000000d9a     0x28cc ff.o
  .debug_line    0x0000000000003666     0x164f deb.o
  .debug_line    0x0000000000004cb5      0x331 symtable.o
  .debug_line    0x0000000000004fe6      0x296 traphandler.o
  .debug_line    0x000000000000527c      0x85c xprintf.o
- .debug_line    0x0000000000005ad8      0x602 main.o
+ .debug_line    0x0000000000005ad8     0x114c main.o
 
-.debug_str      0x0000000000000000      0xedd
+.debug_str      0x0000000000000000     0x117b
  .debug_str     0x0000000000000000      0x2a8 sdmm.o
                                         0x30f (size before relaxing)
  .debug_str     0x00000000000002a8      0x3ce ff.o
@@ -1030,8 +1084,8 @@ OUTPUT(progmem.elf elf32-littleriscv)
                                         0x2e6 (size before relaxing)
  .debug_str     0x0000000000000def       0x83 xprintf.o
                                         0x175 (size before relaxing)
- .debug_str     0x0000000000000e72       0x6b main.o
-                                        0x75d (size before relaxing)
+ .debug_str     0x0000000000000e72      0x309 main.o
+                                        0xa21 (size before relaxing)
 
 .comment        0x0000000000000000       0x39
  .comment       0x0000000000000000       0x39 sdmm.o
@@ -1043,19 +1097,19 @@ OUTPUT(progmem.elf elf32-littleriscv)
  .comment       0x0000000000000039       0x3a xprintf.o
  .comment       0x0000000000000039       0x3a main.o
 
-.debug_frame    0x0000000000000000     0x1528
+.debug_frame    0x0000000000000000     0x1788
  .debug_frame   0x0000000000000000      0x208 sdmm.o
  .debug_frame   0x0000000000000208      0x554 ff.o
  .debug_frame   0x000000000000075c      0x6a0 deb.o
  .debug_frame   0x0000000000000dfc       0x98 symtable.o
  .debug_frame   0x0000000000000e94       0x60 traphandler.o
  .debug_frame   0x0000000000000ef4      0x164 xprintf.o
- .debug_frame   0x0000000000001058      0x2bc main.o
- .debug_frame   0x0000000000001314       0x60 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
- .debug_frame   0x0000000000001374       0x54 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(muldf3.o)
- .debug_frame   0x00000000000013c8       0x20 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(fixunsdfsi.o)
- .debug_frame   0x00000000000013e8       0x38 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(floatunsidf.o)
- .debug_frame   0x0000000000001420       0x20 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(_clzsi2.o)
- .debug_frame   0x0000000000001440       0x78 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-locale.o)
- .debug_frame   0x00000000000014b8       0x40 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-mbtowc_r.o)
- .debug_frame   0x00000000000014f8       0x30 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-wctomb_r.o)
+ .debug_frame   0x0000000000001058      0x51c main.o
+ .debug_frame   0x0000000000001574       0x60 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
+ .debug_frame   0x00000000000015d4       0x54 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(muldf3.o)
+ .debug_frame   0x0000000000001628       0x20 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(fixunsdfsi.o)
+ .debug_frame   0x0000000000001648       0x38 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(floatunsidf.o)
+ .debug_frame   0x0000000000001680       0x20 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(_clzsi2.o)
+ .debug_frame   0x00000000000016a0       0x78 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-locale.o)
+ .debug_frame   0x0000000000001718       0x40 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-mbtowc_r.o)
+ .debug_frame   0x0000000000001758       0x30 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-wctomb_r.o)

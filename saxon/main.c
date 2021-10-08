@@ -7,6 +7,7 @@
 
 #include "xprintf.h"
 #include "symtable.h"
+#include "bsp/sdram.h"
 
 #define LOOP_UDELAY 100000
 
@@ -43,6 +44,34 @@ int main()
     gpio_setOutput(BSP_LED_GPIO, 0x00000000);
 
 	uart_writeStr(BSP_UART_TERMINAL, "*** SaxonSoc Booted...\n");
+
+#define SDRAM_CTRL SYSTEM_SDRAM_A_CTRL
+#define SDRAM_PHY  SDRAM_DOMAIN_PHY_A_CTRL
+#define SDRAM_BASE SYSTEM_SDRAM_A0_BMB
+#define RL 3
+#define WL 0
+#define CTRL_BURST_LENGHT 1
+#define PHY_CLK_RATIO 2
+#define SDRAM_TIMING MT48LC16M16A2_6A_ps
+
+    sdram_init(
+        SDRAM_CTRL,
+        RL,
+        WL,
+        SDRAM_TIMING,
+        CTRL_BURST_LENGHT,
+        PHY_CLK_RATIO,
+        20000
+    );
+
+    sdram_sdr_init(
+        SDRAM_CTRL,
+        RL,
+        CTRL_BURST_LENGHT,
+        PHY_CLK_RATIO
+    );
+
+
     // while(1){
     //     gpio_setOutput(BSP_LED_GPIO, gpio_getOutput(BSP_LED_GPIO) ^ BSP_LED_MASK);
 

@@ -10,10 +10,15 @@ import spinal.lib.com.uart.sim.{UartDecoder, UartEncoder}
 import spinal.lib.generator._
 import spinal.lib.io.{Gpio, InOutWrapper}
 import spinal.lib.misc.plic.PlicMapping
+import spinal.lib.memory.sdram.sdr._
+import spinal.lib.memory.sdram.xdr.CoreParameter
+import spinal.lib.memory.sdram.xdr.phy.{Ecp5Sdrx2Phy, XilinxS7Phy}
+import spinal.lib.blackbox.lattice.ecp5.{DCCA, IDDRX1F, ODDRX1F}
 import vexriscv.VexRiscvBmbGenerator
 import vexriscv.ip._
 import vexriscv._
 import vexriscv.plugin._
+import spinal.core.fiber._
 
 
 // Define a SoC abstract enough to be used for simulation
@@ -43,6 +48,9 @@ class ICESugarProMinimalAbstract extends Area{
   }
 
   //Add components
+  val sdramA = SdramXdrBmbGenerator(memoryAddress = 0x40000000l).mapCtrlAt(0x100000)
+  val sdramA0 = sdramA.addPort()
+
   val ramA = BmbOnChipRamGenerator(0x80000000l) // 64K Code
   val gpioA = BmbGpioGenerator(0x00000)
   val uartA = BmbUartGenerator(0x10000)
@@ -52,8 +60,8 @@ class ICESugarProMinimalAbstract extends Area{
   interconnect.setPriority(cpu.iBus, 1)
   interconnect.setPriority(cpu.dBus, 2)
   interconnect.addConnection(
-    cpu.iBus -> List(ramA.ctrl),
-    cpu.dBus -> List(ramA.ctrl, bmbPeripheral.bmb)
+    cpu.iBus -> List(sdramA0.bmb,ramA.ctrl),
+    cpu.dBus -> List(sdramA0.bmb,ramA.ctrl, bmbPeripheral.bmb)
   )
 }
 
@@ -62,7 +70,7 @@ class ICESugarProMinimal extends Component{
   val debugCdCtrl = ClockDomainResetGenerator()
   debugCdCtrl.holdDuration.load(4095)
   debugCdCtrl.enablePowerOnReset()
-  debugCdCtrl.makeExternal(FixedFrequency(25 MHz), resetActiveLevel = LOW)
+  //debugCdCtrl.makeExternal(FixedFrequency(25 MHz), resetActiveLevel = LOW)
 
   val systemCdCtrl = ClockDomainResetGenerator()
   systemCdCtrl.holdDuration.load(63)
@@ -75,11 +83,47 @@ class ICESugarProMinimal extends Component{
   val debugCd  = debugCdCtrl.outputClockDomain
   val systemCd = systemCdCtrl.outputClockDomain
 
+  val clocking = new Area{
+    val resetn    = in Bool()
+    val clk25m    = in Bool()
+    val sdram_clk = out Bool()
+
+    val pll = new BlackBox{
+      setDefinitionName("pll_50mhz")
+      val clkin = in Bool()
+      val clkout_sdram = out Bool()
+      val clkout_system = out Bool()
+      val locked = out Bool()
+    }
+    pll.clkin := clk25m
+    //sdram_clk := pll.clkout_sdram
+
+    debugCdCtrl.setInput(
+      ClockDomain(
+        clock = pll.clkout_system,
+        reset = resetn,
+        frequency = FixedFrequency(50 MHz),
+        config = ClockDomainConfig(
+          resetKind = spinal.core.ASYNC, // vexriscv.plugin.ASYNC exists
+          resetActiveLevel = LOW
+        )
+      )
+    )
+
+    val bb = ClockDomain(DCCA.on(pll.clkout_sdram), False)(ODDRX1F())
+    bb.D0 <> True
+    bb.D1 <> False
+    bb.Q <> sdram_clk
+  }
+
   val system = systemCd on new ICESugarProMinimalAbstract(){
     cpu.enableJtag(debugCdCtrl, systemCdCtrl)
 
+    val phyA = Ecp5Sdrx2PhyGenerator().connect(sdramA)
+
     interconnect.setPipelining(bmbPeripheral.bmb)(cmdHalfRate = true, rspHalfRate = true)
     interconnect.setPipelining(cpu.dBus)(cmdValid = true)
+    interconnect.setPipelining(sdramA0.bmb)(cmdValid = true, cmdReady = true, rspValid = true)
   }
 }
 
@@ -198,6 +242,17 @@ object ICESugarProMinimalAbstract{
     ramA.size.load(64 KiB)
     ramA.hexInit.load("software/standalone/blinkAndEcho/build/blinkAndEcho.hex")
 
+    sdramA.coreParameter.load(CoreParameter(
+      portTockenMin = 16,
+      portTockenMax = 32,
+      timingWidth = 4,
+      refWidth = 16,
+      stationCount  = 2,
+      bytePerTaskMax = 64,
+      writeLatencies = List(0),
+      readLatencies = List(5, 6, 7)
+    ))
+
     uartA.parameter load UartCtrlMemoryMappedConfig(
       baudrate = 115200,
       txFifoDepth = 16,
@@ -205,6 +260,14 @@ object ICESugarProMinimalAbstract{
     )
 
     gpioA.parameter load Gpio.Parameter(width = 8)
+
+    // val io = new Bundle {
+    //   val externalInterruptLine = in Bool()
+    // }
+    // val exline = Handle[Bool]
+
+    // exline.load(io.externalInterruptLine)
+    // plic.addInterrupt(exline,1)
 
     g
   }
@@ -214,6 +277,7 @@ object ICESugarProMinimal extends App{
   //Function used to configure the SoC
   def default(g : ICESugarProMinimal) = g.rework {
     import g._
+    system.phyA.sdramLayout.load(MT48LC16M16A2.layout) // IS42S16160 compatible
     ICESugarProMinimalAbstract.default(system)
     g
   }

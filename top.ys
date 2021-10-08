@@ -1,5 +1,6 @@
 verilog_defaults -push
 verilog_defaults -add -defer
+read_verilog ./pll_50mhz.v
 read_verilog ./ICESugarProMinimal.v
 read_verilog ./top.v
 verilog_defaults -pop

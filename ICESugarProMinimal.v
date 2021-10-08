@@ -1,18 +1,28 @@
 // Generator : SpinalHDL v1.6.1    git head : 8434600e3b32dc561f4e361e99a6085b79085453
 // Component : ICESugarProMinimal
-// Git hash  : 8c22b7003bd8b2dfbb1a81b109c66e8aff66385d
+// Git hash  : b1df330390622bbad0bd6c81c4e6a72d9a256f47
 
 
 
 module ICESugarProMinimal (
-  input               debugCdCtrl_external_clk,
-  input               debugCdCtrl_external_reset,
+  input               clocking_resetn,
+  input               clocking_clk25m,
+  output              clocking_sdram_clk,
   input               system_cpu_jtag_tms,
   input               system_cpu_jtag_tdi,
   output              system_cpu_jtag_tdo,
   input               system_cpu_jtag_tck,
+  output     [12:0]   system_phyA_sdram_ADDR,
+  output     [1:0]    system_phyA_sdram_BA,
+  output     [1:0]    system_phyA_sdram_DQM,
+  output              system_phyA_sdram_CASn,
+  output              system_phyA_sdram_CKE,
+  output              system_phyA_sdram_CSn,
+  output              system_phyA_sdram_RASn,
+  output              system_phyA_sdram_WEn,
   output              system_uartA_uart_txd,
   input               system_uartA_uart_rxd,
+   inout     [15:0]   system_phyA_sdram_DQ,
    inout     [7:0]    system_gpioA_gpio
 );
 
@@ -24,6 +34,27 @@ module ICESugarProMinimal (
   wire                system_cpu_logic_cpu_iBus_rsp_payload_error;
   wire       [15:0]   system_ramA_ctrl_arbiter_io_inputs_0_cmd_payload_fragment_address;
   wire       [15:0]   system_ramA_ctrl_arbiter_io_inputs_1_cmd_payload_fragment_address;
+  wire       [24:0]   system_sdramA0_bmb_arbiter_io_inputs_0_cmd_payload_fragment_address;
+  wire       [24:0]   system_sdramA0_bmb_arbiter_io_inputs_1_cmd_payload_fragment_address;
+  wire                system_sdramA0_bmb_arbiter_io_output_cmd_ready;
+  wire                clocking_pll_clkout_sdram;
+  wire                clocking_pll_clkout_system;
+  wire                clocking_pll_locked;
+  wire                clocking_pll_clkout_sdram_DCCA_CLKO;
+  wire                clocking_bb_Q;
+  wire       [15:0]   system_phyA_logic_io_ctrl_phases_0_DQr_0;
+  wire       [15:0]   system_phyA_logic_io_ctrl_phases_1_DQr_0;
+  wire                system_phyA_logic_io_ctrl_readValid;
+  wire       [12:0]   system_phyA_logic_io_sdram_ADDR;
+  wire       [1:0]    system_phyA_logic_io_sdram_BA;
+  wire                system_phyA_logic_io_sdram_CASn;
+  wire                system_phyA_logic_io_sdram_CKE;
+  wire                system_phyA_logic_io_sdram_CSn;
+  wire       [1:0]    system_phyA_logic_io_sdram_DQM;
+  wire                system_phyA_logic_io_sdram_RASn;
+  wire                system_phyA_logic_io_sdram_WEn;
+  wire       [15:0]   system_phyA_logic_io_sdram_DQ_write;
+  wire       [15:0]   system_phyA_logic_io_sdram_DQ_writeEnable;
   wire                bufferCC_5_io_dataOut;
   wire                bufferCC_6_io_dataOut;
   wire                system_cpu_logic_cpu_dBus_cmd_valid;
@@ -65,6 +96,12 @@ module ICESugarProMinimal (
   wire       [31:0]   system_cpu_iBus_decoder_io_outputs_0_cmd_payload_fragment_address;
   wire       [4:0]    system_cpu_iBus_decoder_io_outputs_0_cmd_payload_fragment_length;
   wire                system_cpu_iBus_decoder_io_outputs_0_rsp_ready;
+  wire                system_cpu_iBus_decoder_io_outputs_1_cmd_valid;
+  wire                system_cpu_iBus_decoder_io_outputs_1_cmd_payload_last;
+  wire       [0:0]    system_cpu_iBus_decoder_io_outputs_1_cmd_payload_fragment_opcode;
+  wire       [31:0]   system_cpu_iBus_decoder_io_outputs_1_cmd_payload_fragment_address;
+  wire       [4:0]    system_cpu_iBus_decoder_io_outputs_1_cmd_payload_fragment_length;
+  wire                system_cpu_iBus_decoder_io_outputs_1_rsp_ready;
   wire                bufferCC_7_io_dataOut;
   wire                system_cpu_dBus_decoder_io_input_cmd_ready;
   wire                system_cpu_dBus_decoder_io_input_rsp_valid;
@@ -90,6 +127,15 @@ module ICESugarProMinimal (
   wire       [3:0]    system_cpu_dBus_decoder_io_outputs_1_cmd_payload_fragment_mask;
   wire       [0:0]    system_cpu_dBus_decoder_io_outputs_1_cmd_payload_fragment_context;
   wire                system_cpu_dBus_decoder_io_outputs_1_rsp_ready;
+  wire                system_cpu_dBus_decoder_io_outputs_2_cmd_valid;
+  wire                system_cpu_dBus_decoder_io_outputs_2_cmd_payload_last;
+  wire       [0:0]    system_cpu_dBus_decoder_io_outputs_2_cmd_payload_fragment_opcode;
+  wire       [31:0]   system_cpu_dBus_decoder_io_outputs_2_cmd_payload_fragment_address;
+  wire       [4:0]    system_cpu_dBus_decoder_io_outputs_2_cmd_payload_fragment_length;
+  wire       [31:0]   system_cpu_dBus_decoder_io_outputs_2_cmd_payload_fragment_data;
+  wire       [3:0]    system_cpu_dBus_decoder_io_outputs_2_cmd_payload_fragment_mask;
+  wire       [0:0]    system_cpu_dBus_decoder_io_outputs_2_cmd_payload_fragment_context;
+  wire                system_cpu_dBus_decoder_io_outputs_2_rsp_ready;
   wire                system_ramA_logic_io_bus_cmd_ready;
   wire                system_ramA_logic_io_bus_rsp_valid;
   wire                system_ramA_logic_io_bus_rsp_payload_last;
@@ -203,6 +249,15 @@ module ICESugarProMinimal (
   wire       [3:0]    system_bmbPeripheral_bmb_decoder_io_outputs_3_cmd_payload_fragment_mask;
   wire       [2:0]    system_bmbPeripheral_bmb_decoder_io_outputs_3_cmd_payload_fragment_context;
   wire                system_bmbPeripheral_bmb_decoder_io_outputs_3_rsp_ready;
+  wire                system_bmbPeripheral_bmb_decoder_io_outputs_4_cmd_valid;
+  wire                system_bmbPeripheral_bmb_decoder_io_outputs_4_cmd_payload_last;
+  wire       [0:0]    system_bmbPeripheral_bmb_decoder_io_outputs_4_cmd_payload_fragment_opcode;
+  wire       [23:0]   system_bmbPeripheral_bmb_decoder_io_outputs_4_cmd_payload_fragment_address;
+  wire       [1:0]    system_bmbPeripheral_bmb_decoder_io_outputs_4_cmd_payload_fragment_length;
+  wire       [31:0]   system_bmbPeripheral_bmb_decoder_io_outputs_4_cmd_payload_fragment_data;
+  wire       [3:0]    system_bmbPeripheral_bmb_decoder_io_outputs_4_cmd_payload_fragment_mask;
+  wire       [2:0]    system_bmbPeripheral_bmb_decoder_io_outputs_4_cmd_payload_fragment_context;
+  wire                system_bmbPeripheral_bmb_decoder_io_outputs_4_rsp_ready;
   wire                system_clint_logic_io_bus_cmd_ready;
   wire                system_clint_logic_io_bus_rsp_valid;
   wire                system_clint_logic_io_bus_rsp_payload_last;
@@ -212,6 +267,37 @@ module ICESugarProMinimal (
   wire       [0:0]    system_clint_logic_io_timerInterrupt;
   wire       [0:0]    system_clint_logic_io_softwareInterrupt;
   wire       [63:0]   system_clint_logic_io_time;
+  wire                system_sdramA_logic_io_bmb_0_cmd_ready;
+  wire                system_sdramA_logic_io_bmb_0_rsp_valid;
+  wire                system_sdramA_logic_io_bmb_0_rsp_payload_last;
+  wire       [0:0]    system_sdramA_logic_io_bmb_0_rsp_payload_fragment_source;
+  wire       [0:0]    system_sdramA_logic_io_bmb_0_rsp_payload_fragment_opcode;
+  wire       [31:0]   system_sdramA_logic_io_bmb_0_rsp_payload_fragment_data;
+  wire       [0:0]    system_sdramA_logic_io_bmb_0_rsp_payload_fragment_context;
+  wire                system_sdramA_logic_io_ctrl_cmd_ready;
+  wire                system_sdramA_logic_io_ctrl_rsp_valid;
+  wire                system_sdramA_logic_io_ctrl_rsp_payload_last;
+  wire       [0:0]    system_sdramA_logic_io_ctrl_rsp_payload_fragment_opcode;
+  wire       [31:0]   system_sdramA_logic_io_ctrl_rsp_payload_fragment_data;
+  wire       [2:0]    system_sdramA_logic_io_ctrl_rsp_payload_fragment_context;
+  wire                system_sdramA_logic_io_phy_phases_0_CASn;
+  wire                system_sdramA_logic_io_phy_phases_0_CKE;
+  wire                system_sdramA_logic_io_phy_phases_0_CSn;
+  wire       [1:0]    system_sdramA_logic_io_phy_phases_0_DM_0;
+  wire                system_sdramA_logic_io_phy_phases_0_RASn;
+  wire                system_sdramA_logic_io_phy_phases_0_WEn;
+  wire       [15:0]   system_sdramA_logic_io_phy_phases_0_DQw_0;
+  wire                system_sdramA_logic_io_phy_phases_1_CASn;
+  wire                system_sdramA_logic_io_phy_phases_1_CKE;
+  wire                system_sdramA_logic_io_phy_phases_1_CSn;
+  wire       [1:0]    system_sdramA_logic_io_phy_phases_1_DM_0;
+  wire                system_sdramA_logic_io_phy_phases_1_RASn;
+  wire                system_sdramA_logic_io_phy_phases_1_WEn;
+  wire       [15:0]   system_sdramA_logic_io_phy_phases_1_DQw_0;
+  wire       [12:0]   system_sdramA_logic_io_phy_ADDR;
+  wire       [1:0]    system_sdramA_logic_io_phy_BA;
+  wire                system_sdramA_logic_io_phy_readEnable;
+  wire                system_sdramA_logic_io_phy_writeEnable;
   wire       [7:0]    system_gpioA_logic_io_gpio_write;
   wire       [7:0]    system_gpioA_logic_io_gpio_writeEnable;
   wire                system_gpioA_logic_io_bus_cmd_ready;
@@ -229,6 +315,27 @@ module ICESugarProMinimal (
   wire       [2:0]    system_uartA_logic_io_bus_rsp_payload_fragment_context;
   wire                system_uartA_logic_io_uart_txd;
   wire                system_uartA_logic_io_interrupt;
+  wire                system_sdramA0_bmb_arbiter_io_inputs_0_cmd_ready;
+  wire                system_sdramA0_bmb_arbiter_io_inputs_0_rsp_valid;
+  wire                system_sdramA0_bmb_arbiter_io_inputs_0_rsp_payload_last;
+  wire       [0:0]    system_sdramA0_bmb_arbiter_io_inputs_0_rsp_payload_fragment_opcode;
+  wire       [31:0]   system_sdramA0_bmb_arbiter_io_inputs_0_rsp_payload_fragment_data;
+  wire       [0:0]    system_sdramA0_bmb_arbiter_io_inputs_0_rsp_payload_fragment_context;
+  wire                system_sdramA0_bmb_arbiter_io_inputs_1_cmd_ready;
+  wire                system_sdramA0_bmb_arbiter_io_inputs_1_rsp_valid;
+  wire                system_sdramA0_bmb_arbiter_io_inputs_1_rsp_payload_last;
+  wire       [0:0]    system_sdramA0_bmb_arbiter_io_inputs_1_rsp_payload_fragment_opcode;
+  wire       [31:0]   system_sdramA0_bmb_arbiter_io_inputs_1_rsp_payload_fragment_data;
+  wire                system_sdramA0_bmb_arbiter_io_output_cmd_valid;
+  wire                system_sdramA0_bmb_arbiter_io_output_cmd_payload_last;
+  wire       [0:0]    system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_source;
+  wire       [0:0]    system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_opcode;
+  wire       [24:0]   system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_address;
+  wire       [4:0]    system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_length;
+  wire       [31:0]   system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_data;
+  wire       [3:0]    system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_mask;
+  wire       [0:0]    system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_context;
+  wire                system_sdramA0_bmb_arbiter_io_output_rsp_ready;
   reg                 _zz_system_gpioA_gpio;
   reg                 _zz_system_gpioA_gpio_1;
   reg                 _zz_system_gpioA_gpio_2;
@@ -237,6 +344,22 @@ module ICESugarProMinimal (
   reg                 _zz_system_gpioA_gpio_5;
   reg                 _zz_system_gpioA_gpio_6;
   reg                 _zz_system_gpioA_gpio_7;
+  reg                 _zz_system_phyA_sdram_DQ;
+  reg                 _zz_system_phyA_sdram_DQ_1;
+  reg                 _zz_system_phyA_sdram_DQ_2;
+  reg                 _zz_system_phyA_sdram_DQ_3;
+  reg                 _zz_system_phyA_sdram_DQ_4;
+  reg                 _zz_system_phyA_sdram_DQ_5;
+  reg                 _zz_system_phyA_sdram_DQ_6;
+  reg                 _zz_system_phyA_sdram_DQ_7;
+  reg                 _zz_system_phyA_sdram_DQ_8;
+  reg                 _zz_system_phyA_sdram_DQ_9;
+  reg                 _zz_system_phyA_sdram_DQ_10;
+  reg                 _zz_system_phyA_sdram_DQ_11;
+  reg                 _zz_system_phyA_sdram_DQ_12;
+  reg                 _zz_system_phyA_sdram_DQ_13;
+  reg                 _zz_system_phyA_sdram_DQ_14;
+  reg                 _zz_system_phyA_sdram_DQ_15;
   reg                 debugCdCtrl_logic_inputResetTrigger;
   reg                 debugCdCtrl_logic_outputResetUnbuffered;
   reg        [11:0]   debugCdCtrl_logic_holdingLogic_resetCounter = 12'h0;
@@ -280,6 +403,9 @@ module ICESugarProMinimal (
   reg                 system_cpu_debugReset;
   wire                system_cpu_logic_cpu_debug_bus_cmd_fire;
   reg                 system_cpu_logic_cpu_debug_bus_cmd_fire_regNext;
+  wire       [15:0]   _zz_io_sdram_DQ_read;
+  wire       [15:0]   _zz_system_phyA_sdram_DQ_16;
+  wire       [15:0]   _zz_when_InOutWrapper_l65;
   wire                system_cpu_logic_cpu_dBus_Bridge_bus_cmd_m2sPipe_valid;
   wire                system_cpu_logic_cpu_dBus_Bridge_bus_cmd_m2sPipe_ready;
   wire                system_cpu_logic_cpu_dBus_Bridge_bus_cmd_m2sPipe_payload_last;
@@ -409,7 +535,7 @@ module ICESugarProMinimal (
   reg                 system_plic_logic_bridge_targetMapping_0_targetCompletion_valid;
   wire       [7:0]    _zz_io_gpio_read;
   wire       [7:0]    _zz_system_gpioA_gpio_8;
-  wire       [7:0]    _zz_when_InOutWrapper_l65;
+  wire       [7:0]    _zz_when_InOutWrapper_l65_1;
   wire                system_gpioA_interrupts_0;
   wire                system_gpioA_interrupts_1;
   wire                system_gpioA_interrupts_2;
@@ -446,6 +572,68 @@ module ICESugarProMinimal (
   wire       [0:0]    system_clint_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_opcode;
   wire       [31:0]   system_clint_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_data;
   wire       [2:0]    system_clint_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_context;
+  wire                system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_valid;
+  wire                system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_ready;
+  wire                system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_last;
+  wire       [0:0]    system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_opcode;
+  wire       [11:0]   system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_address;
+  wire       [1:0]    system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_length;
+  wire       [31:0]   system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_data;
+  wire       [2:0]    system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_context;
+  wire                system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_valid;
+  wire                system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_ready;
+  wire                system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_last;
+  wire       [0:0]    system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_opcode;
+  wire       [31:0]   system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_data;
+  wire       [2:0]    system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_context;
+  reg                 _zz_io_bmb_0_rsp_ready;
+  wire                system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_valid;
+  reg                 system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_ready;
+  wire                system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_payload_last;
+  wire       [0:0]    system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_payload_fragment_source;
+  wire       [0:0]    system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_payload_fragment_opcode;
+  wire       [24:0]   system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_payload_fragment_address;
+  wire       [4:0]    system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_payload_fragment_length;
+  wire       [31:0]   system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_payload_fragment_data;
+  wire       [3:0]    system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_payload_fragment_mask;
+  wire       [0:0]    system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_payload_fragment_context;
+  reg                 system_sdramA0_bmb_arbiter_io_output_cmd_rValid;
+  reg                 system_sdramA0_bmb_arbiter_io_output_cmd_rData_last;
+  reg        [0:0]    system_sdramA0_bmb_arbiter_io_output_cmd_rData_fragment_source;
+  reg        [0:0]    system_sdramA0_bmb_arbiter_io_output_cmd_rData_fragment_opcode;
+  reg        [24:0]   system_sdramA0_bmb_arbiter_io_output_cmd_rData_fragment_address;
+  reg        [4:0]    system_sdramA0_bmb_arbiter_io_output_cmd_rData_fragment_length;
+  reg        [31:0]   system_sdramA0_bmb_arbiter_io_output_cmd_rData_fragment_data;
+  reg        [3:0]    system_sdramA0_bmb_arbiter_io_output_cmd_rData_fragment_mask;
+  reg        [0:0]    system_sdramA0_bmb_arbiter_io_output_cmd_rData_fragment_context;
+  wire                system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_valid;
+  wire                system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_ready;
+  wire                system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_payload_last;
+  wire       [0:0]    system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_payload_fragment_source;
+  wire       [0:0]    system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_payload_fragment_opcode;
+  wire       [24:0]   system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_payload_fragment_address;
+  wire       [4:0]    system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_payload_fragment_length;
+  wire       [31:0]   system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_payload_fragment_data;
+  wire       [3:0]    system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_payload_fragment_mask;
+  wire       [0:0]    system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_payload_fragment_context;
+  reg                 system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rValid;
+  reg                 system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rData_last;
+  reg        [0:0]    system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rData_fragment_source;
+  reg        [0:0]    system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rData_fragment_opcode;
+  reg        [24:0]   system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rData_fragment_address;
+  reg        [4:0]    system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rData_fragment_length;
+  reg        [31:0]   system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rData_fragment_data;
+  reg        [3:0]    system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rData_fragment_mask;
+  reg        [0:0]    system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rData_fragment_context;
+  wire                when_Stream_l342_2;
+  wire                _zz_when_Stream_l342;
+  reg                 _zz_when_Stream_l342_1;
+  reg                 _zz_io_output_rsp_payload_last;
+  reg        [0:0]    _zz_io_output_rsp_payload_fragment_source;
+  reg        [0:0]    _zz_io_output_rsp_payload_fragment_opcode;
+  reg        [31:0]   _zz_io_output_rsp_payload_fragment_data;
+  reg        [0:0]    _zz_io_output_rsp_payload_fragment_context;
+  wire                when_Stream_l342_3;
   wire                system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_valid;
   wire                system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_ready;
   wire                system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_last;
@@ -530,6 +718,20 @@ module ICESugarProMinimal (
   wire       [0:0]    system_bmbPeripheral_bmb_withoutMask_rsp_payload_fragment_opcode_3;
   wire       [31:0]   system_bmbPeripheral_bmb_withoutMask_rsp_payload_fragment_data_3;
   wire       [2:0]    system_bmbPeripheral_bmb_withoutMask_rsp_payload_fragment_context_3;
+  wire                system_bmbPeripheral_bmb_withoutMask_cmd_valid_4;
+  wire                system_bmbPeripheral_bmb_withoutMask_cmd_ready_4;
+  wire                system_bmbPeripheral_bmb_withoutMask_cmd_payload_last_4;
+  wire       [0:0]    system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_opcode_4;
+  wire       [23:0]   system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_address_4;
+  wire       [1:0]    system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_length_4;
+  wire       [31:0]   system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_data_4;
+  wire       [2:0]    system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_context_4;
+  wire                system_bmbPeripheral_bmb_withoutMask_rsp_valid_4;
+  wire                system_bmbPeripheral_bmb_withoutMask_rsp_ready_4;
+  wire                system_bmbPeripheral_bmb_withoutMask_rsp_payload_last_4;
+  wire       [0:0]    system_bmbPeripheral_bmb_withoutMask_rsp_payload_fragment_opcode_4;
+  wire       [31:0]   system_bmbPeripheral_bmb_withoutMask_rsp_payload_fragment_data_4;
+  wire       [2:0]    system_bmbPeripheral_bmb_withoutMask_rsp_payload_fragment_context_4;
   wire                when_BmbSlaveFactory_l71;
   wire                when_InOutWrapper_l65;
   wire                when_InOutWrapper_l65_1;
@@ -539,17 +741,87 @@ module ICESugarProMinimal (
   wire                when_InOutWrapper_l65_5;
   wire                when_InOutWrapper_l65_6;
   wire                when_InOutWrapper_l65_7;
+  wire                when_InOutWrapper_l65_8;
+  wire                when_InOutWrapper_l65_9;
+  wire                when_InOutWrapper_l65_10;
+  wire                when_InOutWrapper_l65_11;
+  wire                when_InOutWrapper_l65_12;
+  wire                when_InOutWrapper_l65_13;
+  wire                when_InOutWrapper_l65_14;
+  wire                when_InOutWrapper_l65_15;
+  wire                when_InOutWrapper_l65_16;
+  wire                when_InOutWrapper_l65_17;
+  wire                when_InOutWrapper_l65_18;
+  wire                when_InOutWrapper_l65_19;
+  wire                when_InOutWrapper_l65_20;
+  wire                when_InOutWrapper_l65_21;
+  wire                when_InOutWrapper_l65_22;
+  wire                when_InOutWrapper_l65_23;
 
+  pll_50mhz clocking_pll (
+    .clkin            (clocking_clk25m             ), //i
+    .clkout_sdram     (clocking_pll_clkout_sdram   ), //o
+    .clkout_system    (clocking_pll_clkout_system  ), //o
+    .locked           (clocking_pll_locked         )  //o
+  );
+  DCCA clocking_pll_clkout_sdram_DCCA (
+    .CLKI    (clocking_pll_clkout_sdram            ), //i
+    .CE      (1'b1                                 ), //i
+    .CLKO    (clocking_pll_clkout_sdram_DCCA_CLKO  )  //o
+  );
+  ODDRX1F clocking_bb (
+    .SCLK    (clocking_pll_clkout_sdram_DCCA_CLKO  ), //i
+    .RST     (1'b0                                 ), //i
+    .D0      (1'b1                                 ), //i
+    .D1      (1'b0                                 ), //i
+    .Q       (clocking_bb_Q                        )  //o
+  );
+  Ecp5Sdrx2Phy system_phyA_logic (
+    .io_ctrl_phases_0_CASn             (system_sdramA_logic_io_phy_phases_0_CASn         ), //i
+    .io_ctrl_phases_0_CKE              (system_sdramA_logic_io_phy_phases_0_CKE          ), //i
+    .io_ctrl_phases_0_CSn              (system_sdramA_logic_io_phy_phases_0_CSn          ), //i
+    .io_ctrl_phases_0_RASn             (system_sdramA_logic_io_phy_phases_0_RASn         ), //i
+    .io_ctrl_phases_0_WEn              (system_sdramA_logic_io_phy_phases_0_WEn          ), //i
+    .io_ctrl_phases_0_DM_0             (system_sdramA_logic_io_phy_phases_0_DM_0[1:0]    ), //i
+    .io_ctrl_phases_0_DQw_0            (system_sdramA_logic_io_phy_phases_0_DQw_0[15:0]  ), //i
+    .io_ctrl_phases_0_DQr_0            (system_phyA_logic_io_ctrl_phases_0_DQr_0[15:0]   ), //o
+    .io_ctrl_phases_1_CASn             (system_sdramA_logic_io_phy_phases_1_CASn         ), //i
+    .io_ctrl_phases_1_CKE              (system_sdramA_logic_io_phy_phases_1_CKE          ), //i
+    .io_ctrl_phases_1_CSn              (system_sdramA_logic_io_phy_phases_1_CSn          ), //i
+    .io_ctrl_phases_1_RASn             (system_sdramA_logic_io_phy_phases_1_RASn         ), //i
+    .io_ctrl_phases_1_WEn              (system_sdramA_logic_io_phy_phases_1_WEn          ), //i
+    .io_ctrl_phases_1_DM_0             (system_sdramA_logic_io_phy_phases_1_DM_0[1:0]    ), //i
+    .io_ctrl_phases_1_DQw_0            (system_sdramA_logic_io_phy_phases_1_DQw_0[15:0]  ), //i
+    .io_ctrl_phases_1_DQr_0            (system_phyA_logic_io_ctrl_phases_1_DQr_0[15:0]   ), //o
+    .io_ctrl_ADDR                      (system_sdramA_logic_io_phy_ADDR[12:0]            ), //i
+    .io_ctrl_BA                        (system_sdramA_logic_io_phy_BA[1:0]               ), //i
+    .io_ctrl_writeEnable               (system_sdramA_logic_io_phy_writeEnable           ), //i
+    .io_ctrl_readEnable                (system_sdramA_logic_io_phy_readEnable            ), //i
+    .io_ctrl_readValid                 (system_phyA_logic_io_ctrl_readValid              ), //o
+    .io_sdram_ADDR                     (system_phyA_logic_io_sdram_ADDR[12:0]            ), //o
+    .io_sdram_BA                       (system_phyA_logic_io_sdram_BA[1:0]               ), //o
+    .io_sdram_DQ_read                  (_zz_io_sdram_DQ_read[15:0]                       ), //i
+    .io_sdram_DQ_write                 (system_phyA_logic_io_sdram_DQ_write[15:0]        ), //o
+    .io_sdram_DQ_writeEnable           (system_phyA_logic_io_sdram_DQ_writeEnable[15:0]  ), //o
+    .io_sdram_DQM                      (system_phyA_logic_io_sdram_DQM[1:0]              ), //o
+    .io_sdram_CASn                     (system_phyA_logic_io_sdram_CASn                  ), //o
+    .io_sdram_CKE                      (system_phyA_logic_io_sdram_CKE                   ), //o
+    .io_sdram_CSn                      (system_phyA_logic_io_sdram_CSn                   ), //o
+    .io_sdram_RASn                     (system_phyA_logic_io_sdram_RASn                  ), //o
+    .io_sdram_WEn                      (system_phyA_logic_io_sdram_WEn                   ), //o
+    .systemCdCtrl_logic_outputReset    (systemCdCtrl_logic_outputReset                   ), //i
+    .clkout_system                     (clocking_pll_clkout_system                       )  //i
+  );
   BufferCC_2 bufferCC_5 (
-    .io_dataIn                     (1'b0                        ), //i
-    .io_dataOut                    (bufferCC_5_io_dataOut       ), //o
-    .debugCdCtrl_external_clk      (debugCdCtrl_external_clk    ), //i
-    .debugCdCtrl_external_reset    (debugCdCtrl_external_reset  )  //i
+    .io_dataIn          (1'b0                        ), //i
+    .io_dataOut         (bufferCC_5_io_dataOut       ), //o
+    .clkout_system      (clocking_pll_clkout_system  ), //i
+    .clocking_resetn    (clocking_resetn             )  //i
   );
   BufferCC_3 bufferCC_6 (
     .io_dataIn                        (1'b0                           ), //i
     .io_dataOut                       (bufferCC_6_io_dataOut          ), //o
-    .debugCdCtrl_external_clk         (debugCdCtrl_external_clk       ), //i
+    .clkout_system                    (clocking_pll_clkout_system     ), //i
     .debugCdCtrl_logic_outputReset    (debugCdCtrl_logic_outputReset  )  //i
   );
   VexRiscv system_cpu_logic_cpu (
@@ -583,7 +855,7 @@ module ICESugarProMinimal (
     .iBus_rsp_valid                    (system_cpu_iBus_rsp_valid                                             ), //i
     .iBus_rsp_payload_data             (system_cpu_iBus_rsp_payload_fragment_data[31:0]                       ), //i
     .iBus_rsp_payload_error            (system_cpu_logic_cpu_iBus_rsp_payload_error                           ), //i
-    .debugCdCtrl_external_clk          (debugCdCtrl_external_clk                                              ), //i
+    .clkout_system                     (clocking_pll_clkout_system                                            ), //i
     .systemCdCtrl_logic_outputReset    (systemCdCtrl_logic_outputReset                                        ), //i
     .debugCdCtrl_logic_outputReset     (debugCdCtrl_logic_outputReset                                         )  //i
   );
@@ -600,7 +872,7 @@ module ICESugarProMinimal (
     .io_remote_rsp_ready               (jtagBridge_1_io_remote_rsp_ready                   ), //o
     .io_remote_rsp_payload_error       (systemDebugger_1_io_remote_rsp_payload_error       ), //i
     .io_remote_rsp_payload_data        (systemDebugger_1_io_remote_rsp_payload_data[31:0]  ), //i
-    .debugCdCtrl_external_clk          (debugCdCtrl_external_clk                           ), //i
+    .clkout_system                     (clocking_pll_clkout_system                         ), //i
     .debugCdCtrl_logic_outputReset     (debugCdCtrl_logic_outputReset                      )  //i
   );
   SystemDebugger systemDebugger_1 (
@@ -620,7 +892,7 @@ module ICESugarProMinimal (
     .io_mem_cmd_payload_size           (systemDebugger_1_io_mem_cmd_payload_size[1:0]      ), //o
     .io_mem_rsp_valid                  (system_cpu_logic_cpu_debug_bus_cmd_fire_regNext    ), //i
     .io_mem_rsp_payload                (system_cpu_logic_cpu_debug_bus_rsp_data[31:0]      ), //i
-    .debugCdCtrl_external_clk          (debugCdCtrl_external_clk                           ), //i
+    .clkout_system                     (clocking_pll_clkout_system                         ), //i
     .debugCdCtrl_logic_outputReset     (debugCdCtrl_logic_outputReset                      )  //i
   );
   BmbDecoder system_cpu_iBus_decoder (
@@ -636,24 +908,35 @@ module ICESugarProMinimal (
     .io_input_rsp_payload_fragment_opcode         (system_cpu_iBus_decoder_io_input_rsp_payload_fragment_opcode             ), //o
     .io_input_rsp_payload_fragment_data           (system_cpu_iBus_decoder_io_input_rsp_payload_fragment_data[31:0]         ), //o
     .io_outputs_0_cmd_valid                       (system_cpu_iBus_decoder_io_outputs_0_cmd_valid                           ), //o
-    .io_outputs_0_cmd_ready                       (system_cpu_iBus_unburstify_io_input_cmd_ready                            ), //i
+    .io_outputs_0_cmd_ready                       (system_sdramA0_bmb_arbiter_io_inputs_1_cmd_ready                         ), //i
     .io_outputs_0_cmd_payload_last                (system_cpu_iBus_decoder_io_outputs_0_cmd_payload_last                    ), //o
     .io_outputs_0_cmd_payload_fragment_opcode     (system_cpu_iBus_decoder_io_outputs_0_cmd_payload_fragment_opcode         ), //o
     .io_outputs_0_cmd_payload_fragment_address    (system_cpu_iBus_decoder_io_outputs_0_cmd_payload_fragment_address[31:0]  ), //o
     .io_outputs_0_cmd_payload_fragment_length     (system_cpu_iBus_decoder_io_outputs_0_cmd_payload_fragment_length[4:0]    ), //o
-    .io_outputs_0_rsp_valid                       (system_cpu_iBus_unburstify_io_input_rsp_valid                            ), //i
+    .io_outputs_0_rsp_valid                       (system_sdramA0_bmb_arbiter_io_inputs_1_rsp_valid                         ), //i
     .io_outputs_0_rsp_ready                       (system_cpu_iBus_decoder_io_outputs_0_rsp_ready                           ), //o
-    .io_outputs_0_rsp_payload_last                (system_cpu_iBus_unburstify_io_input_rsp_payload_last                     ), //i
-    .io_outputs_0_rsp_payload_fragment_opcode     (system_cpu_iBus_unburstify_io_input_rsp_payload_fragment_opcode          ), //i
-    .io_outputs_0_rsp_payload_fragment_data       (system_cpu_iBus_unburstify_io_input_rsp_payload_fragment_data[31:0]      ), //i
-    .debugCdCtrl_external_clk                     (debugCdCtrl_external_clk                                                 ), //i
+    .io_outputs_0_rsp_payload_last                (system_sdramA0_bmb_arbiter_io_inputs_1_rsp_payload_last                  ), //i
+    .io_outputs_0_rsp_payload_fragment_opcode     (system_sdramA0_bmb_arbiter_io_inputs_1_rsp_payload_fragment_opcode       ), //i
+    .io_outputs_0_rsp_payload_fragment_data       (system_sdramA0_bmb_arbiter_io_inputs_1_rsp_payload_fragment_data[31:0]   ), //i
+    .io_outputs_1_cmd_valid                       (system_cpu_iBus_decoder_io_outputs_1_cmd_valid                           ), //o
+    .io_outputs_1_cmd_ready                       (system_cpu_iBus_unburstify_io_input_cmd_ready                            ), //i
+    .io_outputs_1_cmd_payload_last                (system_cpu_iBus_decoder_io_outputs_1_cmd_payload_last                    ), //o
+    .io_outputs_1_cmd_payload_fragment_opcode     (system_cpu_iBus_decoder_io_outputs_1_cmd_payload_fragment_opcode         ), //o
+    .io_outputs_1_cmd_payload_fragment_address    (system_cpu_iBus_decoder_io_outputs_1_cmd_payload_fragment_address[31:0]  ), //o
+    .io_outputs_1_cmd_payload_fragment_length     (system_cpu_iBus_decoder_io_outputs_1_cmd_payload_fragment_length[4:0]    ), //o
+    .io_outputs_1_rsp_valid                       (system_cpu_iBus_unburstify_io_input_rsp_valid                            ), //i
+    .io_outputs_1_rsp_ready                       (system_cpu_iBus_decoder_io_outputs_1_rsp_ready                           ), //o
+    .io_outputs_1_rsp_payload_last                (system_cpu_iBus_unburstify_io_input_rsp_payload_last                     ), //i
+    .io_outputs_1_rsp_payload_fragment_opcode     (system_cpu_iBus_unburstify_io_input_rsp_payload_fragment_opcode          ), //i
+    .io_outputs_1_rsp_payload_fragment_data       (system_cpu_iBus_unburstify_io_input_rsp_payload_fragment_data[31:0]      ), //i
+    .clkout_system                                (clocking_pll_clkout_system                                               ), //i
     .systemCdCtrl_logic_outputReset               (systemCdCtrl_logic_outputReset                                           )  //i
   );
   BufferCC_4 bufferCC_7 (
-    .io_dataIn                   (1'b0                      ), //i
-    .io_dataOut                  (bufferCC_7_io_dataOut     ), //o
-    .debugCdCtrl_external_clk    (debugCdCtrl_external_clk  ), //i
-    .system_cpu_debugReset       (system_cpu_debugReset     )  //i
+    .io_dataIn                (1'b0                        ), //i
+    .io_dataOut               (bufferCC_7_io_dataOut       ), //o
+    .clkout_system            (clocking_pll_clkout_system  ), //i
+    .system_cpu_debugReset    (system_cpu_debugReset       )  //i
   );
   BmbDecoder_1 system_cpu_dBus_decoder (
     .io_input_cmd_valid                           (system_cpu_logic_cpu_dBus_Bridge_bus_cmd_m2sPipe_valid                           ), //i
@@ -672,7 +955,7 @@ module ICESugarProMinimal (
     .io_input_rsp_payload_fragment_data           (system_cpu_dBus_decoder_io_input_rsp_payload_fragment_data[31:0]                 ), //o
     .io_input_rsp_payload_fragment_context        (system_cpu_dBus_decoder_io_input_rsp_payload_fragment_context                    ), //o
     .io_outputs_0_cmd_valid                       (system_cpu_dBus_decoder_io_outputs_0_cmd_valid                                   ), //o
-    .io_outputs_0_cmd_ready                       (system_cpu_dBus_unburstify_1_io_input_cmd_ready                                  ), //i
+    .io_outputs_0_cmd_ready                       (system_sdramA0_bmb_arbiter_io_inputs_0_cmd_ready                                 ), //i
     .io_outputs_0_cmd_payload_last                (system_cpu_dBus_decoder_io_outputs_0_cmd_payload_last                            ), //o
     .io_outputs_0_cmd_payload_fragment_opcode     (system_cpu_dBus_decoder_io_outputs_0_cmd_payload_fragment_opcode                 ), //o
     .io_outputs_0_cmd_payload_fragment_address    (system_cpu_dBus_decoder_io_outputs_0_cmd_payload_fragment_address[31:0]          ), //o
@@ -680,14 +963,14 @@ module ICESugarProMinimal (
     .io_outputs_0_cmd_payload_fragment_data       (system_cpu_dBus_decoder_io_outputs_0_cmd_payload_fragment_data[31:0]             ), //o
     .io_outputs_0_cmd_payload_fragment_mask       (system_cpu_dBus_decoder_io_outputs_0_cmd_payload_fragment_mask[3:0]              ), //o
     .io_outputs_0_cmd_payload_fragment_context    (system_cpu_dBus_decoder_io_outputs_0_cmd_payload_fragment_context                ), //o
-    .io_outputs_0_rsp_valid                       (system_cpu_dBus_unburstify_1_io_input_rsp_valid                                  ), //i
+    .io_outputs_0_rsp_valid                       (system_sdramA0_bmb_arbiter_io_inputs_0_rsp_valid                                 ), //i
     .io_outputs_0_rsp_ready                       (system_cpu_dBus_decoder_io_outputs_0_rsp_ready                                   ), //o
-    .io_outputs_0_rsp_payload_last                (system_cpu_dBus_unburstify_1_io_input_rsp_payload_last                           ), //i
-    .io_outputs_0_rsp_payload_fragment_opcode     (system_cpu_dBus_unburstify_1_io_input_rsp_payload_fragment_opcode                ), //i
-    .io_outputs_0_rsp_payload_fragment_data       (system_cpu_dBus_unburstify_1_io_input_rsp_payload_fragment_data[31:0]            ), //i
-    .io_outputs_0_rsp_payload_fragment_context    (system_cpu_dBus_unburstify_1_io_input_rsp_payload_fragment_context               ), //i
+    .io_outputs_0_rsp_payload_last                (system_sdramA0_bmb_arbiter_io_inputs_0_rsp_payload_last                          ), //i
+    .io_outputs_0_rsp_payload_fragment_opcode     (system_sdramA0_bmb_arbiter_io_inputs_0_rsp_payload_fragment_opcode               ), //i
+    .io_outputs_0_rsp_payload_fragment_data       (system_sdramA0_bmb_arbiter_io_inputs_0_rsp_payload_fragment_data[31:0]           ), //i
+    .io_outputs_0_rsp_payload_fragment_context    (system_sdramA0_bmb_arbiter_io_inputs_0_rsp_payload_fragment_context              ), //i
     .io_outputs_1_cmd_valid                       (system_cpu_dBus_decoder_io_outputs_1_cmd_valid                                   ), //o
-    .io_outputs_1_cmd_ready                       (system_cpu_dBus_unburstify_io_input_cmd_ready                                    ), //i
+    .io_outputs_1_cmd_ready                       (system_cpu_dBus_unburstify_1_io_input_cmd_ready                                  ), //i
     .io_outputs_1_cmd_payload_last                (system_cpu_dBus_decoder_io_outputs_1_cmd_payload_last                            ), //o
     .io_outputs_1_cmd_payload_fragment_opcode     (system_cpu_dBus_decoder_io_outputs_1_cmd_payload_fragment_opcode                 ), //o
     .io_outputs_1_cmd_payload_fragment_address    (system_cpu_dBus_decoder_io_outputs_1_cmd_payload_fragment_address[31:0]          ), //o
@@ -695,13 +978,28 @@ module ICESugarProMinimal (
     .io_outputs_1_cmd_payload_fragment_data       (system_cpu_dBus_decoder_io_outputs_1_cmd_payload_fragment_data[31:0]             ), //o
     .io_outputs_1_cmd_payload_fragment_mask       (system_cpu_dBus_decoder_io_outputs_1_cmd_payload_fragment_mask[3:0]              ), //o
     .io_outputs_1_cmd_payload_fragment_context    (system_cpu_dBus_decoder_io_outputs_1_cmd_payload_fragment_context                ), //o
-    .io_outputs_1_rsp_valid                       (system_cpu_dBus_unburstify_io_input_rsp_valid                                    ), //i
+    .io_outputs_1_rsp_valid                       (system_cpu_dBus_unburstify_1_io_input_rsp_valid                                  ), //i
     .io_outputs_1_rsp_ready                       (system_cpu_dBus_decoder_io_outputs_1_rsp_ready                                   ), //o
-    .io_outputs_1_rsp_payload_last                (system_cpu_dBus_unburstify_io_input_rsp_payload_last                             ), //i
-    .io_outputs_1_rsp_payload_fragment_opcode     (system_cpu_dBus_unburstify_io_input_rsp_payload_fragment_opcode                  ), //i
-    .io_outputs_1_rsp_payload_fragment_data       (system_cpu_dBus_unburstify_io_input_rsp_payload_fragment_data[31:0]              ), //i
-    .io_outputs_1_rsp_payload_fragment_context    (system_cpu_dBus_unburstify_io_input_rsp_payload_fragment_context                 ), //i
-    .debugCdCtrl_external_clk                     (debugCdCtrl_external_clk                                                         ), //i
+    .io_outputs_1_rsp_payload_last                (system_cpu_dBus_unburstify_1_io_input_rsp_payload_last                           ), //i
+    .io_outputs_1_rsp_payload_fragment_opcode     (system_cpu_dBus_unburstify_1_io_input_rsp_payload_fragment_opcode                ), //i
+    .io_outputs_1_rsp_payload_fragment_data       (system_cpu_dBus_unburstify_1_io_input_rsp_payload_fragment_data[31:0]            ), //i
+    .io_outputs_1_rsp_payload_fragment_context    (system_cpu_dBus_unburstify_1_io_input_rsp_payload_fragment_context               ), //i
+    .io_outputs_2_cmd_valid                       (system_cpu_dBus_decoder_io_outputs_2_cmd_valid                                   ), //o
+    .io_outputs_2_cmd_ready                       (system_cpu_dBus_unburstify_io_input_cmd_ready                                    ), //i
+    .io_outputs_2_cmd_payload_last                (system_cpu_dBus_decoder_io_outputs_2_cmd_payload_last                            ), //o
+    .io_outputs_2_cmd_payload_fragment_opcode     (system_cpu_dBus_decoder_io_outputs_2_cmd_payload_fragment_opcode                 ), //o
+    .io_outputs_2_cmd_payload_fragment_address    (system_cpu_dBus_decoder_io_outputs_2_cmd_payload_fragment_address[31:0]          ), //o
+    .io_outputs_2_cmd_payload_fragment_length     (system_cpu_dBus_decoder_io_outputs_2_cmd_payload_fragment_length[4:0]            ), //o
+    .io_outputs_2_cmd_payload_fragment_data       (system_cpu_dBus_decoder_io_outputs_2_cmd_payload_fragment_data[31:0]             ), //o
+    .io_outputs_2_cmd_payload_fragment_mask       (system_cpu_dBus_decoder_io_outputs_2_cmd_payload_fragment_mask[3:0]              ), //o
+    .io_outputs_2_cmd_payload_fragment_context    (system_cpu_dBus_decoder_io_outputs_2_cmd_payload_fragment_context                ), //o
+    .io_outputs_2_rsp_valid                       (system_cpu_dBus_unburstify_io_input_rsp_valid                                    ), //i
+    .io_outputs_2_rsp_ready                       (system_cpu_dBus_decoder_io_outputs_2_rsp_ready                                   ), //o
+    .io_outputs_2_rsp_payload_last                (system_cpu_dBus_unburstify_io_input_rsp_payload_last                             ), //i
+    .io_outputs_2_rsp_payload_fragment_opcode     (system_cpu_dBus_unburstify_io_input_rsp_payload_fragment_opcode                  ), //i
+    .io_outputs_2_rsp_payload_fragment_data       (system_cpu_dBus_unburstify_io_input_rsp_payload_fragment_data[31:0]              ), //i
+    .io_outputs_2_rsp_payload_fragment_context    (system_cpu_dBus_unburstify_io_input_rsp_payload_fragment_context                 ), //i
+    .clkout_system                                (clocking_pll_clkout_system                                                       ), //i
     .systemCdCtrl_logic_outputReset               (systemCdCtrl_logic_outputReset                                                   )  //i
   );
   BmbOnChipRam system_ramA_logic (
@@ -722,21 +1020,21 @@ module ICESugarProMinimal (
     .io_bus_rsp_payload_fragment_opcode     (system_ramA_logic_io_bus_rsp_payload_fragment_opcode                   ), //o
     .io_bus_rsp_payload_fragment_data       (system_ramA_logic_io_bus_rsp_payload_fragment_data[31:0]               ), //o
     .io_bus_rsp_payload_fragment_context    (system_ramA_logic_io_bus_rsp_payload_fragment_context[2:0]             ), //o
-    .debugCdCtrl_external_clk               (debugCdCtrl_external_clk                                               ), //i
+    .clkout_system                          (clocking_pll_clkout_system                                             ), //i
     .systemCdCtrl_logic_outputReset         (systemCdCtrl_logic_outputReset                                         )  //i
   );
   BmbUnburstify system_cpu_dBus_unburstify (
-    .io_input_cmd_valid                        (system_cpu_dBus_decoder_io_outputs_1_cmd_valid                                                     ), //i
+    .io_input_cmd_valid                        (system_cpu_dBus_decoder_io_outputs_2_cmd_valid                                                     ), //i
     .io_input_cmd_ready                        (system_cpu_dBus_unburstify_io_input_cmd_ready                                                      ), //o
-    .io_input_cmd_payload_last                 (system_cpu_dBus_decoder_io_outputs_1_cmd_payload_last                                              ), //i
-    .io_input_cmd_payload_fragment_opcode      (system_cpu_dBus_decoder_io_outputs_1_cmd_payload_fragment_opcode                                   ), //i
-    .io_input_cmd_payload_fragment_address     (system_cpu_dBus_decoder_io_outputs_1_cmd_payload_fragment_address[31:0]                            ), //i
-    .io_input_cmd_payload_fragment_length      (system_cpu_dBus_decoder_io_outputs_1_cmd_payload_fragment_length[4:0]                              ), //i
-    .io_input_cmd_payload_fragment_data        (system_cpu_dBus_decoder_io_outputs_1_cmd_payload_fragment_data[31:0]                               ), //i
-    .io_input_cmd_payload_fragment_mask        (system_cpu_dBus_decoder_io_outputs_1_cmd_payload_fragment_mask[3:0]                                ), //i
-    .io_input_cmd_payload_fragment_context     (system_cpu_dBus_decoder_io_outputs_1_cmd_payload_fragment_context                                  ), //i
+    .io_input_cmd_payload_last                 (system_cpu_dBus_decoder_io_outputs_2_cmd_payload_last                                              ), //i
+    .io_input_cmd_payload_fragment_opcode      (system_cpu_dBus_decoder_io_outputs_2_cmd_payload_fragment_opcode                                   ), //i
+    .io_input_cmd_payload_fragment_address     (system_cpu_dBus_decoder_io_outputs_2_cmd_payload_fragment_address[31:0]                            ), //i
+    .io_input_cmd_payload_fragment_length      (system_cpu_dBus_decoder_io_outputs_2_cmd_payload_fragment_length[4:0]                              ), //i
+    .io_input_cmd_payload_fragment_data        (system_cpu_dBus_decoder_io_outputs_2_cmd_payload_fragment_data[31:0]                               ), //i
+    .io_input_cmd_payload_fragment_mask        (system_cpu_dBus_decoder_io_outputs_2_cmd_payload_fragment_mask[3:0]                                ), //i
+    .io_input_cmd_payload_fragment_context     (system_cpu_dBus_decoder_io_outputs_2_cmd_payload_fragment_context                                  ), //i
     .io_input_rsp_valid                        (system_cpu_dBus_unburstify_io_input_rsp_valid                                                      ), //o
-    .io_input_rsp_ready                        (system_cpu_dBus_decoder_io_outputs_1_rsp_ready                                                     ), //i
+    .io_input_rsp_ready                        (system_cpu_dBus_decoder_io_outputs_2_rsp_ready                                                     ), //i
     .io_input_rsp_payload_last                 (system_cpu_dBus_unburstify_io_input_rsp_payload_last                                               ), //o
     .io_input_rsp_payload_fragment_opcode      (system_cpu_dBus_unburstify_io_input_rsp_payload_fragment_opcode                                    ), //o
     .io_input_rsp_payload_fragment_data        (system_cpu_dBus_unburstify_io_input_rsp_payload_fragment_data[31:0]                                ), //o
@@ -756,7 +1054,7 @@ module ICESugarProMinimal (
     .io_output_rsp_payload_fragment_opcode     (system_bmbPeripheral_bmb_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_opcode        ), //i
     .io_output_rsp_payload_fragment_data       (system_bmbPeripheral_bmb_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_data[31:0]    ), //i
     .io_output_rsp_payload_fragment_context    (system_bmbPeripheral_bmb_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_context[2:0]  ), //i
-    .debugCdCtrl_external_clk                  (debugCdCtrl_external_clk                                                                           ), //i
+    .clkout_system                             (clocking_pll_clkout_system                                                                         ), //i
     .systemCdCtrl_logic_outputReset            (systemCdCtrl_logic_outputReset                                                                     )  //i
   );
   BmbArbiter system_ramA_ctrl_arbiter (
@@ -807,21 +1105,21 @@ module ICESugarProMinimal (
     .io_output_rsp_payload_fragment_opcode       (system_ramA_logic_io_bus_rsp_payload_fragment_opcode                      ), //i
     .io_output_rsp_payload_fragment_data         (system_ramA_logic_io_bus_rsp_payload_fragment_data[31:0]                  ), //i
     .io_output_rsp_payload_fragment_context      (system_ramA_logic_io_bus_rsp_payload_fragment_context[2:0]                ), //i
-    .debugCdCtrl_external_clk                    (debugCdCtrl_external_clk                                                  ), //i
+    .clkout_system                               (clocking_pll_clkout_system                                                ), //i
     .systemCdCtrl_logic_outputReset              (systemCdCtrl_logic_outputReset                                            )  //i
   );
   BmbUnburstify system_cpu_dBus_unburstify_1 (
-    .io_input_cmd_valid                        (system_cpu_dBus_decoder_io_outputs_0_cmd_valid                             ), //i
+    .io_input_cmd_valid                        (system_cpu_dBus_decoder_io_outputs_1_cmd_valid                             ), //i
     .io_input_cmd_ready                        (system_cpu_dBus_unburstify_1_io_input_cmd_ready                            ), //o
-    .io_input_cmd_payload_last                 (system_cpu_dBus_decoder_io_outputs_0_cmd_payload_last                      ), //i
-    .io_input_cmd_payload_fragment_opcode      (system_cpu_dBus_decoder_io_outputs_0_cmd_payload_fragment_opcode           ), //i
-    .io_input_cmd_payload_fragment_address     (system_cpu_dBus_decoder_io_outputs_0_cmd_payload_fragment_address[31:0]    ), //i
-    .io_input_cmd_payload_fragment_length      (system_cpu_dBus_decoder_io_outputs_0_cmd_payload_fragment_length[4:0]      ), //i
-    .io_input_cmd_payload_fragment_data        (system_cpu_dBus_decoder_io_outputs_0_cmd_payload_fragment_data[31:0]       ), //i
-    .io_input_cmd_payload_fragment_mask        (system_cpu_dBus_decoder_io_outputs_0_cmd_payload_fragment_mask[3:0]        ), //i
-    .io_input_cmd_payload_fragment_context     (system_cpu_dBus_decoder_io_outputs_0_cmd_payload_fragment_context          ), //i
+    .io_input_cmd_payload_last                 (system_cpu_dBus_decoder_io_outputs_1_cmd_payload_last                      ), //i
+    .io_input_cmd_payload_fragment_opcode      (system_cpu_dBus_decoder_io_outputs_1_cmd_payload_fragment_opcode           ), //i
+    .io_input_cmd_payload_fragment_address     (system_cpu_dBus_decoder_io_outputs_1_cmd_payload_fragment_address[31:0]    ), //i
+    .io_input_cmd_payload_fragment_length      (system_cpu_dBus_decoder_io_outputs_1_cmd_payload_fragment_length[4:0]      ), //i
+    .io_input_cmd_payload_fragment_data        (system_cpu_dBus_decoder_io_outputs_1_cmd_payload_fragment_data[31:0]       ), //i
+    .io_input_cmd_payload_fragment_mask        (system_cpu_dBus_decoder_io_outputs_1_cmd_payload_fragment_mask[3:0]        ), //i
+    .io_input_cmd_payload_fragment_context     (system_cpu_dBus_decoder_io_outputs_1_cmd_payload_fragment_context          ), //i
     .io_input_rsp_valid                        (system_cpu_dBus_unburstify_1_io_input_rsp_valid                            ), //o
-    .io_input_rsp_ready                        (system_cpu_dBus_decoder_io_outputs_0_rsp_ready                             ), //i
+    .io_input_rsp_ready                        (system_cpu_dBus_decoder_io_outputs_1_rsp_ready                             ), //i
     .io_input_rsp_payload_last                 (system_cpu_dBus_unburstify_1_io_input_rsp_payload_last                     ), //o
     .io_input_rsp_payload_fragment_opcode      (system_cpu_dBus_unburstify_1_io_input_rsp_payload_fragment_opcode          ), //o
     .io_input_rsp_payload_fragment_data        (system_cpu_dBus_unburstify_1_io_input_rsp_payload_fragment_data[31:0]      ), //o
@@ -841,18 +1139,18 @@ module ICESugarProMinimal (
     .io_output_rsp_payload_fragment_opcode     (system_ramA_ctrl_arbiter_io_inputs_0_rsp_payload_fragment_opcode           ), //i
     .io_output_rsp_payload_fragment_data       (system_ramA_ctrl_arbiter_io_inputs_0_rsp_payload_fragment_data[31:0]       ), //i
     .io_output_rsp_payload_fragment_context    (system_ramA_ctrl_arbiter_io_inputs_0_rsp_payload_fragment_context[2:0]     ), //i
-    .debugCdCtrl_external_clk                  (debugCdCtrl_external_clk                                                   ), //i
+    .clkout_system                             (clocking_pll_clkout_system                                                 ), //i
     .systemCdCtrl_logic_outputReset            (systemCdCtrl_logic_outputReset                                             )  //i
   );
   BmbUnburstify_2 system_cpu_iBus_unburstify (
-    .io_input_cmd_valid                        (system_cpu_iBus_decoder_io_outputs_0_cmd_valid                           ), //i
+    .io_input_cmd_valid                        (system_cpu_iBus_decoder_io_outputs_1_cmd_valid                           ), //i
     .io_input_cmd_ready                        (system_cpu_iBus_unburstify_io_input_cmd_ready                            ), //o
-    .io_input_cmd_payload_last                 (system_cpu_iBus_decoder_io_outputs_0_cmd_payload_last                    ), //i
-    .io_input_cmd_payload_fragment_opcode      (system_cpu_iBus_decoder_io_outputs_0_cmd_payload_fragment_opcode         ), //i
-    .io_input_cmd_payload_fragment_address     (system_cpu_iBus_decoder_io_outputs_0_cmd_payload_fragment_address[31:0]  ), //i
-    .io_input_cmd_payload_fragment_length      (system_cpu_iBus_decoder_io_outputs_0_cmd_payload_fragment_length[4:0]    ), //i
+    .io_input_cmd_payload_last                 (system_cpu_iBus_decoder_io_outputs_1_cmd_payload_last                    ), //i
+    .io_input_cmd_payload_fragment_opcode      (system_cpu_iBus_decoder_io_outputs_1_cmd_payload_fragment_opcode         ), //i
+    .io_input_cmd_payload_fragment_address     (system_cpu_iBus_decoder_io_outputs_1_cmd_payload_fragment_address[31:0]  ), //i
+    .io_input_cmd_payload_fragment_length      (system_cpu_iBus_decoder_io_outputs_1_cmd_payload_fragment_length[4:0]    ), //i
     .io_input_rsp_valid                        (system_cpu_iBus_unburstify_io_input_rsp_valid                            ), //o
-    .io_input_rsp_ready                        (system_cpu_iBus_decoder_io_outputs_0_rsp_ready                           ), //i
+    .io_input_rsp_ready                        (system_cpu_iBus_decoder_io_outputs_1_rsp_ready                           ), //i
     .io_input_rsp_payload_last                 (system_cpu_iBus_unburstify_io_input_rsp_payload_last                     ), //o
     .io_input_rsp_payload_fragment_opcode      (system_cpu_iBus_unburstify_io_input_rsp_payload_fragment_opcode          ), //o
     .io_input_rsp_payload_fragment_data        (system_cpu_iBus_unburstify_io_input_rsp_payload_fragment_data[31:0]      ), //o
@@ -869,7 +1167,7 @@ module ICESugarProMinimal (
     .io_output_rsp_payload_fragment_opcode     (system_ramA_ctrl_arbiter_io_inputs_1_rsp_payload_fragment_opcode         ), //i
     .io_output_rsp_payload_fragment_data       (system_ramA_ctrl_arbiter_io_inputs_1_rsp_payload_fragment_data[31:0]     ), //i
     .io_output_rsp_payload_fragment_context    (system_ramA_ctrl_arbiter_io_inputs_1_rsp_payload_fragment_context[1:0]   ), //i
-    .debugCdCtrl_external_clk                  (debugCdCtrl_external_clk                                                 ), //i
+    .clkout_system                             (clocking_pll_clkout_system                                               ), //i
     .systemCdCtrl_logic_outputReset            (systemCdCtrl_logic_outputReset                                           )  //i
   );
   BmbDecoder_2 system_bmbPeripheral_bmb_decoder (
@@ -948,7 +1246,22 @@ module ICESugarProMinimal (
     .io_outputs_3_rsp_payload_fragment_opcode     (system_bmbPeripheral_bmb_withoutMask_rsp_payload_fragment_opcode_3                ), //i
     .io_outputs_3_rsp_payload_fragment_data       (system_bmbPeripheral_bmb_withoutMask_rsp_payload_fragment_data_3[31:0]            ), //i
     .io_outputs_3_rsp_payload_fragment_context    (system_bmbPeripheral_bmb_withoutMask_rsp_payload_fragment_context_3[2:0]          ), //i
-    .debugCdCtrl_external_clk                     (debugCdCtrl_external_clk                                                          ), //i
+    .io_outputs_4_cmd_valid                       (system_bmbPeripheral_bmb_decoder_io_outputs_4_cmd_valid                           ), //o
+    .io_outputs_4_cmd_ready                       (system_bmbPeripheral_bmb_withoutMask_cmd_ready_4                                  ), //i
+    .io_outputs_4_cmd_payload_last                (system_bmbPeripheral_bmb_decoder_io_outputs_4_cmd_payload_last                    ), //o
+    .io_outputs_4_cmd_payload_fragment_opcode     (system_bmbPeripheral_bmb_decoder_io_outputs_4_cmd_payload_fragment_opcode         ), //o
+    .io_outputs_4_cmd_payload_fragment_address    (system_bmbPeripheral_bmb_decoder_io_outputs_4_cmd_payload_fragment_address[23:0]  ), //o
+    .io_outputs_4_cmd_payload_fragment_length     (system_bmbPeripheral_bmb_decoder_io_outputs_4_cmd_payload_fragment_length[1:0]    ), //o
+    .io_outputs_4_cmd_payload_fragment_data       (system_bmbPeripheral_bmb_decoder_io_outputs_4_cmd_payload_fragment_data[31:0]     ), //o
+    .io_outputs_4_cmd_payload_fragment_mask       (system_bmbPeripheral_bmb_decoder_io_outputs_4_cmd_payload_fragment_mask[3:0]      ), //o
+    .io_outputs_4_cmd_payload_fragment_context    (system_bmbPeripheral_bmb_decoder_io_outputs_4_cmd_payload_fragment_context[2:0]   ), //o
+    .io_outputs_4_rsp_valid                       (system_bmbPeripheral_bmb_withoutMask_rsp_valid_4                                  ), //i
+    .io_outputs_4_rsp_ready                       (system_bmbPeripheral_bmb_decoder_io_outputs_4_rsp_ready                           ), //o
+    .io_outputs_4_rsp_payload_last                (system_bmbPeripheral_bmb_withoutMask_rsp_payload_last_4                           ), //i
+    .io_outputs_4_rsp_payload_fragment_opcode     (system_bmbPeripheral_bmb_withoutMask_rsp_payload_fragment_opcode_4                ), //i
+    .io_outputs_4_rsp_payload_fragment_data       (system_bmbPeripheral_bmb_withoutMask_rsp_payload_fragment_data_4[31:0]            ), //i
+    .io_outputs_4_rsp_payload_fragment_context    (system_bmbPeripheral_bmb_withoutMask_rsp_payload_fragment_context_4[2:0]          ), //i
+    .clkout_system                                (clocking_pll_clkout_system                                                        ), //i
     .systemCdCtrl_logic_outputReset               (systemCdCtrl_logic_outputReset                                                    )  //i
   );
   BmbClint system_clint_logic (
@@ -969,8 +1282,64 @@ module ICESugarProMinimal (
     .io_timerInterrupt                      (system_clint_logic_io_timerInterrupt                                                         ), //o
     .io_softwareInterrupt                   (system_clint_logic_io_softwareInterrupt                                                      ), //o
     .io_time                                (system_clint_logic_io_time[63:0]                                                             ), //o
-    .debugCdCtrl_external_clk               (debugCdCtrl_external_clk                                                                     ), //i
+    .clkout_system                          (clocking_pll_clkout_system                                                                   ), //i
     .systemCdCtrl_logic_outputReset         (systemCdCtrl_logic_outputReset                                                               )  //i
+  );
+  CtrlWithoutPhyBmb system_sdramA_logic (
+    .io_bmb_0_cmd_valid                       (system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_valid                                ), //i
+    .io_bmb_0_cmd_ready                       (system_sdramA_logic_io_bmb_0_cmd_ready                                                        ), //o
+    .io_bmb_0_cmd_payload_last                (system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_payload_last                         ), //i
+    .io_bmb_0_cmd_payload_fragment_source     (system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_payload_fragment_source              ), //i
+    .io_bmb_0_cmd_payload_fragment_opcode     (system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_payload_fragment_opcode              ), //i
+    .io_bmb_0_cmd_payload_fragment_address    (system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_payload_fragment_address[24:0]       ), //i
+    .io_bmb_0_cmd_payload_fragment_length     (system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_payload_fragment_length[4:0]         ), //i
+    .io_bmb_0_cmd_payload_fragment_data       (system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_payload_fragment_data[31:0]          ), //i
+    .io_bmb_0_cmd_payload_fragment_mask       (system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_payload_fragment_mask[3:0]           ), //i
+    .io_bmb_0_cmd_payload_fragment_context    (system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_payload_fragment_context             ), //i
+    .io_bmb_0_rsp_valid                       (system_sdramA_logic_io_bmb_0_rsp_valid                                                        ), //o
+    .io_bmb_0_rsp_ready                       (_zz_io_bmb_0_rsp_ready                                                                        ), //i
+    .io_bmb_0_rsp_payload_last                (system_sdramA_logic_io_bmb_0_rsp_payload_last                                                 ), //o
+    .io_bmb_0_rsp_payload_fragment_source     (system_sdramA_logic_io_bmb_0_rsp_payload_fragment_source                                      ), //o
+    .io_bmb_0_rsp_payload_fragment_opcode     (system_sdramA_logic_io_bmb_0_rsp_payload_fragment_opcode                                      ), //o
+    .io_bmb_0_rsp_payload_fragment_data       (system_sdramA_logic_io_bmb_0_rsp_payload_fragment_data[31:0]                                  ), //o
+    .io_bmb_0_rsp_payload_fragment_context    (system_sdramA_logic_io_bmb_0_rsp_payload_fragment_context                                     ), //o
+    .io_ctrl_cmd_valid                        (system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_valid                           ), //i
+    .io_ctrl_cmd_ready                        (system_sdramA_logic_io_ctrl_cmd_ready                                                         ), //o
+    .io_ctrl_cmd_payload_last                 (system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_last                    ), //i
+    .io_ctrl_cmd_payload_fragment_opcode      (system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_opcode         ), //i
+    .io_ctrl_cmd_payload_fragment_address     (system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_address[11:0]  ), //i
+    .io_ctrl_cmd_payload_fragment_length      (system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_length[1:0]    ), //i
+    .io_ctrl_cmd_payload_fragment_data        (system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_data[31:0]     ), //i
+    .io_ctrl_cmd_payload_fragment_context     (system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_context[2:0]   ), //i
+    .io_ctrl_rsp_valid                        (system_sdramA_logic_io_ctrl_rsp_valid                                                         ), //o
+    .io_ctrl_rsp_ready                        (system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_ready                           ), //i
+    .io_ctrl_rsp_payload_last                 (system_sdramA_logic_io_ctrl_rsp_payload_last                                                  ), //o
+    .io_ctrl_rsp_payload_fragment_opcode      (system_sdramA_logic_io_ctrl_rsp_payload_fragment_opcode                                       ), //o
+    .io_ctrl_rsp_payload_fragment_data        (system_sdramA_logic_io_ctrl_rsp_payload_fragment_data[31:0]                                   ), //o
+    .io_ctrl_rsp_payload_fragment_context     (system_sdramA_logic_io_ctrl_rsp_payload_fragment_context[2:0]                                 ), //o
+    .io_phy_phases_0_CASn                     (system_sdramA_logic_io_phy_phases_0_CASn                                                      ), //o
+    .io_phy_phases_0_CKE                      (system_sdramA_logic_io_phy_phases_0_CKE                                                       ), //o
+    .io_phy_phases_0_CSn                      (system_sdramA_logic_io_phy_phases_0_CSn                                                       ), //o
+    .io_phy_phases_0_RASn                     (system_sdramA_logic_io_phy_phases_0_RASn                                                      ), //o
+    .io_phy_phases_0_WEn                      (system_sdramA_logic_io_phy_phases_0_WEn                                                       ), //o
+    .io_phy_phases_0_DM_0                     (system_sdramA_logic_io_phy_phases_0_DM_0[1:0]                                                 ), //o
+    .io_phy_phases_0_DQw_0                    (system_sdramA_logic_io_phy_phases_0_DQw_0[15:0]                                               ), //o
+    .io_phy_phases_0_DQr_0                    (system_phyA_logic_io_ctrl_phases_0_DQr_0[15:0]                                                ), //i
+    .io_phy_phases_1_CASn                     (system_sdramA_logic_io_phy_phases_1_CASn                                                      ), //o
+    .io_phy_phases_1_CKE                      (system_sdramA_logic_io_phy_phases_1_CKE                                                       ), //o
+    .io_phy_phases_1_CSn                      (system_sdramA_logic_io_phy_phases_1_CSn                                                       ), //o
+    .io_phy_phases_1_RASn                     (system_sdramA_logic_io_phy_phases_1_RASn                                                      ), //o
+    .io_phy_phases_1_WEn                      (system_sdramA_logic_io_phy_phases_1_WEn                                                       ), //o
+    .io_phy_phases_1_DM_0                     (system_sdramA_logic_io_phy_phases_1_DM_0[1:0]                                                 ), //o
+    .io_phy_phases_1_DQw_0                    (system_sdramA_logic_io_phy_phases_1_DQw_0[15:0]                                               ), //o
+    .io_phy_phases_1_DQr_0                    (system_phyA_logic_io_ctrl_phases_1_DQr_0[15:0]                                                ), //i
+    .io_phy_ADDR                              (system_sdramA_logic_io_phy_ADDR[12:0]                                                         ), //o
+    .io_phy_BA                                (system_sdramA_logic_io_phy_BA[1:0]                                                            ), //o
+    .io_phy_writeEnable                       (system_sdramA_logic_io_phy_writeEnable                                                        ), //o
+    .io_phy_readEnable                        (system_sdramA_logic_io_phy_readEnable                                                         ), //o
+    .io_phy_readValid                         (system_phyA_logic_io_ctrl_readValid                                                           ), //i
+    .clkout_system                            (clocking_pll_clkout_system                                                                    ), //i
+    .systemCdCtrl_logic_outputReset           (systemCdCtrl_logic_outputReset                                                                )  //i
   );
   BmbGpio2 system_gpioA_logic (
     .io_gpio_read                           (_zz_io_gpio_read[7:0]                                                                       ), //i
@@ -991,7 +1360,7 @@ module ICESugarProMinimal (
     .io_bus_rsp_payload_fragment_data       (system_gpioA_logic_io_bus_rsp_payload_fragment_data[31:0]                                   ), //o
     .io_bus_rsp_payload_fragment_context    (system_gpioA_logic_io_bus_rsp_payload_fragment_context[2:0]                                 ), //o
     .io_interrupt                           (system_gpioA_logic_io_interrupt[7:0]                                                        ), //o
-    .debugCdCtrl_external_clk               (debugCdCtrl_external_clk                                                                    ), //i
+    .clkout_system                          (clocking_pll_clkout_system                                                                  ), //i
     .systemCdCtrl_logic_outputReset         (systemCdCtrl_logic_outputReset                                                              )  //i
   );
   BmbUartCtrl system_uartA_logic (
@@ -1012,9 +1381,74 @@ module ICESugarProMinimal (
     .io_uart_txd                            (system_uartA_logic_io_uart_txd                                                              ), //o
     .io_uart_rxd                            (system_uartA_uart_rxd                                                                       ), //i
     .io_interrupt                           (system_uartA_logic_io_interrupt                                                             ), //o
-    .debugCdCtrl_external_clk               (debugCdCtrl_external_clk                                                                    ), //i
+    .clkout_system                          (clocking_pll_clkout_system                                                                  ), //i
     .systemCdCtrl_logic_outputReset         (systemCdCtrl_logic_outputReset                                                              )  //i
   );
+  BmbArbiter_1 system_sdramA0_bmb_arbiter (
+    .io_inputs_0_cmd_valid                       (system_cpu_dBus_decoder_io_outputs_0_cmd_valid                             ), //i
+    .io_inputs_0_cmd_ready                       (system_sdramA0_bmb_arbiter_io_inputs_0_cmd_ready                           ), //o
+    .io_inputs_0_cmd_payload_last                (system_cpu_dBus_decoder_io_outputs_0_cmd_payload_last                      ), //i
+    .io_inputs_0_cmd_payload_fragment_opcode     (system_cpu_dBus_decoder_io_outputs_0_cmd_payload_fragment_opcode           ), //i
+    .io_inputs_0_cmd_payload_fragment_address    (system_sdramA0_bmb_arbiter_io_inputs_0_cmd_payload_fragment_address[24:0]  ), //i
+    .io_inputs_0_cmd_payload_fragment_length     (system_cpu_dBus_decoder_io_outputs_0_cmd_payload_fragment_length[4:0]      ), //i
+    .io_inputs_0_cmd_payload_fragment_data       (system_cpu_dBus_decoder_io_outputs_0_cmd_payload_fragment_data[31:0]       ), //i
+    .io_inputs_0_cmd_payload_fragment_mask       (system_cpu_dBus_decoder_io_outputs_0_cmd_payload_fragment_mask[3:0]        ), //i
+    .io_inputs_0_cmd_payload_fragment_context    (system_cpu_dBus_decoder_io_outputs_0_cmd_payload_fragment_context          ), //i
+    .io_inputs_0_rsp_valid                       (system_sdramA0_bmb_arbiter_io_inputs_0_rsp_valid                           ), //o
+    .io_inputs_0_rsp_ready                       (system_cpu_dBus_decoder_io_outputs_0_rsp_ready                             ), //i
+    .io_inputs_0_rsp_payload_last                (system_sdramA0_bmb_arbiter_io_inputs_0_rsp_payload_last                    ), //o
+    .io_inputs_0_rsp_payload_fragment_opcode     (system_sdramA0_bmb_arbiter_io_inputs_0_rsp_payload_fragment_opcode         ), //o
+    .io_inputs_0_rsp_payload_fragment_data       (system_sdramA0_bmb_arbiter_io_inputs_0_rsp_payload_fragment_data[31:0]     ), //o
+    .io_inputs_0_rsp_payload_fragment_context    (system_sdramA0_bmb_arbiter_io_inputs_0_rsp_payload_fragment_context        ), //o
+    .io_inputs_1_cmd_valid                       (system_cpu_iBus_decoder_io_outputs_0_cmd_valid                             ), //i
+    .io_inputs_1_cmd_ready                       (system_sdramA0_bmb_arbiter_io_inputs_1_cmd_ready                           ), //o
+    .io_inputs_1_cmd_payload_last                (system_cpu_iBus_decoder_io_outputs_0_cmd_payload_last                      ), //i
+    .io_inputs_1_cmd_payload_fragment_opcode     (system_cpu_iBus_decoder_io_outputs_0_cmd_payload_fragment_opcode           ), //i
+    .io_inputs_1_cmd_payload_fragment_address    (system_sdramA0_bmb_arbiter_io_inputs_1_cmd_payload_fragment_address[24:0]  ), //i
+    .io_inputs_1_cmd_payload_fragment_length     (system_cpu_iBus_decoder_io_outputs_0_cmd_payload_fragment_length[4:0]      ), //i
+    .io_inputs_1_cmd_payload_fragment_data       (32'bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx                                       ), //i
+    .io_inputs_1_cmd_payload_fragment_mask       (4'bxxxx                                                                    ), //i
+    .io_inputs_1_rsp_valid                       (system_sdramA0_bmb_arbiter_io_inputs_1_rsp_valid                           ), //o
+    .io_inputs_1_rsp_ready                       (system_cpu_iBus_decoder_io_outputs_0_rsp_ready                             ), //i
+    .io_inputs_1_rsp_payload_last                (system_sdramA0_bmb_arbiter_io_inputs_1_rsp_payload_last                    ), //o
+    .io_inputs_1_rsp_payload_fragment_opcode     (system_sdramA0_bmb_arbiter_io_inputs_1_rsp_payload_fragment_opcode         ), //o
+    .io_inputs_1_rsp_payload_fragment_data       (system_sdramA0_bmb_arbiter_io_inputs_1_rsp_payload_fragment_data[31:0]     ), //o
+    .io_output_cmd_valid                         (system_sdramA0_bmb_arbiter_io_output_cmd_valid                             ), //o
+    .io_output_cmd_ready                         (system_sdramA0_bmb_arbiter_io_output_cmd_ready                             ), //i
+    .io_output_cmd_payload_last                  (system_sdramA0_bmb_arbiter_io_output_cmd_payload_last                      ), //o
+    .io_output_cmd_payload_fragment_source       (system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_source           ), //o
+    .io_output_cmd_payload_fragment_opcode       (system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_opcode           ), //o
+    .io_output_cmd_payload_fragment_address      (system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_address[24:0]    ), //o
+    .io_output_cmd_payload_fragment_length       (system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_length[4:0]      ), //o
+    .io_output_cmd_payload_fragment_data         (system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_data[31:0]       ), //o
+    .io_output_cmd_payload_fragment_mask         (system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_mask[3:0]        ), //o
+    .io_output_cmd_payload_fragment_context      (system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_context          ), //o
+    .io_output_rsp_valid                         (_zz_when_Stream_l342                                                       ), //i
+    .io_output_rsp_ready                         (system_sdramA0_bmb_arbiter_io_output_rsp_ready                             ), //o
+    .io_output_rsp_payload_last                  (_zz_io_output_rsp_payload_last                                             ), //i
+    .io_output_rsp_payload_fragment_source       (_zz_io_output_rsp_payload_fragment_source                                  ), //i
+    .io_output_rsp_payload_fragment_opcode       (_zz_io_output_rsp_payload_fragment_opcode                                  ), //i
+    .io_output_rsp_payload_fragment_data         (_zz_io_output_rsp_payload_fragment_data[31:0]                              ), //i
+    .io_output_rsp_payload_fragment_context      (_zz_io_output_rsp_payload_fragment_context                                 ), //i
+    .clkout_system                               (clocking_pll_clkout_system                                                 ), //i
+    .systemCdCtrl_logic_outputReset              (systemCdCtrl_logic_outputReset                                             )  //i
+  );
+  assign system_phyA_sdram_DQ[0] = _zz_system_phyA_sdram_DQ_15 ? _zz_system_phyA_sdram_DQ_16[0] : 1'bz;
+  assign system_phyA_sdram_DQ[1] = _zz_system_phyA_sdram_DQ_14 ? _zz_system_phyA_sdram_DQ_16[1] : 1'bz;
+  assign system_phyA_sdram_DQ[2] = _zz_system_phyA_sdram_DQ_13 ? _zz_system_phyA_sdram_DQ_16[2] : 1'bz;
+  assign system_phyA_sdram_DQ[3] = _zz_system_phyA_sdram_DQ_12 ? _zz_system_phyA_sdram_DQ_16[3] : 1'bz;
+  assign system_phyA_sdram_DQ[4] = _zz_system_phyA_sdram_DQ_11 ? _zz_system_phyA_sdram_DQ_16[4] : 1'bz;
+  assign system_phyA_sdram_DQ[5] = _zz_system_phyA_sdram_DQ_10 ? _zz_system_phyA_sdram_DQ_16[5] : 1'bz;
+  assign system_phyA_sdram_DQ[6] = _zz_system_phyA_sdram_DQ_9 ? _zz_system_phyA_sdram_DQ_16[6] : 1'bz;
+  assign system_phyA_sdram_DQ[7] = _zz_system_phyA_sdram_DQ_8 ? _zz_system_phyA_sdram_DQ_16[7] : 1'bz;
+  assign system_phyA_sdram_DQ[8] = _zz_system_phyA_sdram_DQ_7 ? _zz_system_phyA_sdram_DQ_16[8] : 1'bz;
+  assign system_phyA_sdram_DQ[9] = _zz_system_phyA_sdram_DQ_6 ? _zz_system_phyA_sdram_DQ_16[9] : 1'bz;
+  assign system_phyA_sdram_DQ[10] = _zz_system_phyA_sdram_DQ_5 ? _zz_system_phyA_sdram_DQ_16[10] : 1'bz;
+  assign system_phyA_sdram_DQ[11] = _zz_system_phyA_sdram_DQ_4 ? _zz_system_phyA_sdram_DQ_16[11] : 1'bz;
+  assign system_phyA_sdram_DQ[12] = _zz_system_phyA_sdram_DQ_3 ? _zz_system_phyA_sdram_DQ_16[12] : 1'bz;
+  assign system_phyA_sdram_DQ[13] = _zz_system_phyA_sdram_DQ_2 ? _zz_system_phyA_sdram_DQ_16[13] : 1'bz;
+  assign system_phyA_sdram_DQ[14] = _zz_system_phyA_sdram_DQ_1 ? _zz_system_phyA_sdram_DQ_16[14] : 1'bz;
+  assign system_phyA_sdram_DQ[15] = _zz_system_phyA_sdram_DQ ? _zz_system_phyA_sdram_DQ_16[15] : 1'bz;
   assign system_gpioA_gpio[0] = _zz_system_gpioA_gpio_7 ? _zz_system_gpioA_gpio_8[0] : 1'bz;
   assign system_gpioA_gpio[1] = _zz_system_gpioA_gpio_6 ? _zz_system_gpioA_gpio_8[1] : 1'bz;
   assign system_gpioA_gpio[2] = _zz_system_gpioA_gpio_5 ? _zz_system_gpioA_gpio_8[2] : 1'bz;
@@ -1025,60 +1459,173 @@ module ICESugarProMinimal (
   assign system_gpioA_gpio[7] = _zz_system_gpioA_gpio ? _zz_system_gpioA_gpio_8[7] : 1'bz;
   always @(*) begin
     _zz_system_gpioA_gpio = 1'b0;
-    if(when_InOutWrapper_l65_7) begin
+    if(when_InOutWrapper_l65_23) begin
       _zz_system_gpioA_gpio = 1'b1;
     end
   end
 
   always @(*) begin
     _zz_system_gpioA_gpio_1 = 1'b0;
-    if(when_InOutWrapper_l65_6) begin
+    if(when_InOutWrapper_l65_22) begin
       _zz_system_gpioA_gpio_1 = 1'b1;
     end
   end
 
   always @(*) begin
     _zz_system_gpioA_gpio_2 = 1'b0;
-    if(when_InOutWrapper_l65_5) begin
+    if(when_InOutWrapper_l65_21) begin
       _zz_system_gpioA_gpio_2 = 1'b1;
     end
   end
 
   always @(*) begin
     _zz_system_gpioA_gpio_3 = 1'b0;
-    if(when_InOutWrapper_l65_4) begin
+    if(when_InOutWrapper_l65_20) begin
       _zz_system_gpioA_gpio_3 = 1'b1;
     end
   end
 
   always @(*) begin
     _zz_system_gpioA_gpio_4 = 1'b0;
-    if(when_InOutWrapper_l65_3) begin
+    if(when_InOutWrapper_l65_19) begin
       _zz_system_gpioA_gpio_4 = 1'b1;
     end
   end
 
   always @(*) begin
     _zz_system_gpioA_gpio_5 = 1'b0;
-    if(when_InOutWrapper_l65_2) begin
+    if(when_InOutWrapper_l65_18) begin
       _zz_system_gpioA_gpio_5 = 1'b1;
     end
   end
 
   always @(*) begin
     _zz_system_gpioA_gpio_6 = 1'b0;
-    if(when_InOutWrapper_l65_1) begin
+    if(when_InOutWrapper_l65_17) begin
       _zz_system_gpioA_gpio_6 = 1'b1;
     end
   end
 
   always @(*) begin
     _zz_system_gpioA_gpio_7 = 1'b0;
-    if(when_InOutWrapper_l65) begin
+    if(when_InOutWrapper_l65_16) begin
       _zz_system_gpioA_gpio_7 = 1'b1;
     end
   end
 
+  always @(*) begin
+    _zz_system_phyA_sdram_DQ = 1'b0;
+    if(when_InOutWrapper_l65_15) begin
+      _zz_system_phyA_sdram_DQ = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    _zz_system_phyA_sdram_DQ_1 = 1'b0;
+    if(when_InOutWrapper_l65_14) begin
+      _zz_system_phyA_sdram_DQ_1 = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    _zz_system_phyA_sdram_DQ_2 = 1'b0;
+    if(when_InOutWrapper_l65_13) begin
+      _zz_system_phyA_sdram_DQ_2 = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    _zz_system_phyA_sdram_DQ_3 = 1'b0;
+    if(when_InOutWrapper_l65_12) begin
+      _zz_system_phyA_sdram_DQ_3 = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    _zz_system_phyA_sdram_DQ_4 = 1'b0;
+    if(when_InOutWrapper_l65_11) begin
+      _zz_system_phyA_sdram_DQ_4 = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    _zz_system_phyA_sdram_DQ_5 = 1'b0;
+    if(when_InOutWrapper_l65_10) begin
+      _zz_system_phyA_sdram_DQ_5 = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    _zz_system_phyA_sdram_DQ_6 = 1'b0;
+    if(when_InOutWrapper_l65_9) begin
+      _zz_system_phyA_sdram_DQ_6 = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    _zz_system_phyA_sdram_DQ_7 = 1'b0;
+    if(when_InOutWrapper_l65_8) begin
+      _zz_system_phyA_sdram_DQ_7 = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    _zz_system_phyA_sdram_DQ_8 = 1'b0;
+    if(when_InOutWrapper_l65_7) begin
+      _zz_system_phyA_sdram_DQ_8 = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    _zz_system_phyA_sdram_DQ_9 = 1'b0;
+    if(when_InOutWrapper_l65_6) begin
+      _zz_system_phyA_sdram_DQ_9 = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    _zz_system_phyA_sdram_DQ_10 = 1'b0;
+    if(when_InOutWrapper_l65_5) begin
+      _zz_system_phyA_sdram_DQ_10 = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    _zz_system_phyA_sdram_DQ_11 = 1'b0;
+    if(when_InOutWrapper_l65_4) begin
+      _zz_system_phyA_sdram_DQ_11 = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    _zz_system_phyA_sdram_DQ_12 = 1'b0;
+    if(when_InOutWrapper_l65_3) begin
+      _zz_system_phyA_sdram_DQ_12 = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    _zz_system_phyA_sdram_DQ_13 = 1'b0;
+    if(when_InOutWrapper_l65_2) begin
+      _zz_system_phyA_sdram_DQ_13 = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    _zz_system_phyA_sdram_DQ_14 = 1'b0;
+    if(when_InOutWrapper_l65_1) begin
+      _zz_system_phyA_sdram_DQ_14 = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    _zz_system_phyA_sdram_DQ_15 = 1'b0;
+    if(when_InOutWrapper_l65) begin
+      _zz_system_phyA_sdram_DQ_15 = 1'b1;
+    end
+  end
+
+  assign clocking_sdram_clk = clocking_bb_Q;
   always @(*) begin
     debugCdCtrl_logic_inputResetTrigger = 1'b0;
     if(debugCdCtrl_logic_inputResetAdapter_stuff_syncTrigger) begin
@@ -1168,6 +1715,16 @@ module ICESugarProMinimal (
   assign system_cpu_logic_cpu_debug_bus_cmd_payload_address = systemDebugger_1_io_mem_cmd_payload_address[7:0];
   assign system_cpu_logic_cpu_debug_bus_cmd_fire = (systemDebugger_1_io_mem_cmd_valid && system_cpu_logic_cpu_debug_bus_cmd_ready);
   assign system_cpu_jtag_tdo = jtagBridge_1_io_jtag_tdo;
+  assign system_phyA_sdram_ADDR = system_phyA_logic_io_sdram_ADDR;
+  assign system_phyA_sdram_BA = system_phyA_logic_io_sdram_BA;
+  assign _zz_system_phyA_sdram_DQ_16 = system_phyA_logic_io_sdram_DQ_write;
+  assign _zz_when_InOutWrapper_l65 = system_phyA_logic_io_sdram_DQ_writeEnable;
+  assign system_phyA_sdram_DQM = system_phyA_logic_io_sdram_DQM;
+  assign system_phyA_sdram_CASn = system_phyA_logic_io_sdram_CASn;
+  assign system_phyA_sdram_CKE = system_phyA_logic_io_sdram_CKE;
+  assign system_phyA_sdram_CSn = system_phyA_logic_io_sdram_CSn;
+  assign system_phyA_sdram_RASn = system_phyA_logic_io_sdram_RASn;
+  assign system_phyA_sdram_WEn = system_phyA_logic_io_sdram_WEn;
   assign system_cpu_iBus_cmd_ready = system_cpu_iBus_decoder_io_input_cmd_ready;
   assign system_cpu_iBus_rsp_valid = system_cpu_iBus_decoder_io_input_rsp_valid;
   assign system_cpu_iBus_rsp_payload_last = system_cpu_iBus_decoder_io_input_rsp_payload_last;
@@ -1349,7 +1906,7 @@ module ICESugarProMinimal (
   end
 
   assign _zz_system_gpioA_gpio_8 = system_gpioA_logic_io_gpio_write;
-  assign _zz_when_InOutWrapper_l65 = system_gpioA_logic_io_gpio_writeEnable;
+  assign _zz_when_InOutWrapper_l65_1 = system_gpioA_logic_io_gpio_writeEnable;
   assign system_gpioA_interrupts_0 = system_gpioA_logic_io_interrupt[0];
   assign system_gpioA_interrupts_1 = system_gpioA_logic_io_interrupt[1];
   assign system_gpioA_interrupts_2 = system_gpioA_logic_io_interrupt[2];
@@ -1381,6 +1938,49 @@ module ICESugarProMinimal (
   assign system_clint_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_context = system_clint_logic_io_bus_rsp_payload_fragment_context;
   assign system_cpu_logic_cpu_timerInterrupt = system_clint_logic_io_timerInterrupt[0];
   assign system_cpu_logic_cpu_softwareInterrupt = system_clint_logic_io_softwareInterrupt[0];
+  assign system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_ready = system_sdramA_logic_io_ctrl_cmd_ready;
+  assign system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_valid = system_sdramA_logic_io_ctrl_rsp_valid;
+  assign system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_last = system_sdramA_logic_io_ctrl_rsp_payload_last;
+  assign system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_opcode = system_sdramA_logic_io_ctrl_rsp_payload_fragment_opcode;
+  assign system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_data = system_sdramA_logic_io_ctrl_rsp_payload_fragment_data;
+  assign system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_context = system_sdramA_logic_io_ctrl_rsp_payload_fragment_context;
+  assign system_sdramA0_bmb_arbiter_io_output_cmd_ready = (! system_sdramA0_bmb_arbiter_io_output_cmd_rValid);
+  assign system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_valid = (system_sdramA0_bmb_arbiter_io_output_cmd_valid || system_sdramA0_bmb_arbiter_io_output_cmd_rValid);
+  assign system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_payload_last = (system_sdramA0_bmb_arbiter_io_output_cmd_rValid ? system_sdramA0_bmb_arbiter_io_output_cmd_rData_last : system_sdramA0_bmb_arbiter_io_output_cmd_payload_last);
+  assign system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_payload_fragment_source = (system_sdramA0_bmb_arbiter_io_output_cmd_rValid ? system_sdramA0_bmb_arbiter_io_output_cmd_rData_fragment_source : system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_source);
+  assign system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_payload_fragment_opcode = (system_sdramA0_bmb_arbiter_io_output_cmd_rValid ? system_sdramA0_bmb_arbiter_io_output_cmd_rData_fragment_opcode : system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_opcode);
+  assign system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_payload_fragment_address = (system_sdramA0_bmb_arbiter_io_output_cmd_rValid ? system_sdramA0_bmb_arbiter_io_output_cmd_rData_fragment_address : system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_address);
+  assign system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_payload_fragment_length = (system_sdramA0_bmb_arbiter_io_output_cmd_rValid ? system_sdramA0_bmb_arbiter_io_output_cmd_rData_fragment_length : system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_length);
+  assign system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_payload_fragment_data = (system_sdramA0_bmb_arbiter_io_output_cmd_rValid ? system_sdramA0_bmb_arbiter_io_output_cmd_rData_fragment_data : system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_data);
+  assign system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_payload_fragment_mask = (system_sdramA0_bmb_arbiter_io_output_cmd_rValid ? system_sdramA0_bmb_arbiter_io_output_cmd_rData_fragment_mask : system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_mask);
+  assign system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_payload_fragment_context = (system_sdramA0_bmb_arbiter_io_output_cmd_rValid ? system_sdramA0_bmb_arbiter_io_output_cmd_rData_fragment_context : system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_context);
+  always @(*) begin
+    system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_ready = system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_ready;
+    if(when_Stream_l342_2) begin
+      system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_ready = 1'b1;
+    end
+  end
+
+  assign when_Stream_l342_2 = (! system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_valid);
+  assign system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_valid = system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rValid;
+  assign system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_payload_last = system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rData_last;
+  assign system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_payload_fragment_source = system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rData_fragment_source;
+  assign system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_payload_fragment_opcode = system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rData_fragment_opcode;
+  assign system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_payload_fragment_address = system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rData_fragment_address;
+  assign system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_payload_fragment_length = system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rData_fragment_length;
+  assign system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_payload_fragment_data = system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rData_fragment_data;
+  assign system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_payload_fragment_mask = system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rData_fragment_mask;
+  assign system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_payload_fragment_context = system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rData_fragment_context;
+  assign system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_m2sPipe_ready = system_sdramA_logic_io_bmb_0_cmd_ready;
+  always @(*) begin
+    _zz_io_bmb_0_rsp_ready = system_sdramA0_bmb_arbiter_io_output_rsp_ready;
+    if(when_Stream_l342_3) begin
+      _zz_io_bmb_0_rsp_ready = 1'b1;
+    end
+  end
+
+  assign when_Stream_l342_3 = (! _zz_when_Stream_l342);
+  assign _zz_when_Stream_l342 = _zz_when_Stream_l342_1;
   assign system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_ready = system_gpioA_logic_io_bus_cmd_ready;
   assign system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_valid = system_gpioA_logic_io_bus_rsp_valid;
   assign system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_last = system_gpioA_logic_io_bus_rsp_payload_last;
@@ -1445,20 +2045,22 @@ module ICESugarProMinimal (
   assign system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_length_2 = system_bmbPeripheral_bmb_decoder_io_outputs_2_cmd_payload_fragment_length;
   assign system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_data_2 = system_bmbPeripheral_bmb_decoder_io_outputs_2_cmd_payload_fragment_data;
   assign system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_context_2 = system_bmbPeripheral_bmb_decoder_io_outputs_2_cmd_payload_fragment_context;
-  assign system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_valid = system_bmbPeripheral_bmb_withoutMask_cmd_valid_2;
-  assign system_bmbPeripheral_bmb_withoutMask_cmd_ready_2 = system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_ready;
-  assign system_bmbPeripheral_bmb_withoutMask_rsp_valid_2 = system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_valid;
-  assign system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_ready = system_bmbPeripheral_bmb_withoutMask_rsp_ready_2;
-  assign system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_last = system_bmbPeripheral_bmb_withoutMask_cmd_payload_last_2;
-  assign system_bmbPeripheral_bmb_withoutMask_rsp_payload_last_2 = system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_last;
-  assign system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_opcode = system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_opcode_2;
-  assign system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_address = system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_address_2[7:0];
-  assign system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_length = system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_length_2;
-  assign system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_data = system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_data_2;
-  assign system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_context = system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_context_2;
-  assign system_bmbPeripheral_bmb_withoutMask_rsp_payload_fragment_opcode_2 = system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_opcode;
-  assign system_bmbPeripheral_bmb_withoutMask_rsp_payload_fragment_data_2 = system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_data;
-  assign system_bmbPeripheral_bmb_withoutMask_rsp_payload_fragment_context_2 = system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_context;
+  assign system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_valid = system_bmbPeripheral_bmb_withoutMask_cmd_valid_2;
+  assign system_bmbPeripheral_bmb_withoutMask_cmd_ready_2 = system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_ready;
+  assign system_bmbPeripheral_bmb_withoutMask_rsp_valid_2 = system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_valid;
+  assign system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_ready = system_bmbPeripheral_bmb_withoutMask_rsp_ready_2;
+  assign system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_last = system_bmbPeripheral_bmb_withoutMask_cmd_payload_last_2;
+  assign system_bmbPeripheral_bmb_withoutMask_rsp_payload_last_2 = system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_last;
+  assign system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_opcode = system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_opcode_2;
+  assign system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_address = system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_address_2[11:0];
+  assign system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_length = system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_length_2;
+  assign system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_data = system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_data_2;
+  assign system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_context = system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_context_2;
+  assign system_bmbPeripheral_bmb_withoutMask_rsp_payload_fragment_opcode_2 = system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_opcode;
+  assign system_bmbPeripheral_bmb_withoutMask_rsp_payload_fragment_data_2 = system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_data;
+  assign system_bmbPeripheral_bmb_withoutMask_rsp_payload_fragment_context_2 = system_sdramA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_context;
+  assign system_sdramA0_bmb_arbiter_io_inputs_0_cmd_payload_fragment_address = system_cpu_dBus_decoder_io_outputs_0_cmd_payload_fragment_address[24:0];
+  assign system_sdramA0_bmb_arbiter_io_inputs_1_cmd_payload_fragment_address = system_cpu_iBus_decoder_io_outputs_0_cmd_payload_fragment_address[24:0];
   assign system_bmbPeripheral_bmb_withoutMask_cmd_valid_3 = system_bmbPeripheral_bmb_decoder_io_outputs_3_cmd_valid;
   assign system_bmbPeripheral_bmb_withoutMask_rsp_ready_3 = system_bmbPeripheral_bmb_decoder_io_outputs_3_rsp_ready;
   assign system_bmbPeripheral_bmb_withoutMask_cmd_payload_last_3 = system_bmbPeripheral_bmb_decoder_io_outputs_3_cmd_payload_last;
@@ -1467,22 +2069,44 @@ module ICESugarProMinimal (
   assign system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_length_3 = system_bmbPeripheral_bmb_decoder_io_outputs_3_cmd_payload_fragment_length;
   assign system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_data_3 = system_bmbPeripheral_bmb_decoder_io_outputs_3_cmd_payload_fragment_data;
   assign system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_context_3 = system_bmbPeripheral_bmb_decoder_io_outputs_3_cmd_payload_fragment_context;
-  assign system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_valid = system_bmbPeripheral_bmb_withoutMask_cmd_valid_3;
-  assign system_bmbPeripheral_bmb_withoutMask_cmd_ready_3 = system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_ready;
-  assign system_bmbPeripheral_bmb_withoutMask_rsp_valid_3 = system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_valid;
-  assign system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_ready = system_bmbPeripheral_bmb_withoutMask_rsp_ready_3;
-  assign system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_last = system_bmbPeripheral_bmb_withoutMask_cmd_payload_last_3;
-  assign system_bmbPeripheral_bmb_withoutMask_rsp_payload_last_3 = system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_last;
-  assign system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_opcode = system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_opcode_3;
-  assign system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_address = system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_address_3[5:0];
-  assign system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_length = system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_length_3;
-  assign system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_data = system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_data_3;
-  assign system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_context = system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_context_3;
-  assign system_bmbPeripheral_bmb_withoutMask_rsp_payload_fragment_opcode_3 = system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_opcode;
-  assign system_bmbPeripheral_bmb_withoutMask_rsp_payload_fragment_data_3 = system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_data;
-  assign system_bmbPeripheral_bmb_withoutMask_rsp_payload_fragment_context_3 = system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_context;
+  assign system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_valid = system_bmbPeripheral_bmb_withoutMask_cmd_valid_3;
+  assign system_bmbPeripheral_bmb_withoutMask_cmd_ready_3 = system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_ready;
+  assign system_bmbPeripheral_bmb_withoutMask_rsp_valid_3 = system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_valid;
+  assign system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_ready = system_bmbPeripheral_bmb_withoutMask_rsp_ready_3;
+  assign system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_last = system_bmbPeripheral_bmb_withoutMask_cmd_payload_last_3;
+  assign system_bmbPeripheral_bmb_withoutMask_rsp_payload_last_3 = system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_last;
+  assign system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_opcode = system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_opcode_3;
+  assign system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_address = system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_address_3[7:0];
+  assign system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_length = system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_length_3;
+  assign system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_data = system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_data_3;
+  assign system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_context = system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_context_3;
+  assign system_bmbPeripheral_bmb_withoutMask_rsp_payload_fragment_opcode_3 = system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_opcode;
+  assign system_bmbPeripheral_bmb_withoutMask_rsp_payload_fragment_data_3 = system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_data;
+  assign system_bmbPeripheral_bmb_withoutMask_rsp_payload_fragment_context_3 = system_gpioA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_context;
+  assign system_bmbPeripheral_bmb_withoutMask_cmd_valid_4 = system_bmbPeripheral_bmb_decoder_io_outputs_4_cmd_valid;
+  assign system_bmbPeripheral_bmb_withoutMask_rsp_ready_4 = system_bmbPeripheral_bmb_decoder_io_outputs_4_rsp_ready;
+  assign system_bmbPeripheral_bmb_withoutMask_cmd_payload_last_4 = system_bmbPeripheral_bmb_decoder_io_outputs_4_cmd_payload_last;
+  assign system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_opcode_4 = system_bmbPeripheral_bmb_decoder_io_outputs_4_cmd_payload_fragment_opcode;
+  assign system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_address_4 = system_bmbPeripheral_bmb_decoder_io_outputs_4_cmd_payload_fragment_address;
+  assign system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_length_4 = system_bmbPeripheral_bmb_decoder_io_outputs_4_cmd_payload_fragment_length;
+  assign system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_data_4 = system_bmbPeripheral_bmb_decoder_io_outputs_4_cmd_payload_fragment_data;
+  assign system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_context_4 = system_bmbPeripheral_bmb_decoder_io_outputs_4_cmd_payload_fragment_context;
+  assign system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_valid = system_bmbPeripheral_bmb_withoutMask_cmd_valid_4;
+  assign system_bmbPeripheral_bmb_withoutMask_cmd_ready_4 = system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_ready;
+  assign system_bmbPeripheral_bmb_withoutMask_rsp_valid_4 = system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_valid;
+  assign system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_ready = system_bmbPeripheral_bmb_withoutMask_rsp_ready_4;
+  assign system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_last = system_bmbPeripheral_bmb_withoutMask_cmd_payload_last_4;
+  assign system_bmbPeripheral_bmb_withoutMask_rsp_payload_last_4 = system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_last;
+  assign system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_opcode = system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_opcode_4;
+  assign system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_address = system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_address_4[5:0];
+  assign system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_length = system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_length_4;
+  assign system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_data = system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_data_4;
+  assign system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_fragment_context = system_bmbPeripheral_bmb_withoutMask_cmd_payload_fragment_context_4;
+  assign system_bmbPeripheral_bmb_withoutMask_rsp_payload_fragment_opcode_4 = system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_opcode;
+  assign system_bmbPeripheral_bmb_withoutMask_rsp_payload_fragment_data_4 = system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_data;
+  assign system_bmbPeripheral_bmb_withoutMask_rsp_payload_fragment_context_4 = system_uartA_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_context;
   assign when_BmbSlaveFactory_l71 = 1'b1;
-  assign _zz_io_gpio_read = system_gpioA_gpio;
+  assign _zz_io_sdram_DQ_read = system_phyA_sdram_DQ;
   assign when_InOutWrapper_l65 = _zz_when_InOutWrapper_l65[0];
   assign when_InOutWrapper_l65_1 = _zz_when_InOutWrapper_l65[1];
   assign when_InOutWrapper_l65_2 = _zz_when_InOutWrapper_l65[2];
@@ -1491,7 +2115,24 @@ module ICESugarProMinimal (
   assign when_InOutWrapper_l65_5 = _zz_when_InOutWrapper_l65[5];
   assign when_InOutWrapper_l65_6 = _zz_when_InOutWrapper_l65[6];
   assign when_InOutWrapper_l65_7 = _zz_when_InOutWrapper_l65[7];
-  always @(posedge debugCdCtrl_external_clk) begin
+  assign when_InOutWrapper_l65_8 = _zz_when_InOutWrapper_l65[8];
+  assign when_InOutWrapper_l65_9 = _zz_when_InOutWrapper_l65[9];
+  assign when_InOutWrapper_l65_10 = _zz_when_InOutWrapper_l65[10];
+  assign when_InOutWrapper_l65_11 = _zz_when_InOutWrapper_l65[11];
+  assign when_InOutWrapper_l65_12 = _zz_when_InOutWrapper_l65[12];
+  assign when_InOutWrapper_l65_13 = _zz_when_InOutWrapper_l65[13];
+  assign when_InOutWrapper_l65_14 = _zz_when_InOutWrapper_l65[14];
+  assign when_InOutWrapper_l65_15 = _zz_when_InOutWrapper_l65[15];
+  assign _zz_io_gpio_read = system_gpioA_gpio;
+  assign when_InOutWrapper_l65_16 = _zz_when_InOutWrapper_l65_1[0];
+  assign when_InOutWrapper_l65_17 = _zz_when_InOutWrapper_l65_1[1];
+  assign when_InOutWrapper_l65_18 = _zz_when_InOutWrapper_l65_1[2];
+  assign when_InOutWrapper_l65_19 = _zz_when_InOutWrapper_l65_1[3];
+  assign when_InOutWrapper_l65_20 = _zz_when_InOutWrapper_l65_1[4];
+  assign when_InOutWrapper_l65_21 = _zz_when_InOutWrapper_l65_1[5];
+  assign when_InOutWrapper_l65_22 = _zz_when_InOutWrapper_l65_1[6];
+  assign when_InOutWrapper_l65_23 = _zz_when_InOutWrapper_l65_1[7];
+  always @(posedge clocking_pll_clkout_system) begin
     if(when_ClockDomainGenerator_l77) begin
       debugCdCtrl_logic_holdingLogic_resetCounter <= (debugCdCtrl_logic_holdingLogic_resetCounter + 12'h001);
     end
@@ -1501,7 +2142,7 @@ module ICESugarProMinimal (
     debugCdCtrl_logic_outputReset <= debugCdCtrl_logic_outputResetUnbuffered;
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clocking_pll_clkout_system) begin
     if(when_ClockDomainGenerator_l77_1) begin
       systemCdCtrl_logic_holdingLogic_resetCounter <= (systemCdCtrl_logic_holdingLogic_resetCounter + 6'h01);
     end
@@ -1511,11 +2152,11 @@ module ICESugarProMinimal (
     systemCdCtrl_logic_outputReset <= systemCdCtrl_logic_outputResetUnbuffered;
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clocking_pll_clkout_system) begin
     system_cpu_debugReset <= system_cpu_logic_cpu_debug_resetOut;
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clocking_pll_clkout_system) begin
     if(debugCdCtrl_logic_outputReset) begin
       system_cpu_logic_cpu_debug_bus_cmd_fire_regNext <= 1'b0;
     end else begin
@@ -1523,7 +2164,7 @@ module ICESugarProMinimal (
     end
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clocking_pll_clkout_system) begin
     if(systemCdCtrl_logic_outputReset) begin
       system_cpu_logic_cpu_dBus_Bridge_bus_cmd_rValid <= 1'b0;
       system_bmbPeripheral_bmb_cmd_rValid <= 1'b0;
@@ -1531,6 +2172,9 @@ module ICESugarProMinimal (
       _zz_system_plic_logic_bmb_rsp_valid_2 <= 1'b0;
       system_plic_logic_bridge_coherencyStall_value <= 1'b0;
       _zz_system_cpu_externalInterrupt_plic_target_threshold <= 2'b00;
+      system_sdramA0_bmb_arbiter_io_output_cmd_rValid <= 1'b0;
+      system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rValid <= 1'b0;
+      _zz_when_Stream_l342_1 <= 1'b0;
     end else begin
       if(system_cpu_logic_cpu_dBus_Bridge_bus_cmd_ready) begin
         system_cpu_logic_cpu_dBus_Bridge_bus_cmd_rValid <= system_cpu_logic_cpu_dBus_Bridge_bus_cmd_valid;
@@ -1551,6 +2195,18 @@ module ICESugarProMinimal (
         _zz_system_plic_logic_bmb_rsp_valid_2 <= (system_plic_logic_bus_rsp_valid && _zz_system_plic_logic_bmb_rsp_valid);
       end
       system_plic_logic_bridge_coherencyStall_value <= system_plic_logic_bridge_coherencyStall_valueNext;
+      if(system_sdramA0_bmb_arbiter_io_output_cmd_valid) begin
+        system_sdramA0_bmb_arbiter_io_output_cmd_rValid <= 1'b1;
+      end
+      if(system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_ready) begin
+        system_sdramA0_bmb_arbiter_io_output_cmd_rValid <= 1'b0;
+      end
+      if(system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_ready) begin
+        system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rValid <= system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_valid;
+      end
+      if(_zz_io_bmb_0_rsp_ready) begin
+        _zz_when_Stream_l342_1 <= system_sdramA_logic_io_bmb_0_rsp_valid;
+      end
       case(system_plic_logic_bmb_cmd_payload_fragment_address)
         22'h200000 : begin
           if(system_plic_logic_bus_doWrite) begin
@@ -1563,7 +2219,7 @@ module ICESugarProMinimal (
     end
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clocking_pll_clkout_system) begin
     if(system_cpu_logic_cpu_dBus_Bridge_bus_cmd_ready) begin
       system_cpu_logic_cpu_dBus_Bridge_bus_cmd_rData_last <= system_cpu_logic_cpu_dBus_Bridge_bus_cmd_payload_last;
       system_cpu_logic_cpu_dBus_Bridge_bus_cmd_rData_fragment_opcode <= system_cpu_logic_cpu_dBus_Bridge_bus_cmd_payload_fragment_opcode;
@@ -1596,8 +2252,175 @@ module ICESugarProMinimal (
     end
     system_cpu_externalInterrupt_plic_target_bestRequest_priority <= system_cpu_externalInterrupt_plic_target_requests_0_priority;
     system_cpu_externalInterrupt_plic_target_bestRequest_valid <= system_cpu_externalInterrupt_plic_target_requests_0_valid;
+    if(system_sdramA0_bmb_arbiter_io_output_cmd_ready) begin
+      system_sdramA0_bmb_arbiter_io_output_cmd_rData_last <= system_sdramA0_bmb_arbiter_io_output_cmd_payload_last;
+      system_sdramA0_bmb_arbiter_io_output_cmd_rData_fragment_source <= system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_source;
+      system_sdramA0_bmb_arbiter_io_output_cmd_rData_fragment_opcode <= system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_opcode;
+      system_sdramA0_bmb_arbiter_io_output_cmd_rData_fragment_address <= system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_address;
+      system_sdramA0_bmb_arbiter_io_output_cmd_rData_fragment_length <= system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_length;
+      system_sdramA0_bmb_arbiter_io_output_cmd_rData_fragment_data <= system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_data;
+      system_sdramA0_bmb_arbiter_io_output_cmd_rData_fragment_mask <= system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_mask;
+      system_sdramA0_bmb_arbiter_io_output_cmd_rData_fragment_context <= system_sdramA0_bmb_arbiter_io_output_cmd_payload_fragment_context;
+    end
+    if(system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_ready) begin
+      system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rData_last <= system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_payload_last;
+      system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rData_fragment_source <= system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_payload_fragment_source;
+      system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rData_fragment_opcode <= system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_payload_fragment_opcode;
+      system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rData_fragment_address <= system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_payload_fragment_address;
+      system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rData_fragment_length <= system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_payload_fragment_length;
+      system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rData_fragment_data <= system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_payload_fragment_data;
+      system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rData_fragment_mask <= system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_payload_fragment_mask;
+      system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_rData_fragment_context <= system_sdramA0_bmb_arbiter_io_output_cmd_s2mPipe_payload_fragment_context;
+    end
+    if(_zz_io_bmb_0_rsp_ready) begin
+      _zz_io_output_rsp_payload_last <= system_sdramA_logic_io_bmb_0_rsp_payload_last;
+      _zz_io_output_rsp_payload_fragment_source <= system_sdramA_logic_io_bmb_0_rsp_payload_fragment_source;
+      _zz_io_output_rsp_payload_fragment_opcode <= system_sdramA_logic_io_bmb_0_rsp_payload_fragment_opcode;
+      _zz_io_output_rsp_payload_fragment_data <= system_sdramA_logic_io_bmb_0_rsp_payload_fragment_data;
+      _zz_io_output_rsp_payload_fragment_context <= system_sdramA_logic_io_bmb_0_rsp_payload_fragment_context;
+    end
   end
 
+
+endmodule
+
+module BmbArbiter_1 (
+  input               io_inputs_0_cmd_valid,
+  output              io_inputs_0_cmd_ready,
+  input               io_inputs_0_cmd_payload_last,
+  input      [0:0]    io_inputs_0_cmd_payload_fragment_opcode,
+  input      [24:0]   io_inputs_0_cmd_payload_fragment_address,
+  input      [4:0]    io_inputs_0_cmd_payload_fragment_length,
+  input      [31:0]   io_inputs_0_cmd_payload_fragment_data,
+  input      [3:0]    io_inputs_0_cmd_payload_fragment_mask,
+  input      [0:0]    io_inputs_0_cmd_payload_fragment_context,
+  output              io_inputs_0_rsp_valid,
+  input               io_inputs_0_rsp_ready,
+  output              io_inputs_0_rsp_payload_last,
+  output     [0:0]    io_inputs_0_rsp_payload_fragment_opcode,
+  output     [31:0]   io_inputs_0_rsp_payload_fragment_data,
+  output     [0:0]    io_inputs_0_rsp_payload_fragment_context,
+  input               io_inputs_1_cmd_valid,
+  output              io_inputs_1_cmd_ready,
+  input               io_inputs_1_cmd_payload_last,
+  input      [0:0]    io_inputs_1_cmd_payload_fragment_opcode,
+  input      [24:0]   io_inputs_1_cmd_payload_fragment_address,
+  input      [4:0]    io_inputs_1_cmd_payload_fragment_length,
+  input      [31:0]   io_inputs_1_cmd_payload_fragment_data,
+  input      [3:0]    io_inputs_1_cmd_payload_fragment_mask,
+  output              io_inputs_1_rsp_valid,
+  input               io_inputs_1_rsp_ready,
+  output              io_inputs_1_rsp_payload_last,
+  output     [0:0]    io_inputs_1_rsp_payload_fragment_opcode,
+  output     [31:0]   io_inputs_1_rsp_payload_fragment_data,
+  output              io_output_cmd_valid,
+  input               io_output_cmd_ready,
+  output              io_output_cmd_payload_last,
+  output     [0:0]    io_output_cmd_payload_fragment_source,
+  output     [0:0]    io_output_cmd_payload_fragment_opcode,
+  output     [24:0]   io_output_cmd_payload_fragment_address,
+  output     [4:0]    io_output_cmd_payload_fragment_length,
+  output     [31:0]   io_output_cmd_payload_fragment_data,
+  output     [3:0]    io_output_cmd_payload_fragment_mask,
+  output     [0:0]    io_output_cmd_payload_fragment_context,
+  input               io_output_rsp_valid,
+  output              io_output_rsp_ready,
+  input               io_output_rsp_payload_last,
+  input      [0:0]    io_output_rsp_payload_fragment_source,
+  input      [0:0]    io_output_rsp_payload_fragment_opcode,
+  input      [31:0]   io_output_rsp_payload_fragment_data,
+  input      [0:0]    io_output_rsp_payload_fragment_context,
+  input               clkout_system,
+  input               systemCdCtrl_logic_outputReset
+);
+
+  wire                memory_arbiter_io_inputs_0_ready;
+  wire                memory_arbiter_io_inputs_1_ready;
+  wire                memory_arbiter_io_output_valid;
+  wire                memory_arbiter_io_output_payload_last;
+  wire       [0:0]    memory_arbiter_io_output_payload_fragment_source;
+  wire       [0:0]    memory_arbiter_io_output_payload_fragment_opcode;
+  wire       [24:0]   memory_arbiter_io_output_payload_fragment_address;
+  wire       [4:0]    memory_arbiter_io_output_payload_fragment_length;
+  wire       [31:0]   memory_arbiter_io_output_payload_fragment_data;
+  wire       [3:0]    memory_arbiter_io_output_payload_fragment_mask;
+  wire       [0:0]    memory_arbiter_io_output_payload_fragment_context;
+  wire       [0:0]    memory_arbiter_io_chosen;
+  wire       [1:0]    memory_arbiter_io_chosenOH;
+  wire       [1:0]    _zz_io_output_cmd_payload_fragment_source;
+  reg                 _zz_io_output_rsp_ready;
+  wire       [0:0]    memory_rspSel;
+
+  assign _zz_io_output_cmd_payload_fragment_source = {memory_arbiter_io_output_payload_fragment_source,memory_arbiter_io_chosen};
+  StreamArbiter_1 memory_arbiter (
+    .io_inputs_0_valid                       (io_inputs_0_cmd_valid                                    ), //i
+    .io_inputs_0_ready                       (memory_arbiter_io_inputs_0_ready                         ), //o
+    .io_inputs_0_payload_last                (io_inputs_0_cmd_payload_last                             ), //i
+    .io_inputs_0_payload_fragment_source     (1'b0                                                     ), //i
+    .io_inputs_0_payload_fragment_opcode     (io_inputs_0_cmd_payload_fragment_opcode                  ), //i
+    .io_inputs_0_payload_fragment_address    (io_inputs_0_cmd_payload_fragment_address[24:0]           ), //i
+    .io_inputs_0_payload_fragment_length     (io_inputs_0_cmd_payload_fragment_length[4:0]             ), //i
+    .io_inputs_0_payload_fragment_data       (io_inputs_0_cmd_payload_fragment_data[31:0]              ), //i
+    .io_inputs_0_payload_fragment_mask       (io_inputs_0_cmd_payload_fragment_mask[3:0]               ), //i
+    .io_inputs_0_payload_fragment_context    (io_inputs_0_cmd_payload_fragment_context                 ), //i
+    .io_inputs_1_valid                       (io_inputs_1_cmd_valid                                    ), //i
+    .io_inputs_1_ready                       (memory_arbiter_io_inputs_1_ready                         ), //o
+    .io_inputs_1_payload_last                (io_inputs_1_cmd_payload_last                             ), //i
+    .io_inputs_1_payload_fragment_source     (1'b0                                                     ), //i
+    .io_inputs_1_payload_fragment_opcode     (io_inputs_1_cmd_payload_fragment_opcode                  ), //i
+    .io_inputs_1_payload_fragment_address    (io_inputs_1_cmd_payload_fragment_address[24:0]           ), //i
+    .io_inputs_1_payload_fragment_length     (io_inputs_1_cmd_payload_fragment_length[4:0]             ), //i
+    .io_inputs_1_payload_fragment_data       (io_inputs_1_cmd_payload_fragment_data[31:0]              ), //i
+    .io_inputs_1_payload_fragment_mask       (io_inputs_1_cmd_payload_fragment_mask[3:0]               ), //i
+    .io_inputs_1_payload_fragment_context    (1'b0                                                     ), //i
+    .io_output_valid                         (memory_arbiter_io_output_valid                           ), //o
+    .io_output_ready                         (io_output_cmd_ready                                      ), //i
+    .io_output_payload_last                  (memory_arbiter_io_output_payload_last                    ), //o
+    .io_output_payload_fragment_source       (memory_arbiter_io_output_payload_fragment_source         ), //o
+    .io_output_payload_fragment_opcode       (memory_arbiter_io_output_payload_fragment_opcode         ), //o
+    .io_output_payload_fragment_address      (memory_arbiter_io_output_payload_fragment_address[24:0]  ), //o
+    .io_output_payload_fragment_length       (memory_arbiter_io_output_payload_fragment_length[4:0]    ), //o
+    .io_output_payload_fragment_data         (memory_arbiter_io_output_payload_fragment_data[31:0]     ), //o
+    .io_output_payload_fragment_mask         (memory_arbiter_io_output_payload_fragment_mask[3:0]      ), //o
+    .io_output_payload_fragment_context      (memory_arbiter_io_output_payload_fragment_context        ), //o
+    .io_chosen                               (memory_arbiter_io_chosen                                 ), //o
+    .io_chosenOH                             (memory_arbiter_io_chosenOH[1:0]                          ), //o
+    .clkout_system                           (clkout_system                                            ), //i
+    .systemCdCtrl_logic_outputReset          (systemCdCtrl_logic_outputReset                           )  //i
+  );
+  always @(*) begin
+    case(memory_rspSel)
+      1'b0 : begin
+        _zz_io_output_rsp_ready = io_inputs_0_rsp_ready;
+      end
+      default : begin
+        _zz_io_output_rsp_ready = io_inputs_1_rsp_ready;
+      end
+    endcase
+  end
+
+  assign io_inputs_0_cmd_ready = memory_arbiter_io_inputs_0_ready;
+  assign io_inputs_1_cmd_ready = memory_arbiter_io_inputs_1_ready;
+  assign io_output_cmd_valid = memory_arbiter_io_output_valid;
+  assign io_output_cmd_payload_last = memory_arbiter_io_output_payload_last;
+  assign io_output_cmd_payload_fragment_opcode = memory_arbiter_io_output_payload_fragment_opcode;
+  assign io_output_cmd_payload_fragment_address = memory_arbiter_io_output_payload_fragment_address;
+  assign io_output_cmd_payload_fragment_length = memory_arbiter_io_output_payload_fragment_length;
+  assign io_output_cmd_payload_fragment_data = memory_arbiter_io_output_payload_fragment_data;
+  assign io_output_cmd_payload_fragment_mask = memory_arbiter_io_output_payload_fragment_mask;
+  assign io_output_cmd_payload_fragment_context = memory_arbiter_io_output_payload_fragment_context;
+  assign io_output_cmd_payload_fragment_source = _zz_io_output_cmd_payload_fragment_source[0:0];
+  assign memory_rspSel = io_output_rsp_payload_fragment_source[0 : 0];
+  assign io_inputs_0_rsp_valid = (io_output_rsp_valid && (memory_rspSel == 1'b0));
+  assign io_inputs_0_rsp_payload_last = io_output_rsp_payload_last;
+  assign io_inputs_0_rsp_payload_fragment_opcode = io_output_rsp_payload_fragment_opcode;
+  assign io_inputs_0_rsp_payload_fragment_data = io_output_rsp_payload_fragment_data;
+  assign io_inputs_0_rsp_payload_fragment_context = io_output_rsp_payload_fragment_context;
+  assign io_inputs_1_rsp_valid = (io_output_rsp_valid && (memory_rspSel == 1'b1));
+  assign io_inputs_1_rsp_payload_last = io_output_rsp_payload_last;
+  assign io_inputs_1_rsp_payload_fragment_opcode = io_output_rsp_payload_fragment_opcode;
+  assign io_inputs_1_rsp_payload_fragment_data = io_output_rsp_payload_fragment_data;
+  assign io_output_rsp_ready = _zz_io_output_rsp_ready;
 
 endmodule
 
@@ -1619,7 +2442,7 @@ module BmbUartCtrl (
   output              io_uart_txd,
   input               io_uart_rxd,
   output              io_interrupt,
-  input               debugCdCtrl_external_clk,
+  input               clkout_system,
   input               systemCdCtrl_logic_outputReset
 );
   localparam UartStopType_ONE = 1'd0;
@@ -1715,7 +2538,7 @@ module BmbUartCtrl (
   function [11:0] zz_bridge_uartConfigReg_clockDivider(input dummy);
     begin
       zz_bridge_uartConfigReg_clockDivider = 12'h0;
-      zz_bridge_uartConfigReg_clockDivider = 12'h02a;
+      zz_bridge_uartConfigReg_clockDivider = 12'h055;
     end
   endfunction
   wire [11:0] _zz_1;
@@ -1742,7 +2565,7 @@ module BmbUartCtrl (
     .io_readError                      (uartCtrl_1_io_readError                                               ), //o
     .io_writeBreak                     (bridge_misc_doBreak                                                   ), //i
     .io_readBreak                      (uartCtrl_1_io_readBreak                                               ), //o
-    .debugCdCtrl_external_clk          (debugCdCtrl_external_clk                                              ), //i
+    .clkout_system                     (clkout_system                                                         ), //i
     .systemCdCtrl_logic_outputReset    (systemCdCtrl_logic_outputReset                                        )  //i
   );
   StreamFifo bridge_write_streamUnbuffered_queueWithOccupancy (
@@ -1755,7 +2578,7 @@ module BmbUartCtrl (
     .io_flush                          (1'b0                                                                   ), //i
     .io_occupancy                      (bridge_write_streamUnbuffered_queueWithOccupancy_io_occupancy[4:0]     ), //o
     .io_availability                   (bridge_write_streamUnbuffered_queueWithOccupancy_io_availability[4:0]  ), //o
-    .debugCdCtrl_external_clk          (debugCdCtrl_external_clk                                               ), //i
+    .clkout_system                     (clkout_system                                                          ), //i
     .systemCdCtrl_logic_outputReset    (systemCdCtrl_logic_outputReset                                         )  //i
   );
   StreamFifo uartCtrl_1_io_read_queueWithOccupancy (
@@ -1768,7 +2591,7 @@ module BmbUartCtrl (
     .io_flush                          (1'b0                                                        ), //i
     .io_occupancy                      (uartCtrl_1_io_read_queueWithOccupancy_io_occupancy[4:0]     ), //o
     .io_availability                   (uartCtrl_1_io_read_queueWithOccupancy_io_availability[4:0]  ), //o
-    .debugCdCtrl_external_clk          (debugCdCtrl_external_clk                                    ), //i
+    .clkout_system                     (clkout_system                                               ), //i
     .systemCdCtrl_logic_outputReset    (systemCdCtrl_logic_outputReset                              )  //i
   );
   `ifndef SYNTHESIS
@@ -1971,7 +2794,7 @@ module BmbUartCtrl (
 
   assign when_BusSlaveFactory_l337_3 = io_bus_cmd_payload_fragment_data[11];
   assign io_interrupt = bridge_interruptCtrl_interrupt;
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(systemCdCtrl_logic_outputReset) begin
       _zz_io_bus_rsp_valid_2 <= 1'b0;
       bridge_interruptCtrl_writeIntEnable <= 1'b0;
@@ -2031,7 +2854,7 @@ module BmbUartCtrl (
     end
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(_zz_busCtrl_rsp_ready) begin
       _zz_io_bus_rsp_payload_last <= busCtrl_rsp_payload_last;
       _zz_io_bus_rsp_payload_fragment_opcode <= busCtrl_rsp_payload_fragment_opcode;
@@ -2063,7 +2886,7 @@ module BmbGpio2 (
   output     [31:0]   io_bus_rsp_payload_fragment_data,
   output     [2:0]    io_bus_rsp_payload_fragment_context,
   output reg [7:0]    io_interrupt,
-  input               debugCdCtrl_external_clk,
+  input               clkout_system,
   input               systemCdCtrl_logic_outputReset
 );
 
@@ -2280,7 +3103,7 @@ module BmbGpio2 (
   always @(*) interrupt_enable_high = _zz_4;
   assign _zz_5 = zz_interrupt_enable_low(1'b0);
   always @(*) interrupt_enable_low = _zz_5;
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(systemCdCtrl_logic_outputReset) begin
       _zz_io_bus_rsp_valid_2 <= 1'b0;
       _zz_io_gpio_writeEnable <= 1'b0;
@@ -2314,7 +3137,7 @@ module BmbGpio2 (
     end
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(_zz_mapper_rsp_ready) begin
       _zz_io_bus_rsp_payload_last <= mapper_rsp_payload_last;
       _zz_io_bus_rsp_payload_fragment_opcode <= mapper_rsp_payload_fragment_opcode;
@@ -2345,6 +3168,437 @@ module BmbGpio2 (
 
 endmodule
 
+module CtrlWithoutPhyBmb (
+  input               io_bmb_0_cmd_valid,
+  output              io_bmb_0_cmd_ready,
+  input               io_bmb_0_cmd_payload_last,
+  input      [0:0]    io_bmb_0_cmd_payload_fragment_source,
+  input      [0:0]    io_bmb_0_cmd_payload_fragment_opcode,
+  input      [24:0]   io_bmb_0_cmd_payload_fragment_address,
+  input      [4:0]    io_bmb_0_cmd_payload_fragment_length,
+  input      [31:0]   io_bmb_0_cmd_payload_fragment_data,
+  input      [3:0]    io_bmb_0_cmd_payload_fragment_mask,
+  input      [0:0]    io_bmb_0_cmd_payload_fragment_context,
+  output              io_bmb_0_rsp_valid,
+  input               io_bmb_0_rsp_ready,
+  output              io_bmb_0_rsp_payload_last,
+  output     [0:0]    io_bmb_0_rsp_payload_fragment_source,
+  output     [0:0]    io_bmb_0_rsp_payload_fragment_opcode,
+  output     [31:0]   io_bmb_0_rsp_payload_fragment_data,
+  output     [0:0]    io_bmb_0_rsp_payload_fragment_context,
+  input               io_ctrl_cmd_valid,
+  output              io_ctrl_cmd_ready,
+  input               io_ctrl_cmd_payload_last,
+  input      [0:0]    io_ctrl_cmd_payload_fragment_opcode,
+  input      [11:0]   io_ctrl_cmd_payload_fragment_address,
+  input      [1:0]    io_ctrl_cmd_payload_fragment_length,
+  input      [31:0]   io_ctrl_cmd_payload_fragment_data,
+  input      [2:0]    io_ctrl_cmd_payload_fragment_context,
+  output              io_ctrl_rsp_valid,
+  input               io_ctrl_rsp_ready,
+  output              io_ctrl_rsp_payload_last,
+  output     [0:0]    io_ctrl_rsp_payload_fragment_opcode,
+  output     [31:0]   io_ctrl_rsp_payload_fragment_data,
+  output     [2:0]    io_ctrl_rsp_payload_fragment_context,
+  output              io_phy_phases_0_CASn,
+  output              io_phy_phases_0_CKE,
+  output              io_phy_phases_0_CSn,
+  output              io_phy_phases_0_RASn,
+  output              io_phy_phases_0_WEn,
+  output     [1:0]    io_phy_phases_0_DM_0,
+  output     [15:0]   io_phy_phases_0_DQw_0,
+  input      [15:0]   io_phy_phases_0_DQr_0,
+  output              io_phy_phases_1_CASn,
+  output              io_phy_phases_1_CKE,
+  output              io_phy_phases_1_CSn,
+  output              io_phy_phases_1_RASn,
+  output              io_phy_phases_1_WEn,
+  output     [1:0]    io_phy_phases_1_DM_0,
+  output     [15:0]   io_phy_phases_1_DQw_0,
+  input      [15:0]   io_phy_phases_1_DQr_0,
+  output     [12:0]   io_phy_ADDR,
+  output     [1:0]    io_phy_BA,
+  output              io_phy_writeEnable,
+  output              io_phy_readEnable,
+  input               io_phy_readValid,
+  input               clkout_system,
+  input               systemCdCtrl_logic_outputReset
+);
+
+  wire                bmbAdapter_0_io_input_cmd_ready;
+  wire                bmbAdapter_0_io_input_rsp_valid;
+  wire                bmbAdapter_0_io_input_rsp_payload_last;
+  wire       [0:0]    bmbAdapter_0_io_input_rsp_payload_fragment_source;
+  wire       [0:0]    bmbAdapter_0_io_input_rsp_payload_fragment_opcode;
+  wire       [31:0]   bmbAdapter_0_io_input_rsp_payload_fragment_data;
+  wire       [0:0]    bmbAdapter_0_io_input_rsp_payload_fragment_context;
+  wire       [0:0]    bmbAdapter_0_io_output_writeDataTocken;
+  wire                bmbAdapter_0_io_output_cmd_valid;
+  wire                bmbAdapter_0_io_output_cmd_payload_write;
+  wire       [24:0]   bmbAdapter_0_io_output_cmd_payload_address;
+  wire       [3:0]    bmbAdapter_0_io_output_cmd_payload_context;
+  wire                bmbAdapter_0_io_output_cmd_payload_burstLast;
+  wire       [3:0]    bmbAdapter_0_io_output_cmd_payload_length;
+  wire                bmbAdapter_0_io_output_writeData_valid;
+  wire       [31:0]   bmbAdapter_0_io_output_writeData_payload_data;
+  wire       [3:0]    bmbAdapter_0_io_output_writeData_payload_mask;
+  wire       [0:0]    bmbAdapter_0_io_output_writeDataAdded;
+  wire                bmbAdapter_0_io_output_rsp_ready;
+  wire                core_1_io_ports_0_cmd_ready;
+  wire                core_1_io_ports_0_writeData_ready;
+  wire                core_1_io_ports_0_rsp_valid;
+  wire                core_1_io_ports_0_rsp_payload_last;
+  wire       [31:0]   core_1_io_ports_0_rsp_payload_fragment_data;
+  wire       [3:0]    core_1_io_ports_0_rsp_payload_fragment_context;
+  wire                core_1_io_phy_phases_0_CASn;
+  wire                core_1_io_phy_phases_0_CKE;
+  wire                core_1_io_phy_phases_0_CSn;
+  wire       [1:0]    core_1_io_phy_phases_0_DM_0;
+  wire                core_1_io_phy_phases_0_RASn;
+  wire                core_1_io_phy_phases_0_WEn;
+  wire       [15:0]   core_1_io_phy_phases_0_DQw_0;
+  wire                core_1_io_phy_phases_1_CASn;
+  wire                core_1_io_phy_phases_1_CKE;
+  wire                core_1_io_phy_phases_1_CSn;
+  wire       [1:0]    core_1_io_phy_phases_1_DM_0;
+  wire                core_1_io_phy_phases_1_RASn;
+  wire                core_1_io_phy_phases_1_WEn;
+  wire       [15:0]   core_1_io_phy_phases_1_DQw_0;
+  wire       [12:0]   core_1_io_phy_ADDR;
+  wire       [1:0]    core_1_io_phy_BA;
+  wire                core_1_io_phy_readEnable;
+  wire                core_1_io_phy_writeEnable;
+  wire                core_1_io_refresh;
+  wire                mapper_readHaltTrigger;
+  wire                mapper_writeHaltTrigger;
+  wire                mapper_rsp_valid;
+  wire                mapper_rsp_ready;
+  wire                mapper_rsp_payload_last;
+  wire       [0:0]    mapper_rsp_payload_fragment_opcode;
+  wire       [31:0]   mapper_rsp_payload_fragment_data;
+  wire       [2:0]    mapper_rsp_payload_fragment_context;
+  wire                _zz_io_ctrl_rsp_valid;
+  reg                 _zz_mapper_rsp_ready;
+  wire                _zz_io_ctrl_rsp_valid_1;
+  reg                 _zz_io_ctrl_rsp_valid_2;
+  reg                 _zz_io_ctrl_rsp_payload_last;
+  reg        [0:0]    _zz_io_ctrl_rsp_payload_fragment_opcode;
+  reg        [31:0]   _zz_io_ctrl_rsp_payload_fragment_data;
+  reg        [2:0]    _zz_io_ctrl_rsp_payload_fragment_context;
+  wire                when_Stream_l342;
+  wire                mapper_askWrite;
+  wire                mapper_askRead;
+  wire                io_ctrl_cmd_fire;
+  wire                mapper_doWrite;
+  wire                io_ctrl_cmd_fire_1;
+  wire                mapper_doRead;
+  reg                 _zz_io_config_autoRefresh;
+  reg                 _zz_io_config_noActive;
+  reg        [0:0]    _zz_io_config_phase_write;
+  reg        [0:0]    _zz_io_config_phase_read;
+  reg        [0:0]    _zz_io_config_phase_active;
+  reg        [0:0]    _zz_io_config_phase_precharge;
+  reg        [1:0]    _zz_io_config_readLatency = 2'b00;
+  reg        [15:0]   _zz_io_config_REF = 16'b0000000000000000;
+  reg        [3:0]    _zz_io_config_RAS = 4'b0000;
+  reg        [3:0]    _zz_io_config_RP = 4'b0000;
+  reg        [6:0]    _zz_io_config_RFC = 7'b0000000;
+  reg        [3:0]    _zz_io_config_RRD = 4'b0000;
+  reg        [3:0]    _zz_io_config_RCD = 4'b0000;
+  reg        [3:0]    _zz_io_config_RTW = 4'b0000;
+  reg        [3:0]    _zz_io_config_RTP = 4'b0000;
+  reg        [3:0]    _zz_io_config_WTR = 4'b0000;
+  reg        [3:0]    _zz_io_config_WR = 4'b0000;
+  reg                 _zz_io_soft_cmd_valid;
+  reg                 _zz_io_soft_cmd_valid_1;
+  reg                 _zz_io_soft_cmd_payload_CSn;
+  reg                 _zz_io_soft_cmd_payload_RASn;
+  reg                 _zz_io_soft_cmd_payload_CASn;
+  reg                 _zz_io_soft_cmd_payload_WEn;
+  reg        [12:0]   _zz_io_soft_cmd_payload_ADDR;
+  reg        [1:0]    _zz_io_soft_cmd_payload_BA;
+  reg                 _zz_io_soft_CKE;
+
+  BmbAdapter bmbAdapter_0 (
+    .io_refresh                                (core_1_io_refresh                                      ), //i
+    .io_input_cmd_valid                        (io_bmb_0_cmd_valid                                     ), //i
+    .io_input_cmd_ready                        (bmbAdapter_0_io_input_cmd_ready                        ), //o
+    .io_input_cmd_payload_last                 (io_bmb_0_cmd_payload_last                              ), //i
+    .io_input_cmd_payload_fragment_source      (io_bmb_0_cmd_payload_fragment_source                   ), //i
+    .io_input_cmd_payload_fragment_opcode      (io_bmb_0_cmd_payload_fragment_opcode                   ), //i
+    .io_input_cmd_payload_fragment_address     (io_bmb_0_cmd_payload_fragment_address[24:0]            ), //i
+    .io_input_cmd_payload_fragment_length      (io_bmb_0_cmd_payload_fragment_length[4:0]              ), //i
+    .io_input_cmd_payload_fragment_data        (io_bmb_0_cmd_payload_fragment_data[31:0]               ), //i
+    .io_input_cmd_payload_fragment_mask        (io_bmb_0_cmd_payload_fragment_mask[3:0]                ), //i
+    .io_input_cmd_payload_fragment_context     (io_bmb_0_cmd_payload_fragment_context                  ), //i
+    .io_input_rsp_valid                        (bmbAdapter_0_io_input_rsp_valid                        ), //o
+    .io_input_rsp_ready                        (io_bmb_0_rsp_ready                                     ), //i
+    .io_input_rsp_payload_last                 (bmbAdapter_0_io_input_rsp_payload_last                 ), //o
+    .io_input_rsp_payload_fragment_source      (bmbAdapter_0_io_input_rsp_payload_fragment_source      ), //o
+    .io_input_rsp_payload_fragment_opcode      (bmbAdapter_0_io_input_rsp_payload_fragment_opcode      ), //o
+    .io_input_rsp_payload_fragment_data        (bmbAdapter_0_io_input_rsp_payload_fragment_data[31:0]  ), //o
+    .io_input_rsp_payload_fragment_context     (bmbAdapter_0_io_input_rsp_payload_fragment_context     ), //o
+    .io_output_cmd_valid                       (bmbAdapter_0_io_output_cmd_valid                       ), //o
+    .io_output_cmd_ready                       (core_1_io_ports_0_cmd_ready                            ), //i
+    .io_output_cmd_payload_write               (bmbAdapter_0_io_output_cmd_payload_write               ), //o
+    .io_output_cmd_payload_address             (bmbAdapter_0_io_output_cmd_payload_address[24:0]       ), //o
+    .io_output_cmd_payload_context             (bmbAdapter_0_io_output_cmd_payload_context[3:0]        ), //o
+    .io_output_cmd_payload_burstLast           (bmbAdapter_0_io_output_cmd_payload_burstLast           ), //o
+    .io_output_cmd_payload_length              (bmbAdapter_0_io_output_cmd_payload_length[3:0]         ), //o
+    .io_output_writeData_valid                 (bmbAdapter_0_io_output_writeData_valid                 ), //o
+    .io_output_writeData_ready                 (core_1_io_ports_0_writeData_ready                      ), //i
+    .io_output_writeData_payload_data          (bmbAdapter_0_io_output_writeData_payload_data[31:0]    ), //o
+    .io_output_writeData_payload_mask          (bmbAdapter_0_io_output_writeData_payload_mask[3:0]     ), //o
+    .io_output_writeDataTocken                 (bmbAdapter_0_io_output_writeDataTocken                 ), //o
+    .io_output_rsp_valid                       (core_1_io_ports_0_rsp_valid                            ), //i
+    .io_output_rsp_ready                       (bmbAdapter_0_io_output_rsp_ready                       ), //o
+    .io_output_rsp_payload_last                (core_1_io_ports_0_rsp_payload_last                     ), //i
+    .io_output_rsp_payload_fragment_data       (core_1_io_ports_0_rsp_payload_fragment_data[31:0]      ), //i
+    .io_output_rsp_payload_fragment_context    (core_1_io_ports_0_rsp_payload_fragment_context[3:0]    ), //i
+    .io_output_writeDataAdded                  (bmbAdapter_0_io_output_writeDataAdded                  ), //o
+    .clkout_system                             (clkout_system                                          ), //i
+    .systemCdCtrl_logic_outputReset            (systemCdCtrl_logic_outputReset                         )  //i
+  );
+  Core core_1 (
+    .io_config_readLatency                      (_zz_io_config_readLatency[1:0]                       ), //i
+    .io_config_RAS                              (_zz_io_config_RAS[3:0]                               ), //i
+    .io_config_RP                               (_zz_io_config_RP[3:0]                                ), //i
+    .io_config_WR                               (_zz_io_config_WR[3:0]                                ), //i
+    .io_config_RCD                              (_zz_io_config_RCD[3:0]                               ), //i
+    .io_config_WTR                              (_zz_io_config_WTR[3:0]                               ), //i
+    .io_config_RTP                              (_zz_io_config_RTP[3:0]                               ), //i
+    .io_config_RRD                              (_zz_io_config_RRD[3:0]                               ), //i
+    .io_config_RTW                              (_zz_io_config_RTW[3:0]                               ), //i
+    .io_config_RFC                              (_zz_io_config_RFC[6:0]                               ), //i
+    .io_config_REF                              (_zz_io_config_REF[15:0]                              ), //i
+    .io_config_autoRefresh                      (_zz_io_config_autoRefresh                            ), //i
+    .io_config_noActive                         (_zz_io_config_noActive                               ), //i
+    .io_config_phase_active                     (_zz_io_config_phase_active                           ), //i
+    .io_config_phase_precharge                  (_zz_io_config_phase_precharge                        ), //i
+    .io_config_phase_read                       (_zz_io_config_phase_read                             ), //i
+    .io_config_phase_write                      (_zz_io_config_phase_write                            ), //i
+    .io_soft_cmd_valid                          (_zz_io_soft_cmd_valid_1                              ), //i
+    .io_soft_cmd_payload_ADDR                   (_zz_io_soft_cmd_payload_ADDR[12:0]                   ), //i
+    .io_soft_cmd_payload_BA                     (_zz_io_soft_cmd_payload_BA[1:0]                      ), //i
+    .io_soft_cmd_payload_CASn                   (_zz_io_soft_cmd_payload_CASn                         ), //i
+    .io_soft_cmd_payload_CSn                    (_zz_io_soft_cmd_payload_CSn                          ), //i
+    .io_soft_cmd_payload_RASn                   (_zz_io_soft_cmd_payload_RASn                         ), //i
+    .io_soft_cmd_payload_WEn                    (_zz_io_soft_cmd_payload_WEn                          ), //i
+    .io_soft_CKE                                (_zz_io_soft_CKE                                      ), //i
+    .io_ports_0_cmd_valid                       (bmbAdapter_0_io_output_cmd_valid                     ), //i
+    .io_ports_0_cmd_ready                       (core_1_io_ports_0_cmd_ready                          ), //o
+    .io_ports_0_cmd_payload_write               (bmbAdapter_0_io_output_cmd_payload_write             ), //i
+    .io_ports_0_cmd_payload_address             (bmbAdapter_0_io_output_cmd_payload_address[24:0]     ), //i
+    .io_ports_0_cmd_payload_context             (bmbAdapter_0_io_output_cmd_payload_context[3:0]      ), //i
+    .io_ports_0_cmd_payload_burstLast           (bmbAdapter_0_io_output_cmd_payload_burstLast         ), //i
+    .io_ports_0_cmd_payload_length              (bmbAdapter_0_io_output_cmd_payload_length[3:0]       ), //i
+    .io_ports_0_writeData_valid                 (bmbAdapter_0_io_output_writeData_valid               ), //i
+    .io_ports_0_writeData_ready                 (core_1_io_ports_0_writeData_ready                    ), //o
+    .io_ports_0_writeData_payload_data          (bmbAdapter_0_io_output_writeData_payload_data[31:0]  ), //i
+    .io_ports_0_writeData_payload_mask          (bmbAdapter_0_io_output_writeData_payload_mask[3:0]   ), //i
+    .io_ports_0_writeDataTocken                 (bmbAdapter_0_io_output_writeDataTocken               ), //i
+    .io_ports_0_rsp_valid                       (core_1_io_ports_0_rsp_valid                          ), //o
+    .io_ports_0_rsp_ready                       (bmbAdapter_0_io_output_rsp_ready                     ), //i
+    .io_ports_0_rsp_payload_last                (core_1_io_ports_0_rsp_payload_last                   ), //o
+    .io_ports_0_rsp_payload_fragment_data       (core_1_io_ports_0_rsp_payload_fragment_data[31:0]    ), //o
+    .io_ports_0_rsp_payload_fragment_context    (core_1_io_ports_0_rsp_payload_fragment_context[3:0]  ), //o
+    .io_ports_0_writeDataAdded                  (bmbAdapter_0_io_output_writeDataAdded                ), //i
+    .io_phy_phases_0_CASn                       (core_1_io_phy_phases_0_CASn                          ), //o
+    .io_phy_phases_0_CKE                        (core_1_io_phy_phases_0_CKE                           ), //o
+    .io_phy_phases_0_CSn                        (core_1_io_phy_phases_0_CSn                           ), //o
+    .io_phy_phases_0_RASn                       (core_1_io_phy_phases_0_RASn                          ), //o
+    .io_phy_phases_0_WEn                        (core_1_io_phy_phases_0_WEn                           ), //o
+    .io_phy_phases_0_DM_0                       (core_1_io_phy_phases_0_DM_0[1:0]                     ), //o
+    .io_phy_phases_0_DQw_0                      (core_1_io_phy_phases_0_DQw_0[15:0]                   ), //o
+    .io_phy_phases_0_DQr_0                      (io_phy_phases_0_DQr_0[15:0]                          ), //i
+    .io_phy_phases_1_CASn                       (core_1_io_phy_phases_1_CASn                          ), //o
+    .io_phy_phases_1_CKE                        (core_1_io_phy_phases_1_CKE                           ), //o
+    .io_phy_phases_1_CSn                        (core_1_io_phy_phases_1_CSn                           ), //o
+    .io_phy_phases_1_RASn                       (core_1_io_phy_phases_1_RASn                          ), //o
+    .io_phy_phases_1_WEn                        (core_1_io_phy_phases_1_WEn                           ), //o
+    .io_phy_phases_1_DM_0                       (core_1_io_phy_phases_1_DM_0[1:0]                     ), //o
+    .io_phy_phases_1_DQw_0                      (core_1_io_phy_phases_1_DQw_0[15:0]                   ), //o
+    .io_phy_phases_1_DQr_0                      (io_phy_phases_1_DQr_0[15:0]                          ), //i
+    .io_phy_ADDR                                (core_1_io_phy_ADDR[12:0]                             ), //o
+    .io_phy_BA                                  (core_1_io_phy_BA[1:0]                                ), //o
+    .io_phy_writeEnable                         (core_1_io_phy_writeEnable                            ), //o
+    .io_phy_readEnable                          (core_1_io_phy_readEnable                             ), //o
+    .io_phy_readValid                           (io_phy_readValid                                     ), //i
+    .io_refresh                                 (core_1_io_refresh                                    ), //o
+    .clkout_system                              (clkout_system                                        ), //i
+    .systemCdCtrl_logic_outputReset             (systemCdCtrl_logic_outputReset                       )  //i
+  );
+  assign io_bmb_0_cmd_ready = bmbAdapter_0_io_input_cmd_ready;
+  assign io_bmb_0_rsp_valid = bmbAdapter_0_io_input_rsp_valid;
+  assign io_bmb_0_rsp_payload_last = bmbAdapter_0_io_input_rsp_payload_last;
+  assign io_bmb_0_rsp_payload_fragment_source = bmbAdapter_0_io_input_rsp_payload_fragment_source;
+  assign io_bmb_0_rsp_payload_fragment_opcode = bmbAdapter_0_io_input_rsp_payload_fragment_opcode;
+  assign io_bmb_0_rsp_payload_fragment_data = bmbAdapter_0_io_input_rsp_payload_fragment_data;
+  assign io_bmb_0_rsp_payload_fragment_context = bmbAdapter_0_io_input_rsp_payload_fragment_context;
+  assign io_phy_phases_0_CASn = core_1_io_phy_phases_0_CASn;
+  assign io_phy_phases_0_CKE = core_1_io_phy_phases_0_CKE;
+  assign io_phy_phases_0_CSn = core_1_io_phy_phases_0_CSn;
+  assign io_phy_phases_0_RASn = core_1_io_phy_phases_0_RASn;
+  assign io_phy_phases_0_WEn = core_1_io_phy_phases_0_WEn;
+  assign io_phy_phases_0_DM_0 = core_1_io_phy_phases_0_DM_0;
+  assign io_phy_phases_0_DQw_0 = core_1_io_phy_phases_0_DQw_0;
+  assign io_phy_phases_1_CASn = core_1_io_phy_phases_1_CASn;
+  assign io_phy_phases_1_CKE = core_1_io_phy_phases_1_CKE;
+  assign io_phy_phases_1_CSn = core_1_io_phy_phases_1_CSn;
+  assign io_phy_phases_1_RASn = core_1_io_phy_phases_1_RASn;
+  assign io_phy_phases_1_WEn = core_1_io_phy_phases_1_WEn;
+  assign io_phy_phases_1_DM_0 = core_1_io_phy_phases_1_DM_0;
+  assign io_phy_phases_1_DQw_0 = core_1_io_phy_phases_1_DQw_0;
+  assign io_phy_ADDR = core_1_io_phy_ADDR;
+  assign io_phy_BA = core_1_io_phy_BA;
+  assign io_phy_writeEnable = core_1_io_phy_writeEnable;
+  assign io_phy_readEnable = core_1_io_phy_readEnable;
+  assign mapper_readHaltTrigger = 1'b0;
+  assign mapper_writeHaltTrigger = 1'b0;
+  assign _zz_io_ctrl_rsp_valid = (! (mapper_readHaltTrigger || mapper_writeHaltTrigger));
+  assign mapper_rsp_ready = (_zz_mapper_rsp_ready && _zz_io_ctrl_rsp_valid);
+  always @(*) begin
+    _zz_mapper_rsp_ready = io_ctrl_rsp_ready;
+    if(when_Stream_l342) begin
+      _zz_mapper_rsp_ready = 1'b1;
+    end
+  end
+
+  assign when_Stream_l342 = (! _zz_io_ctrl_rsp_valid_1);
+  assign _zz_io_ctrl_rsp_valid_1 = _zz_io_ctrl_rsp_valid_2;
+  assign io_ctrl_rsp_valid = _zz_io_ctrl_rsp_valid_1;
+  assign io_ctrl_rsp_payload_last = _zz_io_ctrl_rsp_payload_last;
+  assign io_ctrl_rsp_payload_fragment_opcode = _zz_io_ctrl_rsp_payload_fragment_opcode;
+  assign io_ctrl_rsp_payload_fragment_data = _zz_io_ctrl_rsp_payload_fragment_data;
+  assign io_ctrl_rsp_payload_fragment_context = _zz_io_ctrl_rsp_payload_fragment_context;
+  assign mapper_askWrite = (io_ctrl_cmd_valid && (io_ctrl_cmd_payload_fragment_opcode == 1'b1));
+  assign mapper_askRead = (io_ctrl_cmd_valid && (io_ctrl_cmd_payload_fragment_opcode == 1'b0));
+  assign io_ctrl_cmd_fire = (io_ctrl_cmd_valid && io_ctrl_cmd_ready);
+  assign mapper_doWrite = (io_ctrl_cmd_fire && (io_ctrl_cmd_payload_fragment_opcode == 1'b1));
+  assign io_ctrl_cmd_fire_1 = (io_ctrl_cmd_valid && io_ctrl_cmd_ready);
+  assign mapper_doRead = (io_ctrl_cmd_fire_1 && (io_ctrl_cmd_payload_fragment_opcode == 1'b0));
+  assign mapper_rsp_valid = io_ctrl_cmd_valid;
+  assign io_ctrl_cmd_ready = mapper_rsp_ready;
+  assign mapper_rsp_payload_last = 1'b1;
+  assign mapper_rsp_payload_fragment_opcode = 1'b0;
+  assign mapper_rsp_payload_fragment_data = 32'h0;
+  assign mapper_rsp_payload_fragment_context = io_ctrl_cmd_payload_fragment_context;
+  always @(*) begin
+    _zz_io_soft_cmd_valid = 1'b0;
+    case(io_ctrl_cmd_payload_fragment_address)
+      12'h100 : begin
+        if(mapper_doWrite) begin
+          _zz_io_soft_cmd_valid = 1'b1;
+        end
+      end
+      default : begin
+      end
+    endcase
+  end
+
+  always @(posedge clkout_system) begin
+    if(systemCdCtrl_logic_outputReset) begin
+      _zz_io_ctrl_rsp_valid_2 <= 1'b0;
+      _zz_io_config_autoRefresh <= 1'b0;
+      _zz_io_config_noActive <= 1'b0;
+      _zz_io_soft_cmd_valid_1 <= 1'b0;
+      _zz_io_soft_CKE <= 1'b0;
+    end else begin
+      if(_zz_mapper_rsp_ready) begin
+        _zz_io_ctrl_rsp_valid_2 <= (mapper_rsp_valid && _zz_io_ctrl_rsp_valid);
+      end
+      _zz_io_soft_cmd_valid_1 <= _zz_io_soft_cmd_valid;
+      case(io_ctrl_cmd_payload_fragment_address)
+        12'h0 : begin
+          if(mapper_doWrite) begin
+            _zz_io_config_autoRefresh <= io_ctrl_cmd_payload_fragment_data[0];
+            _zz_io_config_noActive <= io_ctrl_cmd_payload_fragment_data[1];
+          end
+        end
+        12'h110 : begin
+          if(mapper_doWrite) begin
+            _zz_io_soft_CKE <= io_ctrl_cmd_payload_fragment_data[1];
+          end
+        end
+        default : begin
+        end
+      endcase
+    end
+  end
+
+  always @(posedge clkout_system) begin
+    if(_zz_mapper_rsp_ready) begin
+      _zz_io_ctrl_rsp_payload_last <= mapper_rsp_payload_last;
+      _zz_io_ctrl_rsp_payload_fragment_opcode <= mapper_rsp_payload_fragment_opcode;
+      _zz_io_ctrl_rsp_payload_fragment_data <= mapper_rsp_payload_fragment_data;
+      _zz_io_ctrl_rsp_payload_fragment_context <= mapper_rsp_payload_fragment_context;
+    end
+    case(io_ctrl_cmd_payload_fragment_address)
+      12'h004 : begin
+        if(mapper_doWrite) begin
+          _zz_io_config_phase_write <= io_ctrl_cmd_payload_fragment_data[0 : 0];
+          _zz_io_config_phase_read <= io_ctrl_cmd_payload_fragment_data[8 : 8];
+          _zz_io_config_phase_active <= io_ctrl_cmd_payload_fragment_data[16 : 16];
+          _zz_io_config_phase_precharge <= io_ctrl_cmd_payload_fragment_data[24 : 24];
+        end
+      end
+      12'h00c : begin
+        if(mapper_doWrite) begin
+          _zz_io_config_readLatency <= io_ctrl_cmd_payload_fragment_data[1 : 0];
+        end
+      end
+      12'h010 : begin
+        if(mapper_doWrite) begin
+          _zz_io_config_REF <= io_ctrl_cmd_payload_fragment_data[15 : 0];
+        end
+      end
+      12'h020 : begin
+        if(mapper_doWrite) begin
+          _zz_io_config_RAS <= io_ctrl_cmd_payload_fragment_data[3 : 0];
+          _zz_io_config_RP <= io_ctrl_cmd_payload_fragment_data[11 : 8];
+          _zz_io_config_RFC <= io_ctrl_cmd_payload_fragment_data[22 : 16];
+          _zz_io_config_RRD <= io_ctrl_cmd_payload_fragment_data[27 : 24];
+        end
+      end
+      12'h024 : begin
+        if(mapper_doWrite) begin
+          _zz_io_config_RCD <= io_ctrl_cmd_payload_fragment_data[3 : 0];
+        end
+      end
+      12'h028 : begin
+        if(mapper_doWrite) begin
+          _zz_io_config_RTW <= io_ctrl_cmd_payload_fragment_data[3 : 0];
+          _zz_io_config_RTP <= io_ctrl_cmd_payload_fragment_data[11 : 8];
+          _zz_io_config_WTR <= io_ctrl_cmd_payload_fragment_data[19 : 16];
+          _zz_io_config_WR <= io_ctrl_cmd_payload_fragment_data[27 : 24];
+        end
+      end
+      12'h104 : begin
+        if(mapper_doWrite) begin
+          _zz_io_soft_cmd_payload_CSn <= io_ctrl_cmd_payload_fragment_data[1];
+          _zz_io_soft_cmd_payload_RASn <= io_ctrl_cmd_payload_fragment_data[2];
+          _zz_io_soft_cmd_payload_CASn <= io_ctrl_cmd_payload_fragment_data[3];
+          _zz_io_soft_cmd_payload_WEn <= io_ctrl_cmd_payload_fragment_data[4];
+        end
+      end
+      12'h108 : begin
+        if(mapper_doWrite) begin
+          _zz_io_soft_cmd_payload_ADDR <= io_ctrl_cmd_payload_fragment_data[12 : 0];
+        end
+      end
+      12'h10c : begin
+        if(mapper_doWrite) begin
+          _zz_io_soft_cmd_payload_BA <= io_ctrl_cmd_payload_fragment_data[1 : 0];
+        end
+      end
+      default : begin
+      end
+    endcase
+  end
+
+
+endmodule
+
 module BmbClint (
   input               io_bus_cmd_valid,
   output              io_bus_cmd_ready,
@@ -2363,7 +3617,7 @@ module BmbClint (
   output     [0:0]    io_timerInterrupt,
   output     [0:0]    io_softwareInterrupt,
   output     [63:0]   io_time,
-  input               debugCdCtrl_external_clk,
+  input               clkout_system,
   input               systemCdCtrl_logic_outputReset
 );
 
@@ -2462,7 +3716,7 @@ module BmbClint (
   assign when_BmbSlaveFactory_l71_1 = ((io_bus_cmd_payload_fragment_address & (~ 16'h0003)) == 16'hbffc);
   assign when_BmbSlaveFactory_l71_2 = ((io_bus_cmd_payload_fragment_address & (~ 16'h0003)) == 16'h4000);
   assign when_BmbSlaveFactory_l71_3 = ((io_bus_cmd_payload_fragment_address & (~ 16'h0003)) == 16'h4004);
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(systemCdCtrl_logic_outputReset) begin
       _zz_io_bus_rsp_valid_2 <= 1'b0;
       logic_time <= 64'h0;
@@ -2484,7 +3738,7 @@ module BmbClint (
     end
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(_zz_factory_rsp_ready) begin
       _zz_io_bus_rsp_payload_last <= factory_rsp_payload_last;
       _zz_io_bus_rsp_payload_fragment_opcode <= factory_rsp_payload_fragment_opcode;
@@ -2583,7 +3837,22 @@ module BmbDecoder_2 (
   input      [0:0]    io_outputs_3_rsp_payload_fragment_opcode,
   input      [31:0]   io_outputs_3_rsp_payload_fragment_data,
   input      [2:0]    io_outputs_3_rsp_payload_fragment_context,
-  input               debugCdCtrl_external_clk,
+  output reg          io_outputs_4_cmd_valid,
+  input               io_outputs_4_cmd_ready,
+  output              io_outputs_4_cmd_payload_last,
+  output     [0:0]    io_outputs_4_cmd_payload_fragment_opcode,
+  output     [23:0]   io_outputs_4_cmd_payload_fragment_address,
+  output     [1:0]    io_outputs_4_cmd_payload_fragment_length,
+  output     [31:0]   io_outputs_4_cmd_payload_fragment_data,
+  output     [3:0]    io_outputs_4_cmd_payload_fragment_mask,
+  output     [2:0]    io_outputs_4_cmd_payload_fragment_context,
+  input               io_outputs_4_rsp_valid,
+  output              io_outputs_4_rsp_ready,
+  input               io_outputs_4_rsp_payload_last,
+  input      [0:0]    io_outputs_4_rsp_payload_fragment_opcode,
+  input      [31:0]   io_outputs_4_rsp_payload_fragment_data,
+  input      [2:0]    io_outputs_4_rsp_payload_fragment_context,
+  input               clkout_system,
   input               systemCdCtrl_logic_outputReset
 );
 
@@ -2618,18 +3887,21 @@ module BmbDecoder_2 (
   wire                logic_hitsS0_1;
   wire                logic_hitsS0_2;
   wire                logic_hitsS0_3;
+  wire                logic_hitsS0_4;
   wire                logic_noHitS0;
   wire                io_input_cmd_fire;
   reg                 logic_hitsS1_0;
   reg                 logic_hitsS1_1;
   reg                 logic_hitsS1_2;
   reg                 logic_hitsS1_3;
+  reg                 logic_hitsS1_4;
   wire                io_input_cmd_fire_1;
   reg                 logic_noHitS1;
   wire                _zz_io_outputs_0_cmd_payload_last;
   wire                _zz_io_outputs_1_cmd_payload_last;
   wire                _zz_io_outputs_2_cmd_payload_last;
   wire                _zz_io_outputs_3_cmd_payload_last;
+  wire                _zz_io_outputs_4_cmd_payload_last;
   reg        [3:0]    logic_rspPendingCounter;
   wire                io_input_cmd_input_fire_1;
   wire                io_input_rsp_fire;
@@ -2639,6 +3911,7 @@ module BmbDecoder_2 (
   reg                 logic_rspHits_1;
   reg                 logic_rspHits_2;
   reg                 logic_rspHits_3;
+  reg                 logic_rspHits_4;
   wire                logic_rspPending;
   wire                logic_rspNoHitValid;
   reg                 logic_rspNoHit_doIt;
@@ -2654,7 +3927,7 @@ module BmbDecoder_2 (
   wire                io_input_cmd_input_fire_6;
   wire                _zz_io_input_rsp_payload_last;
   wire                _zz_io_input_rsp_payload_last_1;
-  wire       [1:0]    _zz_io_input_rsp_payload_last_2;
+  wire       [2:0]    _zz_io_input_rsp_payload_last_2;
 
   assign _zz_logic_rspPendingCounter = (logic_rspPendingCounter + _zz_logic_rspPendingCounter_1);
   assign _zz_logic_rspPendingCounter_2 = (io_input_cmd_input_fire_1 && io_input_cmd_input_payload_last);
@@ -2663,29 +3936,35 @@ module BmbDecoder_2 (
   assign _zz_logic_rspPendingCounter_3 = {3'd0, _zz_logic_rspPendingCounter_4};
   always @(*) begin
     case(_zz_io_input_rsp_payload_last_2)
-      2'b00 : begin
+      3'b000 : begin
         _zz_io_input_rsp_payload_last_3 = io_outputs_0_rsp_payload_last;
         _zz_io_input_rsp_payload_fragment_opcode = io_outputs_0_rsp_payload_fragment_opcode;
         _zz_io_input_rsp_payload_fragment_data = io_outputs_0_rsp_payload_fragment_data;
         _zz_io_input_rsp_payload_fragment_context = io_outputs_0_rsp_payload_fragment_context;
       end
-      2'b01 : begin
+      3'b001 : begin
         _zz_io_input_rsp_payload_last_3 = io_outputs_1_rsp_payload_last;
         _zz_io_input_rsp_payload_fragment_opcode = io_outputs_1_rsp_payload_fragment_opcode;
         _zz_io_input_rsp_payload_fragment_data = io_outputs_1_rsp_payload_fragment_data;
         _zz_io_input_rsp_payload_fragment_context = io_outputs_1_rsp_payload_fragment_context;
       end
-      2'b10 : begin
+      3'b010 : begin
         _zz_io_input_rsp_payload_last_3 = io_outputs_2_rsp_payload_last;
         _zz_io_input_rsp_payload_fragment_opcode = io_outputs_2_rsp_payload_fragment_opcode;
         _zz_io_input_rsp_payload_fragment_data = io_outputs_2_rsp_payload_fragment_data;
         _zz_io_input_rsp_payload_fragment_context = io_outputs_2_rsp_payload_fragment_context;
       end
-      default : begin
+      3'b011 : begin
         _zz_io_input_rsp_payload_last_3 = io_outputs_3_rsp_payload_last;
         _zz_io_input_rsp_payload_fragment_opcode = io_outputs_3_rsp_payload_fragment_opcode;
         _zz_io_input_rsp_payload_fragment_data = io_outputs_3_rsp_payload_fragment_data;
         _zz_io_input_rsp_payload_fragment_context = io_outputs_3_rsp_payload_fragment_context;
+      end
+      default : begin
+        _zz_io_input_rsp_payload_last_3 = io_outputs_4_rsp_payload_last;
+        _zz_io_input_rsp_payload_fragment_opcode = io_outputs_4_rsp_payload_fragment_opcode;
+        _zz_io_input_rsp_payload_fragment_data = io_outputs_4_rsp_payload_fragment_data;
+        _zz_io_input_rsp_payload_fragment_context = io_outputs_4_rsp_payload_fragment_context;
       end
     endcase
   end
@@ -2700,7 +3979,7 @@ module BmbDecoder_2 (
   assign io_input_cmd_input_payload_fragment_data = io_input_cmd_rData_fragment_data;
   assign io_input_cmd_input_payload_fragment_mask = io_input_cmd_rData_fragment_mask;
   assign io_input_cmd_input_payload_fragment_context = io_input_cmd_rData_fragment_context;
-  assign logic_noHitS0 = (! ({logic_hitsS0_3,{logic_hitsS0_2,{logic_hitsS0_1,logic_hitsS0_0}}} != 4'b0000));
+  assign logic_noHitS0 = (! ({logic_hitsS0_4,{logic_hitsS0_3,{logic_hitsS0_2,{logic_hitsS0_1,logic_hitsS0_0}}}} != 5'h0));
   assign io_input_cmd_fire = (io_input_cmd_valid && io_input_cmd_ready);
   assign io_input_cmd_fire_1 = (io_input_cmd_valid && io_input_cmd_ready);
   assign logic_hitsS0_0 = ((io_input_cmd_payload_fragment_address & (~ 24'h3fffff)) == 24'hc00000);
@@ -2735,7 +4014,7 @@ module BmbDecoder_2 (
   assign io_outputs_1_cmd_payload_fragment_data = io_input_cmd_input_payload_fragment_data;
   assign io_outputs_1_cmd_payload_fragment_mask = io_input_cmd_input_payload_fragment_mask;
   assign io_outputs_1_cmd_payload_fragment_context = io_input_cmd_input_payload_fragment_context;
-  assign logic_hitsS0_2 = ((io_input_cmd_payload_fragment_address & (~ 24'h0000ff)) == 24'h0);
+  assign logic_hitsS0_2 = ((io_input_cmd_payload_fragment_address & (~ 24'h000fff)) == 24'h100000);
   always @(*) begin
     io_outputs_2_cmd_valid = (io_input_cmd_input_valid && logic_hitsS1_2);
     if(logic_cmdWait) begin
@@ -2751,7 +4030,7 @@ module BmbDecoder_2 (
   assign io_outputs_2_cmd_payload_fragment_data = io_input_cmd_input_payload_fragment_data;
   assign io_outputs_2_cmd_payload_fragment_mask = io_input_cmd_input_payload_fragment_mask;
   assign io_outputs_2_cmd_payload_fragment_context = io_input_cmd_input_payload_fragment_context;
-  assign logic_hitsS0_3 = ((io_input_cmd_payload_fragment_address & (~ 24'h00003f)) == 24'h010000);
+  assign logic_hitsS0_3 = ((io_input_cmd_payload_fragment_address & (~ 24'h0000ff)) == 24'h0);
   always @(*) begin
     io_outputs_3_cmd_valid = (io_input_cmd_input_valid && logic_hitsS1_3);
     if(logic_cmdWait) begin
@@ -2767,8 +4046,24 @@ module BmbDecoder_2 (
   assign io_outputs_3_cmd_payload_fragment_data = io_input_cmd_input_payload_fragment_data;
   assign io_outputs_3_cmd_payload_fragment_mask = io_input_cmd_input_payload_fragment_mask;
   assign io_outputs_3_cmd_payload_fragment_context = io_input_cmd_input_payload_fragment_context;
+  assign logic_hitsS0_4 = ((io_input_cmd_payload_fragment_address & (~ 24'h00003f)) == 24'h010000);
   always @(*) begin
-    io_input_cmd_input_ready = (({(logic_hitsS1_3 && io_outputs_3_cmd_ready),{(logic_hitsS1_2 && io_outputs_2_cmd_ready),{(logic_hitsS1_1 && io_outputs_1_cmd_ready),(logic_hitsS1_0 && io_outputs_0_cmd_ready)}}} != 4'b0000) || logic_noHitS1);
+    io_outputs_4_cmd_valid = (io_input_cmd_input_valid && logic_hitsS1_4);
+    if(logic_cmdWait) begin
+      io_outputs_4_cmd_valid = 1'b0;
+    end
+  end
+
+  assign _zz_io_outputs_4_cmd_payload_last = io_input_cmd_input_payload_last;
+  assign io_outputs_4_cmd_payload_last = _zz_io_outputs_4_cmd_payload_last;
+  assign io_outputs_4_cmd_payload_fragment_opcode = io_input_cmd_input_payload_fragment_opcode;
+  assign io_outputs_4_cmd_payload_fragment_address = io_input_cmd_input_payload_fragment_address;
+  assign io_outputs_4_cmd_payload_fragment_length = io_input_cmd_input_payload_fragment_length;
+  assign io_outputs_4_cmd_payload_fragment_data = io_input_cmd_input_payload_fragment_data;
+  assign io_outputs_4_cmd_payload_fragment_mask = io_input_cmd_input_payload_fragment_mask;
+  assign io_outputs_4_cmd_payload_fragment_context = io_input_cmd_input_payload_fragment_context;
+  always @(*) begin
+    io_input_cmd_input_ready = (({(logic_hitsS1_4 && io_outputs_4_cmd_ready),{(logic_hitsS1_3 && io_outputs_3_cmd_ready),{(logic_hitsS1_2 && io_outputs_2_cmd_ready),{(logic_hitsS1_1 && io_outputs_1_cmd_ready),(logic_hitsS1_0 && io_outputs_0_cmd_ready)}}}} != 5'h0) || logic_noHitS1);
     if(logic_cmdWait) begin
       io_input_cmd_input_ready = 1'b0;
     end
@@ -2778,7 +4073,7 @@ module BmbDecoder_2 (
   assign io_input_rsp_fire = (io_input_rsp_valid && io_input_rsp_ready);
   assign when_BmbDecoder_l56 = (io_input_cmd_input_valid && (! logic_cmdWait));
   assign logic_rspPending = (logic_rspPendingCounter != 4'b0000);
-  assign logic_rspNoHitValid = (! ({logic_rspHits_3,{logic_rspHits_2,{logic_rspHits_1,logic_rspHits_0}}} != 4'b0000));
+  assign logic_rspNoHitValid = (! ({logic_rspHits_4,{logic_rspHits_3,{logic_rspHits_2,{logic_rspHits_1,logic_rspHits_0}}}} != 5'h0));
   assign io_input_rsp_fire_1 = (io_input_rsp_valid && io_input_rsp_ready);
   assign when_BmbDecoder_l60 = (io_input_rsp_fire_1 && io_input_rsp_payload_last);
   assign io_input_cmd_input_fire_2 = (io_input_cmd_input_valid && io_input_cmd_input_ready);
@@ -2788,7 +4083,7 @@ module BmbDecoder_2 (
   assign io_input_cmd_input_fire_5 = (io_input_cmd_input_valid && io_input_cmd_input_ready);
   assign io_input_cmd_input_fire_6 = (io_input_cmd_input_valid && io_input_cmd_input_ready);
   always @(*) begin
-    io_input_rsp_valid = (({io_outputs_3_rsp_valid,{io_outputs_2_rsp_valid,{io_outputs_1_rsp_valid,io_outputs_0_rsp_valid}}} != 4'b0000) || (logic_rspPending && logic_rspNoHitValid));
+    io_input_rsp_valid = (({io_outputs_4_rsp_valid,{io_outputs_3_rsp_valid,{io_outputs_2_rsp_valid,{io_outputs_1_rsp_valid,io_outputs_0_rsp_valid}}}} != 5'h0) || (logic_rspPending && logic_rspNoHitValid));
     if(logic_rspNoHit_doIt) begin
       io_input_rsp_valid = 1'b1;
     end
@@ -2796,7 +4091,7 @@ module BmbDecoder_2 (
 
   assign _zz_io_input_rsp_payload_last = (logic_rspHits_1 || logic_rspHits_3);
   assign _zz_io_input_rsp_payload_last_1 = (logic_rspHits_2 || logic_rspHits_3);
-  assign _zz_io_input_rsp_payload_last_2 = {_zz_io_input_rsp_payload_last_1,_zz_io_input_rsp_payload_last};
+  assign _zz_io_input_rsp_payload_last_2 = {logic_rspHits_4,{_zz_io_input_rsp_payload_last_1,_zz_io_input_rsp_payload_last}};
   always @(*) begin
     io_input_rsp_payload_last = _zz_io_input_rsp_payload_last_3;
     if(logic_rspNoHit_doIt) begin
@@ -2823,8 +4118,9 @@ module BmbDecoder_2 (
   assign io_outputs_1_rsp_ready = io_input_rsp_ready;
   assign io_outputs_2_rsp_ready = io_input_rsp_ready;
   assign io_outputs_3_rsp_ready = io_input_rsp_ready;
-  assign logic_cmdWait = ((logic_rspPending && (((((logic_hitsS1_0 != logic_rspHits_0) || (logic_hitsS1_1 != logic_rspHits_1)) || (logic_hitsS1_2 != logic_rspHits_2)) || (logic_hitsS1_3 != logic_rspHits_3)) || logic_rspNoHitValid)) || (logic_rspPendingCounter == 4'b1000));
-  always @(posedge debugCdCtrl_external_clk) begin
+  assign io_outputs_4_rsp_ready = io_input_rsp_ready;
+  assign logic_cmdWait = ((logic_rspPending && ((((((logic_hitsS1_0 != logic_rspHits_0) || (logic_hitsS1_1 != logic_rspHits_1)) || (logic_hitsS1_2 != logic_rspHits_2)) || (logic_hitsS1_3 != logic_rspHits_3)) || (logic_hitsS1_4 != logic_rspHits_4)) || logic_rspNoHitValid)) || (logic_rspPendingCounter == 4'b1000));
+  always @(posedge clkout_system) begin
     if(systemCdCtrl_logic_outputReset) begin
       io_input_cmd_rValid <= 1'b0;
       logic_rspPendingCounter <= 4'b0000;
@@ -2846,7 +4142,7 @@ module BmbDecoder_2 (
     end
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(io_input_cmd_ready) begin
       io_input_cmd_rData_last <= io_input_cmd_payload_last;
       io_input_cmd_rData_fragment_opcode <= io_input_cmd_payload_fragment_opcode;
@@ -2861,6 +4157,7 @@ module BmbDecoder_2 (
       logic_hitsS1_1 <= logic_hitsS0_1;
       logic_hitsS1_2 <= logic_hitsS0_2;
       logic_hitsS1_3 <= logic_hitsS0_3;
+      logic_hitsS1_4 <= logic_hitsS0_4;
     end
     if(io_input_cmd_fire_1) begin
       logic_noHitS1 <= logic_noHitS0;
@@ -2870,6 +4167,7 @@ module BmbDecoder_2 (
       logic_rspHits_1 <= logic_hitsS1_1;
       logic_rspHits_2 <= logic_hitsS1_2;
       logic_rspHits_3 <= logic_hitsS1_3;
+      logic_rspHits_4 <= logic_hitsS1_4;
     end
     if(io_input_cmd_input_fire_3) begin
       logic_rspNoHit_singleBeatRsp <= (io_input_cmd_input_payload_fragment_opcode == 1'b1);
@@ -2907,7 +4205,7 @@ module BmbUnburstify_2 (
   input      [0:0]    io_output_rsp_payload_fragment_opcode,
   input      [31:0]   io_output_rsp_payload_fragment_data,
   input      [1:0]    io_output_rsp_payload_fragment_context,
-  input               debugCdCtrl_external_clk,
+  input               clkout_system,
   input               systemCdCtrl_logic_outputReset
 );
 
@@ -3042,7 +4340,7 @@ module BmbUnburstify_2 (
   assign io_input_rsp_payload_last = rspContext_last;
   assign io_input_rsp_payload_fragment_opcode = io_output_rsp_payload_fragment_opcode;
   assign io_input_rsp_payload_fragment_data = io_output_rsp_payload_fragment_data;
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(systemCdCtrl_logic_outputReset) begin
       buffer_valid <= 1'b0;
     end else begin
@@ -3057,7 +4355,7 @@ module BmbUnburstify_2 (
     end
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(io_output_cmd_fire) begin
       buffer_beat <= (buffer_beat - 3'b001);
       buffer_address[11 : 0] <= buffer_addressIncr[11 : 0];
@@ -3122,7 +4420,7 @@ module BmbArbiter (
   input      [0:0]    io_output_rsp_payload_fragment_opcode,
   input      [31:0]   io_output_rsp_payload_fragment_data,
   input      [2:0]    io_output_rsp_payload_fragment_context,
-  input               debugCdCtrl_external_clk,
+  input               clkout_system,
   input               systemCdCtrl_logic_outputReset
 );
 
@@ -3178,7 +4476,7 @@ module BmbArbiter (
     .io_output_payload_fragment_context      (memory_arbiter_io_output_payload_fragment_context[2:0]    ), //o
     .io_chosen                               (memory_arbiter_io_chosen                                  ), //o
     .io_chosenOH                             (memory_arbiter_io_chosenOH[1:0]                           ), //o
-    .debugCdCtrl_external_clk                (debugCdCtrl_external_clk                                  ), //i
+    .clkout_system                           (clkout_system                                             ), //i
     .systemCdCtrl_logic_outputReset          (systemCdCtrl_logic_outputReset                            )  //i
   );
   always @(*) begin
@@ -3250,7 +4548,7 @@ module BmbUnburstify (
   input      [0:0]    io_output_rsp_payload_fragment_opcode,
   input      [31:0]   io_output_rsp_payload_fragment_data,
   input      [2:0]    io_output_rsp_payload_fragment_context,
-  input               debugCdCtrl_external_clk,
+  input               clkout_system,
   input               systemCdCtrl_logic_outputReset
 );
 
@@ -3400,7 +4698,7 @@ module BmbUnburstify (
   assign io_input_rsp_payload_fragment_opcode = io_output_rsp_payload_fragment_opcode;
   assign io_input_rsp_payload_fragment_data = io_output_rsp_payload_fragment_data;
   assign io_input_rsp_payload_fragment_context = rspContext_context;
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(systemCdCtrl_logic_outputReset) begin
       buffer_valid <= 1'b0;
     end else begin
@@ -3415,7 +4713,7 @@ module BmbUnburstify (
     end
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(io_output_cmd_fire) begin
       buffer_beat <= (buffer_beat - 3'b001);
       buffer_address[11 : 0] <= buffer_addressIncr[11 : 0];
@@ -3449,7 +4747,7 @@ module BmbOnChipRam (
   output     [0:0]    io_bus_rsp_payload_fragment_opcode,
   output     [31:0]   io_bus_rsp_payload_fragment_data,
   output     [2:0]    io_bus_rsp_payload_fragment_context,
-  input               debugCdCtrl_external_clk,
+  input               clkout_system,
   input               systemCdCtrl_logic_outputReset
 );
 
@@ -3480,7 +4778,7 @@ module BmbOnChipRam (
   always @(*) begin
     _zz_ram_port0 = {_zz_ramsymbol_read_3, _zz_ramsymbol_read_2, _zz_ramsymbol_read_1, _zz_ramsymbol_read};
   end
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(io_bus_cmd_fire) begin
       _zz_ramsymbol_read <= ram_symbol0[_zz_io_bus_rsp_payload_fragment_data];
       _zz_ramsymbol_read_1 <= ram_symbol1[_zz_io_bus_rsp_payload_fragment_data];
@@ -3489,7 +4787,7 @@ module BmbOnChipRam (
     end
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(io_bus_cmd_payload_fragment_mask[0] && io_bus_cmd_fire && _zz_io_bus_rsp_payload_fragment_data_1 ) begin
       ram_symbol0[_zz_io_bus_rsp_payload_fragment_data] <= _zz_io_bus_rsp_payload_fragment_data_2[7 : 0];
     end
@@ -3516,7 +4814,7 @@ module BmbOnChipRam (
   assign io_bus_rsp_payload_fragment_data = _zz_ram_port0;
   assign io_bus_rsp_payload_fragment_opcode = 1'b0;
   assign io_bus_rsp_payload_last = 1'b1;
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(systemCdCtrl_logic_outputReset) begin
       io_bus_cmd_valid_regNextWhen <= 1'b0;
     end else begin
@@ -3526,7 +4824,7 @@ module BmbOnChipRam (
     end
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(io_bus_cmd_ready) begin
       io_bus_cmd_payload_fragment_source_regNextWhen <= io_bus_cmd_payload_fragment_source;
     end
@@ -3584,7 +4882,22 @@ module BmbDecoder_1 (
   input      [0:0]    io_outputs_1_rsp_payload_fragment_opcode,
   input      [31:0]   io_outputs_1_rsp_payload_fragment_data,
   input      [0:0]    io_outputs_1_rsp_payload_fragment_context,
-  input               debugCdCtrl_external_clk,
+  output reg          io_outputs_2_cmd_valid,
+  input               io_outputs_2_cmd_ready,
+  output              io_outputs_2_cmd_payload_last,
+  output     [0:0]    io_outputs_2_cmd_payload_fragment_opcode,
+  output     [31:0]   io_outputs_2_cmd_payload_fragment_address,
+  output     [4:0]    io_outputs_2_cmd_payload_fragment_length,
+  output     [31:0]   io_outputs_2_cmd_payload_fragment_data,
+  output     [3:0]    io_outputs_2_cmd_payload_fragment_mask,
+  output     [0:0]    io_outputs_2_cmd_payload_fragment_context,
+  input               io_outputs_2_rsp_valid,
+  output              io_outputs_2_rsp_ready,
+  input               io_outputs_2_rsp_payload_last,
+  input      [0:0]    io_outputs_2_rsp_payload_fragment_opcode,
+  input      [31:0]   io_outputs_2_rsp_payload_fragment_data,
+  input      [0:0]    io_outputs_2_rsp_payload_fragment_context,
+  input               clkout_system,
   input               systemCdCtrl_logic_outputReset
 );
 
@@ -3608,9 +4921,11 @@ module BmbDecoder_1 (
   wire       [0:0]    logic_input_payload_fragment_context;
   wire                logic_hitsS0_0;
   wire                logic_hitsS0_1;
+  wire                logic_hitsS0_2;
   wire                logic_noHitS0;
   wire                _zz_io_outputs_0_cmd_payload_last;
   wire                _zz_io_outputs_1_cmd_payload_last;
+  wire                _zz_io_outputs_2_cmd_payload_last;
   reg        [6:0]    logic_rspPendingCounter;
   wire                logic_input_fire;
   wire                io_input_rsp_fire;
@@ -3618,6 +4933,7 @@ module BmbDecoder_1 (
   wire                when_BmbDecoder_l56;
   reg                 logic_rspHits_0;
   reg                 logic_rspHits_1;
+  reg                 logic_rspHits_2;
   wire                logic_rspPending;
   wire                logic_rspNoHitValid;
   reg                 logic_rspNoHit_doIt;
@@ -3632,7 +4948,7 @@ module BmbDecoder_1 (
   reg        [0:0]    logic_rspNoHit_context;
   wire                logic_input_fire_5;
   reg        [2:0]    logic_rspNoHit_counter;
-  wire       [0:0]    _zz_io_input_rsp_payload_last;
+  wire       [1:0]    _zz_io_input_rsp_payload_last;
   wire                when_BmbDecoder_l81;
   wire                io_input_rsp_fire_2;
 
@@ -3643,17 +4959,23 @@ module BmbDecoder_1 (
   assign _zz_logic_rspPendingCounter_3 = {6'd0, _zz_logic_rspPendingCounter_4};
   always @(*) begin
     case(_zz_io_input_rsp_payload_last)
-      1'b0 : begin
+      2'b00 : begin
         _zz_io_input_rsp_payload_last_1 = io_outputs_0_rsp_payload_last;
         _zz_io_input_rsp_payload_fragment_opcode = io_outputs_0_rsp_payload_fragment_opcode;
         _zz_io_input_rsp_payload_fragment_data = io_outputs_0_rsp_payload_fragment_data;
         _zz_io_input_rsp_payload_fragment_context = io_outputs_0_rsp_payload_fragment_context;
       end
-      default : begin
+      2'b01 : begin
         _zz_io_input_rsp_payload_last_1 = io_outputs_1_rsp_payload_last;
         _zz_io_input_rsp_payload_fragment_opcode = io_outputs_1_rsp_payload_fragment_opcode;
         _zz_io_input_rsp_payload_fragment_data = io_outputs_1_rsp_payload_fragment_data;
         _zz_io_input_rsp_payload_fragment_context = io_outputs_1_rsp_payload_fragment_context;
+      end
+      default : begin
+        _zz_io_input_rsp_payload_last_1 = io_outputs_2_rsp_payload_last;
+        _zz_io_input_rsp_payload_fragment_opcode = io_outputs_2_rsp_payload_fragment_opcode;
+        _zz_io_input_rsp_payload_fragment_data = io_outputs_2_rsp_payload_fragment_data;
+        _zz_io_input_rsp_payload_fragment_context = io_outputs_2_rsp_payload_fragment_context;
       end
     endcase
   end
@@ -3667,8 +4989,8 @@ module BmbDecoder_1 (
   assign logic_input_payload_fragment_data = io_input_cmd_payload_fragment_data;
   assign logic_input_payload_fragment_mask = io_input_cmd_payload_fragment_mask;
   assign logic_input_payload_fragment_context = io_input_cmd_payload_fragment_context;
-  assign logic_noHitS0 = (! ({logic_hitsS0_1,logic_hitsS0_0} != 2'b00));
-  assign logic_hitsS0_0 = ((io_input_cmd_payload_fragment_address & (~ 32'h0000ffff)) == 32'h80000000);
+  assign logic_noHitS0 = (! ({logic_hitsS0_2,{logic_hitsS0_1,logic_hitsS0_0}} != 3'b000));
+  assign logic_hitsS0_0 = ((io_input_cmd_payload_fragment_address & (~ 32'h01ffffff)) == 32'h40000000);
   always @(*) begin
     io_outputs_0_cmd_valid = (logic_input_valid && logic_hitsS0_0);
     if(logic_cmdWait) begin
@@ -3684,7 +5006,7 @@ module BmbDecoder_1 (
   assign io_outputs_0_cmd_payload_fragment_data = logic_input_payload_fragment_data;
   assign io_outputs_0_cmd_payload_fragment_mask = logic_input_payload_fragment_mask;
   assign io_outputs_0_cmd_payload_fragment_context = logic_input_payload_fragment_context;
-  assign logic_hitsS0_1 = ((io_input_cmd_payload_fragment_address & (~ 32'h00ffffff)) == 32'hf0000000);
+  assign logic_hitsS0_1 = ((io_input_cmd_payload_fragment_address & (~ 32'h0000ffff)) == 32'h80000000);
   always @(*) begin
     io_outputs_1_cmd_valid = (logic_input_valid && logic_hitsS0_1);
     if(logic_cmdWait) begin
@@ -3700,8 +5022,24 @@ module BmbDecoder_1 (
   assign io_outputs_1_cmd_payload_fragment_data = logic_input_payload_fragment_data;
   assign io_outputs_1_cmd_payload_fragment_mask = logic_input_payload_fragment_mask;
   assign io_outputs_1_cmd_payload_fragment_context = logic_input_payload_fragment_context;
+  assign logic_hitsS0_2 = ((io_input_cmd_payload_fragment_address & (~ 32'h00ffffff)) == 32'hf0000000);
   always @(*) begin
-    logic_input_ready = (({(logic_hitsS0_1 && io_outputs_1_cmd_ready),(logic_hitsS0_0 && io_outputs_0_cmd_ready)} != 2'b00) || logic_noHitS0);
+    io_outputs_2_cmd_valid = (logic_input_valid && logic_hitsS0_2);
+    if(logic_cmdWait) begin
+      io_outputs_2_cmd_valid = 1'b0;
+    end
+  end
+
+  assign _zz_io_outputs_2_cmd_payload_last = logic_input_payload_last;
+  assign io_outputs_2_cmd_payload_last = _zz_io_outputs_2_cmd_payload_last;
+  assign io_outputs_2_cmd_payload_fragment_opcode = logic_input_payload_fragment_opcode;
+  assign io_outputs_2_cmd_payload_fragment_address = logic_input_payload_fragment_address;
+  assign io_outputs_2_cmd_payload_fragment_length = logic_input_payload_fragment_length;
+  assign io_outputs_2_cmd_payload_fragment_data = logic_input_payload_fragment_data;
+  assign io_outputs_2_cmd_payload_fragment_mask = logic_input_payload_fragment_mask;
+  assign io_outputs_2_cmd_payload_fragment_context = logic_input_payload_fragment_context;
+  always @(*) begin
+    logic_input_ready = (({(logic_hitsS0_2 && io_outputs_2_cmd_ready),{(logic_hitsS0_1 && io_outputs_1_cmd_ready),(logic_hitsS0_0 && io_outputs_0_cmd_ready)}} != 3'b000) || logic_noHitS0);
     if(logic_cmdWait) begin
       logic_input_ready = 1'b0;
     end
@@ -3711,7 +5049,7 @@ module BmbDecoder_1 (
   assign io_input_rsp_fire = (io_input_rsp_valid && io_input_rsp_ready);
   assign when_BmbDecoder_l56 = (logic_input_valid && (! logic_cmdWait));
   assign logic_rspPending = (logic_rspPendingCounter != 7'h0);
-  assign logic_rspNoHitValid = (! ({logic_rspHits_1,logic_rspHits_0} != 2'b00));
+  assign logic_rspNoHitValid = (! ({logic_rspHits_2,{logic_rspHits_1,logic_rspHits_0}} != 3'b000));
   assign io_input_rsp_fire_1 = (io_input_rsp_valid && io_input_rsp_ready);
   assign when_BmbDecoder_l60 = (io_input_rsp_fire_1 && io_input_rsp_payload_last);
   assign logic_input_fire_1 = (logic_input_valid && logic_input_ready);
@@ -3721,13 +5059,13 @@ module BmbDecoder_1 (
   assign logic_input_fire_4 = (logic_input_valid && logic_input_ready);
   assign logic_input_fire_5 = (logic_input_valid && logic_input_ready);
   always @(*) begin
-    io_input_rsp_valid = (({io_outputs_1_rsp_valid,io_outputs_0_rsp_valid} != 2'b00) || (logic_rspPending && logic_rspNoHitValid));
+    io_input_rsp_valid = (({io_outputs_2_rsp_valid,{io_outputs_1_rsp_valid,io_outputs_0_rsp_valid}} != 3'b000) || (logic_rspPending && logic_rspNoHitValid));
     if(logic_rspNoHit_doIt) begin
       io_input_rsp_valid = 1'b1;
     end
   end
 
-  assign _zz_io_input_rsp_payload_last = logic_rspHits_1;
+  assign _zz_io_input_rsp_payload_last = {logic_rspHits_2,logic_rspHits_1};
   always @(*) begin
     io_input_rsp_payload_last = _zz_io_input_rsp_payload_last_1;
     if(logic_rspNoHit_doIt) begin
@@ -3760,8 +5098,9 @@ module BmbDecoder_1 (
   assign io_input_rsp_fire_2 = (io_input_rsp_valid && io_input_rsp_ready);
   assign io_outputs_0_rsp_ready = io_input_rsp_ready;
   assign io_outputs_1_rsp_ready = io_input_rsp_ready;
-  assign logic_cmdWait = ((logic_rspPending && (((logic_hitsS0_0 != logic_rspHits_0) || (logic_hitsS0_1 != logic_rspHits_1)) || logic_rspNoHitValid)) || (logic_rspPendingCounter == 7'h40));
-  always @(posedge debugCdCtrl_external_clk) begin
+  assign io_outputs_2_rsp_ready = io_input_rsp_ready;
+  assign logic_cmdWait = ((logic_rspPending && ((((logic_hitsS0_0 != logic_rspHits_0) || (logic_hitsS0_1 != logic_rspHits_1)) || (logic_hitsS0_2 != logic_rspHits_2)) || logic_rspNoHitValid)) || (logic_rspPendingCounter == 7'h40));
+  always @(posedge clkout_system) begin
     if(systemCdCtrl_logic_outputReset) begin
       logic_rspPendingCounter <= 7'h0;
       logic_rspNoHit_doIt <= 1'b0;
@@ -3776,10 +5115,11 @@ module BmbDecoder_1 (
     end
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(when_BmbDecoder_l56) begin
       logic_rspHits_0 <= logic_hitsS0_0;
       logic_rspHits_1 <= logic_hitsS0_1;
+      logic_rspHits_2 <= logic_hitsS0_2;
     end
     if(logic_input_fire_2) begin
       logic_rspNoHit_singleBeatRsp <= (logic_input_payload_fragment_opcode == 1'b1);
@@ -3803,7 +5143,7 @@ endmodule
 module BufferCC_4 (
   input               io_dataIn,
   output              io_dataOut,
-  input               debugCdCtrl_external_clk,
+  input               clkout_system,
   input               system_cpu_debugReset
 );
 
@@ -3811,7 +5151,7 @@ module BufferCC_4 (
   (* async_reg = "true" *) reg                 buffers_1;
 
   assign io_dataOut = buffers_1;
-  always @(posedge debugCdCtrl_external_clk or posedge system_cpu_debugReset) begin
+  always @(posedge clkout_system or posedge system_cpu_debugReset) begin
     if(system_cpu_debugReset) begin
       buffers_0 <= 1'b1;
       buffers_1 <= 1'b1;
@@ -3847,7 +5187,18 @@ module BmbDecoder (
   input               io_outputs_0_rsp_payload_last,
   input      [0:0]    io_outputs_0_rsp_payload_fragment_opcode,
   input      [31:0]   io_outputs_0_rsp_payload_fragment_data,
-  input               debugCdCtrl_external_clk,
+  output reg          io_outputs_1_cmd_valid,
+  input               io_outputs_1_cmd_ready,
+  output              io_outputs_1_cmd_payload_last,
+  output     [0:0]    io_outputs_1_cmd_payload_fragment_opcode,
+  output     [31:0]   io_outputs_1_cmd_payload_fragment_address,
+  output     [4:0]    io_outputs_1_cmd_payload_fragment_length,
+  input               io_outputs_1_rsp_valid,
+  output              io_outputs_1_rsp_ready,
+  input               io_outputs_1_rsp_payload_last,
+  input      [0:0]    io_outputs_1_rsp_payload_fragment_opcode,
+  input      [31:0]   io_outputs_1_rsp_payload_fragment_data,
+  input               clkout_system,
   input               systemCdCtrl_logic_outputReset
 );
 
@@ -3856,6 +5207,9 @@ module BmbDecoder (
   wire       [0:0]    _zz_logic_rspPendingCounter_2;
   wire       [6:0]    _zz_logic_rspPendingCounter_3;
   wire       [0:0]    _zz_logic_rspPendingCounter_4;
+  reg                 _zz_io_input_rsp_payload_last_1;
+  reg        [0:0]    _zz_io_input_rsp_payload_fragment_opcode;
+  reg        [31:0]   _zz_io_input_rsp_payload_fragment_data;
   wire                logic_input_valid;
   reg                 logic_input_ready;
   wire                logic_input_payload_last;
@@ -3863,14 +5217,17 @@ module BmbDecoder (
   wire       [31:0]   logic_input_payload_fragment_address;
   wire       [4:0]    logic_input_payload_fragment_length;
   wire                logic_hitsS0_0;
+  wire                logic_hitsS0_1;
   wire                logic_noHitS0;
   wire                _zz_io_outputs_0_cmd_payload_last;
+  wire                _zz_io_outputs_1_cmd_payload_last;
   reg        [6:0]    logic_rspPendingCounter;
   wire                logic_input_fire;
   wire                io_input_rsp_fire;
   wire                logic_cmdWait;
   wire                when_BmbDecoder_l56;
   reg                 logic_rspHits_0;
+  reg                 logic_rspHits_1;
   wire                logic_rspPending;
   wire                logic_rspNoHitValid;
   reg                 logic_rspNoHit_doIt;
@@ -3884,6 +5241,7 @@ module BmbDecoder (
   wire                logic_input_fire_4;
   wire                logic_input_fire_5;
   reg        [2:0]    logic_rspNoHit_counter;
+  wire       [0:0]    _zz_io_input_rsp_payload_last;
   wire                when_BmbDecoder_l81;
   wire                io_input_rsp_fire_2;
 
@@ -3892,14 +5250,29 @@ module BmbDecoder (
   assign _zz_logic_rspPendingCounter_1 = {6'd0, _zz_logic_rspPendingCounter_2};
   assign _zz_logic_rspPendingCounter_4 = (io_input_rsp_fire && io_input_rsp_payload_last);
   assign _zz_logic_rspPendingCounter_3 = {6'd0, _zz_logic_rspPendingCounter_4};
+  always @(*) begin
+    case(_zz_io_input_rsp_payload_last)
+      1'b0 : begin
+        _zz_io_input_rsp_payload_last_1 = io_outputs_0_rsp_payload_last;
+        _zz_io_input_rsp_payload_fragment_opcode = io_outputs_0_rsp_payload_fragment_opcode;
+        _zz_io_input_rsp_payload_fragment_data = io_outputs_0_rsp_payload_fragment_data;
+      end
+      default : begin
+        _zz_io_input_rsp_payload_last_1 = io_outputs_1_rsp_payload_last;
+        _zz_io_input_rsp_payload_fragment_opcode = io_outputs_1_rsp_payload_fragment_opcode;
+        _zz_io_input_rsp_payload_fragment_data = io_outputs_1_rsp_payload_fragment_data;
+      end
+    endcase
+  end
+
   assign logic_input_valid = io_input_cmd_valid;
   assign io_input_cmd_ready = logic_input_ready;
   assign logic_input_payload_last = io_input_cmd_payload_last;
   assign logic_input_payload_fragment_opcode = io_input_cmd_payload_fragment_opcode;
   assign logic_input_payload_fragment_address = io_input_cmd_payload_fragment_address;
   assign logic_input_payload_fragment_length = io_input_cmd_payload_fragment_length;
-  assign logic_noHitS0 = (! (logic_hitsS0_0 != 1'b0));
-  assign logic_hitsS0_0 = ((io_input_cmd_payload_fragment_address & (~ 32'h0000ffff)) == 32'h80000000);
+  assign logic_noHitS0 = (! ({logic_hitsS0_1,logic_hitsS0_0} != 2'b00));
+  assign logic_hitsS0_0 = ((io_input_cmd_payload_fragment_address & (~ 32'h01ffffff)) == 32'h40000000);
   always @(*) begin
     io_outputs_0_cmd_valid = (logic_input_valid && logic_hitsS0_0);
     if(logic_cmdWait) begin
@@ -3912,8 +5285,21 @@ module BmbDecoder (
   assign io_outputs_0_cmd_payload_fragment_opcode = logic_input_payload_fragment_opcode;
   assign io_outputs_0_cmd_payload_fragment_address = logic_input_payload_fragment_address;
   assign io_outputs_0_cmd_payload_fragment_length = logic_input_payload_fragment_length;
+  assign logic_hitsS0_1 = ((io_input_cmd_payload_fragment_address & (~ 32'h0000ffff)) == 32'h80000000);
   always @(*) begin
-    logic_input_ready = (((logic_hitsS0_0 && io_outputs_0_cmd_ready) != 1'b0) || logic_noHitS0);
+    io_outputs_1_cmd_valid = (logic_input_valid && logic_hitsS0_1);
+    if(logic_cmdWait) begin
+      io_outputs_1_cmd_valid = 1'b0;
+    end
+  end
+
+  assign _zz_io_outputs_1_cmd_payload_last = logic_input_payload_last;
+  assign io_outputs_1_cmd_payload_last = _zz_io_outputs_1_cmd_payload_last;
+  assign io_outputs_1_cmd_payload_fragment_opcode = logic_input_payload_fragment_opcode;
+  assign io_outputs_1_cmd_payload_fragment_address = logic_input_payload_fragment_address;
+  assign io_outputs_1_cmd_payload_fragment_length = logic_input_payload_fragment_length;
+  always @(*) begin
+    logic_input_ready = (({(logic_hitsS0_1 && io_outputs_1_cmd_ready),(logic_hitsS0_0 && io_outputs_0_cmd_ready)} != 2'b00) || logic_noHitS0);
     if(logic_cmdWait) begin
       logic_input_ready = 1'b0;
     end
@@ -3923,7 +5309,7 @@ module BmbDecoder (
   assign io_input_rsp_fire = (io_input_rsp_valid && io_input_rsp_ready);
   assign when_BmbDecoder_l56 = (logic_input_valid && (! logic_cmdWait));
   assign logic_rspPending = (logic_rspPendingCounter != 7'h0);
-  assign logic_rspNoHitValid = (! (logic_rspHits_0 != 1'b0));
+  assign logic_rspNoHitValid = (! ({logic_rspHits_1,logic_rspHits_0} != 2'b00));
   assign io_input_rsp_fire_1 = (io_input_rsp_valid && io_input_rsp_ready);
   assign when_BmbDecoder_l60 = (io_input_rsp_fire_1 && io_input_rsp_payload_last);
   assign logic_input_fire_1 = (logic_input_valid && logic_input_ready);
@@ -3933,14 +5319,15 @@ module BmbDecoder (
   assign logic_input_fire_4 = (logic_input_valid && logic_input_ready);
   assign logic_input_fire_5 = (logic_input_valid && logic_input_ready);
   always @(*) begin
-    io_input_rsp_valid = ((io_outputs_0_rsp_valid != 1'b0) || (logic_rspPending && logic_rspNoHitValid));
+    io_input_rsp_valid = (({io_outputs_1_rsp_valid,io_outputs_0_rsp_valid} != 2'b00) || (logic_rspPending && logic_rspNoHitValid));
     if(logic_rspNoHit_doIt) begin
       io_input_rsp_valid = 1'b1;
     end
   end
 
+  assign _zz_io_input_rsp_payload_last = logic_rspHits_1;
   always @(*) begin
-    io_input_rsp_payload_last = io_outputs_0_rsp_payload_last;
+    io_input_rsp_payload_last = _zz_io_input_rsp_payload_last_1;
     if(logic_rspNoHit_doIt) begin
       io_input_rsp_payload_last = 1'b0;
       if(when_BmbDecoder_l81) begin
@@ -3950,18 +5337,19 @@ module BmbDecoder (
   end
 
   always @(*) begin
-    io_input_rsp_payload_fragment_opcode = io_outputs_0_rsp_payload_fragment_opcode;
+    io_input_rsp_payload_fragment_opcode = _zz_io_input_rsp_payload_fragment_opcode;
     if(logic_rspNoHit_doIt) begin
       io_input_rsp_payload_fragment_opcode = 1'b1;
     end
   end
 
-  assign io_input_rsp_payload_fragment_data = io_outputs_0_rsp_payload_fragment_data;
+  assign io_input_rsp_payload_fragment_data = _zz_io_input_rsp_payload_fragment_data;
   assign when_BmbDecoder_l81 = (logic_rspNoHit_counter == 3'b000);
   assign io_input_rsp_fire_2 = (io_input_rsp_valid && io_input_rsp_ready);
   assign io_outputs_0_rsp_ready = io_input_rsp_ready;
-  assign logic_cmdWait = ((logic_rspPending && ((logic_hitsS0_0 != logic_rspHits_0) || logic_rspNoHitValid)) || (logic_rspPendingCounter == 7'h40));
-  always @(posedge debugCdCtrl_external_clk) begin
+  assign io_outputs_1_rsp_ready = io_input_rsp_ready;
+  assign logic_cmdWait = ((logic_rspPending && (((logic_hitsS0_0 != logic_rspHits_0) || (logic_hitsS0_1 != logic_rspHits_1)) || logic_rspNoHitValid)) || (logic_rspPendingCounter == 7'h40));
+  always @(posedge clkout_system) begin
     if(systemCdCtrl_logic_outputReset) begin
       logic_rspPendingCounter <= 7'h0;
       logic_rspNoHit_doIt <= 1'b0;
@@ -3976,9 +5364,10 @@ module BmbDecoder (
     end
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(when_BmbDecoder_l56) begin
       logic_rspHits_0 <= logic_hitsS0_0;
+      logic_rspHits_1 <= logic_hitsS0_1;
     end
     if(logic_input_fire_2) begin
       logic_rspNoHit_singleBeatRsp <= (logic_input_payload_fragment_opcode == 1'b1);
@@ -4013,7 +5402,7 @@ module SystemDebugger (
   output     [1:0]    io_mem_cmd_payload_size,
   input               io_mem_rsp_valid,
   input      [31:0]   io_mem_rsp_payload,
-  input               debugCdCtrl_external_clk,
+  input               clkout_system,
   input               debugCdCtrl_logic_outputReset
 );
 
@@ -4044,7 +5433,7 @@ module SystemDebugger (
   assign io_remote_rsp_valid = io_mem_rsp_valid;
   assign io_remote_rsp_payload_error = 1'b0;
   assign io_remote_rsp_payload_data = io_mem_rsp_payload;
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(debugCdCtrl_logic_outputReset) begin
       dispatcher_dataLoaded <= 1'b0;
       dispatcher_headerLoaded <= 1'b0;
@@ -4070,7 +5459,7 @@ module SystemDebugger (
     end
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(io_remote_cmd_valid) begin
       if(when_Fragment_l346) begin
         dispatcher_headerShifter <= ({io_remote_cmd_payload_fragment,dispatcher_headerShifter} >>> 1);
@@ -4096,7 +5485,7 @@ module JtagBridge (
   output              io_remote_rsp_ready,
   input               io_remote_rsp_payload_error,
   input      [31:0]   io_remote_rsp_payload_data,
-  input               debugCdCtrl_external_clk,
+  input               clkout_system,
   input               debugCdCtrl_logic_outputReset
 );
   localparam JtagState_RESET = 4'd0;
@@ -4169,7 +5558,7 @@ module JtagBridge (
     .io_output_payload_last           (flowCCByToggle_1_io_output_payload_last      ), //o
     .io_output_payload_fragment       (flowCCByToggle_1_io_output_payload_fragment  ), //o
     .io_jtag_tck                      (io_jtag_tck                                  ), //i
-    .debugCdCtrl_external_clk         (debugCdCtrl_external_clk                     ), //i
+    .clkout_system                    (clkout_system                                ), //i
     .debugCdCtrl_logic_outputReset    (debugCdCtrl_logic_outputReset                )  //i
   );
   `ifndef SYNTHESIS
@@ -4341,7 +5730,7 @@ module JtagBridge (
   assign _zz_io_input_valid = (jtag_tap_instruction == 4'b0010);
   assign _zz_io_input_valid_1 = (jtag_tap_fsm_state == JtagState_DR_SHIFT);
   assign _zz_2 = (jtag_tap_instruction == 4'b0011);
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(io_remote_cmd_valid) begin
       system_rsp_valid <= 1'b0;
     end
@@ -4432,7 +5821,7 @@ module VexRiscv (
   input               iBus_rsp_valid,
   input      [31:0]   iBus_rsp_payload_data,
   input               iBus_rsp_payload_error,
-  input               debugCdCtrl_external_clk,
+  input               clkout_system,
   input               systemCdCtrl_logic_outputReset,
   input               debugCdCtrl_logic_outputReset
 );
@@ -5957,7 +7346,7 @@ module VexRiscv (
   assign _zz_execute_BranchPlugin_branch_src2_8 = execute_INSTRUCTION[7];
   assign _zz_RegFilePlugin_regFile_port0 = RegFilePlugin_regFile[decode_RegFilePlugin_regFileReadAddress1];
   assign _zz_RegFilePlugin_regFile_port1 = RegFilePlugin_regFile[decode_RegFilePlugin_regFileReadAddress2];
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(_zz_1) begin
       RegFilePlugin_regFile[lastStageRegFileWrite_payload_address] <= lastStageRegFileWrite_payload_data;
     end
@@ -6002,7 +7391,7 @@ module VexRiscv (
     .io_mem_rsp_valid                         (iBus_rsp_valid                                              ), //i
     .io_mem_rsp_payload_data                  (iBus_rsp_payload_data[31:0]                                 ), //i
     .io_mem_rsp_payload_error                 (iBus_rsp_payload_error                                      ), //i
-    .debugCdCtrl_external_clk                 (debugCdCtrl_external_clk                                    ), //i
+    .clkout_system                            (clkout_system                                               ), //i
     .systemCdCtrl_logic_outputReset           (systemCdCtrl_logic_outputReset                              )  //i
   );
   DataCache dataCache_1 (
@@ -6064,7 +7453,7 @@ module VexRiscv (
     .io_mem_rsp_payload_last                   (dBus_rsp_payload_last                              ), //i
     .io_mem_rsp_payload_data                   (dBus_rsp_payload_data[31:0]                        ), //i
     .io_mem_rsp_payload_error                  (dBus_rsp_payload_error                             ), //i
-    .debugCdCtrl_external_clk                  (debugCdCtrl_external_clk                           ), //i
+    .clkout_system                             (clkout_system                                      ), //i
     .systemCdCtrl_logic_outputReset            (systemCdCtrl_logic_outputReset                     )  //i
   );
   always @(*) begin
@@ -9063,7 +10452,7 @@ module VexRiscv (
   assign CsrPlugin_csrMapping_readDataInit = (((_zz_CsrPlugin_csrMapping_readDataInit | _zz_CsrPlugin_csrMapping_readDataInit_1) | (_zz_CsrPlugin_csrMapping_readDataInit_2 | _zz_CsrPlugin_csrMapping_readDataInit_3)) | (_zz_CsrPlugin_csrMapping_readDataInit_4 | _zz_CsrPlugin_csrMapping_readDataInit_5));
   assign when_CsrPlugin_l1297 = (CsrPlugin_privilege < execute_CsrPlugin_csrAddress[9 : 8]);
   assign when_CsrPlugin_l1302 = ((! execute_arbitration_isValid) || (! execute_IS_CSR));
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(systemCdCtrl_logic_outputReset) begin
       IBusCachedPlugin_fetchPc_pcReg <= 32'h80000000;
       IBusCachedPlugin_fetchPc_correctionReg <= 1'b0;
@@ -9324,7 +10713,7 @@ module VexRiscv (
     end
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(IBusCachedPlugin_decompressor_input_valid) begin
       IBusCachedPlugin_decompressor_bufferValidLatch <= IBusCachedPlugin_decompressor_bufferValid;
     end
@@ -9641,7 +11030,7 @@ module VexRiscv (
     end
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     DebugPlugin_firstCycle <= 1'b0;
     if(debug_bus_cmd_ready) begin
       DebugPlugin_firstCycle <= 1'b1;
@@ -9658,7 +11047,7 @@ module VexRiscv (
     DebugPlugin_resetIt_regNext <= DebugPlugin_resetIt;
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(debugCdCtrl_logic_outputReset) begin
       DebugPlugin_resetIt <= 1'b0;
       DebugPlugin_haltIt <= 1'b0;
@@ -9731,7 +11120,7 @@ endmodule
 module BufferCC_3 (
   input               io_dataIn,
   output              io_dataOut,
-  input               debugCdCtrl_external_clk,
+  input               clkout_system,
   input               debugCdCtrl_logic_outputReset
 );
 
@@ -9739,7 +11128,7 @@ module BufferCC_3 (
   (* async_reg = "true" *) reg                 buffers_1;
 
   assign io_dataOut = buffers_1;
-  always @(posedge debugCdCtrl_external_clk or posedge debugCdCtrl_logic_outputReset) begin
+  always @(posedge clkout_system or posedge debugCdCtrl_logic_outputReset) begin
     if(debugCdCtrl_logic_outputReset) begin
       buffers_0 <= 1'b1;
       buffers_1 <= 1'b1;
@@ -9755,21 +11144,965 @@ endmodule
 module BufferCC_2 (
   input               io_dataIn,
   output              io_dataOut,
-  input               debugCdCtrl_external_clk,
-  input               debugCdCtrl_external_reset
+  input               clkout_system,
+  input               clocking_resetn
 );
 
   (* async_reg = "true" *) reg                 buffers_0;
   (* async_reg = "true" *) reg                 buffers_1;
 
   assign io_dataOut = buffers_1;
-  always @(posedge debugCdCtrl_external_clk or negedge debugCdCtrl_external_reset) begin
-    if(!debugCdCtrl_external_reset) begin
+  always @(posedge clkout_system or negedge clocking_resetn) begin
+    if(!clocking_resetn) begin
       buffers_0 <= 1'b1;
       buffers_1 <= 1'b1;
     end else begin
       buffers_0 <= io_dataIn;
       buffers_1 <= buffers_0;
+    end
+  end
+
+
+endmodule
+
+module Ecp5Sdrx2Phy (
+  input               io_ctrl_phases_0_CASn,
+  input               io_ctrl_phases_0_CKE,
+  input               io_ctrl_phases_0_CSn,
+  input               io_ctrl_phases_0_RASn,
+  input               io_ctrl_phases_0_WEn,
+  input      [1:0]    io_ctrl_phases_0_DM_0,
+  input      [15:0]   io_ctrl_phases_0_DQw_0,
+  output     [15:0]   io_ctrl_phases_0_DQr_0,
+  input               io_ctrl_phases_1_CASn,
+  input               io_ctrl_phases_1_CKE,
+  input               io_ctrl_phases_1_CSn,
+  input               io_ctrl_phases_1_RASn,
+  input               io_ctrl_phases_1_WEn,
+  input      [1:0]    io_ctrl_phases_1_DM_0,
+  input      [15:0]   io_ctrl_phases_1_DQw_0,
+  output     [15:0]   io_ctrl_phases_1_DQr_0,
+  input      [12:0]   io_ctrl_ADDR,
+  input      [1:0]    io_ctrl_BA,
+  input               io_ctrl_writeEnable,
+  input               io_ctrl_readEnable,
+  output              io_ctrl_readValid,
+  output     [12:0]   io_sdram_ADDR,
+  output     [1:0]    io_sdram_BA,
+  input      [15:0]   io_sdram_DQ_read,
+  output     [15:0]   io_sdram_DQ_write,
+  output     [15:0]   io_sdram_DQ_writeEnable,
+  output     [1:0]    io_sdram_DQM,
+  output              io_sdram_CASn,
+  output              io_sdram_CKE,
+  output              io_sdram_CSn,
+  output              io_sdram_RASn,
+  output              io_sdram_WEn,
+  input               systemCdCtrl_logic_outputReset,
+  input               clkout_system
+);
+
+  wire                ADDR_gears_0_D0;
+  wire                ADDR_gears_0_D1;
+  wire                ADDR_gears_1_D0;
+  wire                ADDR_gears_1_D1;
+  wire                ADDR_gears_2_D0;
+  wire                ADDR_gears_2_D1;
+  wire                ADDR_gears_3_D0;
+  wire                ADDR_gears_3_D1;
+  wire                ADDR_gears_4_D0;
+  wire                ADDR_gears_4_D1;
+  wire                ADDR_gears_5_D0;
+  wire                ADDR_gears_5_D1;
+  wire                ADDR_gears_6_D0;
+  wire                ADDR_gears_6_D1;
+  wire                ADDR_gears_7_D0;
+  wire                ADDR_gears_7_D1;
+  wire                ADDR_gears_8_D0;
+  wire                ADDR_gears_8_D1;
+  wire                ADDR_gears_9_D0;
+  wire                ADDR_gears_9_D1;
+  wire                ADDR_gears_10_D0;
+  wire                ADDR_gears_10_D1;
+  wire                ADDR_gears_11_D0;
+  wire                ADDR_gears_11_D1;
+  wire                ADDR_gears_12_D0;
+  wire                ADDR_gears_12_D1;
+  wire                BA_gears_0_D0;
+  wire                BA_gears_0_D1;
+  wire                BA_gears_1_D0;
+  wire                BA_gears_1_D1;
+  wire                CASn_gears_0_D0;
+  wire                CASn_gears_0_D1;
+  wire                CKE_gears_0_D0;
+  wire                CKE_gears_0_D1;
+  wire                CSn_gears_0_D0;
+  wire                CSn_gears_0_D1;
+  wire                RASn_gears_0_D0;
+  wire                RASn_gears_0_D1;
+  wire                WEn_gears_0_D0;
+  wire                WEn_gears_0_D1;
+  wire                DM_gears_0_D0;
+  wire                DM_gears_0_D1;
+  wire                DM_gears_1_D0;
+  wire                DM_gears_1_D1;
+  wire                DQw_gears_0_D0;
+  wire                DQw_gears_0_D1;
+  wire                DQw_gears_1_D0;
+  wire                DQw_gears_1_D1;
+  wire                DQw_gears_2_D0;
+  wire                DQw_gears_2_D1;
+  wire                DQw_gears_3_D0;
+  wire                DQw_gears_3_D1;
+  wire                DQw_gears_4_D0;
+  wire                DQw_gears_4_D1;
+  wire                DQw_gears_5_D0;
+  wire                DQw_gears_5_D1;
+  wire                DQw_gears_6_D0;
+  wire                DQw_gears_6_D1;
+  wire                DQw_gears_7_D0;
+  wire                DQw_gears_7_D1;
+  wire                DQw_gears_8_D0;
+  wire                DQw_gears_8_D1;
+  wire                DQw_gears_9_D0;
+  wire                DQw_gears_9_D1;
+  wire                DQw_gears_10_D0;
+  wire                DQw_gears_10_D1;
+  wire                DQw_gears_11_D0;
+  wire                DQw_gears_11_D1;
+  wire                DQw_gears_12_D0;
+  wire                DQw_gears_12_D1;
+  wire                DQw_gears_13_D0;
+  wire                DQw_gears_13_D1;
+  wire                DQw_gears_14_D0;
+  wire                DQw_gears_14_D1;
+  wire                DQw_gears_15_D0;
+  wire                DQw_gears_15_D1;
+  wire                DQr_gears_0_D;
+  wire                DQr_gears_1_D;
+  wire                DQr_gears_2_D;
+  wire                DQr_gears_3_D;
+  wire                DQr_gears_4_D;
+  wire                DQr_gears_5_D;
+  wire                DQr_gears_6_D;
+  wire                DQr_gears_7_D;
+  wire                DQr_gears_8_D;
+  wire                DQr_gears_9_D;
+  wire                DQr_gears_10_D;
+  wire                DQr_gears_11_D;
+  wire                DQr_gears_12_D;
+  wire                DQr_gears_13_D;
+  wire                DQr_gears_14_D;
+  wire                DQr_gears_15_D;
+  wire                ADDR_gears_0_Q;
+  wire                ADDR_gears_1_Q;
+  wire                ADDR_gears_2_Q;
+  wire                ADDR_gears_3_Q;
+  wire                ADDR_gears_4_Q;
+  wire                ADDR_gears_5_Q;
+  wire                ADDR_gears_6_Q;
+  wire                ADDR_gears_7_Q;
+  wire                ADDR_gears_8_Q;
+  wire                ADDR_gears_9_Q;
+  wire                ADDR_gears_10_Q;
+  wire                ADDR_gears_11_Q;
+  wire                ADDR_gears_12_Q;
+  wire                BA_gears_0_Q;
+  wire                BA_gears_1_Q;
+  wire                CASn_gears_0_Q;
+  wire                CKE_gears_0_Q;
+  wire                CSn_gears_0_Q;
+  wire                RASn_gears_0_Q;
+  wire                WEn_gears_0_Q;
+  wire                DM_gears_0_Q;
+  wire                DM_gears_1_Q;
+  wire                DQw_gears_0_Q;
+  wire                DQw_gears_1_Q;
+  wire                DQw_gears_2_Q;
+  wire                DQw_gears_3_Q;
+  wire                DQw_gears_4_Q;
+  wire                DQw_gears_5_Q;
+  wire                DQw_gears_6_Q;
+  wire                DQw_gears_7_Q;
+  wire                DQw_gears_8_Q;
+  wire                DQw_gears_9_Q;
+  wire                DQw_gears_10_Q;
+  wire                DQw_gears_11_Q;
+  wire                DQw_gears_12_Q;
+  wire                DQw_gears_13_Q;
+  wire                DQw_gears_14_Q;
+  wire                DQw_gears_15_Q;
+  wire                DQr_gears_0_Q0;
+  wire                DQr_gears_0_Q1;
+  wire                DQr_gears_1_Q0;
+  wire                DQr_gears_1_Q1;
+  wire                DQr_gears_2_Q0;
+  wire                DQr_gears_2_Q1;
+  wire                DQr_gears_3_Q0;
+  wire                DQr_gears_3_Q1;
+  wire                DQr_gears_4_Q0;
+  wire                DQr_gears_4_Q1;
+  wire                DQr_gears_5_Q0;
+  wire                DQr_gears_5_Q1;
+  wire                DQr_gears_6_Q0;
+  wire                DQr_gears_6_Q1;
+  wire                DQr_gears_7_Q0;
+  wire                DQr_gears_7_Q1;
+  wire                DQr_gears_8_Q0;
+  wire                DQr_gears_8_Q1;
+  wire                DQr_gears_9_Q0;
+  wire                DQr_gears_9_Q1;
+  wire                DQr_gears_10_Q0;
+  wire                DQr_gears_10_Q1;
+  wire                DQr_gears_11_Q0;
+  wire                DQr_gears_11_Q1;
+  wire                DQr_gears_12_Q0;
+  wire                DQr_gears_12_Q1;
+  wire                DQr_gears_13_Q0;
+  wire                DQr_gears_13_Q1;
+  wire                DQr_gears_14_Q0;
+  wire                DQr_gears_14_Q1;
+  wire                DQr_gears_15_Q0;
+  wire                DQr_gears_15_Q1;
+  wire       [0:0]    _zz_dqWriteEnable;
+  wire       [4:0]    _zz_dqWriteEnable_1;
+  wire       [12:0]   ADDR_iBits;
+  reg        [12:0]   ADDR_oBits;
+  wire       [1:0]    BA_iBits;
+  reg        [1:0]    BA_oBits;
+  wire       [0:0]    CASn_iBits_0;
+  wire       [0:0]    CASn_iBits_1;
+  wire       [0:0]    CASn_oBits;
+  wire       [0:0]    CKE_iBits_0;
+  wire       [0:0]    CKE_iBits_1;
+  wire       [0:0]    CKE_oBits;
+  wire       [0:0]    CSn_iBits_0;
+  wire       [0:0]    CSn_iBits_1;
+  wire       [0:0]    CSn_oBits;
+  wire       [0:0]    RASn_iBits_0;
+  wire       [0:0]    RASn_iBits_1;
+  wire       [0:0]    RASn_oBits;
+  wire       [0:0]    WEn_iBits_0;
+  wire       [0:0]    WEn_iBits_1;
+  wire       [0:0]    WEn_oBits;
+  wire       [1:0]    DM_iBits_0;
+  wire       [1:0]    DM_iBits_1;
+  reg        [1:0]    DM_oBits;
+  wire       [15:0]   DQw_iBits_0;
+  wire       [15:0]   DQw_iBits_1;
+  reg        [15:0]   DQw_oBits;
+  wire       [15:0]   DQrValue_0;
+  wire       [15:0]   DQrValue_1;
+  wire       [15:0]   DQr_iBits;
+  reg        [15:0]   DQr_oBits_0;
+  reg        [15:0]   DQr_oBits_1;
+  reg        [15:0]   DQrBuffer;
+  reg                 io_ctrl_writeEnable_delay_1;
+  wire                delayedWriteEnable;
+  (* keep , syn_keep *) reg        [15:0]   dqWriteEnable /* synthesis syn_keep = 1 */ ;
+  reg        [15:0]   dqWriteEnableReg;
+
+  assign _zz_dqWriteEnable = delayedWriteEnable;
+  assign _zz_dqWriteEnable_1 = {delayedWriteEnable,{delayedWriteEnable,{delayedWriteEnable,{delayedWriteEnable,delayedWriteEnable}}}};
+  ODDRX1F ADDR_gears_0 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (ADDR_gears_0_D0                 ), //i
+    .D1      (ADDR_gears_0_D1                 ), //i
+    .Q       (ADDR_gears_0_Q                  )  //o
+  );
+  ODDRX1F ADDR_gears_1 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (ADDR_gears_1_D0                 ), //i
+    .D1      (ADDR_gears_1_D1                 ), //i
+    .Q       (ADDR_gears_1_Q                  )  //o
+  );
+  ODDRX1F ADDR_gears_2 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (ADDR_gears_2_D0                 ), //i
+    .D1      (ADDR_gears_2_D1                 ), //i
+    .Q       (ADDR_gears_2_Q                  )  //o
+  );
+  ODDRX1F ADDR_gears_3 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (ADDR_gears_3_D0                 ), //i
+    .D1      (ADDR_gears_3_D1                 ), //i
+    .Q       (ADDR_gears_3_Q                  )  //o
+  );
+  ODDRX1F ADDR_gears_4 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (ADDR_gears_4_D0                 ), //i
+    .D1      (ADDR_gears_4_D1                 ), //i
+    .Q       (ADDR_gears_4_Q                  )  //o
+  );
+  ODDRX1F ADDR_gears_5 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (ADDR_gears_5_D0                 ), //i
+    .D1      (ADDR_gears_5_D1                 ), //i
+    .Q       (ADDR_gears_5_Q                  )  //o
+  );
+  ODDRX1F ADDR_gears_6 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (ADDR_gears_6_D0                 ), //i
+    .D1      (ADDR_gears_6_D1                 ), //i
+    .Q       (ADDR_gears_6_Q                  )  //o
+  );
+  ODDRX1F ADDR_gears_7 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (ADDR_gears_7_D0                 ), //i
+    .D1      (ADDR_gears_7_D1                 ), //i
+    .Q       (ADDR_gears_7_Q                  )  //o
+  );
+  ODDRX1F ADDR_gears_8 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (ADDR_gears_8_D0                 ), //i
+    .D1      (ADDR_gears_8_D1                 ), //i
+    .Q       (ADDR_gears_8_Q                  )  //o
+  );
+  ODDRX1F ADDR_gears_9 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (ADDR_gears_9_D0                 ), //i
+    .D1      (ADDR_gears_9_D1                 ), //i
+    .Q       (ADDR_gears_9_Q                  )  //o
+  );
+  ODDRX1F ADDR_gears_10 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (ADDR_gears_10_D0                ), //i
+    .D1      (ADDR_gears_10_D1                ), //i
+    .Q       (ADDR_gears_10_Q                 )  //o
+  );
+  ODDRX1F ADDR_gears_11 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (ADDR_gears_11_D0                ), //i
+    .D1      (ADDR_gears_11_D1                ), //i
+    .Q       (ADDR_gears_11_Q                 )  //o
+  );
+  ODDRX1F ADDR_gears_12 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (ADDR_gears_12_D0                ), //i
+    .D1      (ADDR_gears_12_D1                ), //i
+    .Q       (ADDR_gears_12_Q                 )  //o
+  );
+  ODDRX1F BA_gears_0 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (BA_gears_0_D0                   ), //i
+    .D1      (BA_gears_0_D1                   ), //i
+    .Q       (BA_gears_0_Q                    )  //o
+  );
+  ODDRX1F BA_gears_1 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (BA_gears_1_D0                   ), //i
+    .D1      (BA_gears_1_D1                   ), //i
+    .Q       (BA_gears_1_Q                    )  //o
+  );
+  ODDRX1F CASn_gears_0 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (CASn_gears_0_D0                 ), //i
+    .D1      (CASn_gears_0_D1                 ), //i
+    .Q       (CASn_gears_0_Q                  )  //o
+  );
+  ODDRX1F CKE_gears_0 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (CKE_gears_0_D0                  ), //i
+    .D1      (CKE_gears_0_D1                  ), //i
+    .Q       (CKE_gears_0_Q                   )  //o
+  );
+  ODDRX1F CSn_gears_0 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (CSn_gears_0_D0                  ), //i
+    .D1      (CSn_gears_0_D1                  ), //i
+    .Q       (CSn_gears_0_Q                   )  //o
+  );
+  ODDRX1F RASn_gears_0 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (RASn_gears_0_D0                 ), //i
+    .D1      (RASn_gears_0_D1                 ), //i
+    .Q       (RASn_gears_0_Q                  )  //o
+  );
+  ODDRX1F WEn_gears_0 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (WEn_gears_0_D0                  ), //i
+    .D1      (WEn_gears_0_D1                  ), //i
+    .Q       (WEn_gears_0_Q                   )  //o
+  );
+  ODDRX1F DM_gears_0 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (DM_gears_0_D0                   ), //i
+    .D1      (DM_gears_0_D1                   ), //i
+    .Q       (DM_gears_0_Q                    )  //o
+  );
+  ODDRX1F DM_gears_1 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (DM_gears_1_D0                   ), //i
+    .D1      (DM_gears_1_D1                   ), //i
+    .Q       (DM_gears_1_Q                    )  //o
+  );
+  ODDRX1F DQw_gears_0 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (DQw_gears_0_D0                  ), //i
+    .D1      (DQw_gears_0_D1                  ), //i
+    .Q       (DQw_gears_0_Q                   )  //o
+  );
+  ODDRX1F DQw_gears_1 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (DQw_gears_1_D0                  ), //i
+    .D1      (DQw_gears_1_D1                  ), //i
+    .Q       (DQw_gears_1_Q                   )  //o
+  );
+  ODDRX1F DQw_gears_2 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (DQw_gears_2_D0                  ), //i
+    .D1      (DQw_gears_2_D1                  ), //i
+    .Q       (DQw_gears_2_Q                   )  //o
+  );
+  ODDRX1F DQw_gears_3 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (DQw_gears_3_D0                  ), //i
+    .D1      (DQw_gears_3_D1                  ), //i
+    .Q       (DQw_gears_3_Q                   )  //o
+  );
+  ODDRX1F DQw_gears_4 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (DQw_gears_4_D0                  ), //i
+    .D1      (DQw_gears_4_D1                  ), //i
+    .Q       (DQw_gears_4_Q                   )  //o
+  );
+  ODDRX1F DQw_gears_5 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (DQw_gears_5_D0                  ), //i
+    .D1      (DQw_gears_5_D1                  ), //i
+    .Q       (DQw_gears_5_Q                   )  //o
+  );
+  ODDRX1F DQw_gears_6 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (DQw_gears_6_D0                  ), //i
+    .D1      (DQw_gears_6_D1                  ), //i
+    .Q       (DQw_gears_6_Q                   )  //o
+  );
+  ODDRX1F DQw_gears_7 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (DQw_gears_7_D0                  ), //i
+    .D1      (DQw_gears_7_D1                  ), //i
+    .Q       (DQw_gears_7_Q                   )  //o
+  );
+  ODDRX1F DQw_gears_8 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (DQw_gears_8_D0                  ), //i
+    .D1      (DQw_gears_8_D1                  ), //i
+    .Q       (DQw_gears_8_Q                   )  //o
+  );
+  ODDRX1F DQw_gears_9 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (DQw_gears_9_D0                  ), //i
+    .D1      (DQw_gears_9_D1                  ), //i
+    .Q       (DQw_gears_9_Q                   )  //o
+  );
+  ODDRX1F DQw_gears_10 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (DQw_gears_10_D0                 ), //i
+    .D1      (DQw_gears_10_D1                 ), //i
+    .Q       (DQw_gears_10_Q                  )  //o
+  );
+  ODDRX1F DQw_gears_11 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (DQw_gears_11_D0                 ), //i
+    .D1      (DQw_gears_11_D1                 ), //i
+    .Q       (DQw_gears_11_Q                  )  //o
+  );
+  ODDRX1F DQw_gears_12 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (DQw_gears_12_D0                 ), //i
+    .D1      (DQw_gears_12_D1                 ), //i
+    .Q       (DQw_gears_12_Q                  )  //o
+  );
+  ODDRX1F DQw_gears_13 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (DQw_gears_13_D0                 ), //i
+    .D1      (DQw_gears_13_D1                 ), //i
+    .Q       (DQw_gears_13_Q                  )  //o
+  );
+  ODDRX1F DQw_gears_14 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (DQw_gears_14_D0                 ), //i
+    .D1      (DQw_gears_14_D1                 ), //i
+    .Q       (DQw_gears_14_Q                  )  //o
+  );
+  ODDRX1F DQw_gears_15 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D0      (DQw_gears_15_D0                 ), //i
+    .D1      (DQw_gears_15_D1                 ), //i
+    .Q       (DQw_gears_15_Q                  )  //o
+  );
+  IDDRX1F DQr_gears_0 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D       (DQr_gears_0_D                   ), //i
+    .Q0      (DQr_gears_0_Q0                  ), //o
+    .Q1      (DQr_gears_0_Q1                  )  //o
+  );
+  IDDRX1F DQr_gears_1 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D       (DQr_gears_1_D                   ), //i
+    .Q0      (DQr_gears_1_Q0                  ), //o
+    .Q1      (DQr_gears_1_Q1                  )  //o
+  );
+  IDDRX1F DQr_gears_2 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D       (DQr_gears_2_D                   ), //i
+    .Q0      (DQr_gears_2_Q0                  ), //o
+    .Q1      (DQr_gears_2_Q1                  )  //o
+  );
+  IDDRX1F DQr_gears_3 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D       (DQr_gears_3_D                   ), //i
+    .Q0      (DQr_gears_3_Q0                  ), //o
+    .Q1      (DQr_gears_3_Q1                  )  //o
+  );
+  IDDRX1F DQr_gears_4 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D       (DQr_gears_4_D                   ), //i
+    .Q0      (DQr_gears_4_Q0                  ), //o
+    .Q1      (DQr_gears_4_Q1                  )  //o
+  );
+  IDDRX1F DQr_gears_5 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D       (DQr_gears_5_D                   ), //i
+    .Q0      (DQr_gears_5_Q0                  ), //o
+    .Q1      (DQr_gears_5_Q1                  )  //o
+  );
+  IDDRX1F DQr_gears_6 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D       (DQr_gears_6_D                   ), //i
+    .Q0      (DQr_gears_6_Q0                  ), //o
+    .Q1      (DQr_gears_6_Q1                  )  //o
+  );
+  IDDRX1F DQr_gears_7 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D       (DQr_gears_7_D                   ), //i
+    .Q0      (DQr_gears_7_Q0                  ), //o
+    .Q1      (DQr_gears_7_Q1                  )  //o
+  );
+  IDDRX1F DQr_gears_8 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D       (DQr_gears_8_D                   ), //i
+    .Q0      (DQr_gears_8_Q0                  ), //o
+    .Q1      (DQr_gears_8_Q1                  )  //o
+  );
+  IDDRX1F DQr_gears_9 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D       (DQr_gears_9_D                   ), //i
+    .Q0      (DQr_gears_9_Q0                  ), //o
+    .Q1      (DQr_gears_9_Q1                  )  //o
+  );
+  IDDRX1F DQr_gears_10 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D       (DQr_gears_10_D                  ), //i
+    .Q0      (DQr_gears_10_Q0                 ), //o
+    .Q1      (DQr_gears_10_Q1                 )  //o
+  );
+  IDDRX1F DQr_gears_11 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D       (DQr_gears_11_D                  ), //i
+    .Q0      (DQr_gears_11_Q0                 ), //o
+    .Q1      (DQr_gears_11_Q1                 )  //o
+  );
+  IDDRX1F DQr_gears_12 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D       (DQr_gears_12_D                  ), //i
+    .Q0      (DQr_gears_12_Q0                 ), //o
+    .Q1      (DQr_gears_12_Q1                 )  //o
+  );
+  IDDRX1F DQr_gears_13 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D       (DQr_gears_13_D                  ), //i
+    .Q0      (DQr_gears_13_Q0                 ), //o
+    .Q1      (DQr_gears_13_Q1                 )  //o
+  );
+  IDDRX1F DQr_gears_14 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D       (DQr_gears_14_D                  ), //i
+    .Q0      (DQr_gears_14_Q0                 ), //o
+    .Q1      (DQr_gears_14_Q1                 )  //o
+  );
+  IDDRX1F DQr_gears_15 (
+    .SCLK    (clkout_system                   ), //i
+    .RST     (systemCdCtrl_logic_outputReset  ), //i
+    .D       (DQr_gears_15_D                  ), //i
+    .Q0      (DQr_gears_15_Q0                 ), //o
+    .Q1      (DQr_gears_15_Q1                 )  //o
+  );
+  assign ADDR_iBits = io_ctrl_ADDR;
+  assign ADDR_gears_0_D0 = ADDR_iBits[0];
+  assign ADDR_gears_0_D1 = ADDR_iBits[0];
+  always @(*) begin
+    ADDR_oBits[0] = ADDR_gears_0_Q;
+    ADDR_oBits[1] = ADDR_gears_1_Q;
+    ADDR_oBits[2] = ADDR_gears_2_Q;
+    ADDR_oBits[3] = ADDR_gears_3_Q;
+    ADDR_oBits[4] = ADDR_gears_4_Q;
+    ADDR_oBits[5] = ADDR_gears_5_Q;
+    ADDR_oBits[6] = ADDR_gears_6_Q;
+    ADDR_oBits[7] = ADDR_gears_7_Q;
+    ADDR_oBits[8] = ADDR_gears_8_Q;
+    ADDR_oBits[9] = ADDR_gears_9_Q;
+    ADDR_oBits[10] = ADDR_gears_10_Q;
+    ADDR_oBits[11] = ADDR_gears_11_Q;
+    ADDR_oBits[12] = ADDR_gears_12_Q;
+  end
+
+  assign ADDR_gears_1_D0 = ADDR_iBits[1];
+  assign ADDR_gears_1_D1 = ADDR_iBits[1];
+  assign ADDR_gears_2_D0 = ADDR_iBits[2];
+  assign ADDR_gears_2_D1 = ADDR_iBits[2];
+  assign ADDR_gears_3_D0 = ADDR_iBits[3];
+  assign ADDR_gears_3_D1 = ADDR_iBits[3];
+  assign ADDR_gears_4_D0 = ADDR_iBits[4];
+  assign ADDR_gears_4_D1 = ADDR_iBits[4];
+  assign ADDR_gears_5_D0 = ADDR_iBits[5];
+  assign ADDR_gears_5_D1 = ADDR_iBits[5];
+  assign ADDR_gears_6_D0 = ADDR_iBits[6];
+  assign ADDR_gears_6_D1 = ADDR_iBits[6];
+  assign ADDR_gears_7_D0 = ADDR_iBits[7];
+  assign ADDR_gears_7_D1 = ADDR_iBits[7];
+  assign ADDR_gears_8_D0 = ADDR_iBits[8];
+  assign ADDR_gears_8_D1 = ADDR_iBits[8];
+  assign ADDR_gears_9_D0 = ADDR_iBits[9];
+  assign ADDR_gears_9_D1 = ADDR_iBits[9];
+  assign ADDR_gears_10_D0 = ADDR_iBits[10];
+  assign ADDR_gears_10_D1 = ADDR_iBits[10];
+  assign ADDR_gears_11_D0 = ADDR_iBits[11];
+  assign ADDR_gears_11_D1 = ADDR_iBits[11];
+  assign ADDR_gears_12_D0 = ADDR_iBits[12];
+  assign ADDR_gears_12_D1 = ADDR_iBits[12];
+  assign io_sdram_ADDR = ADDR_oBits;
+  assign BA_iBits = io_ctrl_BA;
+  assign BA_gears_0_D0 = BA_iBits[0];
+  assign BA_gears_0_D1 = BA_iBits[0];
+  always @(*) begin
+    BA_oBits[0] = BA_gears_0_Q;
+    BA_oBits[1] = BA_gears_1_Q;
+  end
+
+  assign BA_gears_1_D0 = BA_iBits[1];
+  assign BA_gears_1_D1 = BA_iBits[1];
+  assign io_sdram_BA = BA_oBits;
+  assign CASn_iBits_0 = io_ctrl_phases_0_CASn;
+  assign CASn_iBits_1 = io_ctrl_phases_1_CASn;
+  assign CASn_gears_0_D0 = CASn_iBits_0[0];
+  assign CASn_gears_0_D1 = CASn_iBits_1[0];
+  assign CASn_oBits[0] = CASn_gears_0_Q;
+  assign io_sdram_CASn = CASn_oBits[0];
+  assign CKE_iBits_0 = io_ctrl_phases_0_CKE;
+  assign CKE_iBits_1 = io_ctrl_phases_1_CKE;
+  assign CKE_gears_0_D0 = CKE_iBits_0[0];
+  assign CKE_gears_0_D1 = CKE_iBits_1[0];
+  assign CKE_oBits[0] = CKE_gears_0_Q;
+  assign io_sdram_CKE = CKE_oBits[0];
+  assign CSn_iBits_0 = io_ctrl_phases_0_CSn;
+  assign CSn_iBits_1 = io_ctrl_phases_1_CSn;
+  assign CSn_gears_0_D0 = CSn_iBits_0[0];
+  assign CSn_gears_0_D1 = CSn_iBits_1[0];
+  assign CSn_oBits[0] = CSn_gears_0_Q;
+  assign io_sdram_CSn = CSn_oBits[0];
+  assign RASn_iBits_0 = io_ctrl_phases_0_RASn;
+  assign RASn_iBits_1 = io_ctrl_phases_1_RASn;
+  assign RASn_gears_0_D0 = RASn_iBits_0[0];
+  assign RASn_gears_0_D1 = RASn_iBits_1[0];
+  assign RASn_oBits[0] = RASn_gears_0_Q;
+  assign io_sdram_RASn = RASn_oBits[0];
+  assign WEn_iBits_0 = io_ctrl_phases_0_WEn;
+  assign WEn_iBits_1 = io_ctrl_phases_1_WEn;
+  assign WEn_gears_0_D0 = WEn_iBits_0[0];
+  assign WEn_gears_0_D1 = WEn_iBits_1[0];
+  assign WEn_oBits[0] = WEn_gears_0_Q;
+  assign io_sdram_WEn = WEn_oBits[0];
+  assign DM_iBits_0 = io_ctrl_phases_0_DM_0;
+  assign DM_iBits_1 = io_ctrl_phases_1_DM_0;
+  assign DM_gears_0_D0 = DM_iBits_0[0];
+  assign DM_gears_0_D1 = DM_iBits_1[0];
+  always @(*) begin
+    DM_oBits[0] = DM_gears_0_Q;
+    DM_oBits[1] = DM_gears_1_Q;
+  end
+
+  assign DM_gears_1_D0 = DM_iBits_0[1];
+  assign DM_gears_1_D1 = DM_iBits_1[1];
+  assign io_sdram_DQM = DM_oBits;
+  assign DQw_iBits_0 = io_ctrl_phases_0_DQw_0;
+  assign DQw_iBits_1 = io_ctrl_phases_1_DQw_0;
+  assign DQw_gears_0_D0 = DQw_iBits_0[0];
+  assign DQw_gears_0_D1 = DQw_iBits_1[0];
+  always @(*) begin
+    DQw_oBits[0] = DQw_gears_0_Q;
+    DQw_oBits[1] = DQw_gears_1_Q;
+    DQw_oBits[2] = DQw_gears_2_Q;
+    DQw_oBits[3] = DQw_gears_3_Q;
+    DQw_oBits[4] = DQw_gears_4_Q;
+    DQw_oBits[5] = DQw_gears_5_Q;
+    DQw_oBits[6] = DQw_gears_6_Q;
+    DQw_oBits[7] = DQw_gears_7_Q;
+    DQw_oBits[8] = DQw_gears_8_Q;
+    DQw_oBits[9] = DQw_gears_9_Q;
+    DQw_oBits[10] = DQw_gears_10_Q;
+    DQw_oBits[11] = DQw_gears_11_Q;
+    DQw_oBits[12] = DQw_gears_12_Q;
+    DQw_oBits[13] = DQw_gears_13_Q;
+    DQw_oBits[14] = DQw_gears_14_Q;
+    DQw_oBits[15] = DQw_gears_15_Q;
+  end
+
+  assign DQw_gears_1_D0 = DQw_iBits_0[1];
+  assign DQw_gears_1_D1 = DQw_iBits_1[1];
+  assign DQw_gears_2_D0 = DQw_iBits_0[2];
+  assign DQw_gears_2_D1 = DQw_iBits_1[2];
+  assign DQw_gears_3_D0 = DQw_iBits_0[3];
+  assign DQw_gears_3_D1 = DQw_iBits_1[3];
+  assign DQw_gears_4_D0 = DQw_iBits_0[4];
+  assign DQw_gears_4_D1 = DQw_iBits_1[4];
+  assign DQw_gears_5_D0 = DQw_iBits_0[5];
+  assign DQw_gears_5_D1 = DQw_iBits_1[5];
+  assign DQw_gears_6_D0 = DQw_iBits_0[6];
+  assign DQw_gears_6_D1 = DQw_iBits_1[6];
+  assign DQw_gears_7_D0 = DQw_iBits_0[7];
+  assign DQw_gears_7_D1 = DQw_iBits_1[7];
+  assign DQw_gears_8_D0 = DQw_iBits_0[8];
+  assign DQw_gears_8_D1 = DQw_iBits_1[8];
+  assign DQw_gears_9_D0 = DQw_iBits_0[9];
+  assign DQw_gears_9_D1 = DQw_iBits_1[9];
+  assign DQw_gears_10_D0 = DQw_iBits_0[10];
+  assign DQw_gears_10_D1 = DQw_iBits_1[10];
+  assign DQw_gears_11_D0 = DQw_iBits_0[11];
+  assign DQw_gears_11_D1 = DQw_iBits_1[11];
+  assign DQw_gears_12_D0 = DQw_iBits_0[12];
+  assign DQw_gears_12_D1 = DQw_iBits_1[12];
+  assign DQw_gears_13_D0 = DQw_iBits_0[13];
+  assign DQw_gears_13_D1 = DQw_iBits_1[13];
+  assign DQw_gears_14_D0 = DQw_iBits_0[14];
+  assign DQw_gears_14_D1 = DQw_iBits_1[14];
+  assign DQw_gears_15_D0 = DQw_iBits_0[15];
+  assign DQw_gears_15_D1 = DQw_iBits_1[15];
+  assign io_sdram_DQ_write = DQw_oBits;
+  assign DQr_iBits = io_sdram_DQ_read;
+  assign DQr_gears_0_D = DQr_iBits[0];
+  always @(*) begin
+    DQr_oBits_0[0] = DQr_gears_0_Q0;
+    DQr_oBits_0[1] = DQr_gears_1_Q0;
+    DQr_oBits_0[2] = DQr_gears_2_Q0;
+    DQr_oBits_0[3] = DQr_gears_3_Q0;
+    DQr_oBits_0[4] = DQr_gears_4_Q0;
+    DQr_oBits_0[5] = DQr_gears_5_Q0;
+    DQr_oBits_0[6] = DQr_gears_6_Q0;
+    DQr_oBits_0[7] = DQr_gears_7_Q0;
+    DQr_oBits_0[8] = DQr_gears_8_Q0;
+    DQr_oBits_0[9] = DQr_gears_9_Q0;
+    DQr_oBits_0[10] = DQr_gears_10_Q0;
+    DQr_oBits_0[11] = DQr_gears_11_Q0;
+    DQr_oBits_0[12] = DQr_gears_12_Q0;
+    DQr_oBits_0[13] = DQr_gears_13_Q0;
+    DQr_oBits_0[14] = DQr_gears_14_Q0;
+    DQr_oBits_0[15] = DQr_gears_15_Q0;
+  end
+
+  always @(*) begin
+    DQr_oBits_1[0] = DQr_gears_0_Q1;
+    DQr_oBits_1[1] = DQr_gears_1_Q1;
+    DQr_oBits_1[2] = DQr_gears_2_Q1;
+    DQr_oBits_1[3] = DQr_gears_3_Q1;
+    DQr_oBits_1[4] = DQr_gears_4_Q1;
+    DQr_oBits_1[5] = DQr_gears_5_Q1;
+    DQr_oBits_1[6] = DQr_gears_6_Q1;
+    DQr_oBits_1[7] = DQr_gears_7_Q1;
+    DQr_oBits_1[8] = DQr_gears_8_Q1;
+    DQr_oBits_1[9] = DQr_gears_9_Q1;
+    DQr_oBits_1[10] = DQr_gears_10_Q1;
+    DQr_oBits_1[11] = DQr_gears_11_Q1;
+    DQr_oBits_1[12] = DQr_gears_12_Q1;
+    DQr_oBits_1[13] = DQr_gears_13_Q1;
+    DQr_oBits_1[14] = DQr_gears_14_Q1;
+    DQr_oBits_1[15] = DQr_gears_15_Q1;
+  end
+
+  assign DQr_gears_1_D = DQr_iBits[1];
+  assign DQr_gears_2_D = DQr_iBits[2];
+  assign DQr_gears_3_D = DQr_iBits[3];
+  assign DQr_gears_4_D = DQr_iBits[4];
+  assign DQr_gears_5_D = DQr_iBits[5];
+  assign DQr_gears_6_D = DQr_iBits[6];
+  assign DQr_gears_7_D = DQr_iBits[7];
+  assign DQr_gears_8_D = DQr_iBits[8];
+  assign DQr_gears_9_D = DQr_iBits[9];
+  assign DQr_gears_10_D = DQr_iBits[10];
+  assign DQr_gears_11_D = DQr_iBits[11];
+  assign DQr_gears_12_D = DQr_iBits[12];
+  assign DQr_gears_13_D = DQr_iBits[13];
+  assign DQr_gears_14_D = DQr_iBits[14];
+  assign DQr_gears_15_D = DQr_iBits[15];
+  assign DQrValue_0 = DQr_oBits_0;
+  assign DQrValue_1 = DQr_oBits_1;
+  assign io_ctrl_phases_0_DQr_0 = DQrBuffer;
+  assign io_ctrl_phases_1_DQr_0 = DQrValue_0;
+  assign delayedWriteEnable = (io_ctrl_writeEnable_delay_1 || io_ctrl_writeEnable);
+  assign io_sdram_DQ_writeEnable = dqWriteEnableReg;
+  assign io_ctrl_readValid = io_ctrl_readEnable;
+  always @(posedge clkout_system) begin
+    DQrBuffer <= DQrValue_1;
+    dqWriteEnable <= {delayedWriteEnable,{delayedWriteEnable,{delayedWriteEnable,{delayedWriteEnable,{delayedWriteEnable,{delayedWriteEnable,{delayedWriteEnable,{delayedWriteEnable,{delayedWriteEnable,{delayedWriteEnable,{_zz_dqWriteEnable,_zz_dqWriteEnable_1}}}}}}}}}}};
+    dqWriteEnableReg <= dqWriteEnable;
+  end
+
+  always @(posedge clkout_system) begin
+    if(systemCdCtrl_logic_outputReset) begin
+      io_ctrl_writeEnable_delay_1 <= 1'b0;
+    end else begin
+      io_ctrl_writeEnable_delay_1 <= io_ctrl_writeEnable;
+    end
+  end
+
+
+endmodule
+
+module StreamArbiter_1 (
+  input               io_inputs_0_valid,
+  output              io_inputs_0_ready,
+  input               io_inputs_0_payload_last,
+  input      [0:0]    io_inputs_0_payload_fragment_source,
+  input      [0:0]    io_inputs_0_payload_fragment_opcode,
+  input      [24:0]   io_inputs_0_payload_fragment_address,
+  input      [4:0]    io_inputs_0_payload_fragment_length,
+  input      [31:0]   io_inputs_0_payload_fragment_data,
+  input      [3:0]    io_inputs_0_payload_fragment_mask,
+  input      [0:0]    io_inputs_0_payload_fragment_context,
+  input               io_inputs_1_valid,
+  output              io_inputs_1_ready,
+  input               io_inputs_1_payload_last,
+  input      [0:0]    io_inputs_1_payload_fragment_source,
+  input      [0:0]    io_inputs_1_payload_fragment_opcode,
+  input      [24:0]   io_inputs_1_payload_fragment_address,
+  input      [4:0]    io_inputs_1_payload_fragment_length,
+  input      [31:0]   io_inputs_1_payload_fragment_data,
+  input      [3:0]    io_inputs_1_payload_fragment_mask,
+  input      [0:0]    io_inputs_1_payload_fragment_context,
+  output              io_output_valid,
+  input               io_output_ready,
+  output              io_output_payload_last,
+  output     [0:0]    io_output_payload_fragment_source,
+  output     [0:0]    io_output_payload_fragment_opcode,
+  output     [24:0]   io_output_payload_fragment_address,
+  output     [4:0]    io_output_payload_fragment_length,
+  output     [31:0]   io_output_payload_fragment_data,
+  output     [3:0]    io_output_payload_fragment_mask,
+  output     [0:0]    io_output_payload_fragment_context,
+  output     [0:0]    io_chosen,
+  output     [1:0]    io_chosenOH,
+  input               clkout_system,
+  input               systemCdCtrl_logic_outputReset
+);
+
+  wire       [1:0]    _zz_maskProposal_1_1;
+  wire       [1:0]    _zz_maskProposal_1_2;
+  reg                 locked;
+  wire                maskProposal_0;
+  wire                maskProposal_1;
+  reg                 maskLocked_0;
+  reg                 maskLocked_1;
+  wire                maskRouted_0;
+  wire                maskRouted_1;
+  wire       [1:0]    _zz_maskProposal_1;
+  wire                io_output_fire;
+  wire                when_Stream_l523;
+  wire                _zz_io_chosen;
+
+  assign _zz_maskProposal_1_1 = (_zz_maskProposal_1 & (~ _zz_maskProposal_1_2));
+  assign _zz_maskProposal_1_2 = (_zz_maskProposal_1 - 2'b01);
+  assign maskRouted_0 = (locked ? maskLocked_0 : maskProposal_0);
+  assign maskRouted_1 = (locked ? maskLocked_1 : maskProposal_1);
+  assign _zz_maskProposal_1 = {io_inputs_1_valid,io_inputs_0_valid};
+  assign maskProposal_0 = io_inputs_0_valid;
+  assign maskProposal_1 = _zz_maskProposal_1_1[1];
+  assign io_output_fire = (io_output_valid && io_output_ready);
+  assign when_Stream_l523 = (io_output_fire && io_output_payload_last);
+  assign io_output_valid = ((io_inputs_0_valid && maskRouted_0) || (io_inputs_1_valid && maskRouted_1));
+  assign io_output_payload_last = (maskRouted_0 ? io_inputs_0_payload_last : io_inputs_1_payload_last);
+  assign io_output_payload_fragment_source = (maskRouted_0 ? io_inputs_0_payload_fragment_source : io_inputs_1_payload_fragment_source);
+  assign io_output_payload_fragment_opcode = (maskRouted_0 ? io_inputs_0_payload_fragment_opcode : io_inputs_1_payload_fragment_opcode);
+  assign io_output_payload_fragment_address = (maskRouted_0 ? io_inputs_0_payload_fragment_address : io_inputs_1_payload_fragment_address);
+  assign io_output_payload_fragment_length = (maskRouted_0 ? io_inputs_0_payload_fragment_length : io_inputs_1_payload_fragment_length);
+  assign io_output_payload_fragment_data = (maskRouted_0 ? io_inputs_0_payload_fragment_data : io_inputs_1_payload_fragment_data);
+  assign io_output_payload_fragment_mask = (maskRouted_0 ? io_inputs_0_payload_fragment_mask : io_inputs_1_payload_fragment_mask);
+  assign io_output_payload_fragment_context = (maskRouted_0 ? io_inputs_0_payload_fragment_context : io_inputs_1_payload_fragment_context);
+  assign io_inputs_0_ready = (maskRouted_0 && io_output_ready);
+  assign io_inputs_1_ready = (maskRouted_1 && io_output_ready);
+  assign io_chosenOH = {maskRouted_1,maskRouted_0};
+  assign _zz_io_chosen = io_chosenOH[1];
+  assign io_chosen = _zz_io_chosen;
+  always @(posedge clkout_system) begin
+    if(systemCdCtrl_logic_outputReset) begin
+      locked <= 1'b0;
+    end else begin
+      if(io_output_valid) begin
+        locked <= 1'b1;
+      end
+      if(when_Stream_l523) begin
+        locked <= 1'b0;
+      end
+    end
+  end
+
+  always @(posedge clkout_system) begin
+    if(io_output_valid) begin
+      maskLocked_0 <= maskRouted_0;
+      maskLocked_1 <= maskRouted_1;
     end
   end
 
@@ -9788,7 +12121,7 @@ module StreamFifo (
   input               io_flush,
   output     [4:0]    io_occupancy,
   output     [4:0]    io_availability,
-  input               debugCdCtrl_external_clk,
+  input               clkout_system,
   input               systemCdCtrl_logic_outputReset
 );
 
@@ -9830,13 +12163,13 @@ module StreamFifo (
   assign _zz_logic_popPtr_valueNext = {3'd0, _zz_logic_popPtr_valueNext_1};
   assign _zz_io_availability = (logic_popPtr_value - logic_pushPtr_value);
   assign _zz_io_pop_payload = 1'b1;
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(_zz_io_pop_payload) begin
       _zz_logic_ram_port0 <= logic_ram[logic_popPtr_valueNext];
     end
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(_zz_1) begin
       logic_ram[logic_pushPtr_value] <= io_push_payload;
     end
@@ -9907,7 +12240,7 @@ module StreamFifo (
   assign logic_ptrDif = (logic_pushPtr_value - logic_popPtr_value);
   assign io_occupancy = {(logic_risingOccupancy && logic_ptrMatch),logic_ptrDif};
   assign io_availability = {((! logic_risingOccupancy) && logic_ptrMatch),_zz_io_availability};
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(systemCdCtrl_logic_outputReset) begin
       logic_pushPtr_value <= 4'b0000;
       logic_popPtr_value <= 4'b0000;
@@ -9945,7 +12278,7 @@ module UartCtrl (
   output              io_readError,
   input               io_writeBreak,
   output              io_readBreak,
-  input               debugCdCtrl_external_clk,
+  input               clkout_system,
   input               systemCdCtrl_logic_outputReset
 );
   localparam UartStopType_ONE = 1'd0;
@@ -9984,7 +12317,7 @@ module UartCtrl (
     .io_cts                            (1'b0                             ), //i
     .io_txd                            (tx_io_txd                        ), //o
     .io_break                          (io_writeBreak                    ), //i
-    .debugCdCtrl_external_clk          (debugCdCtrl_external_clk         ), //i
+    .clkout_system                     (clkout_system                    ), //i
     .systemCdCtrl_logic_outputReset    (systemCdCtrl_logic_outputReset   )  //i
   );
   UartCtrlRx rx (
@@ -9999,7 +12332,7 @@ module UartCtrl (
     .io_rts                            (rx_io_rts                        ), //o
     .io_error                          (rx_io_error                      ), //o
     .io_break                          (rx_io_break                      ), //o
-    .debugCdCtrl_external_clk          (debugCdCtrl_external_clk         ), //i
+    .clkout_system                     (clkout_system                    ), //i
     .systemCdCtrl_logic_outputReset    (systemCdCtrl_logic_outputReset   )  //i
   );
   `ifndef SYNTHESIS
@@ -10042,7 +12375,7 @@ module UartCtrl (
   assign io_uart_txd = tx_io_txd;
   assign io_readError = rx_io_error;
   assign io_readBreak = rx_io_break;
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(systemCdCtrl_logic_outputReset) begin
       clockDivider_counter <= 12'h0;
       clockDivider_tickReg <= 1'b0;
@@ -10053,6 +12386,835 @@ module UartCtrl (
         clockDivider_counter <= io_config_clockDivider;
       end
     end
+  end
+
+
+endmodule
+
+module Core (
+  input      [1:0]    io_config_readLatency,
+  input      [3:0]    io_config_RAS,
+  input      [3:0]    io_config_RP,
+  input      [3:0]    io_config_WR,
+  input      [3:0]    io_config_RCD,
+  input      [3:0]    io_config_WTR,
+  input      [3:0]    io_config_RTP,
+  input      [3:0]    io_config_RRD,
+  input      [3:0]    io_config_RTW,
+  input      [6:0]    io_config_RFC,
+  input      [15:0]   io_config_REF,
+  input               io_config_autoRefresh,
+  input               io_config_noActive,
+  input      [0:0]    io_config_phase_active,
+  input      [0:0]    io_config_phase_precharge,
+  input      [0:0]    io_config_phase_read,
+  input      [0:0]    io_config_phase_write,
+  input               io_soft_cmd_valid,
+  input      [12:0]   io_soft_cmd_payload_ADDR,
+  input      [1:0]    io_soft_cmd_payload_BA,
+  input               io_soft_cmd_payload_CASn,
+  input               io_soft_cmd_payload_CSn,
+  input               io_soft_cmd_payload_RASn,
+  input               io_soft_cmd_payload_WEn,
+  input               io_soft_CKE,
+  input               io_ports_0_cmd_valid,
+  output              io_ports_0_cmd_ready,
+  input               io_ports_0_cmd_payload_write,
+  input      [24:0]   io_ports_0_cmd_payload_address,
+  input      [3:0]    io_ports_0_cmd_payload_context,
+  input               io_ports_0_cmd_payload_burstLast,
+  input      [3:0]    io_ports_0_cmd_payload_length,
+  input               io_ports_0_writeData_valid,
+  output              io_ports_0_writeData_ready,
+  input      [31:0]   io_ports_0_writeData_payload_data,
+  input      [3:0]    io_ports_0_writeData_payload_mask,
+  input      [0:0]    io_ports_0_writeDataTocken,
+  output              io_ports_0_rsp_valid,
+  input               io_ports_0_rsp_ready,
+  output              io_ports_0_rsp_payload_last,
+  output     [31:0]   io_ports_0_rsp_payload_fragment_data,
+  output     [3:0]    io_ports_0_rsp_payload_fragment_context,
+  input      [0:0]    io_ports_0_writeDataAdded,
+  output              io_phy_phases_0_CASn,
+  output              io_phy_phases_0_CKE,
+  output              io_phy_phases_0_CSn,
+  output              io_phy_phases_0_RASn,
+  output              io_phy_phases_0_WEn,
+  output     [1:0]    io_phy_phases_0_DM_0,
+  output     [15:0]   io_phy_phases_0_DQw_0,
+  input      [15:0]   io_phy_phases_0_DQr_0,
+  output              io_phy_phases_1_CASn,
+  output              io_phy_phases_1_CKE,
+  output              io_phy_phases_1_CSn,
+  output              io_phy_phases_1_RASn,
+  output              io_phy_phases_1_WEn,
+  output     [1:0]    io_phy_phases_1_DM_0,
+  output     [15:0]   io_phy_phases_1_DQw_0,
+  input      [15:0]   io_phy_phases_1_DQr_0,
+  output     [12:0]   io_phy_ADDR,
+  output     [1:0]    io_phy_BA,
+  output              io_phy_writeEnable,
+  output              io_phy_readEnable,
+  input               io_phy_readValid,
+  output              io_refresh,
+  input               clkout_system,
+  input               systemCdCtrl_logic_outputReset
+);
+
+  wire                refresher_1_io_refresh_valid;
+  wire                tasker_1_io_refresh_ready;
+  wire                tasker_1_io_inputs_0_ready;
+  wire                tasker_1_io_output_ports_0_read;
+  wire                tasker_1_io_output_ports_0_write;
+  wire                tasker_1_io_output_ports_0_active;
+  wire                tasker_1_io_output_ports_0_precharge;
+  wire                tasker_1_io_output_ports_0_last;
+  wire       [0:0]    tasker_1_io_output_ports_0_address_byte;
+  wire       [8:0]    tasker_1_io_output_ports_0_address_column;
+  wire       [1:0]    tasker_1_io_output_ports_0_address_bank;
+  wire       [12:0]   tasker_1_io_output_ports_0_address_row;
+  wire       [3:0]    tasker_1_io_output_ports_0_context;
+  wire                tasker_1_io_output_ports_1_read;
+  wire                tasker_1_io_output_ports_1_write;
+  wire                tasker_1_io_output_ports_1_active;
+  wire                tasker_1_io_output_ports_1_precharge;
+  wire                tasker_1_io_output_ports_1_last;
+  wire       [0:0]    tasker_1_io_output_ports_1_address_byte;
+  wire       [8:0]    tasker_1_io_output_ports_1_address_column;
+  wire       [1:0]    tasker_1_io_output_ports_1_address_bank;
+  wire       [12:0]   tasker_1_io_output_ports_1_address_row;
+  wire       [3:0]    tasker_1_io_output_ports_1_context;
+  wire                tasker_1_io_output_prechargeAll;
+  wire                tasker_1_io_output_refresh;
+  wire                backend_1_io_writeDatas_0_ready;
+  wire                backend_1_io_phy_phases_0_CASn;
+  wire                backend_1_io_phy_phases_0_CKE;
+  wire                backend_1_io_phy_phases_0_CSn;
+  wire       [1:0]    backend_1_io_phy_phases_0_DM_0;
+  wire                backend_1_io_phy_phases_0_RASn;
+  wire                backend_1_io_phy_phases_0_WEn;
+  wire       [15:0]   backend_1_io_phy_phases_0_DQw_0;
+  wire                backend_1_io_phy_phases_1_CASn;
+  wire                backend_1_io_phy_phases_1_CKE;
+  wire                backend_1_io_phy_phases_1_CSn;
+  wire       [1:0]    backend_1_io_phy_phases_1_DM_0;
+  wire                backend_1_io_phy_phases_1_RASn;
+  wire                backend_1_io_phy_phases_1_WEn;
+  wire       [15:0]   backend_1_io_phy_phases_1_DQw_0;
+  wire       [12:0]   backend_1_io_phy_ADDR;
+  wire       [1:0]    backend_1_io_phy_BA;
+  wire                backend_1_io_phy_readEnable;
+  wire                backend_1_io_phy_writeEnable;
+  wire                backend_1_io_outputs_0_valid;
+  wire                backend_1_io_outputs_0_payload_last;
+  wire       [31:0]   backend_1_io_outputs_0_payload_fragment_data;
+  wire       [3:0]    backend_1_io_outputs_0_payload_fragment_context;
+  reg        [1:0]    config_readLatency = 2'b00;
+  reg        [3:0]    config_RAS = 4'b0000;
+  reg        [3:0]    config_RP = 4'b0000;
+  reg        [3:0]    config_WR = 4'b0000;
+  reg        [3:0]    config_RCD = 4'b0000;
+  reg        [3:0]    config_WTR = 4'b0000;
+  reg        [3:0]    config_RTP = 4'b0000;
+  reg        [3:0]    config_RRD = 4'b0000;
+  reg        [3:0]    config_RTW = 4'b0000;
+  reg        [6:0]    config_RFC = 7'b0000000;
+  reg        [15:0]   config_REF = 16'b0000000000000000;
+  reg                 config_autoRefresh = 0;
+  reg                 config_noActive = 0;
+  reg        [0:0]    config_phase_active = 1'b0;
+  reg        [0:0]    config_phase_precharge = 1'b0;
+  reg        [0:0]    config_phase_read = 1'b0;
+  reg        [0:0]    config_phase_write = 1'b0;
+  reg                 tasker_1_io_output_stage_ports_0_read;
+  reg                 tasker_1_io_output_stage_ports_0_write;
+  reg                 tasker_1_io_output_stage_ports_0_active;
+  reg                 tasker_1_io_output_stage_ports_0_precharge;
+  reg                 tasker_1_io_output_stage_ports_0_last;
+  reg        [0:0]    tasker_1_io_output_stage_ports_0_address_byte;
+  reg        [8:0]    tasker_1_io_output_stage_ports_0_address_column;
+  reg        [1:0]    tasker_1_io_output_stage_ports_0_address_bank;
+  reg        [12:0]   tasker_1_io_output_stage_ports_0_address_row;
+  reg        [3:0]    tasker_1_io_output_stage_ports_0_context;
+  reg                 tasker_1_io_output_stage_ports_1_read;
+  reg                 tasker_1_io_output_stage_ports_1_write;
+  reg                 tasker_1_io_output_stage_ports_1_active;
+  reg                 tasker_1_io_output_stage_ports_1_precharge;
+  reg                 tasker_1_io_output_stage_ports_1_last;
+  reg        [0:0]    tasker_1_io_output_stage_ports_1_address_byte;
+  reg        [8:0]    tasker_1_io_output_stage_ports_1_address_column;
+  reg        [1:0]    tasker_1_io_output_stage_ports_1_address_bank;
+  reg        [12:0]   tasker_1_io_output_stage_ports_1_address_row;
+  reg        [3:0]    tasker_1_io_output_stage_ports_1_context;
+  reg                 tasker_1_io_output_stage_prechargeAll;
+  reg                 tasker_1_io_output_stage_refresh;
+
+  Refresher refresher_1 (
+    .io_config_readLatency             (config_readLatency[1:0]         ), //i
+    .io_config_RAS                     (config_RAS[3:0]                 ), //i
+    .io_config_RP                      (config_RP[3:0]                  ), //i
+    .io_config_WR                      (config_WR[3:0]                  ), //i
+    .io_config_RCD                     (config_RCD[3:0]                 ), //i
+    .io_config_WTR                     (config_WTR[3:0]                 ), //i
+    .io_config_RTP                     (config_RTP[3:0]                 ), //i
+    .io_config_RRD                     (config_RRD[3:0]                 ), //i
+    .io_config_RTW                     (config_RTW[3:0]                 ), //i
+    .io_config_RFC                     (config_RFC[6:0]                 ), //i
+    .io_config_REF                     (config_REF[15:0]                ), //i
+    .io_config_autoRefresh             (config_autoRefresh              ), //i
+    .io_config_noActive                (config_noActive                 ), //i
+    .io_config_phase_active            (config_phase_active             ), //i
+    .io_config_phase_precharge         (config_phase_precharge          ), //i
+    .io_config_phase_read              (config_phase_read               ), //i
+    .io_config_phase_write             (config_phase_write              ), //i
+    .io_refresh_valid                  (refresher_1_io_refresh_valid    ), //o
+    .io_refresh_ready                  (tasker_1_io_refresh_ready       ), //i
+    .clkout_system                     (clkout_system                   ), //i
+    .systemCdCtrl_logic_outputReset    (systemCdCtrl_logic_outputReset  )  //i
+  );
+  Tasker tasker_1 (
+    .io_config_readLatency               (config_readLatency[1:0]                         ), //i
+    .io_config_RAS                       (config_RAS[3:0]                                 ), //i
+    .io_config_RP                        (config_RP[3:0]                                  ), //i
+    .io_config_WR                        (config_WR[3:0]                                  ), //i
+    .io_config_RCD                       (config_RCD[3:0]                                 ), //i
+    .io_config_WTR                       (config_WTR[3:0]                                 ), //i
+    .io_config_RTP                       (config_RTP[3:0]                                 ), //i
+    .io_config_RRD                       (config_RRD[3:0]                                 ), //i
+    .io_config_RTW                       (config_RTW[3:0]                                 ), //i
+    .io_config_RFC                       (config_RFC[6:0]                                 ), //i
+    .io_config_REF                       (config_REF[15:0]                                ), //i
+    .io_config_autoRefresh               (config_autoRefresh                              ), //i
+    .io_config_noActive                  (config_noActive                                 ), //i
+    .io_config_phase_active              (config_phase_active                             ), //i
+    .io_config_phase_precharge           (config_phase_precharge                          ), //i
+    .io_config_phase_read                (config_phase_read                               ), //i
+    .io_config_phase_write               (config_phase_write                              ), //i
+    .io_refresh_valid                    (refresher_1_io_refresh_valid                    ), //i
+    .io_refresh_ready                    (tasker_1_io_refresh_ready                       ), //o
+    .io_inputs_0_valid                   (io_ports_0_cmd_valid                            ), //i
+    .io_inputs_0_ready                   (tasker_1_io_inputs_0_ready                      ), //o
+    .io_inputs_0_payload_write           (io_ports_0_cmd_payload_write                    ), //i
+    .io_inputs_0_payload_address         (io_ports_0_cmd_payload_address[24:0]            ), //i
+    .io_inputs_0_payload_context         (io_ports_0_cmd_payload_context[3:0]             ), //i
+    .io_inputs_0_payload_burstLast       (io_ports_0_cmd_payload_burstLast                ), //i
+    .io_inputs_0_payload_length          (io_ports_0_cmd_payload_length[3:0]              ), //i
+    .io_writeDataTockens_0               (io_ports_0_writeDataTocken                      ), //i
+    .io_output_ports_0_read              (tasker_1_io_output_ports_0_read                 ), //o
+    .io_output_ports_0_write             (tasker_1_io_output_ports_0_write                ), //o
+    .io_output_ports_0_active            (tasker_1_io_output_ports_0_active               ), //o
+    .io_output_ports_0_precharge         (tasker_1_io_output_ports_0_precharge            ), //o
+    .io_output_ports_0_last              (tasker_1_io_output_ports_0_last                 ), //o
+    .io_output_ports_0_address_byte      (tasker_1_io_output_ports_0_address_byte         ), //o
+    .io_output_ports_0_address_column    (tasker_1_io_output_ports_0_address_column[8:0]  ), //o
+    .io_output_ports_0_address_bank      (tasker_1_io_output_ports_0_address_bank[1:0]    ), //o
+    .io_output_ports_0_address_row       (tasker_1_io_output_ports_0_address_row[12:0]    ), //o
+    .io_output_ports_0_context           (tasker_1_io_output_ports_0_context[3:0]         ), //o
+    .io_output_ports_1_read              (tasker_1_io_output_ports_1_read                 ), //o
+    .io_output_ports_1_write             (tasker_1_io_output_ports_1_write                ), //o
+    .io_output_ports_1_active            (tasker_1_io_output_ports_1_active               ), //o
+    .io_output_ports_1_precharge         (tasker_1_io_output_ports_1_precharge            ), //o
+    .io_output_ports_1_last              (tasker_1_io_output_ports_1_last                 ), //o
+    .io_output_ports_1_address_byte      (tasker_1_io_output_ports_1_address_byte         ), //o
+    .io_output_ports_1_address_column    (tasker_1_io_output_ports_1_address_column[8:0]  ), //o
+    .io_output_ports_1_address_bank      (tasker_1_io_output_ports_1_address_bank[1:0]    ), //o
+    .io_output_ports_1_address_row       (tasker_1_io_output_ports_1_address_row[12:0]    ), //o
+    .io_output_ports_1_context           (tasker_1_io_output_ports_1_context[3:0]         ), //o
+    .io_output_prechargeAll              (tasker_1_io_output_prechargeAll                 ), //o
+    .io_output_refresh                   (tasker_1_io_output_refresh                      ), //o
+    .clkout_system                       (clkout_system                                   ), //i
+    .systemCdCtrl_logic_outputReset      (systemCdCtrl_logic_outputReset                  )  //i
+  );
+  Backend backend_1 (
+    .io_config_readLatency                    (config_readLatency[1:0]                               ), //i
+    .io_config_RAS                            (config_RAS[3:0]                                       ), //i
+    .io_config_RP                             (config_RP[3:0]                                        ), //i
+    .io_config_WR                             (config_WR[3:0]                                        ), //i
+    .io_config_RCD                            (config_RCD[3:0]                                       ), //i
+    .io_config_WTR                            (config_WTR[3:0]                                       ), //i
+    .io_config_RTP                            (config_RTP[3:0]                                       ), //i
+    .io_config_RRD                            (config_RRD[3:0]                                       ), //i
+    .io_config_RTW                            (config_RTW[3:0]                                       ), //i
+    .io_config_RFC                            (config_RFC[6:0]                                       ), //i
+    .io_config_REF                            (config_REF[15:0]                                      ), //i
+    .io_config_autoRefresh                    (config_autoRefresh                                    ), //i
+    .io_config_noActive                       (config_noActive                                       ), //i
+    .io_config_phase_active                   (config_phase_active                                   ), //i
+    .io_config_phase_precharge                (config_phase_precharge                                ), //i
+    .io_config_phase_read                     (config_phase_read                                     ), //i
+    .io_config_phase_write                    (config_phase_write                                    ), //i
+    .io_input_ports_0_read                    (tasker_1_io_output_stage_ports_0_read                 ), //i
+    .io_input_ports_0_write                   (tasker_1_io_output_stage_ports_0_write                ), //i
+    .io_input_ports_0_active                  (tasker_1_io_output_stage_ports_0_active               ), //i
+    .io_input_ports_0_precharge               (tasker_1_io_output_stage_ports_0_precharge            ), //i
+    .io_input_ports_0_last                    (tasker_1_io_output_stage_ports_0_last                 ), //i
+    .io_input_ports_0_address_byte            (tasker_1_io_output_stage_ports_0_address_byte         ), //i
+    .io_input_ports_0_address_column          (tasker_1_io_output_stage_ports_0_address_column[8:0]  ), //i
+    .io_input_ports_0_address_bank            (tasker_1_io_output_stage_ports_0_address_bank[1:0]    ), //i
+    .io_input_ports_0_address_row             (tasker_1_io_output_stage_ports_0_address_row[12:0]    ), //i
+    .io_input_ports_0_context                 (tasker_1_io_output_stage_ports_0_context[3:0]         ), //i
+    .io_input_ports_1_read                    (tasker_1_io_output_stage_ports_1_read                 ), //i
+    .io_input_ports_1_write                   (tasker_1_io_output_stage_ports_1_write                ), //i
+    .io_input_ports_1_active                  (tasker_1_io_output_stage_ports_1_active               ), //i
+    .io_input_ports_1_precharge               (tasker_1_io_output_stage_ports_1_precharge            ), //i
+    .io_input_ports_1_last                    (tasker_1_io_output_stage_ports_1_last                 ), //i
+    .io_input_ports_1_address_byte            (tasker_1_io_output_stage_ports_1_address_byte         ), //i
+    .io_input_ports_1_address_column          (tasker_1_io_output_stage_ports_1_address_column[8:0]  ), //i
+    .io_input_ports_1_address_bank            (tasker_1_io_output_stage_ports_1_address_bank[1:0]    ), //i
+    .io_input_ports_1_address_row             (tasker_1_io_output_stage_ports_1_address_row[12:0]    ), //i
+    .io_input_ports_1_context                 (tasker_1_io_output_stage_ports_1_context[3:0]         ), //i
+    .io_input_prechargeAll                    (tasker_1_io_output_stage_prechargeAll                 ), //i
+    .io_input_refresh                         (tasker_1_io_output_stage_refresh                      ), //i
+    .io_writeDatas_0_valid                    (io_ports_0_writeData_valid                            ), //i
+    .io_writeDatas_0_ready                    (backend_1_io_writeDatas_0_ready                       ), //o
+    .io_writeDatas_0_payload_data             (io_ports_0_writeData_payload_data[31:0]               ), //i
+    .io_writeDatas_0_payload_mask             (io_ports_0_writeData_payload_mask[3:0]                ), //i
+    .io_phy_phases_0_CASn                     (backend_1_io_phy_phases_0_CASn                        ), //o
+    .io_phy_phases_0_CKE                      (backend_1_io_phy_phases_0_CKE                         ), //o
+    .io_phy_phases_0_CSn                      (backend_1_io_phy_phases_0_CSn                         ), //o
+    .io_phy_phases_0_RASn                     (backend_1_io_phy_phases_0_RASn                        ), //o
+    .io_phy_phases_0_WEn                      (backend_1_io_phy_phases_0_WEn                         ), //o
+    .io_phy_phases_0_DM_0                     (backend_1_io_phy_phases_0_DM_0[1:0]                   ), //o
+    .io_phy_phases_0_DQw_0                    (backend_1_io_phy_phases_0_DQw_0[15:0]                 ), //o
+    .io_phy_phases_0_DQr_0                    (io_phy_phases_0_DQr_0[15:0]                           ), //i
+    .io_phy_phases_1_CASn                     (backend_1_io_phy_phases_1_CASn                        ), //o
+    .io_phy_phases_1_CKE                      (backend_1_io_phy_phases_1_CKE                         ), //o
+    .io_phy_phases_1_CSn                      (backend_1_io_phy_phases_1_CSn                         ), //o
+    .io_phy_phases_1_RASn                     (backend_1_io_phy_phases_1_RASn                        ), //o
+    .io_phy_phases_1_WEn                      (backend_1_io_phy_phases_1_WEn                         ), //o
+    .io_phy_phases_1_DM_0                     (backend_1_io_phy_phases_1_DM_0[1:0]                   ), //o
+    .io_phy_phases_1_DQw_0                    (backend_1_io_phy_phases_1_DQw_0[15:0]                 ), //o
+    .io_phy_phases_1_DQr_0                    (io_phy_phases_1_DQr_0[15:0]                           ), //i
+    .io_phy_ADDR                              (backend_1_io_phy_ADDR[12:0]                           ), //o
+    .io_phy_BA                                (backend_1_io_phy_BA[1:0]                              ), //o
+    .io_phy_writeEnable                       (backend_1_io_phy_writeEnable                          ), //o
+    .io_phy_readEnable                        (backend_1_io_phy_readEnable                           ), //o
+    .io_phy_readValid                         (io_phy_readValid                                      ), //i
+    .io_outputs_0_valid                       (backend_1_io_outputs_0_valid                          ), //o
+    .io_outputs_0_payload_last                (backend_1_io_outputs_0_payload_last                   ), //o
+    .io_outputs_0_payload_fragment_data       (backend_1_io_outputs_0_payload_fragment_data[31:0]    ), //o
+    .io_outputs_0_payload_fragment_context    (backend_1_io_outputs_0_payload_fragment_context[3:0]  ), //o
+    .io_soft_cmd_valid                        (io_soft_cmd_valid                                     ), //i
+    .io_soft_cmd_payload_ADDR                 (io_soft_cmd_payload_ADDR[12:0]                        ), //i
+    .io_soft_cmd_payload_BA                   (io_soft_cmd_payload_BA[1:0]                           ), //i
+    .io_soft_cmd_payload_CASn                 (io_soft_cmd_payload_CASn                              ), //i
+    .io_soft_cmd_payload_CSn                  (io_soft_cmd_payload_CSn                               ), //i
+    .io_soft_cmd_payload_RASn                 (io_soft_cmd_payload_RASn                              ), //i
+    .io_soft_cmd_payload_WEn                  (io_soft_cmd_payload_WEn                               ), //i
+    .io_soft_CKE                              (io_soft_CKE                                           ), //i
+    .clkout_system                            (clkout_system                                         ), //i
+    .systemCdCtrl_logic_outputReset           (systemCdCtrl_logic_outputReset                        )  //i
+  );
+  assign io_refresh = refresher_1_io_refresh_valid;
+  assign io_ports_0_cmd_ready = tasker_1_io_inputs_0_ready;
+  assign io_ports_0_writeData_ready = backend_1_io_writeDatas_0_ready;
+  assign io_phy_phases_0_CASn = backend_1_io_phy_phases_0_CASn;
+  assign io_phy_phases_0_CKE = backend_1_io_phy_phases_0_CKE;
+  assign io_phy_phases_0_CSn = backend_1_io_phy_phases_0_CSn;
+  assign io_phy_phases_0_RASn = backend_1_io_phy_phases_0_RASn;
+  assign io_phy_phases_0_WEn = backend_1_io_phy_phases_0_WEn;
+  assign io_phy_phases_0_DM_0 = backend_1_io_phy_phases_0_DM_0;
+  assign io_phy_phases_0_DQw_0 = backend_1_io_phy_phases_0_DQw_0;
+  assign io_phy_phases_1_CASn = backend_1_io_phy_phases_1_CASn;
+  assign io_phy_phases_1_CKE = backend_1_io_phy_phases_1_CKE;
+  assign io_phy_phases_1_CSn = backend_1_io_phy_phases_1_CSn;
+  assign io_phy_phases_1_RASn = backend_1_io_phy_phases_1_RASn;
+  assign io_phy_phases_1_WEn = backend_1_io_phy_phases_1_WEn;
+  assign io_phy_phases_1_DM_0 = backend_1_io_phy_phases_1_DM_0;
+  assign io_phy_phases_1_DQw_0 = backend_1_io_phy_phases_1_DQw_0;
+  assign io_phy_ADDR = backend_1_io_phy_ADDR;
+  assign io_phy_BA = backend_1_io_phy_BA;
+  assign io_phy_writeEnable = backend_1_io_phy_writeEnable;
+  assign io_phy_readEnable = backend_1_io_phy_readEnable;
+  assign io_ports_0_rsp_valid = backend_1_io_outputs_0_valid;
+  assign io_ports_0_rsp_payload_last = backend_1_io_outputs_0_payload_last;
+  assign io_ports_0_rsp_payload_fragment_data = backend_1_io_outputs_0_payload_fragment_data;
+  assign io_ports_0_rsp_payload_fragment_context = backend_1_io_outputs_0_payload_fragment_context;
+  always @(posedge clkout_system) begin
+    config_readLatency <= io_config_readLatency;
+    config_RAS <= io_config_RAS;
+    config_RP <= io_config_RP;
+    config_WR <= io_config_WR;
+    config_RCD <= io_config_RCD;
+    config_WTR <= io_config_WTR;
+    config_RTP <= io_config_RTP;
+    config_RRD <= io_config_RRD;
+    config_RTW <= io_config_RTW;
+    config_RFC <= io_config_RFC;
+    config_REF <= io_config_REF;
+    config_autoRefresh <= io_config_autoRefresh;
+    config_noActive <= io_config_noActive;
+    config_phase_active <= io_config_phase_active;
+    config_phase_precharge <= io_config_phase_precharge;
+    config_phase_read <= io_config_phase_read;
+    config_phase_write <= io_config_phase_write;
+    tasker_1_io_output_stage_ports_0_last <= tasker_1_io_output_ports_0_last;
+    tasker_1_io_output_stage_ports_0_address_byte <= tasker_1_io_output_ports_0_address_byte;
+    tasker_1_io_output_stage_ports_0_address_column <= tasker_1_io_output_ports_0_address_column;
+    tasker_1_io_output_stage_ports_0_address_bank <= tasker_1_io_output_ports_0_address_bank;
+    tasker_1_io_output_stage_ports_0_address_row <= tasker_1_io_output_ports_0_address_row;
+    tasker_1_io_output_stage_ports_0_context <= tasker_1_io_output_ports_0_context;
+    tasker_1_io_output_stage_ports_1_last <= tasker_1_io_output_ports_1_last;
+    tasker_1_io_output_stage_ports_1_address_byte <= tasker_1_io_output_ports_1_address_byte;
+    tasker_1_io_output_stage_ports_1_address_column <= tasker_1_io_output_ports_1_address_column;
+    tasker_1_io_output_stage_ports_1_address_bank <= tasker_1_io_output_ports_1_address_bank;
+    tasker_1_io_output_stage_ports_1_address_row <= tasker_1_io_output_ports_1_address_row;
+    tasker_1_io_output_stage_ports_1_context <= tasker_1_io_output_ports_1_context;
+  end
+
+  always @(posedge clkout_system) begin
+    if(systemCdCtrl_logic_outputReset) begin
+      tasker_1_io_output_stage_ports_0_read <= 1'b0;
+      tasker_1_io_output_stage_ports_0_write <= 1'b0;
+      tasker_1_io_output_stage_ports_0_precharge <= 1'b0;
+      tasker_1_io_output_stage_ports_0_active <= 1'b0;
+      tasker_1_io_output_stage_ports_1_read <= 1'b0;
+      tasker_1_io_output_stage_ports_1_write <= 1'b0;
+      tasker_1_io_output_stage_ports_1_precharge <= 1'b0;
+      tasker_1_io_output_stage_ports_1_active <= 1'b0;
+      tasker_1_io_output_stage_prechargeAll <= 1'b0;
+      tasker_1_io_output_stage_refresh <= 1'b0;
+    end else begin
+      tasker_1_io_output_stage_ports_0_read <= tasker_1_io_output_ports_0_read;
+      tasker_1_io_output_stage_ports_0_write <= tasker_1_io_output_ports_0_write;
+      tasker_1_io_output_stage_ports_0_active <= tasker_1_io_output_ports_0_active;
+      tasker_1_io_output_stage_ports_0_precharge <= tasker_1_io_output_ports_0_precharge;
+      tasker_1_io_output_stage_ports_1_read <= tasker_1_io_output_ports_1_read;
+      tasker_1_io_output_stage_ports_1_write <= tasker_1_io_output_ports_1_write;
+      tasker_1_io_output_stage_ports_1_active <= tasker_1_io_output_ports_1_active;
+      tasker_1_io_output_stage_ports_1_precharge <= tasker_1_io_output_ports_1_precharge;
+      tasker_1_io_output_stage_prechargeAll <= tasker_1_io_output_prechargeAll;
+      tasker_1_io_output_stage_refresh <= tasker_1_io_output_refresh;
+    end
+  end
+
+
+endmodule
+
+module BmbAdapter (
+  input               io_refresh,
+  input               io_input_cmd_valid,
+  output              io_input_cmd_ready,
+  input               io_input_cmd_payload_last,
+  input      [0:0]    io_input_cmd_payload_fragment_source,
+  input      [0:0]    io_input_cmd_payload_fragment_opcode,
+  input      [24:0]   io_input_cmd_payload_fragment_address,
+  input      [4:0]    io_input_cmd_payload_fragment_length,
+  input      [31:0]   io_input_cmd_payload_fragment_data,
+  input      [3:0]    io_input_cmd_payload_fragment_mask,
+  input      [0:0]    io_input_cmd_payload_fragment_context,
+  output              io_input_rsp_valid,
+  input               io_input_rsp_ready,
+  output              io_input_rsp_payload_last,
+  output     [0:0]    io_input_rsp_payload_fragment_source,
+  output     [0:0]    io_input_rsp_payload_fragment_opcode,
+  output     [31:0]   io_input_rsp_payload_fragment_data,
+  output     [0:0]    io_input_rsp_payload_fragment_context,
+  output              io_output_cmd_valid,
+  input               io_output_cmd_ready,
+  output              io_output_cmd_payload_write,
+  output     [24:0]   io_output_cmd_payload_address,
+  output     [3:0]    io_output_cmd_payload_context,
+  output              io_output_cmd_payload_burstLast,
+  output     [3:0]    io_output_cmd_payload_length,
+  output              io_output_writeData_valid,
+  input               io_output_writeData_ready,
+  output     [31:0]   io_output_writeData_payload_data,
+  output     [3:0]    io_output_writeData_payload_mask,
+  output     [0:0]    io_output_writeDataTocken,
+  input               io_output_rsp_valid,
+  output              io_output_rsp_ready,
+  input               io_output_rsp_payload_last,
+  input      [31:0]   io_output_rsp_payload_fragment_data,
+  input      [3:0]    io_output_rsp_payload_fragment_context,
+  output     [0:0]    io_output_writeDataAdded,
+  input               clkout_system,
+  input               systemCdCtrl_logic_outputReset
+);
+
+  reg                 inputLogic_spliter_io_output_cmd_ready;
+  wire                inputLogic_aligner_io_input_cmd_ready;
+  wire                inputLogic_aligner_io_input_rsp_valid;
+  wire                inputLogic_aligner_io_input_rsp_payload_last;
+  wire       [0:0]    inputLogic_aligner_io_input_rsp_payload_fragment_source;
+  wire       [0:0]    inputLogic_aligner_io_input_rsp_payload_fragment_opcode;
+  wire       [31:0]   inputLogic_aligner_io_input_rsp_payload_fragment_data;
+  wire       [0:0]    inputLogic_aligner_io_input_rsp_payload_fragment_context;
+  wire                inputLogic_aligner_io_output_cmd_valid;
+  wire                inputLogic_aligner_io_output_cmd_payload_last;
+  wire       [0:0]    inputLogic_aligner_io_output_cmd_payload_fragment_source;
+  wire       [0:0]    inputLogic_aligner_io_output_cmd_payload_fragment_opcode;
+  wire       [24:0]   inputLogic_aligner_io_output_cmd_payload_fragment_address;
+  wire       [4:0]    inputLogic_aligner_io_output_cmd_payload_fragment_length;
+  wire       [31:0]   inputLogic_aligner_io_output_cmd_payload_fragment_data;
+  wire       [3:0]    inputLogic_aligner_io_output_cmd_payload_fragment_mask;
+  wire       [0:0]    inputLogic_aligner_io_output_cmd_payload_fragment_context;
+  wire                inputLogic_aligner_io_output_rsp_ready;
+  wire                inputLogic_spliter_io_input_cmd_ready;
+  wire                inputLogic_spliter_io_input_rsp_valid;
+  wire                inputLogic_spliter_io_input_rsp_payload_last;
+  wire       [0:0]    inputLogic_spliter_io_input_rsp_payload_fragment_source;
+  wire       [0:0]    inputLogic_spliter_io_input_rsp_payload_fragment_opcode;
+  wire       [31:0]   inputLogic_spliter_io_input_rsp_payload_fragment_data;
+  wire       [0:0]    inputLogic_spliter_io_input_rsp_payload_fragment_context;
+  wire                inputLogic_spliter_io_output_cmd_valid;
+  wire                inputLogic_spliter_io_output_cmd_payload_last;
+  wire       [0:0]    inputLogic_spliter_io_output_cmd_payload_fragment_opcode;
+  wire       [24:0]   inputLogic_spliter_io_output_cmd_payload_fragment_address;
+  wire       [4:0]    inputLogic_spliter_io_output_cmd_payload_fragment_length;
+  wire       [31:0]   inputLogic_spliter_io_output_cmd_payload_fragment_data;
+  wire       [3:0]    inputLogic_spliter_io_output_cmd_payload_fragment_mask;
+  wire       [3:0]    inputLogic_spliter_io_output_cmd_payload_fragment_context;
+  wire                inputLogic_spliter_io_output_rsp_ready;
+  wire                inputLogic_spliter_io_outputBurstLast;
+  wire                inputLogic_converter_io_input_cmd_ready;
+  wire                inputLogic_converter_io_input_rsp_valid;
+  wire                inputLogic_converter_io_input_rsp_payload_last;
+  wire       [0:0]    inputLogic_converter_io_input_rsp_payload_fragment_opcode;
+  wire       [31:0]   inputLogic_converter_io_input_rsp_payload_fragment_data;
+  wire       [3:0]    inputLogic_converter_io_input_rsp_payload_fragment_context;
+  wire       [0:0]    inputLogic_converter_io_output_writeDataTocken;
+  wire                inputLogic_converter_io_output_cmd_valid;
+  wire                inputLogic_converter_io_output_cmd_payload_write;
+  wire       [24:0]   inputLogic_converter_io_output_cmd_payload_address;
+  wire       [3:0]    inputLogic_converter_io_output_cmd_payload_context;
+  wire                inputLogic_converter_io_output_cmd_payload_burstLast;
+  wire       [3:0]    inputLogic_converter_io_output_cmd_payload_length;
+  wire                inputLogic_converter_io_output_writeData_valid;
+  wire       [31:0]   inputLogic_converter_io_output_writeData_payload_data;
+  wire       [3:0]    inputLogic_converter_io_output_writeData_payload_mask;
+  wire       [0:0]    inputLogic_converter_io_output_writeDataAdded;
+  wire                inputLogic_converter_io_output_rsp_ready;
+  wire                io_output_cmd_fifo_io_push_ready;
+  wire                io_output_cmd_fifo_io_pop_valid;
+  wire                io_output_cmd_fifo_io_pop_payload_write;
+  wire       [24:0]   io_output_cmd_fifo_io_pop_payload_address;
+  wire       [3:0]    io_output_cmd_fifo_io_pop_payload_context;
+  wire                io_output_cmd_fifo_io_pop_payload_burstLast;
+  wire       [3:0]    io_output_cmd_fifo_io_pop_payload_length;
+  wire       [4:0]    io_output_cmd_fifo_io_occupancy;
+  wire                io_output_rsp_fifo_io_push_ready;
+  wire                io_output_rsp_fifo_io_pop_valid;
+  wire                io_output_rsp_fifo_io_pop_payload_last;
+  wire       [31:0]   io_output_rsp_fifo_io_pop_payload_fragment_data;
+  wire       [3:0]    io_output_rsp_fifo_io_pop_payload_fragment_context;
+  wire       [5:0]    io_output_rsp_fifo_io_occupancy;
+  wire                io_output_writeData_fifo_io_push_ready;
+  wire                io_output_writeData_fifo_io_pop_valid;
+  wire       [31:0]   io_output_writeData_fifo_io_pop_payload_data;
+  wire       [3:0]    io_output_writeData_fifo_io_pop_payload_mask;
+  wire       [5:0]    io_output_writeData_fifo_io_occupancy;
+  wire                inputLogic_spliter_io_output_cmd_m2sPipe_valid;
+  wire                inputLogic_spliter_io_output_cmd_m2sPipe_ready;
+  wire                inputLogic_spliter_io_output_cmd_m2sPipe_payload_last;
+  wire       [0:0]    inputLogic_spliter_io_output_cmd_m2sPipe_payload_fragment_opcode;
+  wire       [24:0]   inputLogic_spliter_io_output_cmd_m2sPipe_payload_fragment_address;
+  wire       [4:0]    inputLogic_spliter_io_output_cmd_m2sPipe_payload_fragment_length;
+  wire       [31:0]   inputLogic_spliter_io_output_cmd_m2sPipe_payload_fragment_data;
+  wire       [3:0]    inputLogic_spliter_io_output_cmd_m2sPipe_payload_fragment_mask;
+  wire       [3:0]    inputLogic_spliter_io_output_cmd_m2sPipe_payload_fragment_context;
+  reg                 inputLogic_spliter_io_output_cmd_rValid;
+  reg                 inputLogic_spliter_io_output_cmd_rData_last;
+  reg        [0:0]    inputLogic_spliter_io_output_cmd_rData_fragment_opcode;
+  reg        [24:0]   inputLogic_spliter_io_output_cmd_rData_fragment_address;
+  reg        [4:0]    inputLogic_spliter_io_output_cmd_rData_fragment_length;
+  reg        [31:0]   inputLogic_spliter_io_output_cmd_rData_fragment_data;
+  reg        [3:0]    inputLogic_spliter_io_output_cmd_rData_fragment_mask;
+  reg        [3:0]    inputLogic_spliter_io_output_cmd_rData_fragment_context;
+  wire                when_Stream_l342;
+  wire                cmdAddress_valid;
+  reg                 cmdAddress_ready;
+  wire                cmdAddress_payload_write;
+  wire       [24:0]   cmdAddress_payload_address;
+  wire       [3:0]    cmdAddress_payload_context;
+  wire                cmdAddress_payload_burstLast;
+  wire       [3:0]    cmdAddress_payload_length;
+  wire                inputLogic_converter_io_output_writeData_fire;
+  reg        [0:0]    _zz_io_output_writeDataTocken;
+  wire                cmdAddress_m2sPipe_valid;
+  wire                cmdAddress_m2sPipe_ready;
+  wire                cmdAddress_m2sPipe_payload_write;
+  wire       [24:0]   cmdAddress_m2sPipe_payload_address;
+  wire       [3:0]    cmdAddress_m2sPipe_payload_context;
+  wire                cmdAddress_m2sPipe_payload_burstLast;
+  wire       [3:0]    cmdAddress_m2sPipe_payload_length;
+  reg                 cmdAddress_rValid;
+  reg                 cmdAddress_rData_write;
+  reg        [24:0]   cmdAddress_rData_address;
+  reg        [3:0]    cmdAddress_rData_context;
+  reg                 cmdAddress_rData_burstLast;
+  reg        [3:0]    cmdAddress_rData_length;
+  wire                when_Stream_l342_1;
+  reg                 io_refresh_regNext;
+  wire                _zz_io_output_cmd_valid;
+  wire                io_output_rsp_isStall;
+
+  BmbAligner inputLogic_aligner (
+    .io_input_cmd_valid                        (io_input_cmd_valid                                               ), //i
+    .io_input_cmd_ready                        (inputLogic_aligner_io_input_cmd_ready                            ), //o
+    .io_input_cmd_payload_last                 (io_input_cmd_payload_last                                        ), //i
+    .io_input_cmd_payload_fragment_source      (io_input_cmd_payload_fragment_source                             ), //i
+    .io_input_cmd_payload_fragment_opcode      (io_input_cmd_payload_fragment_opcode                             ), //i
+    .io_input_cmd_payload_fragment_address     (io_input_cmd_payload_fragment_address[24:0]                      ), //i
+    .io_input_cmd_payload_fragment_length      (io_input_cmd_payload_fragment_length[4:0]                        ), //i
+    .io_input_cmd_payload_fragment_data        (io_input_cmd_payload_fragment_data[31:0]                         ), //i
+    .io_input_cmd_payload_fragment_mask        (io_input_cmd_payload_fragment_mask[3:0]                          ), //i
+    .io_input_cmd_payload_fragment_context     (io_input_cmd_payload_fragment_context                            ), //i
+    .io_input_rsp_valid                        (inputLogic_aligner_io_input_rsp_valid                            ), //o
+    .io_input_rsp_ready                        (io_input_rsp_ready                                               ), //i
+    .io_input_rsp_payload_last                 (inputLogic_aligner_io_input_rsp_payload_last                     ), //o
+    .io_input_rsp_payload_fragment_source      (inputLogic_aligner_io_input_rsp_payload_fragment_source          ), //o
+    .io_input_rsp_payload_fragment_opcode      (inputLogic_aligner_io_input_rsp_payload_fragment_opcode          ), //o
+    .io_input_rsp_payload_fragment_data        (inputLogic_aligner_io_input_rsp_payload_fragment_data[31:0]      ), //o
+    .io_input_rsp_payload_fragment_context     (inputLogic_aligner_io_input_rsp_payload_fragment_context         ), //o
+    .io_output_cmd_valid                       (inputLogic_aligner_io_output_cmd_valid                           ), //o
+    .io_output_cmd_ready                       (inputLogic_spliter_io_input_cmd_ready                            ), //i
+    .io_output_cmd_payload_last                (inputLogic_aligner_io_output_cmd_payload_last                    ), //o
+    .io_output_cmd_payload_fragment_source     (inputLogic_aligner_io_output_cmd_payload_fragment_source         ), //o
+    .io_output_cmd_payload_fragment_opcode     (inputLogic_aligner_io_output_cmd_payload_fragment_opcode         ), //o
+    .io_output_cmd_payload_fragment_address    (inputLogic_aligner_io_output_cmd_payload_fragment_address[24:0]  ), //o
+    .io_output_cmd_payload_fragment_length     (inputLogic_aligner_io_output_cmd_payload_fragment_length[4:0]    ), //o
+    .io_output_cmd_payload_fragment_data       (inputLogic_aligner_io_output_cmd_payload_fragment_data[31:0]     ), //o
+    .io_output_cmd_payload_fragment_mask       (inputLogic_aligner_io_output_cmd_payload_fragment_mask[3:0]      ), //o
+    .io_output_cmd_payload_fragment_context    (inputLogic_aligner_io_output_cmd_payload_fragment_context        ), //o
+    .io_output_rsp_valid                       (inputLogic_spliter_io_input_rsp_valid                            ), //i
+    .io_output_rsp_ready                       (inputLogic_aligner_io_output_rsp_ready                           ), //o
+    .io_output_rsp_payload_last                (inputLogic_spliter_io_input_rsp_payload_last                     ), //i
+    .io_output_rsp_payload_fragment_source     (inputLogic_spliter_io_input_rsp_payload_fragment_source          ), //i
+    .io_output_rsp_payload_fragment_opcode     (inputLogic_spliter_io_input_rsp_payload_fragment_opcode          ), //i
+    .io_output_rsp_payload_fragment_data       (inputLogic_spliter_io_input_rsp_payload_fragment_data[31:0]      ), //i
+    .io_output_rsp_payload_fragment_context    (inputLogic_spliter_io_input_rsp_payload_fragment_context         ), //i
+    .clkout_system                             (clkout_system                                                    ), //i
+    .systemCdCtrl_logic_outputReset            (systemCdCtrl_logic_outputReset                                   )  //i
+  );
+  BmbAlignedSpliter inputLogic_spliter (
+    .io_input_cmd_valid                        (inputLogic_aligner_io_output_cmd_valid                           ), //i
+    .io_input_cmd_ready                        (inputLogic_spliter_io_input_cmd_ready                            ), //o
+    .io_input_cmd_payload_last                 (inputLogic_aligner_io_output_cmd_payload_last                    ), //i
+    .io_input_cmd_payload_fragment_source      (inputLogic_aligner_io_output_cmd_payload_fragment_source         ), //i
+    .io_input_cmd_payload_fragment_opcode      (inputLogic_aligner_io_output_cmd_payload_fragment_opcode         ), //i
+    .io_input_cmd_payload_fragment_address     (inputLogic_aligner_io_output_cmd_payload_fragment_address[24:0]  ), //i
+    .io_input_cmd_payload_fragment_length      (inputLogic_aligner_io_output_cmd_payload_fragment_length[4:0]    ), //i
+    .io_input_cmd_payload_fragment_data        (inputLogic_aligner_io_output_cmd_payload_fragment_data[31:0]     ), //i
+    .io_input_cmd_payload_fragment_mask        (inputLogic_aligner_io_output_cmd_payload_fragment_mask[3:0]      ), //i
+    .io_input_cmd_payload_fragment_context     (inputLogic_aligner_io_output_cmd_payload_fragment_context        ), //i
+    .io_input_rsp_valid                        (inputLogic_spliter_io_input_rsp_valid                            ), //o
+    .io_input_rsp_ready                        (inputLogic_aligner_io_output_rsp_ready                           ), //i
+    .io_input_rsp_payload_last                 (inputLogic_spliter_io_input_rsp_payload_last                     ), //o
+    .io_input_rsp_payload_fragment_source      (inputLogic_spliter_io_input_rsp_payload_fragment_source          ), //o
+    .io_input_rsp_payload_fragment_opcode      (inputLogic_spliter_io_input_rsp_payload_fragment_opcode          ), //o
+    .io_input_rsp_payload_fragment_data        (inputLogic_spliter_io_input_rsp_payload_fragment_data[31:0]      ), //o
+    .io_input_rsp_payload_fragment_context     (inputLogic_spliter_io_input_rsp_payload_fragment_context         ), //o
+    .io_output_cmd_valid                       (inputLogic_spliter_io_output_cmd_valid                           ), //o
+    .io_output_cmd_ready                       (inputLogic_spliter_io_output_cmd_ready                           ), //i
+    .io_output_cmd_payload_last                (inputLogic_spliter_io_output_cmd_payload_last                    ), //o
+    .io_output_cmd_payload_fragment_opcode     (inputLogic_spliter_io_output_cmd_payload_fragment_opcode         ), //o
+    .io_output_cmd_payload_fragment_address    (inputLogic_spliter_io_output_cmd_payload_fragment_address[24:0]  ), //o
+    .io_output_cmd_payload_fragment_length     (inputLogic_spliter_io_output_cmd_payload_fragment_length[4:0]    ), //o
+    .io_output_cmd_payload_fragment_data       (inputLogic_spliter_io_output_cmd_payload_fragment_data[31:0]     ), //o
+    .io_output_cmd_payload_fragment_mask       (inputLogic_spliter_io_output_cmd_payload_fragment_mask[3:0]      ), //o
+    .io_output_cmd_payload_fragment_context    (inputLogic_spliter_io_output_cmd_payload_fragment_context[3:0]   ), //o
+    .io_output_rsp_valid                       (inputLogic_converter_io_input_rsp_valid                          ), //i
+    .io_output_rsp_ready                       (inputLogic_spliter_io_output_rsp_ready                           ), //o
+    .io_output_rsp_payload_last                (inputLogic_converter_io_input_rsp_payload_last                   ), //i
+    .io_output_rsp_payload_fragment_opcode     (inputLogic_converter_io_input_rsp_payload_fragment_opcode        ), //i
+    .io_output_rsp_payload_fragment_data       (inputLogic_converter_io_input_rsp_payload_fragment_data[31:0]    ), //i
+    .io_output_rsp_payload_fragment_context    (inputLogic_converter_io_input_rsp_payload_fragment_context[3:0]  ), //i
+    .io_outputBurstLast                        (inputLogic_spliter_io_outputBurstLast                            ), //o
+    .clkout_system                             (clkout_system                                                    ), //i
+    .systemCdCtrl_logic_outputReset            (systemCdCtrl_logic_outputReset                                   )  //i
+  );
+  BmbToCorePort inputLogic_converter (
+    .io_input_cmd_valid                        (inputLogic_spliter_io_output_cmd_m2sPipe_valid                           ), //i
+    .io_input_cmd_ready                        (inputLogic_converter_io_input_cmd_ready                                  ), //o
+    .io_input_cmd_payload_last                 (inputLogic_spliter_io_output_cmd_m2sPipe_payload_last                    ), //i
+    .io_input_cmd_payload_fragment_opcode      (inputLogic_spliter_io_output_cmd_m2sPipe_payload_fragment_opcode         ), //i
+    .io_input_cmd_payload_fragment_address     (inputLogic_spliter_io_output_cmd_m2sPipe_payload_fragment_address[24:0]  ), //i
+    .io_input_cmd_payload_fragment_length      (inputLogic_spliter_io_output_cmd_m2sPipe_payload_fragment_length[4:0]    ), //i
+    .io_input_cmd_payload_fragment_data        (inputLogic_spliter_io_output_cmd_m2sPipe_payload_fragment_data[31:0]     ), //i
+    .io_input_cmd_payload_fragment_mask        (inputLogic_spliter_io_output_cmd_m2sPipe_payload_fragment_mask[3:0]      ), //i
+    .io_input_cmd_payload_fragment_context     (inputLogic_spliter_io_output_cmd_m2sPipe_payload_fragment_context[3:0]   ), //i
+    .io_input_rsp_valid                        (inputLogic_converter_io_input_rsp_valid                                  ), //o
+    .io_input_rsp_ready                        (inputLogic_spliter_io_output_rsp_ready                                   ), //i
+    .io_input_rsp_payload_last                 (inputLogic_converter_io_input_rsp_payload_last                           ), //o
+    .io_input_rsp_payload_fragment_opcode      (inputLogic_converter_io_input_rsp_payload_fragment_opcode                ), //o
+    .io_input_rsp_payload_fragment_data        (inputLogic_converter_io_input_rsp_payload_fragment_data[31:0]            ), //o
+    .io_input_rsp_payload_fragment_context     (inputLogic_converter_io_input_rsp_payload_fragment_context[3:0]          ), //o
+    .io_inputBurstLast                         (inputLogic_spliter_io_outputBurstLast                                    ), //i
+    .io_output_cmd_valid                       (inputLogic_converter_io_output_cmd_valid                                 ), //o
+    .io_output_cmd_ready                       (io_output_cmd_fifo_io_push_ready                                         ), //i
+    .io_output_cmd_payload_write               (inputLogic_converter_io_output_cmd_payload_write                         ), //o
+    .io_output_cmd_payload_address             (inputLogic_converter_io_output_cmd_payload_address[24:0]                 ), //o
+    .io_output_cmd_payload_context             (inputLogic_converter_io_output_cmd_payload_context[3:0]                  ), //o
+    .io_output_cmd_payload_burstLast           (inputLogic_converter_io_output_cmd_payload_burstLast                     ), //o
+    .io_output_cmd_payload_length              (inputLogic_converter_io_output_cmd_payload_length[3:0]                   ), //o
+    .io_output_writeData_valid                 (inputLogic_converter_io_output_writeData_valid                           ), //o
+    .io_output_writeData_ready                 (io_output_writeData_fifo_io_push_ready                                   ), //i
+    .io_output_writeData_payload_data          (inputLogic_converter_io_output_writeData_payload_data[31:0]              ), //o
+    .io_output_writeData_payload_mask          (inputLogic_converter_io_output_writeData_payload_mask[3:0]               ), //o
+    .io_output_writeDataTocken                 (inputLogic_converter_io_output_writeDataTocken                           ), //o
+    .io_output_rsp_valid                       (io_output_rsp_fifo_io_pop_valid                                          ), //i
+    .io_output_rsp_ready                       (inputLogic_converter_io_output_rsp_ready                                 ), //o
+    .io_output_rsp_payload_last                (io_output_rsp_fifo_io_pop_payload_last                                   ), //i
+    .io_output_rsp_payload_fragment_data       (io_output_rsp_fifo_io_pop_payload_fragment_data[31:0]                    ), //i
+    .io_output_rsp_payload_fragment_context    (io_output_rsp_fifo_io_pop_payload_fragment_context[3:0]                  ), //i
+    .io_output_writeDataAdded                  (inputLogic_converter_io_output_writeDataAdded                            ), //o
+    .clkout_system                             (clkout_system                                                            ), //i
+    .systemCdCtrl_logic_outputReset            (systemCdCtrl_logic_outputReset                                           )  //i
+  );
+  StreamFifoLowLatency_1 io_output_cmd_fifo (
+    .io_push_valid                     (inputLogic_converter_io_output_cmd_valid                  ), //i
+    .io_push_ready                     (io_output_cmd_fifo_io_push_ready                          ), //o
+    .io_push_payload_write             (inputLogic_converter_io_output_cmd_payload_write          ), //i
+    .io_push_payload_address           (inputLogic_converter_io_output_cmd_payload_address[24:0]  ), //i
+    .io_push_payload_context           (inputLogic_converter_io_output_cmd_payload_context[3:0]   ), //i
+    .io_push_payload_burstLast         (inputLogic_converter_io_output_cmd_payload_burstLast      ), //i
+    .io_push_payload_length            (inputLogic_converter_io_output_cmd_payload_length[3:0]    ), //i
+    .io_pop_valid                      (io_output_cmd_fifo_io_pop_valid                           ), //o
+    .io_pop_ready                      (cmdAddress_ready                                          ), //i
+    .io_pop_payload_write              (io_output_cmd_fifo_io_pop_payload_write                   ), //o
+    .io_pop_payload_address            (io_output_cmd_fifo_io_pop_payload_address[24:0]           ), //o
+    .io_pop_payload_context            (io_output_cmd_fifo_io_pop_payload_context[3:0]            ), //o
+    .io_pop_payload_burstLast          (io_output_cmd_fifo_io_pop_payload_burstLast               ), //o
+    .io_pop_payload_length             (io_output_cmd_fifo_io_pop_payload_length[3:0]             ), //o
+    .io_flush                          (1'b0                                                      ), //i
+    .io_occupancy                      (io_output_cmd_fifo_io_occupancy[4:0]                      ), //o
+    .clkout_system                     (clkout_system                                             ), //i
+    .systemCdCtrl_logic_outputReset    (systemCdCtrl_logic_outputReset                            )  //i
+  );
+  StreamFifoLowLatency_2 io_output_rsp_fifo (
+    .io_push_valid                       (io_output_rsp_valid                                      ), //i
+    .io_push_ready                       (io_output_rsp_fifo_io_push_ready                         ), //o
+    .io_push_payload_last                (io_output_rsp_payload_last                               ), //i
+    .io_push_payload_fragment_data       (io_output_rsp_payload_fragment_data[31:0]                ), //i
+    .io_push_payload_fragment_context    (io_output_rsp_payload_fragment_context[3:0]              ), //i
+    .io_pop_valid                        (io_output_rsp_fifo_io_pop_valid                          ), //o
+    .io_pop_ready                        (inputLogic_converter_io_output_rsp_ready                 ), //i
+    .io_pop_payload_last                 (io_output_rsp_fifo_io_pop_payload_last                   ), //o
+    .io_pop_payload_fragment_data        (io_output_rsp_fifo_io_pop_payload_fragment_data[31:0]    ), //o
+    .io_pop_payload_fragment_context     (io_output_rsp_fifo_io_pop_payload_fragment_context[3:0]  ), //o
+    .io_flush                            (1'b0                                                     ), //i
+    .io_occupancy                        (io_output_rsp_fifo_io_occupancy[5:0]                     ), //o
+    .clkout_system                       (clkout_system                                            ), //i
+    .systemCdCtrl_logic_outputReset      (systemCdCtrl_logic_outputReset                           )  //i
+  );
+  StreamFifoLowLatency_3 io_output_writeData_fifo (
+    .io_push_valid                     (inputLogic_converter_io_output_writeData_valid               ), //i
+    .io_push_ready                     (io_output_writeData_fifo_io_push_ready                       ), //o
+    .io_push_payload_data              (inputLogic_converter_io_output_writeData_payload_data[31:0]  ), //i
+    .io_push_payload_mask              (inputLogic_converter_io_output_writeData_payload_mask[3:0]   ), //i
+    .io_pop_valid                      (io_output_writeData_fifo_io_pop_valid                        ), //o
+    .io_pop_ready                      (io_output_writeData_ready                                    ), //i
+    .io_pop_payload_data               (io_output_writeData_fifo_io_pop_payload_data[31:0]           ), //o
+    .io_pop_payload_mask               (io_output_writeData_fifo_io_pop_payload_mask[3:0]            ), //o
+    .io_flush                          (1'b0                                                         ), //i
+    .io_occupancy                      (io_output_writeData_fifo_io_occupancy[5:0]                   ), //o
+    .clkout_system                     (clkout_system                                                ), //i
+    .systemCdCtrl_logic_outputReset    (systemCdCtrl_logic_outputReset                               )  //i
+  );
+  assign io_input_cmd_ready = inputLogic_aligner_io_input_cmd_ready;
+  assign io_input_rsp_valid = inputLogic_aligner_io_input_rsp_valid;
+  assign io_input_rsp_payload_last = inputLogic_aligner_io_input_rsp_payload_last;
+  assign io_input_rsp_payload_fragment_source = inputLogic_aligner_io_input_rsp_payload_fragment_source;
+  assign io_input_rsp_payload_fragment_opcode = inputLogic_aligner_io_input_rsp_payload_fragment_opcode;
+  assign io_input_rsp_payload_fragment_data = inputLogic_aligner_io_input_rsp_payload_fragment_data;
+  assign io_input_rsp_payload_fragment_context = inputLogic_aligner_io_input_rsp_payload_fragment_context;
+  always @(*) begin
+    inputLogic_spliter_io_output_cmd_ready = inputLogic_spliter_io_output_cmd_m2sPipe_ready;
+    if(when_Stream_l342) begin
+      inputLogic_spliter_io_output_cmd_ready = 1'b1;
+    end
+  end
+
+  assign when_Stream_l342 = (! inputLogic_spliter_io_output_cmd_m2sPipe_valid);
+  assign inputLogic_spliter_io_output_cmd_m2sPipe_valid = inputLogic_spliter_io_output_cmd_rValid;
+  assign inputLogic_spliter_io_output_cmd_m2sPipe_payload_last = inputLogic_spliter_io_output_cmd_rData_last;
+  assign inputLogic_spliter_io_output_cmd_m2sPipe_payload_fragment_opcode = inputLogic_spliter_io_output_cmd_rData_fragment_opcode;
+  assign inputLogic_spliter_io_output_cmd_m2sPipe_payload_fragment_address = inputLogic_spliter_io_output_cmd_rData_fragment_address;
+  assign inputLogic_spliter_io_output_cmd_m2sPipe_payload_fragment_length = inputLogic_spliter_io_output_cmd_rData_fragment_length;
+  assign inputLogic_spliter_io_output_cmd_m2sPipe_payload_fragment_data = inputLogic_spliter_io_output_cmd_rData_fragment_data;
+  assign inputLogic_spliter_io_output_cmd_m2sPipe_payload_fragment_mask = inputLogic_spliter_io_output_cmd_rData_fragment_mask;
+  assign inputLogic_spliter_io_output_cmd_m2sPipe_payload_fragment_context = inputLogic_spliter_io_output_cmd_rData_fragment_context;
+  assign inputLogic_spliter_io_output_cmd_m2sPipe_ready = inputLogic_converter_io_input_cmd_ready;
+  assign cmdAddress_valid = io_output_cmd_fifo_io_pop_valid;
+  assign cmdAddress_payload_write = io_output_cmd_fifo_io_pop_payload_write;
+  assign cmdAddress_payload_address = io_output_cmd_fifo_io_pop_payload_address;
+  assign cmdAddress_payload_context = io_output_cmd_fifo_io_pop_payload_context;
+  assign cmdAddress_payload_burstLast = io_output_cmd_fifo_io_pop_payload_burstLast;
+  assign cmdAddress_payload_length = io_output_cmd_fifo_io_pop_payload_length;
+  assign io_output_rsp_ready = io_output_rsp_fifo_io_push_ready;
+  assign io_output_writeData_valid = io_output_writeData_fifo_io_pop_valid;
+  assign io_output_writeData_payload_data = io_output_writeData_fifo_io_pop_payload_data;
+  assign io_output_writeData_payload_mask = io_output_writeData_fifo_io_pop_payload_mask;
+  assign inputLogic_converter_io_output_writeData_fire = (inputLogic_converter_io_output_writeData_valid && io_output_writeData_fifo_io_push_ready);
+  assign io_output_writeDataTocken = _zz_io_output_writeDataTocken;
+  always @(*) begin
+    cmdAddress_ready = cmdAddress_m2sPipe_ready;
+    if(when_Stream_l342_1) begin
+      cmdAddress_ready = 1'b1;
+    end
+  end
+
+  assign when_Stream_l342_1 = (! cmdAddress_m2sPipe_valid);
+  assign cmdAddress_m2sPipe_valid = cmdAddress_rValid;
+  assign cmdAddress_m2sPipe_payload_write = cmdAddress_rData_write;
+  assign cmdAddress_m2sPipe_payload_address = cmdAddress_rData_address;
+  assign cmdAddress_m2sPipe_payload_context = cmdAddress_rData_context;
+  assign cmdAddress_m2sPipe_payload_burstLast = cmdAddress_rData_burstLast;
+  assign cmdAddress_m2sPipe_payload_length = cmdAddress_rData_length;
+  assign _zz_io_output_cmd_valid = (! io_refresh_regNext);
+  assign cmdAddress_m2sPipe_ready = (io_output_cmd_ready && _zz_io_output_cmd_valid);
+  assign io_output_cmd_valid = (cmdAddress_m2sPipe_valid && _zz_io_output_cmd_valid);
+  assign io_output_cmd_payload_write = cmdAddress_m2sPipe_payload_write;
+  assign io_output_cmd_payload_address = cmdAddress_m2sPipe_payload_address;
+  assign io_output_cmd_payload_context = cmdAddress_m2sPipe_payload_context;
+  assign io_output_cmd_payload_burstLast = cmdAddress_m2sPipe_payload_burstLast;
+  assign io_output_cmd_payload_length = cmdAddress_m2sPipe_payload_length;
+  assign io_output_rsp_isStall = (io_output_rsp_valid && (! io_output_rsp_ready));
+  always @(posedge clkout_system) begin
+    if(systemCdCtrl_logic_outputReset) begin
+      inputLogic_spliter_io_output_cmd_rValid <= 1'b0;
+      _zz_io_output_writeDataTocken <= 1'b0;
+      cmdAddress_rValid <= 1'b0;
+    end else begin
+      if(inputLogic_spliter_io_output_cmd_ready) begin
+        inputLogic_spliter_io_output_cmd_rValid <= inputLogic_spliter_io_output_cmd_valid;
+      end
+      _zz_io_output_writeDataTocken <= inputLogic_converter_io_output_writeData_fire;
+      if(cmdAddress_ready) begin
+        cmdAddress_rValid <= cmdAddress_valid;
+      end
+      `ifndef SYNTHESIS
+        `ifdef FORMAL
+          assert((! io_output_rsp_isStall));
+        `else
+          if(!(! io_output_rsp_isStall)) begin
+            $display("FAILURE SDRAM rsp buffer stalled !");
+            $finish;
+          end
+        `endif
+      `endif
+    end
+  end
+
+  always @(posedge clkout_system) begin
+    if(inputLogic_spliter_io_output_cmd_ready) begin
+      inputLogic_spliter_io_output_cmd_rData_last <= inputLogic_spliter_io_output_cmd_payload_last;
+      inputLogic_spliter_io_output_cmd_rData_fragment_opcode <= inputLogic_spliter_io_output_cmd_payload_fragment_opcode;
+      inputLogic_spliter_io_output_cmd_rData_fragment_address <= inputLogic_spliter_io_output_cmd_payload_fragment_address;
+      inputLogic_spliter_io_output_cmd_rData_fragment_length <= inputLogic_spliter_io_output_cmd_payload_fragment_length;
+      inputLogic_spliter_io_output_cmd_rData_fragment_data <= inputLogic_spliter_io_output_cmd_payload_fragment_data;
+      inputLogic_spliter_io_output_cmd_rData_fragment_mask <= inputLogic_spliter_io_output_cmd_payload_fragment_mask;
+      inputLogic_spliter_io_output_cmd_rData_fragment_context <= inputLogic_spliter_io_output_cmd_payload_fragment_context;
+    end
+    if(cmdAddress_ready) begin
+      cmdAddress_rData_write <= cmdAddress_payload_write;
+      cmdAddress_rData_address <= cmdAddress_payload_address;
+      cmdAddress_rData_context <= cmdAddress_payload_context;
+      cmdAddress_rData_burstLast <= cmdAddress_payload_burstLast;
+      cmdAddress_rData_length <= cmdAddress_payload_length;
+    end
+    io_refresh_regNext <= io_refresh;
   end
 
 
@@ -10091,7 +13253,7 @@ module StreamArbiter (
   output     [2:0]    io_output_payload_fragment_context,
   output     [0:0]    io_chosen,
   output     [1:0]    io_chosenOH,
-  input               debugCdCtrl_external_clk,
+  input               clkout_system,
   input               systemCdCtrl_logic_outputReset
 );
 
@@ -10132,7 +13294,7 @@ module StreamArbiter (
   assign io_chosenOH = {maskRouted_1,maskRouted_0};
   assign _zz_io_chosen = io_chosenOH[1];
   assign io_chosen = _zz_io_chosen;
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(systemCdCtrl_logic_outputReset) begin
       locked <= 1'b0;
     end else begin
@@ -10145,7 +13307,7 @@ module StreamArbiter (
     end
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(io_output_valid) begin
       maskLocked_0 <= maskRouted_0;
       maskLocked_1 <= maskRouted_1;
@@ -10163,7 +13325,7 @@ module FlowCCByToggle (
   output              io_output_payload_last,
   output     [0:0]    io_output_payload_fragment,
   input               io_jtag_tck,
-  input               debugCdCtrl_external_clk,
+  input               clkout_system,
   input               debugCdCtrl_logic_outputReset
 );
 
@@ -10184,7 +13346,7 @@ module FlowCCByToggle (
   BufferCC_1 inputArea_target_buffercc (
     .io_dataIn                        (inputArea_target                      ), //i
     .io_dataOut                       (inputArea_target_buffercc_io_dataOut  ), //o
-    .debugCdCtrl_external_clk         (debugCdCtrl_external_clk              ), //i
+    .clkout_system                    (clkout_system                         ), //i
     .debugCdCtrl_logic_outputReset    (debugCdCtrl_logic_outputReset         )  //i
   );
   assign outputArea_target = inputArea_target_buffercc_io_dataOut;
@@ -10202,7 +13364,7 @@ module FlowCCByToggle (
     end
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     outputArea_hit <= outputArea_target;
     if(outputArea_flow_valid) begin
       outputArea_flow_m2sPipe_payload_last <= outputArea_flow_payload_last;
@@ -10210,7 +13372,7 @@ module FlowCCByToggle (
     end
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(debugCdCtrl_logic_outputReset) begin
       outputArea_flow_m2sPipe_valid <= 1'b0;
     end else begin
@@ -10280,7 +13442,7 @@ module DataCache (
   input               io_mem_rsp_payload_last,
   input      [31:0]   io_mem_rsp_payload_data,
   input               io_mem_rsp_payload_error,
-  input               debugCdCtrl_external_clk,
+  input               clkout_system,
   input               systemCdCtrl_logic_outputReset
 );
 
@@ -10450,7 +13612,7 @@ module DataCache (
   assign _zz_loader_waysAllocator = {loader_waysAllocator,loader_waysAllocator[0]};
   assign _zz_ways_0_tags_port = {tagsWriteCmd_payload_data_address,{tagsWriteCmd_payload_data_error,tagsWriteCmd_payload_data_valid}};
   assign _zz_ways_0_tags_port0 = ways_0_tags[tagsReadCmd_payload_regNextWhen];
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(_zz_2) begin
       ways_0_tags[tagsWriteCmd_payload_address] <= _zz_ways_0_tags_port;
     end
@@ -10459,7 +13621,7 @@ module DataCache (
   always @(*) begin
     _zz_ways_0_data_port0 = {_zz_ways_0_datasymbol_read_3, _zz_ways_0_datasymbol_read_2, _zz_ways_0_datasymbol_read_1, _zz_ways_0_datasymbol_read};
   end
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(_zz_ways_0_dataReadRspMem) begin
       _zz_ways_0_datasymbol_read <= ways_0_data_symbol0[dataReadCmd_payload];
       _zz_ways_0_datasymbol_read_1 <= ways_0_data_symbol1[dataReadCmd_payload];
@@ -10468,7 +13630,7 @@ module DataCache (
     end
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(dataWriteCmd_payload_mask[0] && _zz_1) begin
       ways_0_data_symbol0[dataWriteCmd_payload_address] <= dataWriteCmd_payload_data[7 : 0];
     end
@@ -10922,7 +14084,7 @@ module DataCache (
   assign when_DataCache_l1108 = (loader_valid && (! loader_valid_regNext));
   assign io_cpu_execute_refilling = loader_valid;
   assign when_DataCache_l1111 = (stageB_loaderValid || loader_valid);
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     tagsWriteLastCmd_valid <= tagsWriteCmd_valid;
     tagsWriteLastCmd_payload_way <= tagsWriteCmd_payload_way;
     tagsWriteLastCmd_payload_address <= tagsWriteCmd_payload_address;
@@ -10988,7 +14150,7 @@ module DataCache (
     loader_valid_regNext <= loader_valid;
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(systemCdCtrl_logic_outputReset) begin
       memCmdSent <= 1'b0;
       stageB_flusher_waitDone <= 1'b0;
@@ -11091,7 +14253,7 @@ module InstructionCache (
   input               io_mem_rsp_valid,
   input      [31:0]   io_mem_rsp_payload_data,
   input               io_mem_rsp_payload_error,
-  input               debugCdCtrl_external_clk,
+  input               clkout_system,
   input               systemCdCtrl_logic_outputReset
 );
 
@@ -11145,19 +14307,19 @@ module InstructionCache (
   (* ram_style = "distributed" *) reg [21:0] ways_0_tags [0:127];
 
   assign _zz_ways_0_tags_port = {lineLoader_write_tag_0_payload_data_address,{lineLoader_write_tag_0_payload_data_error,lineLoader_write_tag_0_payload_data_valid}};
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(_zz_1) begin
       banks_0[lineLoader_write_data_0_payload_address] <= lineLoader_write_data_0_payload_data;
     end
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(_zz_fetchStage_read_banksValue_0_dataMem_1) begin
       _zz_banks_0_port1 <= banks_0[_zz_fetchStage_read_banksValue_0_dataMem];
     end
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(_zz_2) begin
       ways_0_tags[lineLoader_write_tag_0_payload_address] <= _zz_ways_0_tags_port;
     end
@@ -11247,7 +14409,7 @@ module InstructionCache (
   assign io_cpu_fetch_error = (fetchStage_hit_error || ((! io_cpu_fetch_mmuRsp_isPaging) && (io_cpu_fetch_mmuRsp_exception || (! io_cpu_fetch_mmuRsp_allowExecute))));
   assign io_cpu_fetch_mmuRefilling = io_cpu_fetch_mmuRsp_refilling;
   assign io_cpu_fetch_mmuException = (((! io_cpu_fetch_mmuRsp_refilling) && io_cpu_fetch_mmuRsp_isPaging) && (io_cpu_fetch_mmuRsp_exception || (! io_cpu_fetch_mmuRsp_allowExecute)));
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(systemCdCtrl_logic_outputReset) begin
       lineLoader_valid <= 1'b0;
       lineLoader_hadError <= 1'b0;
@@ -11285,7 +14447,7 @@ module InstructionCache (
     end
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(io_cpu_fill_valid) begin
       lineLoader_address <= io_cpu_fill_payload;
     end
@@ -11313,7 +14475,7 @@ module UartCtrlRx (
   output              io_rts,
   output reg          io_error,
   output              io_break,
-  input               debugCdCtrl_external_clk,
+  input               clkout_system,
   input               systemCdCtrl_logic_outputReset
 );
   localparam UartStopType_ONE = 1'd0;
@@ -11367,7 +14529,7 @@ module UartCtrlRx (
   BufferCC io_rxd_buffercc (
     .io_dataIn                         (io_rxd                          ), //i
     .io_dataOut                        (io_rxd_buffercc_io_dataOut      ), //o
-    .debugCdCtrl_external_clk          (debugCdCtrl_external_clk        ), //i
+    .clkout_system                     (clkout_system                   ), //i
     .systemCdCtrl_logic_outputReset    (systemCdCtrl_logic_outputReset  )  //i
   );
   `ifndef SYNTHESIS
@@ -11449,7 +14611,7 @@ module UartCtrlRx (
   assign when_UartCtrlRx_l136 = (! sampler_value);
   assign when_UartCtrlRx_l139 = (bitCounter_value == _zz_when_UartCtrlRx_l139);
   assign io_read_payload = stateMachine_shifter;
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(systemCdCtrl_logic_outputReset) begin
       _zz_io_rts <= 1'b0;
       sampler_samples_1 <= 1'b1;
@@ -11528,7 +14690,7 @@ module UartCtrlRx (
     end
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(sampler_tick) begin
       bitTimer_counter <= (bitTimer_counter - 3'b001);
       if(when_UartCtrlRx_l43) begin
@@ -11585,7 +14747,7 @@ module UartCtrlTx (
   input               io_cts,
   output              io_txd,
   input               io_break,
-  input               debugCdCtrl_external_clk,
+  input               clkout_system,
   input               systemCdCtrl_logic_outputReset
 );
   localparam UartStopType_ONE = 1'd0;
@@ -11723,7 +14885,7 @@ module UartCtrlTx (
   assign when_UartCtrlTx_l76 = (io_configFrame_parity == UartParityType_NONE);
   assign when_UartCtrlTx_l93 = (tickCounter_value == _zz_when_UartCtrlTx_l93);
   assign io_txd = _zz_io_txd;
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(systemCdCtrl_logic_outputReset) begin
       clockDivider_counter_value <= 3'b000;
       stateMachine_state <= UartCtrlTxState_IDLE;
@@ -11769,7 +14931,7 @@ module UartCtrlTx (
     end
   end
 
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(clockDivider_counter_willOverflow) begin
       tickCounter_value <= (tickCounter_value + 3'b001);
     end
@@ -11805,10 +14967,3108 @@ module UartCtrlTx (
 
 endmodule
 
+module Backend (
+  input      [1:0]    io_config_readLatency,
+  input      [3:0]    io_config_RAS,
+  input      [3:0]    io_config_RP,
+  input      [3:0]    io_config_WR,
+  input      [3:0]    io_config_RCD,
+  input      [3:0]    io_config_WTR,
+  input      [3:0]    io_config_RTP,
+  input      [3:0]    io_config_RRD,
+  input      [3:0]    io_config_RTW,
+  input      [6:0]    io_config_RFC,
+  input      [15:0]   io_config_REF,
+  input               io_config_autoRefresh,
+  input               io_config_noActive,
+  input      [0:0]    io_config_phase_active,
+  input      [0:0]    io_config_phase_precharge,
+  input      [0:0]    io_config_phase_read,
+  input      [0:0]    io_config_phase_write,
+  input               io_input_ports_0_read,
+  input               io_input_ports_0_write,
+  input               io_input_ports_0_active,
+  input               io_input_ports_0_precharge,
+  input               io_input_ports_0_last,
+  input      [0:0]    io_input_ports_0_address_byte,
+  input      [8:0]    io_input_ports_0_address_column,
+  input      [1:0]    io_input_ports_0_address_bank,
+  input      [12:0]   io_input_ports_0_address_row,
+  input      [3:0]    io_input_ports_0_context,
+  input               io_input_ports_1_read,
+  input               io_input_ports_1_write,
+  input               io_input_ports_1_active,
+  input               io_input_ports_1_precharge,
+  input               io_input_ports_1_last,
+  input      [0:0]    io_input_ports_1_address_byte,
+  input      [8:0]    io_input_ports_1_address_column,
+  input      [1:0]    io_input_ports_1_address_bank,
+  input      [12:0]   io_input_ports_1_address_row,
+  input      [3:0]    io_input_ports_1_context,
+  input               io_input_prechargeAll,
+  input               io_input_refresh,
+  input               io_writeDatas_0_valid,
+  output reg          io_writeDatas_0_ready,
+  input      [31:0]   io_writeDatas_0_payload_data,
+  input      [3:0]    io_writeDatas_0_payload_mask,
+  output reg          io_phy_phases_0_CASn,
+  output              io_phy_phases_0_CKE,
+  output reg          io_phy_phases_0_CSn,
+  output reg          io_phy_phases_0_RASn,
+  output reg          io_phy_phases_0_WEn,
+  output reg [1:0]    io_phy_phases_0_DM_0,
+  output     [15:0]   io_phy_phases_0_DQw_0,
+  input      [15:0]   io_phy_phases_0_DQr_0,
+  output reg          io_phy_phases_1_CASn,
+  output              io_phy_phases_1_CKE,
+  output reg          io_phy_phases_1_CSn,
+  output reg          io_phy_phases_1_RASn,
+  output reg          io_phy_phases_1_WEn,
+  output reg [1:0]    io_phy_phases_1_DM_0,
+  output     [15:0]   io_phy_phases_1_DQw_0,
+  input      [15:0]   io_phy_phases_1_DQr_0,
+  output reg [12:0]   io_phy_ADDR,
+  output reg [1:0]    io_phy_BA,
+  output              io_phy_writeEnable,
+  output reg          io_phy_readEnable,
+  input               io_phy_readValid,
+  output              io_outputs_0_valid,
+  output              io_outputs_0_payload_last,
+  output     [31:0]   io_outputs_0_payload_fragment_data,
+  output     [3:0]    io_outputs_0_payload_fragment_context,
+  input               io_soft_cmd_valid,
+  input      [12:0]   io_soft_cmd_payload_ADDR,
+  input      [1:0]    io_soft_cmd_payload_BA,
+  input               io_soft_cmd_payload_CASn,
+  input               io_soft_cmd_payload_CSn,
+  input               io_soft_cmd_payload_RASn,
+  input               io_soft_cmd_payload_WEn,
+  input               io_soft_CKE,
+  input               clkout_system,
+  input               systemCdCtrl_logic_outputReset
+);
+
+  wire                streamFifoLowLatency_4_io_pop_ready;
+  wire                streamFifoLowLatency_4_io_push_ready;
+  wire                streamFifoLowLatency_4_io_pop_valid;
+  wire                streamFifoLowLatency_4_io_pop_payload_write;
+  wire                streamFifoLowLatency_4_io_pop_payload_last;
+  wire       [3:0]    streamFifoLowLatency_4_io_pop_payload_context;
+  wire       [3:0]    streamFifoLowLatency_4_io_occupancy;
+  wire       [0:0]    _zz_when;
+  wire       [15:0]   _zz_io_phy_phases_0_DQw_0;
+  wire       [1:0]    _zz_io_phy_phases_0_DM_0;
+  wire       [15:0]   _zz_io_phy_phases_1_DQw_0;
+  wire       [1:0]    _zz_io_phy_phases_1_DM_0;
+  wire       [8:0]    _zz_io_phy_ADDR;
+  wire       [8:0]    _zz_io_phy_ADDR_1;
+  wire                writePipeline_input_valid;
+  wire                writePipeline_inputRepeated_valid;
+  wire                writePipeline_writeHistory_0_valid;
+  wire                writePipeline_writeHistory_1_valid;
+  wire                _zz_writePipeline_writeHistory_0_valid;
+  reg                 _zz_writePipeline_writeHistory_1_valid;
+  reg                 writePipeline_history_valid;
+  wire       [31:0]   writePipeline_payload_data;
+  wire       [3:0]    writePipeline_payload_mask;
+  reg                 rspPipeline_input_valid;
+  reg                 rspPipeline_input_payload_write;
+  wire                rspPipeline_input_payload_last;
+  wire       [3:0]    rspPipeline_input_payload_context;
+  wire                rspPipeline_readHistory_0;
+  wire                rspPipeline_readHistory_1;
+  wire                rspPipeline_readHistory_2;
+  wire                rspPipeline_readHistory_3;
+  wire                rspPipeline_readHistory_4;
+  wire                rspPipeline_readHistory_5;
+  wire                rspPipeline_readHistory_6;
+  wire                rspPipeline_readHistory_7;
+  wire                _zz_rspPipeline_readHistory_0;
+  reg                 _zz_rspPipeline_readHistory_1;
+  reg                 _zz_rspPipeline_readHistory_2;
+  reg                 _zz_rspPipeline_readHistory_3;
+  reg                 _zz_rspPipeline_readHistory_4;
+  reg                 _zz_rspPipeline_readHistory_5;
+  reg                 _zz_rspPipeline_readHistory_6;
+  reg                 _zz_rspPipeline_readHistory_7;
+  reg                 rspPipeline_beatCounter_willIncrement;
+  wire                rspPipeline_beatCounter_willClear;
+  wire                rspPipeline_beatCounter_willOverflowIfInc;
+  wire                rspPipeline_beatCounter_willOverflow;
+  wire                rspPipeline_output_valid;
+  wire                rspPipeline_output_payload_last;
+  reg        [31:0]   rspPipeline_output_payload_fragment_data;
+  wire       [3:0]    rspPipeline_output_payload_fragment_context;
+  reg        [31:0]   rspPipeline_debugData;
+  reg                 rspPop_valid;
+  reg                 rspPop_payload_last;
+  reg        [31:0]   rspPop_payload_fragment_data;
+  reg        [3:0]    rspPop_payload_fragment_context;
+  wire                _zz_muxedCmd_read;
+  wire                muxedCmd_read;
+  wire                muxedCmd_write;
+  wire                muxedCmd_active;
+  wire                muxedCmd_precharge;
+  wire                muxedCmd_last;
+  wire       [0:0]    muxedCmd_address_byte;
+  wire       [8:0]    muxedCmd_address_column;
+  wire       [1:0]    muxedCmd_address_bank;
+  wire       [12:0]   muxedCmd_address_row;
+  wire       [3:0]    muxedCmd_context;
+  wire       [1:0]    _zz_1;
+  wire                _zz_2;
+  wire                _zz_3;
+  wire       [1:0]    _zz_4;
+  wire                _zz_5;
+  wire                _zz_6;
+  wire                when_Backend_l186;
+  wire                when_Backend_l194;
+  wire                when_Backend_l200;
+  wire       [1:0]    _zz_7;
+  wire                _zz_8;
+  wire                _zz_9;
+  wire                when_Backend_l211;
+  wire       [1:0]    _zz_10;
+  wire                _zz_11;
+  wire                _zz_12;
+
+  assign _zz_when = 1'b1;
+  assign _zz_io_phy_phases_0_DQw_0 = writePipeline_payload_data[15 : 0];
+  assign _zz_io_phy_phases_0_DM_0 = (~ writePipeline_payload_mask[1 : 0]);
+  assign _zz_io_phy_phases_1_DQw_0 = writePipeline_payload_data[31 : 16];
+  assign _zz_io_phy_phases_1_DM_0 = (~ writePipeline_payload_mask[3 : 2]);
+  assign _zz_io_phy_ADDR = muxedCmd_address_column;
+  assign _zz_io_phy_ADDR_1 = muxedCmd_address_column;
+  StreamFifoLowLatency streamFifoLowLatency_4 (
+    .io_push_valid                     (rspPipeline_input_valid                             ), //i
+    .io_push_ready                     (streamFifoLowLatency_4_io_push_ready                ), //o
+    .io_push_payload_write             (rspPipeline_input_payload_write                     ), //i
+    .io_push_payload_last              (rspPipeline_input_payload_last                      ), //i
+    .io_push_payload_context           (rspPipeline_input_payload_context[3:0]              ), //i
+    .io_pop_valid                      (streamFifoLowLatency_4_io_pop_valid                 ), //o
+    .io_pop_ready                      (streamFifoLowLatency_4_io_pop_ready                 ), //i
+    .io_pop_payload_write              (streamFifoLowLatency_4_io_pop_payload_write         ), //o
+    .io_pop_payload_last               (streamFifoLowLatency_4_io_pop_payload_last          ), //o
+    .io_pop_payload_context            (streamFifoLowLatency_4_io_pop_payload_context[3:0]  ), //o
+    .io_flush                          (1'b0                                                ), //i
+    .io_occupancy                      (streamFifoLowLatency_4_io_occupancy[3:0]            ), //o
+    .clkout_system                     (clkout_system                                       ), //i
+    .systemCdCtrl_logic_outputReset    (systemCdCtrl_logic_outputReset                      )  //i
+  );
+  always @(*) begin
+    io_phy_ADDR = 13'bxxxxxxxxxxxxx;
+    if(io_input_prechargeAll) begin
+      io_phy_ADDR[10] = 1'b1;
+    end
+    if(when_Backend_l186) begin
+      io_phy_ADDR = muxedCmd_address_row;
+      io_phy_ADDR[10] = 1'b0;
+    end
+    if(when_Backend_l194) begin
+      io_phy_ADDR = muxedCmd_address_row;
+    end
+    if(when_Backend_l200) begin
+      io_phy_ADDR = {4'd0, _zz_io_phy_ADDR};
+      io_phy_ADDR[10] = 1'b0;
+    end
+    if(when_Backend_l211) begin
+      io_phy_ADDR = {4'd0, _zz_io_phy_ADDR_1};
+      io_phy_ADDR[10] = 1'b0;
+    end
+    if(io_soft_cmd_valid) begin
+      io_phy_ADDR = io_soft_cmd_payload_ADDR;
+    end
+  end
+
+  always @(*) begin
+    io_phy_BA = 2'bxx;
+    if(when_Backend_l186) begin
+      io_phy_BA = muxedCmd_address_bank;
+    end
+    if(when_Backend_l194) begin
+      io_phy_BA = muxedCmd_address_bank;
+    end
+    if(when_Backend_l200) begin
+      io_phy_BA = muxedCmd_address_bank;
+    end
+    if(when_Backend_l211) begin
+      io_phy_BA = muxedCmd_address_bank;
+    end
+    if(io_soft_cmd_valid) begin
+      io_phy_BA = io_soft_cmd_payload_BA;
+    end
+  end
+
+  always @(*) begin
+    io_phy_phases_0_CSn = 1'b0;
+    if(io_input_prechargeAll) begin
+      if(_zz_2) begin
+        io_phy_phases_0_CSn = 1'b0;
+      end
+    end
+    if(io_input_refresh) begin
+      if(_zz_5) begin
+        io_phy_phases_0_CSn = 1'b0;
+      end
+    end
+    if(when_Backend_l186) begin
+      if(_zz_2) begin
+        io_phy_phases_0_CSn = 1'b0;
+      end
+    end
+    if(when_Backend_l194) begin
+      if(_zz_5) begin
+        io_phy_phases_0_CSn = 1'b0;
+      end
+    end
+    if(when_Backend_l200) begin
+      if(_zz_8) begin
+        io_phy_phases_0_CSn = 1'b0;
+      end
+    end
+    if(when_Backend_l211) begin
+      if(_zz_11) begin
+        io_phy_phases_0_CSn = 1'b0;
+      end
+    end
+    if(io_soft_cmd_valid) begin
+      io_phy_phases_0_CSn = io_soft_cmd_payload_CSn;
+    end
+  end
+
+  always @(*) begin
+    io_phy_phases_0_RASn = 1'b1;
+    if(io_input_prechargeAll) begin
+      if(_zz_2) begin
+        io_phy_phases_0_RASn = 1'b0;
+      end
+    end
+    if(io_input_refresh) begin
+      if(_zz_5) begin
+        io_phy_phases_0_RASn = 1'b0;
+      end
+    end
+    if(when_Backend_l186) begin
+      if(_zz_2) begin
+        io_phy_phases_0_RASn = 1'b0;
+      end
+    end
+    if(when_Backend_l194) begin
+      if(_zz_5) begin
+        io_phy_phases_0_RASn = io_config_noActive;
+      end
+    end
+    if(io_soft_cmd_valid) begin
+      io_phy_phases_0_RASn = io_soft_cmd_payload_RASn;
+    end
+  end
+
+  always @(*) begin
+    io_phy_phases_0_CASn = 1'b1;
+    if(io_input_refresh) begin
+      if(_zz_5) begin
+        io_phy_phases_0_CASn = 1'b0;
+      end
+    end
+    if(when_Backend_l200) begin
+      if(_zz_8) begin
+        io_phy_phases_0_CASn = 1'b0;
+      end
+    end
+    if(when_Backend_l211) begin
+      if(_zz_11) begin
+        io_phy_phases_0_CASn = 1'b0;
+      end
+    end
+    if(io_soft_cmd_valid) begin
+      io_phy_phases_0_CASn = io_soft_cmd_payload_CASn;
+    end
+  end
+
+  always @(*) begin
+    io_phy_phases_0_WEn = 1'b1;
+    if(io_input_prechargeAll) begin
+      if(_zz_2) begin
+        io_phy_phases_0_WEn = 1'b0;
+      end
+    end
+    if(when_Backend_l186) begin
+      if(_zz_2) begin
+        io_phy_phases_0_WEn = 1'b0;
+      end
+    end
+    if(when_Backend_l200) begin
+      if(_zz_8) begin
+        io_phy_phases_0_WEn = 1'b0;
+      end
+    end
+    if(io_soft_cmd_valid) begin
+      io_phy_phases_0_WEn = io_soft_cmd_payload_WEn;
+    end
+  end
+
+  assign io_phy_phases_0_CKE = io_soft_CKE;
+  always @(*) begin
+    io_phy_phases_1_CSn = 1'b0;
+    if(io_input_prechargeAll) begin
+      if(_zz_3) begin
+        io_phy_phases_1_CSn = 1'b0;
+      end
+    end
+    if(io_input_refresh) begin
+      if(_zz_6) begin
+        io_phy_phases_1_CSn = 1'b0;
+      end
+    end
+    if(when_Backend_l186) begin
+      if(_zz_3) begin
+        io_phy_phases_1_CSn = 1'b0;
+      end
+    end
+    if(when_Backend_l194) begin
+      if(_zz_6) begin
+        io_phy_phases_1_CSn = 1'b0;
+      end
+    end
+    if(when_Backend_l200) begin
+      if(_zz_9) begin
+        io_phy_phases_1_CSn = 1'b0;
+      end
+    end
+    if(when_Backend_l211) begin
+      if(_zz_12) begin
+        io_phy_phases_1_CSn = 1'b0;
+      end
+    end
+  end
+
+  always @(*) begin
+    io_phy_phases_1_RASn = 1'b1;
+    if(io_input_prechargeAll) begin
+      if(_zz_3) begin
+        io_phy_phases_1_RASn = 1'b0;
+      end
+    end
+    if(io_input_refresh) begin
+      if(_zz_6) begin
+        io_phy_phases_1_RASn = 1'b0;
+      end
+    end
+    if(when_Backend_l186) begin
+      if(_zz_3) begin
+        io_phy_phases_1_RASn = 1'b0;
+      end
+    end
+    if(when_Backend_l194) begin
+      if(_zz_6) begin
+        io_phy_phases_1_RASn = io_config_noActive;
+      end
+    end
+  end
+
+  always @(*) begin
+    io_phy_phases_1_CASn = 1'b1;
+    if(io_input_refresh) begin
+      if(_zz_6) begin
+        io_phy_phases_1_CASn = 1'b0;
+      end
+    end
+    if(when_Backend_l200) begin
+      if(_zz_9) begin
+        io_phy_phases_1_CASn = 1'b0;
+      end
+    end
+    if(when_Backend_l211) begin
+      if(_zz_12) begin
+        io_phy_phases_1_CASn = 1'b0;
+      end
+    end
+  end
+
+  always @(*) begin
+    io_phy_phases_1_WEn = 1'b1;
+    if(io_input_prechargeAll) begin
+      if(_zz_3) begin
+        io_phy_phases_1_WEn = 1'b0;
+      end
+    end
+    if(when_Backend_l186) begin
+      if(_zz_3) begin
+        io_phy_phases_1_WEn = 1'b0;
+      end
+    end
+    if(when_Backend_l200) begin
+      if(_zz_9) begin
+        io_phy_phases_1_WEn = 1'b0;
+      end
+    end
+  end
+
+  assign io_phy_phases_1_CKE = io_soft_CKE;
+  assign writePipeline_inputRepeated_valid = writePipeline_input_valid;
+  assign _zz_writePipeline_writeHistory_0_valid = writePipeline_inputRepeated_valid;
+  assign writePipeline_writeHistory_0_valid = _zz_writePipeline_writeHistory_0_valid;
+  assign writePipeline_writeHistory_1_valid = _zz_writePipeline_writeHistory_1_valid;
+  always @(*) begin
+    writePipeline_history_valid = 1'b0;
+    writePipeline_history_valid = writePipeline_writeHistory_0_valid;
+  end
+
+  assign io_phy_writeEnable = writePipeline_history_valid;
+  always @(*) begin
+    io_writeDatas_0_ready = 1'b0;
+    if(_zz_when[0]) begin
+      io_writeDatas_0_ready = writePipeline_history_valid;
+    end
+  end
+
+  assign writePipeline_payload_data = io_writeDatas_0_payload_data;
+  assign writePipeline_payload_mask = io_writeDatas_0_payload_mask;
+  assign io_phy_phases_0_DQw_0 = _zz_io_phy_phases_0_DQw_0[15 : 0];
+  always @(*) begin
+    if(writePipeline_history_valid) begin
+      io_phy_phases_0_DM_0 = _zz_io_phy_phases_0_DM_0[1 : 0];
+    end else begin
+      io_phy_phases_0_DM_0 = 2'b00;
+    end
+  end
+
+  assign io_phy_phases_1_DQw_0 = _zz_io_phy_phases_1_DQw_0[15 : 0];
+  always @(*) begin
+    if(writePipeline_history_valid) begin
+      io_phy_phases_1_DM_0 = _zz_io_phy_phases_1_DM_0[1 : 0];
+    end else begin
+      io_phy_phases_1_DM_0 = 2'b00;
+    end
+  end
+
+  assign _zz_rspPipeline_readHistory_0 = (rspPipeline_input_valid && (! rspPipeline_input_payload_write));
+  assign rspPipeline_readHistory_0 = _zz_rspPipeline_readHistory_0;
+  assign rspPipeline_readHistory_1 = _zz_rspPipeline_readHistory_1;
+  assign rspPipeline_readHistory_2 = _zz_rspPipeline_readHistory_2;
+  assign rspPipeline_readHistory_3 = _zz_rspPipeline_readHistory_3;
+  assign rspPipeline_readHistory_4 = _zz_rspPipeline_readHistory_4;
+  assign rspPipeline_readHistory_5 = _zz_rspPipeline_readHistory_5;
+  assign rspPipeline_readHistory_6 = _zz_rspPipeline_readHistory_6;
+  assign rspPipeline_readHistory_7 = _zz_rspPipeline_readHistory_7;
+  always @(*) begin
+    io_phy_readEnable = 1'b0;
+    case(io_config_readLatency)
+      2'b00 : begin
+        io_phy_readEnable = (rspPipeline_readHistory_5 != 1'b0);
+      end
+      2'b01 : begin
+        io_phy_readEnable = (rspPipeline_readHistory_6 != 1'b0);
+      end
+      2'b10 : begin
+        io_phy_readEnable = (rspPipeline_readHistory_7 != 1'b0);
+      end
+      default : begin
+      end
+    endcase
+  end
+
+  always @(*) begin
+    rspPipeline_beatCounter_willIncrement = 1'b0;
+    if(io_phy_readValid) begin
+      rspPipeline_beatCounter_willIncrement = 1'b1;
+    end
+  end
+
+  assign rspPipeline_beatCounter_willClear = 1'b0;
+  assign rspPipeline_beatCounter_willOverflowIfInc = 1'b1;
+  assign rspPipeline_beatCounter_willOverflow = (rspPipeline_beatCounter_willOverflowIfInc && rspPipeline_beatCounter_willIncrement);
+  assign rspPipeline_output_valid = (((streamFifoLowLatency_4_io_pop_valid && streamFifoLowLatency_4_io_pop_payload_write) && streamFifoLowLatency_4_io_pop_payload_last) || io_phy_readValid);
+  assign rspPipeline_output_payload_fragment_context = streamFifoLowLatency_4_io_pop_payload_context;
+  assign rspPipeline_output_payload_last = (streamFifoLowLatency_4_io_pop_payload_write || (rspPipeline_beatCounter_willOverflowIfInc && streamFifoLowLatency_4_io_pop_payload_last));
+  assign streamFifoLowLatency_4_io_pop_ready = (streamFifoLowLatency_4_io_pop_payload_write || rspPipeline_beatCounter_willOverflow);
+  always @(*) begin
+    rspPipeline_output_payload_fragment_data[15 : 0] = io_phy_phases_0_DQr_0;
+    rspPipeline_output_payload_fragment_data[31 : 16] = io_phy_phases_1_DQr_0;
+  end
+
+  assign io_outputs_0_valid = (rspPop_valid && 1'b1);
+  assign io_outputs_0_payload_last = rspPop_payload_last;
+  assign io_outputs_0_payload_fragment_data = rspPop_payload_fragment_data;
+  assign io_outputs_0_payload_fragment_context = rspPop_payload_fragment_context;
+  assign _zz_muxedCmd_read = (((io_input_ports_0_read || io_input_ports_0_write) || io_input_ports_0_precharge) || io_input_ports_0_active);
+  assign muxedCmd_read = (_zz_muxedCmd_read ? io_input_ports_0_read : io_input_ports_1_read);
+  assign muxedCmd_write = (_zz_muxedCmd_read ? io_input_ports_0_write : io_input_ports_1_write);
+  assign muxedCmd_active = (_zz_muxedCmd_read ? io_input_ports_0_active : io_input_ports_1_active);
+  assign muxedCmd_precharge = (_zz_muxedCmd_read ? io_input_ports_0_precharge : io_input_ports_1_precharge);
+  assign muxedCmd_last = (_zz_muxedCmd_read ? io_input_ports_0_last : io_input_ports_1_last);
+  assign muxedCmd_address_byte = (_zz_muxedCmd_read ? io_input_ports_0_address_byte : io_input_ports_1_address_byte);
+  assign muxedCmd_address_column = (_zz_muxedCmd_read ? io_input_ports_0_address_column : io_input_ports_1_address_column);
+  assign muxedCmd_address_bank = (_zz_muxedCmd_read ? io_input_ports_0_address_bank : io_input_ports_1_address_bank);
+  assign muxedCmd_address_row = (_zz_muxedCmd_read ? io_input_ports_0_address_row : io_input_ports_1_address_row);
+  assign muxedCmd_context = (_zz_muxedCmd_read ? io_input_ports_0_context : io_input_ports_1_context);
+  assign writePipeline_input_valid = ({io_input_ports_1_write,io_input_ports_0_write} != 2'b00);
+  always @(*) begin
+    rspPipeline_input_valid = 1'b0;
+    if(when_Backend_l200) begin
+      rspPipeline_input_valid = 1'b1;
+    end
+    if(when_Backend_l211) begin
+      rspPipeline_input_valid = 1'b1;
+    end
+  end
+
+  assign rspPipeline_input_payload_last = muxedCmd_last;
+  assign rspPipeline_input_payload_context = muxedCmd_context;
+  always @(*) begin
+    rspPipeline_input_payload_write = 1'bx;
+    if(when_Backend_l200) begin
+      rspPipeline_input_payload_write = 1'b1;
+    end
+    if(when_Backend_l211) begin
+      rspPipeline_input_payload_write = 1'b0;
+    end
+  end
+
+  assign _zz_1 = ({1'd0,1'b1} <<< io_config_phase_precharge);
+  assign _zz_2 = _zz_1[0];
+  assign _zz_3 = _zz_1[1];
+  assign _zz_4 = ({1'd0,1'b1} <<< io_config_phase_active);
+  assign _zz_5 = _zz_4[0];
+  assign _zz_6 = _zz_4[1];
+  assign when_Backend_l186 = ({io_input_ports_1_precharge,io_input_ports_0_precharge} != 2'b00);
+  assign when_Backend_l194 = ({io_input_ports_1_active,io_input_ports_0_active} != 2'b00);
+  assign when_Backend_l200 = ({io_input_ports_1_write,io_input_ports_0_write} != 2'b00);
+  assign _zz_7 = ({1'd0,1'b1} <<< io_config_phase_write);
+  assign _zz_8 = _zz_7[0];
+  assign _zz_9 = _zz_7[1];
+  assign when_Backend_l211 = ({io_input_ports_1_read,io_input_ports_0_read} != 2'b00);
+  assign _zz_10 = ({1'd0,1'b1} <<< io_config_phase_read);
+  assign _zz_11 = _zz_10[0];
+  assign _zz_12 = _zz_10[1];
+  always @(posedge clkout_system) begin
+    if(systemCdCtrl_logic_outputReset) begin
+      _zz_writePipeline_writeHistory_1_valid <= 1'b0;
+      _zz_rspPipeline_readHistory_1 <= 1'b0;
+      _zz_rspPipeline_readHistory_2 <= 1'b0;
+      _zz_rspPipeline_readHistory_3 <= 1'b0;
+      _zz_rspPipeline_readHistory_4 <= 1'b0;
+      _zz_rspPipeline_readHistory_5 <= 1'b0;
+      _zz_rspPipeline_readHistory_6 <= 1'b0;
+      _zz_rspPipeline_readHistory_7 <= 1'b0;
+      rspPop_valid <= 1'b0;
+    end else begin
+      _zz_writePipeline_writeHistory_1_valid <= _zz_writePipeline_writeHistory_0_valid;
+      `ifndef SYNTHESIS
+        `ifdef FORMAL
+          assert((! ((! io_writeDatas_0_valid) && io_writeDatas_0_ready)));
+        `else
+          if(!(! ((! io_writeDatas_0_valid) && io_writeDatas_0_ready))) begin
+            $display("ERROR SDRAM write data stream starved !");
+          end
+        `endif
+      `endif
+      _zz_rspPipeline_readHistory_1 <= _zz_rspPipeline_readHistory_0;
+      _zz_rspPipeline_readHistory_2 <= _zz_rspPipeline_readHistory_1;
+      _zz_rspPipeline_readHistory_3 <= _zz_rspPipeline_readHistory_2;
+      _zz_rspPipeline_readHistory_4 <= _zz_rspPipeline_readHistory_3;
+      _zz_rspPipeline_readHistory_5 <= _zz_rspPipeline_readHistory_4;
+      _zz_rspPipeline_readHistory_6 <= _zz_rspPipeline_readHistory_5;
+      _zz_rspPipeline_readHistory_7 <= _zz_rspPipeline_readHistory_6;
+      rspPop_valid <= rspPipeline_output_valid;
+    end
+  end
+
+  always @(posedge clkout_system) begin
+    if(rspPipeline_output_valid) begin
+      rspPipeline_debugData <= rspPipeline_output_payload_fragment_data;
+    end
+    rspPop_payload_last <= rspPipeline_output_payload_last;
+    rspPop_payload_fragment_data <= rspPipeline_output_payload_fragment_data;
+    rspPop_payload_fragment_context <= rspPipeline_output_payload_fragment_context;
+  end
+
+
+endmodule
+
+module Tasker (
+  input      [1:0]    io_config_readLatency,
+  input      [3:0]    io_config_RAS,
+  input      [3:0]    io_config_RP,
+  input      [3:0]    io_config_WR,
+  input      [3:0]    io_config_RCD,
+  input      [3:0]    io_config_WTR,
+  input      [3:0]    io_config_RTP,
+  input      [3:0]    io_config_RRD,
+  input      [3:0]    io_config_RTW,
+  input      [6:0]    io_config_RFC,
+  input      [15:0]   io_config_REF,
+  input               io_config_autoRefresh,
+  input               io_config_noActive,
+  input      [0:0]    io_config_phase_active,
+  input      [0:0]    io_config_phase_precharge,
+  input      [0:0]    io_config_phase_read,
+  input      [0:0]    io_config_phase_write,
+  input               io_refresh_valid,
+  output reg          io_refresh_ready,
+  input               io_inputs_0_valid,
+  output              io_inputs_0_ready,
+  input               io_inputs_0_payload_write,
+  input      [24:0]   io_inputs_0_payload_address,
+  input      [3:0]    io_inputs_0_payload_context,
+  input               io_inputs_0_payload_burstLast,
+  input      [3:0]    io_inputs_0_payload_length,
+  input      [0:0]    io_writeDataTockens_0,
+  output              io_output_ports_0_read,
+  output              io_output_ports_0_write,
+  output              io_output_ports_0_active,
+  output              io_output_ports_0_precharge,
+  output              io_output_ports_0_last,
+  output     [0:0]    io_output_ports_0_address_byte,
+  output     [8:0]    io_output_ports_0_address_column,
+  output     [1:0]    io_output_ports_0_address_bank,
+  output     [12:0]   io_output_ports_0_address_row,
+  output     [3:0]    io_output_ports_0_context,
+  output              io_output_ports_1_read,
+  output              io_output_ports_1_write,
+  output              io_output_ports_1_active,
+  output              io_output_ports_1_precharge,
+  output              io_output_ports_1_last,
+  output     [0:0]    io_output_ports_1_address_byte,
+  output     [8:0]    io_output_ports_1_address_column,
+  output     [1:0]    io_output_ports_1_address_bank,
+  output     [12:0]   io_output_ports_1_address_row,
+  output     [3:0]    io_output_ports_1_context,
+  output reg          io_output_prechargeAll,
+  output reg          io_output_refresh,
+  input               clkout_system,
+  input               systemCdCtrl_logic_outputReset
+);
+
+  wire       [12:0]   _zz_banksRow_port0;
+  wire       [6:0]    _zz_RFC_value;
+  wire       [0:0]    _zz_RFC_value_1;
+  wire       [3:0]    _zz_RRD_value;
+  wire       [0:0]    _zz_RRD_value_1;
+  wire       [3:0]    _zz_WTR_value;
+  wire       [0:0]    _zz_WTR_value_1;
+  wire       [3:0]    _zz_RTW_value;
+  wire       [0:0]    _zz_RTW_value_1;
+  wire       [3:0]    _zz_RP_notZero;
+  wire       [3:0]    _zz_RP_value;
+  wire       [0:0]    _zz_RP_value_1;
+  wire       [3:0]    _zz_banks_0_WR_value;
+  wire       [0:0]    _zz_banks_0_WR_value_1;
+  wire       [3:0]    _zz_banks_0_RAS_value;
+  wire       [0:0]    _zz_banks_0_RAS_value_1;
+  wire       [3:0]    _zz_banks_0_RP_value;
+  wire       [0:0]    _zz_banks_0_RP_value_1;
+  wire       [3:0]    _zz_banks_0_RCD_value;
+  wire       [0:0]    _zz_banks_0_RCD_value_1;
+  wire       [3:0]    _zz_banks_0_RTP_value;
+  wire       [0:0]    _zz_banks_0_RTP_value_1;
+  wire       [3:0]    _zz_banks_1_WR_value;
+  wire       [0:0]    _zz_banks_1_WR_value_1;
+  wire       [3:0]    _zz_banks_1_RAS_value;
+  wire       [0:0]    _zz_banks_1_RAS_value_1;
+  wire       [3:0]    _zz_banks_1_RP_value;
+  wire       [0:0]    _zz_banks_1_RP_value_1;
+  wire       [3:0]    _zz_banks_1_RCD_value;
+  wire       [0:0]    _zz_banks_1_RCD_value_1;
+  wire       [3:0]    _zz_banks_1_RTP_value;
+  wire       [0:0]    _zz_banks_1_RTP_value_1;
+  wire       [3:0]    _zz_banks_2_WR_value;
+  wire       [0:0]    _zz_banks_2_WR_value_1;
+  wire       [3:0]    _zz_banks_2_RAS_value;
+  wire       [0:0]    _zz_banks_2_RAS_value_1;
+  wire       [3:0]    _zz_banks_2_RP_value;
+  wire       [0:0]    _zz_banks_2_RP_value_1;
+  wire       [3:0]    _zz_banks_2_RCD_value;
+  wire       [0:0]    _zz_banks_2_RCD_value_1;
+  wire       [3:0]    _zz_banks_2_RTP_value;
+  wire       [0:0]    _zz_banks_2_RTP_value_1;
+  wire       [3:0]    _zz_banks_3_WR_value;
+  wire       [0:0]    _zz_banks_3_WR_value_1;
+  wire       [3:0]    _zz_banks_3_RAS_value;
+  wire       [0:0]    _zz_banks_3_RAS_value_1;
+  wire       [3:0]    _zz_banks_3_RP_value;
+  wire       [0:0]    _zz_banks_3_RP_value_1;
+  wire       [3:0]    _zz_banks_3_RCD_value;
+  wire       [0:0]    _zz_banks_3_RCD_value_1;
+  wire       [3:0]    _zz_banks_3_RTP_value;
+  wire       [0:0]    _zz_banks_3_RTP_value_1;
+  wire       [5:0]    _zz_writeTockens_0_counter;
+  wire       [5:0]    _zz_writeTockens_0_counter_1;
+  wire       [5:0]    _zz_writeTockens_0_counter_2;
+  wire       [0:0]    _zz_writeTockens_0_counter_3;
+  wire       [1:0]    _zz__zz_inputsArbiter_selOH_2;
+  wire       [1:0]    _zz__zz_inputsArbiter_selOH_2_1;
+  wire       [0:0]    _zz__zz_inputsArbiter_selOH_2_2;
+  wire       [5:0]    _zz_when_Tasker_l157;
+  reg                 _zz_taskConstructor_s1_status_bankActive;
+  reg                 _zz_when_Tasker_l94;
+  reg                 _zz_when_Tasker_l95;
+  reg                 _zz_when_Tasker_l96;
+  reg                 _zz_when_Tasker_l97;
+  reg                 _zz_when_Tasker_l94_1;
+  reg                 _zz_when_Tasker_l95_1;
+  reg                 _zz_when_Tasker_l96_1;
+  reg                 _zz_when_Tasker_l97_1;
+  wire       [8:0]    _zz_io_output_ports_0_address_column;
+  wire       [4:0]    _zz_io_output_ports_0_address_column_1;
+  reg                 _zz_when_Tasker_l94_2;
+  reg                 _zz_when_Tasker_l95_2;
+  reg                 _zz_when_Tasker_l96_2;
+  reg                 _zz_when_Tasker_l97_2;
+  wire       [8:0]    _zz_io_output_ports_1_address_column;
+  wire       [4:0]    _zz_io_output_ports_1_address_column_1;
+  wire       [12:0]   _zz_banksRow_port;
+  reg                 _zz_1;
+  reg                 readyForRefresh;
+  reg        [6:0]    RFC_value = 7'b0000000;
+  wire                RFC_notZero;
+  wire                RFC_busy;
+  wire                when_Tasker_l38;
+  reg        [3:0]    RRD_value = 4'b0000;
+  wire                RRD_notZero;
+  wire                RRD_busy;
+  wire                when_Tasker_l38_1;
+  reg        [3:0]    WTR_value = 4'b0000;
+  wire                WTR_notZero;
+  wire                WTR_busy;
+  wire                when_Tasker_l38_2;
+  reg        [3:0]    RTW_value = 4'b0000;
+  wire                RTW_notZero;
+  wire                RTW_busy;
+  reg        [3:0]    RP_value = 4'b0000;
+  wire                RP_notZero;
+  wire                RP_busy;
+  wire       [1:0]    banks_0_hits;
+  reg                 banks_0_activeNext;
+  reg                 banks_0_active;
+  wire                when_Tasker_l65;
+  wire                when_Tasker_l68;
+  wire                when_Tasker_l38_3;
+  reg        [3:0]    banks_0_WR_value = 4'b0000;
+  wire                banks_0_WR_notZero;
+  wire                banks_0_WR_busy;
+  wire                when_Tasker_l38_4;
+  reg        [3:0]    banks_0_RAS_value = 4'b0000;
+  wire                banks_0_RAS_notZero;
+  wire                banks_0_RAS_busy;
+  wire                when_Tasker_l38_5;
+  reg        [3:0]    banks_0_RP_value = 4'b0000;
+  wire                banks_0_RP_notZero;
+  wire                banks_0_RP_busy;
+  wire                when_Tasker_l38_6;
+  reg        [3:0]    banks_0_RCD_value = 4'b0000;
+  wire                banks_0_RCD_notZero;
+  wire                banks_0_RCD_busy;
+  wire                when_Tasker_l38_7;
+  reg        [3:0]    banks_0_RTP_value = 4'b0000;
+  wire                banks_0_RTP_notZero;
+  wire                banks_0_RTP_busy;
+  wire                banks_0_allowPrecharge;
+  wire                banks_0_allowActive;
+  wire                banks_0_allowWrite;
+  wire                banks_0_allowRead;
+  wire       [1:0]    banks_1_hits;
+  reg                 banks_1_activeNext;
+  reg                 banks_1_active;
+  wire                when_Tasker_l65_1;
+  wire                when_Tasker_l68_1;
+  wire                when_Tasker_l38_8;
+  reg        [3:0]    banks_1_WR_value = 4'b0000;
+  wire                banks_1_WR_notZero;
+  wire                banks_1_WR_busy;
+  wire                when_Tasker_l38_9;
+  reg        [3:0]    banks_1_RAS_value = 4'b0000;
+  wire                banks_1_RAS_notZero;
+  wire                banks_1_RAS_busy;
+  wire                when_Tasker_l38_10;
+  reg        [3:0]    banks_1_RP_value = 4'b0000;
+  wire                banks_1_RP_notZero;
+  wire                banks_1_RP_busy;
+  wire                when_Tasker_l38_11;
+  reg        [3:0]    banks_1_RCD_value = 4'b0000;
+  wire                banks_1_RCD_notZero;
+  wire                banks_1_RCD_busy;
+  wire                when_Tasker_l38_12;
+  reg        [3:0]    banks_1_RTP_value = 4'b0000;
+  wire                banks_1_RTP_notZero;
+  wire                banks_1_RTP_busy;
+  wire                banks_1_allowPrecharge;
+  wire                banks_1_allowActive;
+  wire                banks_1_allowWrite;
+  wire                banks_1_allowRead;
+  wire       [1:0]    banks_2_hits;
+  reg                 banks_2_activeNext;
+  reg                 banks_2_active;
+  wire                when_Tasker_l65_2;
+  wire                when_Tasker_l68_2;
+  wire                when_Tasker_l38_13;
+  reg        [3:0]    banks_2_WR_value = 4'b0000;
+  wire                banks_2_WR_notZero;
+  wire                banks_2_WR_busy;
+  wire                when_Tasker_l38_14;
+  reg        [3:0]    banks_2_RAS_value = 4'b0000;
+  wire                banks_2_RAS_notZero;
+  wire                banks_2_RAS_busy;
+  wire                when_Tasker_l38_15;
+  reg        [3:0]    banks_2_RP_value = 4'b0000;
+  wire                banks_2_RP_notZero;
+  wire                banks_2_RP_busy;
+  wire                when_Tasker_l38_16;
+  reg        [3:0]    banks_2_RCD_value = 4'b0000;
+  wire                banks_2_RCD_notZero;
+  wire                banks_2_RCD_busy;
+  wire                when_Tasker_l38_17;
+  reg        [3:0]    banks_2_RTP_value = 4'b0000;
+  wire                banks_2_RTP_notZero;
+  wire                banks_2_RTP_busy;
+  wire                banks_2_allowPrecharge;
+  wire                banks_2_allowActive;
+  wire                banks_2_allowWrite;
+  wire                banks_2_allowRead;
+  wire       [1:0]    banks_3_hits;
+  reg                 banks_3_activeNext;
+  reg                 banks_3_active;
+  wire                when_Tasker_l65_3;
+  wire                when_Tasker_l68_3;
+  wire                when_Tasker_l38_18;
+  reg        [3:0]    banks_3_WR_value = 4'b0000;
+  wire                banks_3_WR_notZero;
+  wire                banks_3_WR_busy;
+  wire                when_Tasker_l38_19;
+  reg        [3:0]    banks_3_RAS_value = 4'b0000;
+  wire                banks_3_RAS_notZero;
+  wire                banks_3_RAS_busy;
+  wire                when_Tasker_l38_20;
+  reg        [3:0]    banks_3_RP_value = 4'b0000;
+  wire                banks_3_RP_notZero;
+  wire                banks_3_RP_busy;
+  wire                when_Tasker_l38_21;
+  reg        [3:0]    banks_3_RCD_value = 4'b0000;
+  wire                banks_3_RCD_notZero;
+  wire                banks_3_RCD_busy;
+  wire                when_Tasker_l38_22;
+  reg        [3:0]    banks_3_RTP_value = 4'b0000;
+  wire                banks_3_RTP_notZero;
+  wire                banks_3_RTP_busy;
+  wire                banks_3_allowPrecharge;
+  wire                banks_3_allowActive;
+  wire                banks_3_allowWrite;
+  wire                banks_3_allowRead;
+  wire                allowPrechargeAll;
+  wire                writeTockens_0_consume;
+  reg        [5:0]    writeTockens_0_counter;
+  reg                 writeTockens_0_ready;
+  wire                when_Tasker_l131;
+  wire                when_Tasker_l131_1;
+  wire                inputsArbiter_output_valid;
+  reg                 inputsArbiter_output_ready;
+  wire                inputsArbiter_output_payload_write;
+  wire       [24:0]   inputsArbiter_output_payload_address;
+  wire       [3:0]    inputsArbiter_output_payload_context;
+  wire                inputsArbiter_output_payload_burstLast;
+  wire       [3:0]    inputsArbiter_output_payload_length;
+  reg        [0:0]    inputsArbiter_state;
+  wire       [0:0]    inputsArbiter_inputsValids;
+  wire       [0:0]    _zz_inputsArbiter_selOH;
+  wire       [1:0]    _zz_inputsArbiter_selOH_1;
+  wire       [1:0]    _zz_inputsArbiter_selOH_2;
+  wire       [0:0]    inputsArbiter_selOH;
+  reg        [4:0]    inputsArbiter_tocken;
+  wire                inputsArbiter_tockenIncrement;
+  wire                when_Tasker_l157;
+  wire                _zz_inputsArbiter_selPayload_write;
+  wire                _zz_inputsArbiter_selPayload_burstLast;
+  wire                inputsArbiter_selPayload_write;
+  wire       [24:0]   inputsArbiter_selPayload_address;
+  wire       [3:0]    inputsArbiter_selPayload_context;
+  wire                inputsArbiter_selPayload_burstLast;
+  wire       [3:0]    inputsArbiter_selPayload_length;
+  wire                when_Tasker_l172;
+  wire       [0:0]    taskConstructor_s0_portAddress_byte;
+  wire       [8:0]    taskConstructor_s0_portAddress_column;
+  wire       [1:0]    taskConstructor_s0_portAddress_bank;
+  wire       [12:0]   taskConstructor_s0_portAddress_row;
+  wire       [24:0]   _zz_taskConstructor_s0_portAddress_byte;
+  wire                inputsArbiter_output_input_valid;
+  wire                inputsArbiter_output_input_ready;
+  wire                inputsArbiter_output_input_payload_write;
+  wire       [24:0]   inputsArbiter_output_input_payload_address;
+  wire       [3:0]    inputsArbiter_output_input_payload_context;
+  wire                inputsArbiter_output_input_payload_burstLast;
+  wire       [3:0]    inputsArbiter_output_input_payload_length;
+  reg                 inputsArbiter_output_rValid;
+  reg                 inputsArbiter_output_rData_write;
+  reg        [24:0]   inputsArbiter_output_rData_address;
+  reg        [3:0]    inputsArbiter_output_rData_context;
+  reg                 inputsArbiter_output_rData_burstLast;
+  reg        [3:0]    inputsArbiter_output_rData_length;
+  wire                when_Stream_l342;
+  wire       [0:0]    taskConstructor_s1_address_byte;
+  wire       [8:0]    taskConstructor_s1_address_column;
+  wire       [1:0]    taskConstructor_s1_address_bank;
+  wire       [12:0]   taskConstructor_s1_address_row;
+  wire       [24:0]   _zz_taskConstructor_s1_address_byte;
+  reg                 taskConstructor_s1_status_bankActive;
+  reg                 taskConstructor_s1_status_bankHit;
+  reg                 taskConstructor_s1_status_allowPrecharge;
+  reg                 taskConstructor_s1_status_allowActive;
+  reg                 taskConstructor_s1_status_allowWrite;
+  reg                 taskConstructor_s1_status_allowRead;
+  wire                when_Tasker_l94;
+  wire                when_Tasker_l95;
+  wire                when_Tasker_l96;
+  wire                when_Tasker_l97;
+  wire                when_Tasker_l100;
+  wire                when_Tasker_l111;
+  wire                when_Tasker_l100_1;
+  wire                when_Tasker_l111_1;
+  reg                 stations_0_valid;
+  reg                 stations_0_status_bankActive;
+  reg                 stations_0_status_bankHit;
+  reg                 stations_0_status_allowPrecharge;
+  reg                 stations_0_status_allowActive;
+  reg                 stations_0_status_allowWrite;
+  reg                 stations_0_status_allowRead;
+  reg        [0:0]    stations_0_address_byte;
+  reg        [8:0]    stations_0_address_column;
+  reg        [1:0]    stations_0_address_bank;
+  reg        [12:0]   stations_0_address_row;
+  reg                 stations_0_write;
+  reg        [3:0]    stations_0_context;
+  reg        [3:0]    stations_0_offset;
+  reg        [3:0]    stations_0_offsetLast;
+  reg        [1:0]    stations_0_stronger;
+  reg        [1:0]    stations_0_afterBank;
+  reg        [1:0]    stations_0_afterAccess;
+  wire                when_Tasker_l94_1;
+  wire                when_Tasker_l95_1;
+  wire                when_Tasker_l96_1;
+  wire                when_Tasker_l97_1;
+  wire                when_Tasker_l100_2;
+  wire                when_Tasker_l111_2;
+  wire                when_Tasker_l100_3;
+  wire                when_Tasker_l111_3;
+  wire                stations_0_inputMiss;
+  wire                stations_0_inputActive;
+  wire                stations_0_inputPrecharge;
+  wire                stations_0_inputAccess;
+  wire                stations_0_inputWrite;
+  wire                stations_0_inputRead;
+  reg                 stations_0_inibated;
+  wire                stations_0_doActive;
+  wire                stations_0_doPrecharge;
+  wire                stations_0_doWrite;
+  wire                stations_0_doRead;
+  wire                stations_0_doSomething;
+  wire                stations_0_blockedByWriteTocken;
+  wire                stations_0_sel;
+  reg                 stations_0_fire;
+  wire                stations_0_last;
+  wire                stations_0_cmdOutputPayload_read;
+  wire                stations_0_cmdOutputPayload_write;
+  wire                stations_0_cmdOutputPayload_active;
+  wire                stations_0_cmdOutputPayload_precharge;
+  wire                stations_0_cmdOutputPayload_last;
+  wire       [0:0]    stations_0_cmdOutputPayload_address_byte;
+  wire       [8:0]    stations_0_cmdOutputPayload_address_column;
+  wire       [1:0]    stations_0_cmdOutputPayload_address_bank;
+  wire       [12:0]   stations_0_cmdOutputPayload_address_row;
+  wire       [3:0]    stations_0_cmdOutputPayload_context;
+  wire                when_Tasker_l252;
+  reg        [3:0]    stations_0_frustration_counter;
+  reg                 stations_0_frustration_increment;
+  wire                stations_0_frustration_full;
+  wire                when_Tasker_l266;
+  reg                 stations_1_valid;
+  reg                 stations_1_status_bankActive;
+  reg                 stations_1_status_bankHit;
+  reg                 stations_1_status_allowPrecharge;
+  reg                 stations_1_status_allowActive;
+  reg                 stations_1_status_allowWrite;
+  reg                 stations_1_status_allowRead;
+  reg        [0:0]    stations_1_address_byte;
+  reg        [8:0]    stations_1_address_column;
+  reg        [1:0]    stations_1_address_bank;
+  reg        [12:0]   stations_1_address_row;
+  reg                 stations_1_write;
+  reg        [3:0]    stations_1_context;
+  reg        [3:0]    stations_1_offset;
+  reg        [3:0]    stations_1_offsetLast;
+  reg        [1:0]    stations_1_stronger;
+  reg        [1:0]    stations_1_afterBank;
+  reg        [1:0]    stations_1_afterAccess;
+  wire                when_Tasker_l94_2;
+  wire                when_Tasker_l95_2;
+  wire                when_Tasker_l96_2;
+  wire                when_Tasker_l97_2;
+  wire                when_Tasker_l100_4;
+  wire                when_Tasker_l111_4;
+  wire                when_Tasker_l100_5;
+  wire                when_Tasker_l111_5;
+  wire                stations_1_inputMiss;
+  wire                stations_1_inputActive;
+  wire                stations_1_inputPrecharge;
+  wire                stations_1_inputAccess;
+  wire                stations_1_inputWrite;
+  wire                stations_1_inputRead;
+  reg                 stations_1_inibated;
+  wire                stations_1_doActive;
+  wire                stations_1_doPrecharge;
+  wire                stations_1_doWrite;
+  wire                stations_1_doRead;
+  wire                stations_1_doSomething;
+  wire                stations_1_blockedByWriteTocken;
+  wire                stations_1_sel;
+  reg                 stations_1_fire;
+  wire                stations_1_last;
+  wire                stations_1_cmdOutputPayload_read;
+  wire                stations_1_cmdOutputPayload_write;
+  wire                stations_1_cmdOutputPayload_active;
+  wire                stations_1_cmdOutputPayload_precharge;
+  wire                stations_1_cmdOutputPayload_last;
+  wire       [0:0]    stations_1_cmdOutputPayload_address_byte;
+  wire       [8:0]    stations_1_cmdOutputPayload_address_column;
+  wire       [1:0]    stations_1_cmdOutputPayload_address_bank;
+  wire       [12:0]   stations_1_cmdOutputPayload_address_row;
+  wire       [3:0]    stations_1_cmdOutputPayload_context;
+  wire                when_Tasker_l252_1;
+  reg        [3:0]    stations_1_frustration_counter;
+  reg                 stations_1_frustration_increment;
+  wire                stations_1_frustration_full;
+  wire                when_Tasker_l266_1;
+  wire       [1:0]    loader_stationsValid;
+  wire       [1:0]    loader_stronger;
+  wire       [1:0]    loader_afterBank;
+  wire       [1:0]    loader_afterAccess;
+  wire       [3:0]    loader_offset;
+  wire       [3:0]    loader_offsetLast;
+  wire                loader_slot_0_canSpawn;
+  wire                when_Tasker_l282;
+  wire                loader_slot_1_canSpawn;
+  wire                when_Tasker_l282_1;
+  reg        [1:0]    arbiter_selOH;
+  wire                when_Tasker_l305;
+  wire                when_Tasker_l306;
+  wire       [1:0]    arbiter_logic_0_othersDoSomething;
+  wire                when_Tasker_l305_1;
+  wire                when_Tasker_l306_1;
+  wire       [1:0]    arbiter_logic_1_othersDoSomething;
+  wire                _zz_stations_0_sel;
+  wire                when_Tasker_l320;
+  wire                when_Tasker_l320_1;
+  wire                arbiter_askRefresh;
+  reg        [1:0]    arbiter_refreshState;
+  reg                 allowPrechargeAll_regNext;
+  wire                when_Tasker_l344;
+  wire                when_Tasker_l350;
+  wire                when_Tasker_l362;
+  wire                when_Tasker_l370;
+  wire                when_Tasker_l373;
+  wire                when_Tasker_l362_1;
+  wire                when_Tasker_l370_1;
+  wire                when_Tasker_l373_1;
+  wire       [0:0]    selectedAddress_byte;
+  wire       [8:0]    selectedAddress_column;
+  wire       [1:0]    selectedAddress_bank;
+  wire       [12:0]   selectedAddress_row;
+  wire                when_Tasker_l380;
+  (* ram_style = "distributed" *) reg [12:0] banksRow [0:3];
+
+  assign _zz_RFC_value_1 = RFC_notZero;
+  assign _zz_RFC_value = {6'd0, _zz_RFC_value_1};
+  assign _zz_RRD_value_1 = RRD_notZero;
+  assign _zz_RRD_value = {3'd0, _zz_RRD_value_1};
+  assign _zz_WTR_value_1 = WTR_notZero;
+  assign _zz_WTR_value = {3'd0, _zz_WTR_value_1};
+  assign _zz_RTW_value_1 = RTW_notZero;
+  assign _zz_RTW_value = {3'd0, _zz_RTW_value_1};
+  assign _zz_RP_notZero = (io_config_RP + 4'b0001);
+  assign _zz_RP_value_1 = RP_notZero;
+  assign _zz_RP_value = {3'd0, _zz_RP_value_1};
+  assign _zz_banks_0_WR_value_1 = banks_0_WR_notZero;
+  assign _zz_banks_0_WR_value = {3'd0, _zz_banks_0_WR_value_1};
+  assign _zz_banks_0_RAS_value_1 = banks_0_RAS_notZero;
+  assign _zz_banks_0_RAS_value = {3'd0, _zz_banks_0_RAS_value_1};
+  assign _zz_banks_0_RP_value_1 = banks_0_RP_notZero;
+  assign _zz_banks_0_RP_value = {3'd0, _zz_banks_0_RP_value_1};
+  assign _zz_banks_0_RCD_value_1 = banks_0_RCD_notZero;
+  assign _zz_banks_0_RCD_value = {3'd0, _zz_banks_0_RCD_value_1};
+  assign _zz_banks_0_RTP_value_1 = banks_0_RTP_notZero;
+  assign _zz_banks_0_RTP_value = {3'd0, _zz_banks_0_RTP_value_1};
+  assign _zz_banks_1_WR_value_1 = banks_1_WR_notZero;
+  assign _zz_banks_1_WR_value = {3'd0, _zz_banks_1_WR_value_1};
+  assign _zz_banks_1_RAS_value_1 = banks_1_RAS_notZero;
+  assign _zz_banks_1_RAS_value = {3'd0, _zz_banks_1_RAS_value_1};
+  assign _zz_banks_1_RP_value_1 = banks_1_RP_notZero;
+  assign _zz_banks_1_RP_value = {3'd0, _zz_banks_1_RP_value_1};
+  assign _zz_banks_1_RCD_value_1 = banks_1_RCD_notZero;
+  assign _zz_banks_1_RCD_value = {3'd0, _zz_banks_1_RCD_value_1};
+  assign _zz_banks_1_RTP_value_1 = banks_1_RTP_notZero;
+  assign _zz_banks_1_RTP_value = {3'd0, _zz_banks_1_RTP_value_1};
+  assign _zz_banks_2_WR_value_1 = banks_2_WR_notZero;
+  assign _zz_banks_2_WR_value = {3'd0, _zz_banks_2_WR_value_1};
+  assign _zz_banks_2_RAS_value_1 = banks_2_RAS_notZero;
+  assign _zz_banks_2_RAS_value = {3'd0, _zz_banks_2_RAS_value_1};
+  assign _zz_banks_2_RP_value_1 = banks_2_RP_notZero;
+  assign _zz_banks_2_RP_value = {3'd0, _zz_banks_2_RP_value_1};
+  assign _zz_banks_2_RCD_value_1 = banks_2_RCD_notZero;
+  assign _zz_banks_2_RCD_value = {3'd0, _zz_banks_2_RCD_value_1};
+  assign _zz_banks_2_RTP_value_1 = banks_2_RTP_notZero;
+  assign _zz_banks_2_RTP_value = {3'd0, _zz_banks_2_RTP_value_1};
+  assign _zz_banks_3_WR_value_1 = banks_3_WR_notZero;
+  assign _zz_banks_3_WR_value = {3'd0, _zz_banks_3_WR_value_1};
+  assign _zz_banks_3_RAS_value_1 = banks_3_RAS_notZero;
+  assign _zz_banks_3_RAS_value = {3'd0, _zz_banks_3_RAS_value_1};
+  assign _zz_banks_3_RP_value_1 = banks_3_RP_notZero;
+  assign _zz_banks_3_RP_value = {3'd0, _zz_banks_3_RP_value_1};
+  assign _zz_banks_3_RCD_value_1 = banks_3_RCD_notZero;
+  assign _zz_banks_3_RCD_value = {3'd0, _zz_banks_3_RCD_value_1};
+  assign _zz_banks_3_RTP_value_1 = banks_3_RTP_notZero;
+  assign _zz_banks_3_RTP_value = {3'd0, _zz_banks_3_RTP_value_1};
+  assign _zz_writeTockens_0_counter = (writeTockens_0_counter + _zz_writeTockens_0_counter_1);
+  assign _zz_writeTockens_0_counter_1 = {5'd0, io_writeDataTockens_0};
+  assign _zz_writeTockens_0_counter_3 = writeTockens_0_consume;
+  assign _zz_writeTockens_0_counter_2 = {5'd0, _zz_writeTockens_0_counter_3};
+  assign _zz__zz_inputsArbiter_selOH_2 = (_zz_inputsArbiter_selOH_1 - _zz__zz_inputsArbiter_selOH_2_1);
+  assign _zz__zz_inputsArbiter_selOH_2_2 = inputsArbiter_state;
+  assign _zz__zz_inputsArbiter_selOH_2_1 = {1'd0, _zz__zz_inputsArbiter_selOH_2_2};
+  assign _zz_when_Tasker_l157 = {1'd0, inputsArbiter_tocken};
+  assign _zz_io_output_ports_0_address_column_1 = ({1'd0,stations_0_offset} <<< 1);
+  assign _zz_io_output_ports_0_address_column = {4'd0, _zz_io_output_ports_0_address_column_1};
+  assign _zz_io_output_ports_1_address_column_1 = ({1'd0,stations_1_offset} <<< 1);
+  assign _zz_io_output_ports_1_address_column = {4'd0, _zz_io_output_ports_1_address_column_1};
+  assign _zz_banksRow_port = selectedAddress_row;
+  assign _zz_banksRow_port0 = banksRow[taskConstructor_s1_address_bank];
+  always @(posedge clkout_system) begin
+    if(_zz_1) begin
+      banksRow[selectedAddress_bank] <= _zz_banksRow_port;
+    end
+  end
+
+  always @(*) begin
+    case(taskConstructor_s1_address_bank)
+      2'b00 : begin
+        _zz_taskConstructor_s1_status_bankActive = banks_0_active;
+        _zz_when_Tasker_l94 = banks_0_allowPrecharge;
+        _zz_when_Tasker_l95 = banks_0_allowActive;
+        _zz_when_Tasker_l96 = banks_0_allowWrite;
+        _zz_when_Tasker_l97 = banks_0_allowRead;
+      end
+      2'b01 : begin
+        _zz_taskConstructor_s1_status_bankActive = banks_1_active;
+        _zz_when_Tasker_l94 = banks_1_allowPrecharge;
+        _zz_when_Tasker_l95 = banks_1_allowActive;
+        _zz_when_Tasker_l96 = banks_1_allowWrite;
+        _zz_when_Tasker_l97 = banks_1_allowRead;
+      end
+      2'b10 : begin
+        _zz_taskConstructor_s1_status_bankActive = banks_2_active;
+        _zz_when_Tasker_l94 = banks_2_allowPrecharge;
+        _zz_when_Tasker_l95 = banks_2_allowActive;
+        _zz_when_Tasker_l96 = banks_2_allowWrite;
+        _zz_when_Tasker_l97 = banks_2_allowRead;
+      end
+      default : begin
+        _zz_taskConstructor_s1_status_bankActive = banks_3_active;
+        _zz_when_Tasker_l94 = banks_3_allowPrecharge;
+        _zz_when_Tasker_l95 = banks_3_allowActive;
+        _zz_when_Tasker_l96 = banks_3_allowWrite;
+        _zz_when_Tasker_l97 = banks_3_allowRead;
+      end
+    endcase
+  end
+
+  always @(*) begin
+    case(stations_0_address_bank)
+      2'b00 : begin
+        _zz_when_Tasker_l94_1 = banks_0_allowPrecharge;
+        _zz_when_Tasker_l95_1 = banks_0_allowActive;
+        _zz_when_Tasker_l96_1 = banks_0_allowWrite;
+        _zz_when_Tasker_l97_1 = banks_0_allowRead;
+      end
+      2'b01 : begin
+        _zz_when_Tasker_l94_1 = banks_1_allowPrecharge;
+        _zz_when_Tasker_l95_1 = banks_1_allowActive;
+        _zz_when_Tasker_l96_1 = banks_1_allowWrite;
+        _zz_when_Tasker_l97_1 = banks_1_allowRead;
+      end
+      2'b10 : begin
+        _zz_when_Tasker_l94_1 = banks_2_allowPrecharge;
+        _zz_when_Tasker_l95_1 = banks_2_allowActive;
+        _zz_when_Tasker_l96_1 = banks_2_allowWrite;
+        _zz_when_Tasker_l97_1 = banks_2_allowRead;
+      end
+      default : begin
+        _zz_when_Tasker_l94_1 = banks_3_allowPrecharge;
+        _zz_when_Tasker_l95_1 = banks_3_allowActive;
+        _zz_when_Tasker_l96_1 = banks_3_allowWrite;
+        _zz_when_Tasker_l97_1 = banks_3_allowRead;
+      end
+    endcase
+  end
+
+  always @(*) begin
+    case(stations_1_address_bank)
+      2'b00 : begin
+        _zz_when_Tasker_l94_2 = banks_0_allowPrecharge;
+        _zz_when_Tasker_l95_2 = banks_0_allowActive;
+        _zz_when_Tasker_l96_2 = banks_0_allowWrite;
+        _zz_when_Tasker_l97_2 = banks_0_allowRead;
+      end
+      2'b01 : begin
+        _zz_when_Tasker_l94_2 = banks_1_allowPrecharge;
+        _zz_when_Tasker_l95_2 = banks_1_allowActive;
+        _zz_when_Tasker_l96_2 = banks_1_allowWrite;
+        _zz_when_Tasker_l97_2 = banks_1_allowRead;
+      end
+      2'b10 : begin
+        _zz_when_Tasker_l94_2 = banks_2_allowPrecharge;
+        _zz_when_Tasker_l95_2 = banks_2_allowActive;
+        _zz_when_Tasker_l96_2 = banks_2_allowWrite;
+        _zz_when_Tasker_l97_2 = banks_2_allowRead;
+      end
+      default : begin
+        _zz_when_Tasker_l94_2 = banks_3_allowPrecharge;
+        _zz_when_Tasker_l95_2 = banks_3_allowActive;
+        _zz_when_Tasker_l96_2 = banks_3_allowWrite;
+        _zz_when_Tasker_l97_2 = banks_3_allowRead;
+      end
+    endcase
+  end
+
+  always @(*) begin
+    _zz_1 = 1'b0;
+    if(when_Tasker_l380) begin
+      _zz_1 = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    readyForRefresh = 1'b1;
+    if(when_Tasker_l172) begin
+      readyForRefresh = 1'b0;
+    end
+    if(inputsArbiter_output_input_valid) begin
+      readyForRefresh = 1'b0;
+    end
+    if(stations_0_valid) begin
+      readyForRefresh = 1'b0;
+    end
+    if(stations_1_valid) begin
+      readyForRefresh = 1'b0;
+    end
+  end
+
+  assign RFC_notZero = (RFC_value != io_config_RFC);
+  assign RFC_busy = RFC_notZero;
+  assign when_Tasker_l38 = ({io_output_ports_1_active,io_output_ports_0_active} != 2'b00);
+  assign RRD_notZero = (RRD_value != io_config_RRD);
+  assign RRD_busy = RRD_notZero;
+  assign when_Tasker_l38_1 = ({io_output_ports_1_write,io_output_ports_0_write} != 2'b00);
+  assign WTR_notZero = (WTR_value != io_config_WTR);
+  assign WTR_busy = WTR_notZero;
+  assign when_Tasker_l38_2 = ({io_output_ports_1_read,io_output_ports_0_read} != 2'b00);
+  assign RTW_notZero = (RTW_value != io_config_RTW);
+  assign RTW_busy = RTW_notZero;
+  assign RP_notZero = (RP_value != _zz_RP_notZero);
+  assign RP_busy = RP_notZero;
+  assign banks_0_hits = {(io_output_ports_1_address_bank == 2'b00),(io_output_ports_0_address_bank == 2'b00)};
+  always @(*) begin
+    banks_0_activeNext = banks_0_active;
+    if(when_Tasker_l65) begin
+      banks_0_activeNext = 1'b0;
+    end
+    if(when_Tasker_l68) begin
+      banks_0_activeNext = 1'b1;
+    end
+  end
+
+  assign when_Tasker_l65 = ((|(banks_0_hits & {io_output_ports_1_precharge,io_output_ports_0_precharge})) || io_output_prechargeAll);
+  assign when_Tasker_l68 = (|(banks_0_hits & {io_output_ports_1_active,io_output_ports_0_active}));
+  assign when_Tasker_l38_3 = (|(banks_0_hits & {io_output_ports_1_write,io_output_ports_0_write}));
+  assign banks_0_WR_notZero = (banks_0_WR_value != io_config_WR);
+  assign banks_0_WR_busy = banks_0_WR_notZero;
+  assign when_Tasker_l38_4 = (|(banks_0_hits & {io_output_ports_1_active,io_output_ports_0_active}));
+  assign banks_0_RAS_notZero = (banks_0_RAS_value != io_config_RAS);
+  assign banks_0_RAS_busy = banks_0_RAS_notZero;
+  assign when_Tasker_l38_5 = (|(banks_0_hits & {io_output_ports_1_precharge,io_output_ports_0_precharge}));
+  assign banks_0_RP_notZero = (banks_0_RP_value != io_config_RP);
+  assign banks_0_RP_busy = banks_0_RP_notZero;
+  assign when_Tasker_l38_6 = (|(banks_0_hits & {io_output_ports_1_active,io_output_ports_0_active}));
+  assign banks_0_RCD_notZero = (banks_0_RCD_value != io_config_RCD);
+  assign banks_0_RCD_busy = banks_0_RCD_notZero;
+  assign when_Tasker_l38_7 = (|(banks_0_hits & {io_output_ports_1_read,io_output_ports_0_read}));
+  assign banks_0_RTP_notZero = (banks_0_RTP_value != io_config_RTP);
+  assign banks_0_RTP_busy = banks_0_RTP_notZero;
+  assign banks_0_allowPrecharge = (((! banks_0_WR_busy) && (! banks_0_RAS_busy)) && (! banks_0_RTP_busy));
+  assign banks_0_allowActive = (! banks_0_RP_busy);
+  assign banks_0_allowWrite = (! banks_0_RCD_busy);
+  assign banks_0_allowRead = (! banks_0_RCD_busy);
+  assign banks_1_hits = {(io_output_ports_1_address_bank == 2'b01),(io_output_ports_0_address_bank == 2'b01)};
+  always @(*) begin
+    banks_1_activeNext = banks_1_active;
+    if(when_Tasker_l65_1) begin
+      banks_1_activeNext = 1'b0;
+    end
+    if(when_Tasker_l68_1) begin
+      banks_1_activeNext = 1'b1;
+    end
+  end
+
+  assign when_Tasker_l65_1 = ((|(banks_1_hits & {io_output_ports_1_precharge,io_output_ports_0_precharge})) || io_output_prechargeAll);
+  assign when_Tasker_l68_1 = (|(banks_1_hits & {io_output_ports_1_active,io_output_ports_0_active}));
+  assign when_Tasker_l38_8 = (|(banks_1_hits & {io_output_ports_1_write,io_output_ports_0_write}));
+  assign banks_1_WR_notZero = (banks_1_WR_value != io_config_WR);
+  assign banks_1_WR_busy = banks_1_WR_notZero;
+  assign when_Tasker_l38_9 = (|(banks_1_hits & {io_output_ports_1_active,io_output_ports_0_active}));
+  assign banks_1_RAS_notZero = (banks_1_RAS_value != io_config_RAS);
+  assign banks_1_RAS_busy = banks_1_RAS_notZero;
+  assign when_Tasker_l38_10 = (|(banks_1_hits & {io_output_ports_1_precharge,io_output_ports_0_precharge}));
+  assign banks_1_RP_notZero = (banks_1_RP_value != io_config_RP);
+  assign banks_1_RP_busy = banks_1_RP_notZero;
+  assign when_Tasker_l38_11 = (|(banks_1_hits & {io_output_ports_1_active,io_output_ports_0_active}));
+  assign banks_1_RCD_notZero = (banks_1_RCD_value != io_config_RCD);
+  assign banks_1_RCD_busy = banks_1_RCD_notZero;
+  assign when_Tasker_l38_12 = (|(banks_1_hits & {io_output_ports_1_read,io_output_ports_0_read}));
+  assign banks_1_RTP_notZero = (banks_1_RTP_value != io_config_RTP);
+  assign banks_1_RTP_busy = banks_1_RTP_notZero;
+  assign banks_1_allowPrecharge = (((! banks_1_WR_busy) && (! banks_1_RAS_busy)) && (! banks_1_RTP_busy));
+  assign banks_1_allowActive = (! banks_1_RP_busy);
+  assign banks_1_allowWrite = (! banks_1_RCD_busy);
+  assign banks_1_allowRead = (! banks_1_RCD_busy);
+  assign banks_2_hits = {(io_output_ports_1_address_bank == 2'b10),(io_output_ports_0_address_bank == 2'b10)};
+  always @(*) begin
+    banks_2_activeNext = banks_2_active;
+    if(when_Tasker_l65_2) begin
+      banks_2_activeNext = 1'b0;
+    end
+    if(when_Tasker_l68_2) begin
+      banks_2_activeNext = 1'b1;
+    end
+  end
+
+  assign when_Tasker_l65_2 = ((|(banks_2_hits & {io_output_ports_1_precharge,io_output_ports_0_precharge})) || io_output_prechargeAll);
+  assign when_Tasker_l68_2 = (|(banks_2_hits & {io_output_ports_1_active,io_output_ports_0_active}));
+  assign when_Tasker_l38_13 = (|(banks_2_hits & {io_output_ports_1_write,io_output_ports_0_write}));
+  assign banks_2_WR_notZero = (banks_2_WR_value != io_config_WR);
+  assign banks_2_WR_busy = banks_2_WR_notZero;
+  assign when_Tasker_l38_14 = (|(banks_2_hits & {io_output_ports_1_active,io_output_ports_0_active}));
+  assign banks_2_RAS_notZero = (banks_2_RAS_value != io_config_RAS);
+  assign banks_2_RAS_busy = banks_2_RAS_notZero;
+  assign when_Tasker_l38_15 = (|(banks_2_hits & {io_output_ports_1_precharge,io_output_ports_0_precharge}));
+  assign banks_2_RP_notZero = (banks_2_RP_value != io_config_RP);
+  assign banks_2_RP_busy = banks_2_RP_notZero;
+  assign when_Tasker_l38_16 = (|(banks_2_hits & {io_output_ports_1_active,io_output_ports_0_active}));
+  assign banks_2_RCD_notZero = (banks_2_RCD_value != io_config_RCD);
+  assign banks_2_RCD_busy = banks_2_RCD_notZero;
+  assign when_Tasker_l38_17 = (|(banks_2_hits & {io_output_ports_1_read,io_output_ports_0_read}));
+  assign banks_2_RTP_notZero = (banks_2_RTP_value != io_config_RTP);
+  assign banks_2_RTP_busy = banks_2_RTP_notZero;
+  assign banks_2_allowPrecharge = (((! banks_2_WR_busy) && (! banks_2_RAS_busy)) && (! banks_2_RTP_busy));
+  assign banks_2_allowActive = (! banks_2_RP_busy);
+  assign banks_2_allowWrite = (! banks_2_RCD_busy);
+  assign banks_2_allowRead = (! banks_2_RCD_busy);
+  assign banks_3_hits = {(io_output_ports_1_address_bank == 2'b11),(io_output_ports_0_address_bank == 2'b11)};
+  always @(*) begin
+    banks_3_activeNext = banks_3_active;
+    if(when_Tasker_l65_3) begin
+      banks_3_activeNext = 1'b0;
+    end
+    if(when_Tasker_l68_3) begin
+      banks_3_activeNext = 1'b1;
+    end
+  end
+
+  assign when_Tasker_l65_3 = ((|(banks_3_hits & {io_output_ports_1_precharge,io_output_ports_0_precharge})) || io_output_prechargeAll);
+  assign when_Tasker_l68_3 = (|(banks_3_hits & {io_output_ports_1_active,io_output_ports_0_active}));
+  assign when_Tasker_l38_18 = (|(banks_3_hits & {io_output_ports_1_write,io_output_ports_0_write}));
+  assign banks_3_WR_notZero = (banks_3_WR_value != io_config_WR);
+  assign banks_3_WR_busy = banks_3_WR_notZero;
+  assign when_Tasker_l38_19 = (|(banks_3_hits & {io_output_ports_1_active,io_output_ports_0_active}));
+  assign banks_3_RAS_notZero = (banks_3_RAS_value != io_config_RAS);
+  assign banks_3_RAS_busy = banks_3_RAS_notZero;
+  assign when_Tasker_l38_20 = (|(banks_3_hits & {io_output_ports_1_precharge,io_output_ports_0_precharge}));
+  assign banks_3_RP_notZero = (banks_3_RP_value != io_config_RP);
+  assign banks_3_RP_busy = banks_3_RP_notZero;
+  assign when_Tasker_l38_21 = (|(banks_3_hits & {io_output_ports_1_active,io_output_ports_0_active}));
+  assign banks_3_RCD_notZero = (banks_3_RCD_value != io_config_RCD);
+  assign banks_3_RCD_busy = banks_3_RCD_notZero;
+  assign when_Tasker_l38_22 = (|(banks_3_hits & {io_output_ports_1_read,io_output_ports_0_read}));
+  assign banks_3_RTP_notZero = (banks_3_RTP_value != io_config_RTP);
+  assign banks_3_RTP_busy = banks_3_RTP_notZero;
+  assign banks_3_allowPrecharge = (((! banks_3_WR_busy) && (! banks_3_RAS_busy)) && (! banks_3_RTP_busy));
+  assign banks_3_allowActive = (! banks_3_RP_busy);
+  assign banks_3_allowWrite = (! banks_3_RCD_busy);
+  assign banks_3_allowRead = (! banks_3_RCD_busy);
+  assign allowPrechargeAll = (((banks_0_allowPrecharge && banks_1_allowPrecharge) && banks_2_allowPrecharge) && banks_3_allowPrecharge);
+  assign writeTockens_0_consume = ({(io_output_ports_1_write && 1'b1),(io_output_ports_0_write && 1'b1)} != 2'b00);
+  assign when_Tasker_l131 = (6'h01 <= writeTockens_0_counter);
+  assign when_Tasker_l131_1 = (writeTockens_0_consume && (writeTockens_0_counter < 6'h02));
+  assign inputsArbiter_inputsValids = io_inputs_0_valid;
+  assign _zz_inputsArbiter_selOH = inputsArbiter_inputsValids;
+  assign _zz_inputsArbiter_selOH_1 = {_zz_inputsArbiter_selOH,_zz_inputsArbiter_selOH};
+  assign _zz_inputsArbiter_selOH_2 = (_zz_inputsArbiter_selOH_1 & (~ _zz__zz_inputsArbiter_selOH_2));
+  assign inputsArbiter_selOH = (_zz_inputsArbiter_selOH_2[1 : 1] | _zz_inputsArbiter_selOH_2[0 : 0]);
+  assign inputsArbiter_tockenIncrement = inputsArbiter_output_ready;
+  assign when_Tasker_l157 = ((! (|(io_inputs_0_valid & inputsArbiter_state))) || (inputsArbiter_tockenIncrement && (((|(io_inputs_0_payload_burstLast & inputsArbiter_state)) && (5'h10 <= inputsArbiter_tocken)) || (6'h20 <= _zz_when_Tasker_l157))));
+  assign inputsArbiter_output_valid = (|(inputsArbiter_selOH & inputsArbiter_inputsValids));
+  assign io_inputs_0_ready = (inputsArbiter_selOH[0] && inputsArbiter_output_ready);
+  assign _zz_inputsArbiter_selPayload_write = io_inputs_0_payload_write;
+  assign _zz_inputsArbiter_selPayload_burstLast = io_inputs_0_payload_burstLast;
+  assign inputsArbiter_selPayload_write = _zz_inputsArbiter_selPayload_write;
+  assign inputsArbiter_selPayload_address = io_inputs_0_payload_address;
+  assign inputsArbiter_selPayload_context = io_inputs_0_payload_context;
+  assign inputsArbiter_selPayload_burstLast = _zz_inputsArbiter_selPayload_burstLast;
+  assign inputsArbiter_selPayload_length = io_inputs_0_payload_length;
+  assign inputsArbiter_output_payload_write = inputsArbiter_selPayload_write;
+  assign inputsArbiter_output_payload_address = inputsArbiter_selPayload_address;
+  assign inputsArbiter_output_payload_context = inputsArbiter_selPayload_context;
+  assign inputsArbiter_output_payload_burstLast = inputsArbiter_selPayload_burstLast;
+  assign inputsArbiter_output_payload_length = inputsArbiter_selPayload_length;
+  assign when_Tasker_l172 = (|inputsArbiter_inputsValids);
+  assign _zz_taskConstructor_s0_portAddress_byte = inputsArbiter_output_payload_address;
+  assign taskConstructor_s0_portAddress_byte = _zz_taskConstructor_s0_portAddress_byte[0 : 0];
+  assign taskConstructor_s0_portAddress_column = _zz_taskConstructor_s0_portAddress_byte[9 : 1];
+  assign taskConstructor_s0_portAddress_bank = _zz_taskConstructor_s0_portAddress_byte[11 : 10];
+  assign taskConstructor_s0_portAddress_row = _zz_taskConstructor_s0_portAddress_byte[24 : 12];
+  always @(*) begin
+    inputsArbiter_output_ready = inputsArbiter_output_input_ready;
+    if(when_Stream_l342) begin
+      inputsArbiter_output_ready = 1'b1;
+    end
+  end
+
+  assign when_Stream_l342 = (! inputsArbiter_output_input_valid);
+  assign inputsArbiter_output_input_valid = inputsArbiter_output_rValid;
+  assign inputsArbiter_output_input_payload_write = inputsArbiter_output_rData_write;
+  assign inputsArbiter_output_input_payload_address = inputsArbiter_output_rData_address;
+  assign inputsArbiter_output_input_payload_context = inputsArbiter_output_rData_context;
+  assign inputsArbiter_output_input_payload_burstLast = inputsArbiter_output_rData_burstLast;
+  assign inputsArbiter_output_input_payload_length = inputsArbiter_output_rData_length;
+  assign _zz_taskConstructor_s1_address_byte = inputsArbiter_output_input_payload_address;
+  assign taskConstructor_s1_address_byte = _zz_taskConstructor_s1_address_byte[0 : 0];
+  assign taskConstructor_s1_address_column = _zz_taskConstructor_s1_address_byte[9 : 1];
+  assign taskConstructor_s1_address_bank = _zz_taskConstructor_s1_address_byte[11 : 10];
+  assign taskConstructor_s1_address_row = _zz_taskConstructor_s1_address_byte[24 : 12];
+  always @(*) begin
+    taskConstructor_s1_status_allowPrecharge = 1'b1;
+    if(when_Tasker_l94) begin
+      taskConstructor_s1_status_allowPrecharge = 1'b0;
+    end
+    if(when_Tasker_l100) begin
+      if(io_output_ports_0_active) begin
+        taskConstructor_s1_status_allowPrecharge = 1'b0;
+      end
+      if(when_Tasker_l111) begin
+        taskConstructor_s1_status_allowPrecharge = 1'b0;
+      end
+    end
+    if(when_Tasker_l100_1) begin
+      if(io_output_ports_1_active) begin
+        taskConstructor_s1_status_allowPrecharge = 1'b0;
+      end
+      if(when_Tasker_l111_1) begin
+        taskConstructor_s1_status_allowPrecharge = 1'b0;
+      end
+    end
+  end
+
+  always @(*) begin
+    taskConstructor_s1_status_allowActive = ((! RRD_busy) && 1'b1);
+    if(when_Tasker_l95) begin
+      taskConstructor_s1_status_allowActive = 1'b0;
+    end
+    if(when_Tasker_l100) begin
+      if(io_output_ports_0_precharge) begin
+        taskConstructor_s1_status_allowActive = 1'b0;
+      end
+    end
+    if(when_Tasker_l100_1) begin
+      if(io_output_ports_1_precharge) begin
+        taskConstructor_s1_status_allowActive = 1'b0;
+      end
+    end
+  end
+
+  always @(*) begin
+    taskConstructor_s1_status_allowWrite = ((! RTW_busy) && 1'b1);
+    if(when_Tasker_l96) begin
+      taskConstructor_s1_status_allowWrite = 1'b0;
+    end
+    if(when_Tasker_l100) begin
+      if(io_output_ports_0_active) begin
+        taskConstructor_s1_status_allowWrite = 1'b0;
+      end
+    end
+    if(when_Tasker_l100_1) begin
+      if(io_output_ports_1_active) begin
+        taskConstructor_s1_status_allowWrite = 1'b0;
+      end
+    end
+  end
+
+  always @(*) begin
+    taskConstructor_s1_status_allowRead = ((! WTR_busy) && 1'b1);
+    if(when_Tasker_l97) begin
+      taskConstructor_s1_status_allowRead = 1'b0;
+    end
+    if(when_Tasker_l100) begin
+      if(io_output_ports_0_active) begin
+        taskConstructor_s1_status_allowRead = 1'b0;
+      end
+    end
+    if(when_Tasker_l100_1) begin
+      if(io_output_ports_1_active) begin
+        taskConstructor_s1_status_allowRead = 1'b0;
+      end
+    end
+  end
+
+  always @(*) begin
+    taskConstructor_s1_status_bankHit = (_zz_banksRow_port0 == taskConstructor_s1_address_row);
+    if(when_Tasker_l100) begin
+      if(io_output_ports_0_active) begin
+        taskConstructor_s1_status_bankHit = (io_output_ports_0_address_row == taskConstructor_s1_address_row);
+      end
+    end
+    if(when_Tasker_l100_1) begin
+      if(io_output_ports_1_active) begin
+        taskConstructor_s1_status_bankHit = (io_output_ports_1_address_row == taskConstructor_s1_address_row);
+      end
+    end
+  end
+
+  always @(*) begin
+    taskConstructor_s1_status_bankActive = _zz_taskConstructor_s1_status_bankActive;
+    if(when_Tasker_l100) begin
+      if(io_output_ports_0_precharge) begin
+        taskConstructor_s1_status_bankActive = 1'b0;
+      end
+      if(io_output_ports_0_active) begin
+        taskConstructor_s1_status_bankActive = 1'b1;
+      end
+    end
+    if(when_Tasker_l100_1) begin
+      if(io_output_ports_1_precharge) begin
+        taskConstructor_s1_status_bankActive = 1'b0;
+      end
+      if(io_output_ports_1_active) begin
+        taskConstructor_s1_status_bankActive = 1'b1;
+      end
+    end
+  end
+
+  assign when_Tasker_l94 = (! _zz_when_Tasker_l94);
+  assign when_Tasker_l95 = (! _zz_when_Tasker_l95);
+  assign when_Tasker_l96 = (! _zz_when_Tasker_l96);
+  assign when_Tasker_l97 = (! _zz_when_Tasker_l97);
+  assign when_Tasker_l100 = (io_output_ports_0_address_bank == taskConstructor_s1_address_bank);
+  assign when_Tasker_l111 = (io_output_ports_0_read || io_output_ports_0_write);
+  assign when_Tasker_l100_1 = (io_output_ports_1_address_bank == taskConstructor_s1_address_bank);
+  assign when_Tasker_l111_1 = (io_output_ports_1_read || io_output_ports_1_write);
+  assign when_Tasker_l94_1 = (! _zz_when_Tasker_l94_1);
+  assign when_Tasker_l95_1 = (! _zz_when_Tasker_l95_1);
+  assign when_Tasker_l96_1 = (! _zz_when_Tasker_l96_1);
+  assign when_Tasker_l97_1 = (! _zz_when_Tasker_l97_1);
+  assign when_Tasker_l100_2 = (io_output_ports_0_address_bank == stations_0_address_bank);
+  assign when_Tasker_l111_2 = (io_output_ports_0_read || io_output_ports_0_write);
+  assign when_Tasker_l100_3 = (io_output_ports_1_address_bank == stations_0_address_bank);
+  assign when_Tasker_l111_3 = (io_output_ports_1_read || io_output_ports_1_write);
+  assign stations_0_inputMiss = ((! stations_0_status_bankActive) || (! stations_0_status_bankHit));
+  assign stations_0_inputActive = (! stations_0_status_bankActive);
+  assign stations_0_inputPrecharge = (stations_0_status_bankActive && (! stations_0_status_bankHit));
+  assign stations_0_inputAccess = (stations_0_status_bankActive && stations_0_status_bankHit);
+  assign stations_0_inputWrite = ((stations_0_status_bankActive && stations_0_status_bankHit) && stations_0_write);
+  assign stations_0_inputRead = ((stations_0_status_bankActive && stations_0_status_bankHit) && (! stations_0_write));
+  always @(*) begin
+    stations_0_inibated = 1'b0;
+    if(when_Tasker_l305) begin
+      stations_0_inibated = 1'b1;
+    end
+    if(when_Tasker_l306) begin
+      stations_0_inibated = 1'b1;
+    end
+  end
+
+  assign stations_0_doActive = (stations_0_inputActive && stations_0_status_allowActive);
+  assign stations_0_doPrecharge = (stations_0_inputPrecharge && stations_0_status_allowPrecharge);
+  assign stations_0_doWrite = ((stations_0_inputWrite && stations_0_status_allowWrite) && writeTockens_0_ready);
+  assign stations_0_doRead = (stations_0_inputRead && stations_0_status_allowRead);
+  assign stations_0_doSomething = ((stations_0_valid && (((stations_0_doActive || stations_0_doPrecharge) || stations_0_doWrite) || stations_0_doRead)) && (! stations_0_inibated));
+  assign stations_0_blockedByWriteTocken = ((stations_0_inputWrite && stations_0_status_allowWrite) && (! writeTockens_0_ready));
+  always @(*) begin
+    stations_0_fire = 1'b0;
+    if(when_Tasker_l252) begin
+      if(stations_0_last) begin
+        stations_0_fire = 1'b1;
+      end
+    end
+  end
+
+  assign stations_0_last = (stations_0_offset == stations_0_offsetLast);
+  assign io_output_ports_0_address_byte = stations_0_address_byte;
+  assign io_output_ports_0_address_column = (stations_0_address_column | _zz_io_output_ports_0_address_column);
+  assign io_output_ports_0_address_bank = stations_0_address_bank;
+  assign io_output_ports_0_address_row = stations_0_address_row;
+  assign io_output_ports_0_context = stations_0_context;
+  assign io_output_ports_0_active = (stations_0_inputActive && stations_0_sel);
+  assign io_output_ports_0_precharge = (stations_0_inputPrecharge && stations_0_sel);
+  assign io_output_ports_0_write = (stations_0_inputWrite && stations_0_sel);
+  assign io_output_ports_0_read = (stations_0_inputRead && stations_0_sel);
+  assign io_output_ports_0_last = stations_0_last;
+  assign when_Tasker_l252 = (stations_0_sel && stations_0_inputAccess);
+  always @(*) begin
+    stations_0_frustration_increment = 1'b0;
+    if(stations_1_fire) begin
+      if(when_Tasker_l320_1) begin
+        stations_0_frustration_increment = 1'b1;
+      end
+    end
+  end
+
+  assign stations_0_frustration_full = stations_0_frustration_counter[3];
+  assign when_Tasker_l266 = (stations_0_frustration_increment && (! stations_0_frustration_full));
+  assign when_Tasker_l94_2 = (! _zz_when_Tasker_l94_2);
+  assign when_Tasker_l95_2 = (! _zz_when_Tasker_l95_2);
+  assign when_Tasker_l96_2 = (! _zz_when_Tasker_l96_2);
+  assign when_Tasker_l97_2 = (! _zz_when_Tasker_l97_2);
+  assign when_Tasker_l100_4 = (io_output_ports_0_address_bank == stations_1_address_bank);
+  assign when_Tasker_l111_4 = (io_output_ports_0_read || io_output_ports_0_write);
+  assign when_Tasker_l100_5 = (io_output_ports_1_address_bank == stations_1_address_bank);
+  assign when_Tasker_l111_5 = (io_output_ports_1_read || io_output_ports_1_write);
+  assign stations_1_inputMiss = ((! stations_1_status_bankActive) || (! stations_1_status_bankHit));
+  assign stations_1_inputActive = (! stations_1_status_bankActive);
+  assign stations_1_inputPrecharge = (stations_1_status_bankActive && (! stations_1_status_bankHit));
+  assign stations_1_inputAccess = (stations_1_status_bankActive && stations_1_status_bankHit);
+  assign stations_1_inputWrite = ((stations_1_status_bankActive && stations_1_status_bankHit) && stations_1_write);
+  assign stations_1_inputRead = ((stations_1_status_bankActive && stations_1_status_bankHit) && (! stations_1_write));
+  always @(*) begin
+    stations_1_inibated = 1'b0;
+    if(when_Tasker_l305_1) begin
+      stations_1_inibated = 1'b1;
+    end
+    if(when_Tasker_l306_1) begin
+      stations_1_inibated = 1'b1;
+    end
+  end
+
+  assign stations_1_doActive = (stations_1_inputActive && stations_1_status_allowActive);
+  assign stations_1_doPrecharge = (stations_1_inputPrecharge && stations_1_status_allowPrecharge);
+  assign stations_1_doWrite = ((stations_1_inputWrite && stations_1_status_allowWrite) && writeTockens_0_ready);
+  assign stations_1_doRead = (stations_1_inputRead && stations_1_status_allowRead);
+  assign stations_1_doSomething = ((stations_1_valid && (((stations_1_doActive || stations_1_doPrecharge) || stations_1_doWrite) || stations_1_doRead)) && (! stations_1_inibated));
+  assign stations_1_blockedByWriteTocken = ((stations_1_inputWrite && stations_1_status_allowWrite) && (! writeTockens_0_ready));
+  always @(*) begin
+    stations_1_fire = 1'b0;
+    if(when_Tasker_l252_1) begin
+      if(stations_1_last) begin
+        stations_1_fire = 1'b1;
+      end
+    end
+  end
+
+  assign stations_1_last = (stations_1_offset == stations_1_offsetLast);
+  assign io_output_ports_1_address_byte = stations_1_address_byte;
+  assign io_output_ports_1_address_column = (stations_1_address_column | _zz_io_output_ports_1_address_column);
+  assign io_output_ports_1_address_bank = stations_1_address_bank;
+  assign io_output_ports_1_address_row = stations_1_address_row;
+  assign io_output_ports_1_context = stations_1_context;
+  assign io_output_ports_1_active = (stations_1_inputActive && stations_1_sel);
+  assign io_output_ports_1_precharge = (stations_1_inputPrecharge && stations_1_sel);
+  assign io_output_ports_1_write = (stations_1_inputWrite && stations_1_sel);
+  assign io_output_ports_1_read = (stations_1_inputRead && stations_1_sel);
+  assign io_output_ports_1_last = stations_1_last;
+  assign when_Tasker_l252_1 = (stations_1_sel && stations_1_inputAccess);
+  always @(*) begin
+    stations_1_frustration_increment = 1'b0;
+    if(stations_0_fire) begin
+      if(when_Tasker_l320) begin
+        stations_1_frustration_increment = 1'b1;
+      end
+    end
+  end
+
+  assign stations_1_frustration_full = stations_1_frustration_counter[3];
+  assign when_Tasker_l266_1 = (stations_1_frustration_increment && (! stations_1_frustration_full));
+  assign loader_stationsValid = {stations_1_valid,stations_0_valid};
+  assign loader_stronger = loader_stationsValid;
+  assign loader_afterBank = (loader_stationsValid & {(stations_1_address_bank == taskConstructor_s1_address_bank),(stations_0_address_bank == taskConstructor_s1_address_bank)});
+  assign loader_afterAccess = (loader_stationsValid & {(1'b1 || stations_1_frustration_full),(1'b1 || stations_0_frustration_full)});
+  assign inputsArbiter_output_input_ready = (! (stations_0_valid && stations_1_valid));
+  assign loader_offset = taskConstructor_s1_address_column[4 : 1];
+  assign loader_offsetLast = (loader_offset + inputsArbiter_output_input_payload_length);
+  assign loader_slot_0_canSpawn = (1'b1 && (! stations_0_valid));
+  assign when_Tasker_l282 = (inputsArbiter_output_input_valid && loader_slot_0_canSpawn);
+  assign loader_slot_1_canSpawn = (((~ stations_0_valid) == 1'b0) && (! stations_1_valid));
+  assign when_Tasker_l282_1 = (inputsArbiter_output_input_valid && loader_slot_1_canSpawn);
+  assign when_Tasker_l305 = (stations_0_inputAccess && (|stations_0_afterAccess));
+  assign when_Tasker_l306 = (stations_0_inputMiss && (|stations_0_afterBank));
+  assign arbiter_logic_0_othersDoSomething = (({stations_1_doSomething,stations_0_doSomething} & stations_0_stronger) & 2'b10);
+  always @(*) begin
+    arbiter_selOH[0] = (stations_0_doSomething && (! (|arbiter_logic_0_othersDoSomething)));
+    arbiter_selOH[1] = (stations_1_doSomething && (! (|arbiter_logic_1_othersDoSomething)));
+  end
+
+  assign when_Tasker_l305_1 = (stations_1_inputAccess && (|stations_1_afterAccess));
+  assign when_Tasker_l306_1 = (stations_1_inputMiss && (|stations_1_afterBank));
+  assign arbiter_logic_1_othersDoSomething = (({stations_1_doSomething,stations_0_doSomething} & stations_1_stronger) & 2'b01);
+  assign _zz_stations_0_sel = arbiter_selOH[0];
+  assign stations_0_sel = _zz_stations_0_sel;
+  assign when_Tasker_l320 = stations_0_stronger[1];
+  assign stations_1_sel = arbiter_selOH[1];
+  assign when_Tasker_l320_1 = stations_1_stronger[0];
+  assign arbiter_askRefresh = (io_refresh_valid && readyForRefresh);
+  always @(*) begin
+    io_refresh_ready = 1'b0;
+    if(arbiter_askRefresh) begin
+      case(arbiter_refreshState)
+        2'b00 : begin
+        end
+        2'b01 : begin
+        end
+        2'b10 : begin
+        end
+        default : begin
+          if(when_Tasker_l350) begin
+            io_refresh_ready = 1'b1;
+          end
+        end
+      endcase
+    end
+  end
+
+  always @(*) begin
+    io_output_prechargeAll = 1'b0;
+    if(arbiter_askRefresh) begin
+      case(arbiter_refreshState)
+        2'b00 : begin
+        end
+        2'b01 : begin
+          if(allowPrechargeAll_regNext) begin
+            io_output_prechargeAll = 1'b1;
+          end
+        end
+        2'b10 : begin
+        end
+        default : begin
+        end
+      endcase
+    end
+  end
+
+  always @(*) begin
+    io_output_refresh = 1'b0;
+    if(arbiter_askRefresh) begin
+      case(arbiter_refreshState)
+        2'b00 : begin
+        end
+        2'b01 : begin
+        end
+        2'b10 : begin
+          if(when_Tasker_l344) begin
+            io_output_refresh = 1'b1;
+          end
+        end
+        default : begin
+        end
+      endcase
+    end
+  end
+
+  assign when_Tasker_l344 = (! RP_busy);
+  assign when_Tasker_l350 = (! RFC_busy);
+  assign when_Tasker_l362 = ({io_output_ports_1_active,io_output_ports_0_active} != 2'b00);
+  assign when_Tasker_l370 = ({io_output_ports_1_read,io_output_ports_0_read} != 2'b00);
+  assign when_Tasker_l373 = ({io_output_ports_1_write,io_output_ports_0_write} != 2'b00);
+  assign when_Tasker_l362_1 = ({io_output_ports_1_active,io_output_ports_0_active} != 2'b00);
+  assign when_Tasker_l370_1 = ({io_output_ports_1_read,io_output_ports_0_read} != 2'b00);
+  assign when_Tasker_l373_1 = ({io_output_ports_1_write,io_output_ports_0_write} != 2'b00);
+  assign selectedAddress_byte = (_zz_stations_0_sel ? io_output_ports_0_address_byte : io_output_ports_1_address_byte);
+  assign selectedAddress_column = (_zz_stations_0_sel ? io_output_ports_0_address_column : io_output_ports_1_address_column);
+  assign selectedAddress_bank = (_zz_stations_0_sel ? io_output_ports_0_address_bank : io_output_ports_1_address_bank);
+  assign selectedAddress_row = (_zz_stations_0_sel ? io_output_ports_0_address_row : io_output_ports_1_address_row);
+  assign when_Tasker_l380 = (|arbiter_selOH);
+  always @(posedge clkout_system) begin
+    RFC_value <= (RFC_value + _zz_RFC_value);
+    if(io_output_refresh) begin
+      RFC_value <= 7'h0;
+    end
+    RRD_value <= (RRD_value + _zz_RRD_value);
+    if(when_Tasker_l38) begin
+      RRD_value <= 4'b0000;
+    end
+    WTR_value <= (WTR_value + _zz_WTR_value);
+    if(when_Tasker_l38_1) begin
+      WTR_value <= 4'b0000;
+    end
+    RTW_value <= (RTW_value + _zz_RTW_value);
+    if(when_Tasker_l38_2) begin
+      RTW_value <= 4'b0000;
+    end
+    RP_value <= (RP_value + _zz_RP_value);
+    if(io_output_prechargeAll) begin
+      RP_value <= 4'b0000;
+    end
+    banks_0_WR_value <= (banks_0_WR_value + _zz_banks_0_WR_value);
+    if(when_Tasker_l38_3) begin
+      banks_0_WR_value <= 4'b0000;
+    end
+    banks_0_RAS_value <= (banks_0_RAS_value + _zz_banks_0_RAS_value);
+    if(when_Tasker_l38_4) begin
+      banks_0_RAS_value <= 4'b0000;
+    end
+    banks_0_RP_value <= (banks_0_RP_value + _zz_banks_0_RP_value);
+    if(when_Tasker_l38_5) begin
+      banks_0_RP_value <= 4'b0000;
+    end
+    banks_0_RCD_value <= (banks_0_RCD_value + _zz_banks_0_RCD_value);
+    if(when_Tasker_l38_6) begin
+      banks_0_RCD_value <= 4'b0000;
+    end
+    banks_0_RTP_value <= (banks_0_RTP_value + _zz_banks_0_RTP_value);
+    if(when_Tasker_l38_7) begin
+      banks_0_RTP_value <= 4'b0000;
+    end
+    banks_1_WR_value <= (banks_1_WR_value + _zz_banks_1_WR_value);
+    if(when_Tasker_l38_8) begin
+      banks_1_WR_value <= 4'b0000;
+    end
+    banks_1_RAS_value <= (banks_1_RAS_value + _zz_banks_1_RAS_value);
+    if(when_Tasker_l38_9) begin
+      banks_1_RAS_value <= 4'b0000;
+    end
+    banks_1_RP_value <= (banks_1_RP_value + _zz_banks_1_RP_value);
+    if(when_Tasker_l38_10) begin
+      banks_1_RP_value <= 4'b0000;
+    end
+    banks_1_RCD_value <= (banks_1_RCD_value + _zz_banks_1_RCD_value);
+    if(when_Tasker_l38_11) begin
+      banks_1_RCD_value <= 4'b0000;
+    end
+    banks_1_RTP_value <= (banks_1_RTP_value + _zz_banks_1_RTP_value);
+    if(when_Tasker_l38_12) begin
+      banks_1_RTP_value <= 4'b0000;
+    end
+    banks_2_WR_value <= (banks_2_WR_value + _zz_banks_2_WR_value);
+    if(when_Tasker_l38_13) begin
+      banks_2_WR_value <= 4'b0000;
+    end
+    banks_2_RAS_value <= (banks_2_RAS_value + _zz_banks_2_RAS_value);
+    if(when_Tasker_l38_14) begin
+      banks_2_RAS_value <= 4'b0000;
+    end
+    banks_2_RP_value <= (banks_2_RP_value + _zz_banks_2_RP_value);
+    if(when_Tasker_l38_15) begin
+      banks_2_RP_value <= 4'b0000;
+    end
+    banks_2_RCD_value <= (banks_2_RCD_value + _zz_banks_2_RCD_value);
+    if(when_Tasker_l38_16) begin
+      banks_2_RCD_value <= 4'b0000;
+    end
+    banks_2_RTP_value <= (banks_2_RTP_value + _zz_banks_2_RTP_value);
+    if(when_Tasker_l38_17) begin
+      banks_2_RTP_value <= 4'b0000;
+    end
+    banks_3_WR_value <= (banks_3_WR_value + _zz_banks_3_WR_value);
+    if(when_Tasker_l38_18) begin
+      banks_3_WR_value <= 4'b0000;
+    end
+    banks_3_RAS_value <= (banks_3_RAS_value + _zz_banks_3_RAS_value);
+    if(when_Tasker_l38_19) begin
+      banks_3_RAS_value <= 4'b0000;
+    end
+    banks_3_RP_value <= (banks_3_RP_value + _zz_banks_3_RP_value);
+    if(when_Tasker_l38_20) begin
+      banks_3_RP_value <= 4'b0000;
+    end
+    banks_3_RCD_value <= (banks_3_RCD_value + _zz_banks_3_RCD_value);
+    if(when_Tasker_l38_21) begin
+      banks_3_RCD_value <= 4'b0000;
+    end
+    banks_3_RTP_value <= (banks_3_RTP_value + _zz_banks_3_RTP_value);
+    if(when_Tasker_l38_22) begin
+      banks_3_RTP_value <= 4'b0000;
+    end
+    if(inputsArbiter_output_ready) begin
+      inputsArbiter_output_rData_write <= inputsArbiter_output_payload_write;
+      inputsArbiter_output_rData_address <= inputsArbiter_output_payload_address;
+      inputsArbiter_output_rData_context <= inputsArbiter_output_payload_context;
+      inputsArbiter_output_rData_burstLast <= inputsArbiter_output_payload_burstLast;
+      inputsArbiter_output_rData_length <= inputsArbiter_output_payload_length;
+    end
+    stations_0_status_allowPrecharge <= 1'b1;
+    stations_0_status_allowActive <= ((! RRD_busy) && 1'b1);
+    stations_0_status_allowWrite <= ((! RTW_busy) && 1'b1);
+    stations_0_status_allowRead <= ((! WTR_busy) && 1'b1);
+    if(when_Tasker_l94_1) begin
+      stations_0_status_allowPrecharge <= 1'b0;
+    end
+    if(when_Tasker_l95_1) begin
+      stations_0_status_allowActive <= 1'b0;
+    end
+    if(when_Tasker_l96_1) begin
+      stations_0_status_allowWrite <= 1'b0;
+    end
+    if(when_Tasker_l97_1) begin
+      stations_0_status_allowRead <= 1'b0;
+    end
+    if(when_Tasker_l100_2) begin
+      if(io_output_ports_0_precharge) begin
+        stations_0_status_bankActive <= 1'b0;
+      end
+      if(io_output_ports_0_active) begin
+        stations_0_status_bankActive <= 1'b1;
+        stations_0_status_bankHit <= (io_output_ports_0_address_row == stations_0_address_row);
+        stations_0_status_allowRead <= 1'b0;
+        stations_0_status_allowWrite <= 1'b0;
+        stations_0_status_allowPrecharge <= 1'b0;
+      end
+      if(when_Tasker_l111_2) begin
+        stations_0_status_allowPrecharge <= 1'b0;
+      end
+      if(io_output_ports_0_precharge) begin
+        stations_0_status_allowActive <= 1'b0;
+      end
+    end
+    if(when_Tasker_l100_3) begin
+      if(io_output_ports_1_precharge) begin
+        stations_0_status_bankActive <= 1'b0;
+      end
+      if(io_output_ports_1_active) begin
+        stations_0_status_bankActive <= 1'b1;
+        stations_0_status_bankHit <= (io_output_ports_1_address_row == stations_0_address_row);
+        stations_0_status_allowRead <= 1'b0;
+        stations_0_status_allowWrite <= 1'b0;
+        stations_0_status_allowPrecharge <= 1'b0;
+      end
+      if(when_Tasker_l111_3) begin
+        stations_0_status_allowPrecharge <= 1'b0;
+      end
+      if(io_output_ports_1_precharge) begin
+        stations_0_status_allowActive <= 1'b0;
+      end
+    end
+    if(when_Tasker_l252) begin
+      stations_0_offset <= (stations_0_offset + 4'b0001);
+    end
+    if(when_Tasker_l266) begin
+      stations_0_frustration_counter <= (stations_0_frustration_counter + 4'b0001);
+    end
+    stations_1_status_allowPrecharge <= 1'b1;
+    stations_1_status_allowActive <= ((! RRD_busy) && 1'b1);
+    stations_1_status_allowWrite <= ((! RTW_busy) && 1'b1);
+    stations_1_status_allowRead <= ((! WTR_busy) && 1'b1);
+    if(when_Tasker_l94_2) begin
+      stations_1_status_allowPrecharge <= 1'b0;
+    end
+    if(when_Tasker_l95_2) begin
+      stations_1_status_allowActive <= 1'b0;
+    end
+    if(when_Tasker_l96_2) begin
+      stations_1_status_allowWrite <= 1'b0;
+    end
+    if(when_Tasker_l97_2) begin
+      stations_1_status_allowRead <= 1'b0;
+    end
+    if(when_Tasker_l100_4) begin
+      if(io_output_ports_0_precharge) begin
+        stations_1_status_bankActive <= 1'b0;
+      end
+      if(io_output_ports_0_active) begin
+        stations_1_status_bankActive <= 1'b1;
+        stations_1_status_bankHit <= (io_output_ports_0_address_row == stations_1_address_row);
+        stations_1_status_allowRead <= 1'b0;
+        stations_1_status_allowWrite <= 1'b0;
+        stations_1_status_allowPrecharge <= 1'b0;
+      end
+      if(when_Tasker_l111_4) begin
+        stations_1_status_allowPrecharge <= 1'b0;
+      end
+      if(io_output_ports_0_precharge) begin
+        stations_1_status_allowActive <= 1'b0;
+      end
+    end
+    if(when_Tasker_l100_5) begin
+      if(io_output_ports_1_precharge) begin
+        stations_1_status_bankActive <= 1'b0;
+      end
+      if(io_output_ports_1_active) begin
+        stations_1_status_bankActive <= 1'b1;
+        stations_1_status_bankHit <= (io_output_ports_1_address_row == stations_1_address_row);
+        stations_1_status_allowRead <= 1'b0;
+        stations_1_status_allowWrite <= 1'b0;
+        stations_1_status_allowPrecharge <= 1'b0;
+      end
+      if(when_Tasker_l111_5) begin
+        stations_1_status_allowPrecharge <= 1'b0;
+      end
+      if(io_output_ports_1_precharge) begin
+        stations_1_status_allowActive <= 1'b0;
+      end
+    end
+    if(when_Tasker_l252_1) begin
+      stations_1_offset <= (stations_1_offset + 4'b0001);
+    end
+    if(when_Tasker_l266_1) begin
+      stations_1_frustration_counter <= (stations_1_frustration_counter + 4'b0001);
+    end
+    if(when_Tasker_l282) begin
+      stations_0_status_bankActive <= taskConstructor_s1_status_bankActive;
+      stations_0_status_bankHit <= taskConstructor_s1_status_bankHit;
+      stations_0_status_allowPrecharge <= taskConstructor_s1_status_allowPrecharge;
+      stations_0_status_allowActive <= taskConstructor_s1_status_allowActive;
+      stations_0_status_allowWrite <= taskConstructor_s1_status_allowWrite;
+      stations_0_status_allowRead <= taskConstructor_s1_status_allowRead;
+      stations_0_address_byte <= taskConstructor_s1_address_byte;
+      stations_0_address_column <= (taskConstructor_s1_address_column & 9'h1e1);
+      stations_0_address_bank <= taskConstructor_s1_address_bank;
+      stations_0_address_row <= taskConstructor_s1_address_row;
+      stations_0_offset <= loader_offset;
+      stations_0_offsetLast <= loader_offsetLast;
+      stations_0_write <= inputsArbiter_output_input_payload_write;
+      stations_0_context <= inputsArbiter_output_input_payload_context;
+      stations_0_frustration_counter <= 4'b0000;
+    end
+    if(when_Tasker_l282_1) begin
+      stations_1_status_bankActive <= taskConstructor_s1_status_bankActive;
+      stations_1_status_bankHit <= taskConstructor_s1_status_bankHit;
+      stations_1_status_allowPrecharge <= taskConstructor_s1_status_allowPrecharge;
+      stations_1_status_allowActive <= taskConstructor_s1_status_allowActive;
+      stations_1_status_allowWrite <= taskConstructor_s1_status_allowWrite;
+      stations_1_status_allowRead <= taskConstructor_s1_status_allowRead;
+      stations_1_address_byte <= taskConstructor_s1_address_byte;
+      stations_1_address_column <= (taskConstructor_s1_address_column & 9'h1e1);
+      stations_1_address_bank <= taskConstructor_s1_address_bank;
+      stations_1_address_row <= taskConstructor_s1_address_row;
+      stations_1_offset <= loader_offset;
+      stations_1_offsetLast <= loader_offsetLast;
+      stations_1_write <= inputsArbiter_output_input_payload_write;
+      stations_1_context <= inputsArbiter_output_input_payload_context;
+      stations_1_frustration_counter <= 4'b0000;
+    end
+    if(when_Tasker_l362) begin
+      stations_0_status_allowActive <= 1'b0;
+    end
+    if(when_Tasker_l370) begin
+      stations_0_status_allowWrite <= 1'b0;
+    end
+    if(when_Tasker_l373) begin
+      stations_0_status_allowRead <= 1'b0;
+    end
+    if(when_Tasker_l362_1) begin
+      stations_1_status_allowActive <= 1'b0;
+    end
+    if(when_Tasker_l370_1) begin
+      stations_1_status_allowWrite <= 1'b0;
+    end
+    if(when_Tasker_l373_1) begin
+      stations_1_status_allowRead <= 1'b0;
+    end
+  end
+
+  always @(posedge clkout_system) begin
+    if(systemCdCtrl_logic_outputReset) begin
+      banks_0_active <= 1'b0;
+      banks_1_active <= 1'b0;
+      banks_2_active <= 1'b0;
+      banks_3_active <= 1'b0;
+      writeTockens_0_counter <= 6'h0;
+      writeTockens_0_ready <= 1'b0;
+      inputsArbiter_state <= 1'b1;
+      inputsArbiter_tocken <= 5'h0;
+      inputsArbiter_output_rValid <= 1'b0;
+      stations_0_valid <= 1'b0;
+      stations_0_stronger <= 2'b00;
+      stations_0_afterBank <= 2'b00;
+      stations_0_afterAccess <= 2'b00;
+      stations_1_valid <= 1'b0;
+      stations_1_stronger <= 2'b00;
+      stations_1_afterBank <= 2'b00;
+      stations_1_afterAccess <= 2'b00;
+      arbiter_refreshState <= 2'b00;
+    end else begin
+      banks_0_active <= banks_0_activeNext;
+      banks_1_active <= banks_1_activeNext;
+      banks_2_active <= banks_2_activeNext;
+      banks_3_active <= banks_3_activeNext;
+      writeTockens_0_counter <= (_zz_writeTockens_0_counter - _zz_writeTockens_0_counter_2);
+      if(when_Tasker_l131) begin
+        writeTockens_0_ready <= 1'b1;
+      end
+      if(when_Tasker_l131_1) begin
+        writeTockens_0_ready <= 1'b0;
+      end
+      if(inputsArbiter_tockenIncrement) begin
+        inputsArbiter_tocken <= (inputsArbiter_tocken + 5'h01);
+      end
+      if(when_Tasker_l157) begin
+        inputsArbiter_state <= inputsArbiter_state[0 : 0];
+        inputsArbiter_tocken <= 5'h0;
+      end
+      if(inputsArbiter_output_ready) begin
+        inputsArbiter_output_rValid <= inputsArbiter_output_valid;
+      end
+      if(when_Tasker_l252) begin
+        if(stations_0_last) begin
+          stations_0_valid <= 1'b0;
+        end
+      end
+      if(when_Tasker_l252_1) begin
+        if(stations_1_last) begin
+          stations_1_valid <= 1'b0;
+        end
+      end
+      if(when_Tasker_l282) begin
+        stations_0_valid <= 1'b1;
+        stations_0_stronger <= (loader_stronger & 2'b10);
+        stations_0_afterBank <= (loader_afterBank & 2'b10);
+        stations_0_afterAccess <= (loader_afterAccess & 2'b10);
+      end
+      if(when_Tasker_l282_1) begin
+        stations_1_valid <= 1'b1;
+        stations_1_stronger <= (loader_stronger & 2'b01);
+        stations_1_afterBank <= (loader_afterBank & 2'b01);
+        stations_1_afterAccess <= (loader_afterAccess & 2'b01);
+      end
+      if(stations_0_fire) begin
+        stations_1_stronger[0] <= 1'b0;
+        stations_1_afterAccess[0] <= 1'b0;
+        stations_1_afterBank[0] <= 1'b0;
+      end
+      if(stations_1_fire) begin
+        stations_0_stronger[1] <= 1'b0;
+        stations_0_afterAccess[1] <= 1'b0;
+        stations_0_afterBank[1] <= 1'b0;
+      end
+      if(arbiter_askRefresh) begin
+        case(arbiter_refreshState)
+          2'b00 : begin
+            arbiter_refreshState <= 2'b01;
+          end
+          2'b01 : begin
+            if(allowPrechargeAll_regNext) begin
+              arbiter_refreshState <= 2'b10;
+            end
+          end
+          2'b10 : begin
+            if(when_Tasker_l344) begin
+              arbiter_refreshState <= 2'b11;
+            end
+          end
+          default : begin
+            if(when_Tasker_l350) begin
+              arbiter_refreshState <= 2'b00;
+            end
+          end
+        endcase
+      end
+    end
+  end
+
+  always @(posedge clkout_system) begin
+    allowPrechargeAll_regNext <= allowPrechargeAll;
+  end
+
+
+endmodule
+
+module Refresher (
+  input      [1:0]    io_config_readLatency,
+  input      [3:0]    io_config_RAS,
+  input      [3:0]    io_config_RP,
+  input      [3:0]    io_config_WR,
+  input      [3:0]    io_config_RCD,
+  input      [3:0]    io_config_WTR,
+  input      [3:0]    io_config_RTP,
+  input      [3:0]    io_config_RRD,
+  input      [3:0]    io_config_RTW,
+  input      [6:0]    io_config_RFC,
+  input      [15:0]   io_config_REF,
+  input               io_config_autoRefresh,
+  input               io_config_noActive,
+  input      [0:0]    io_config_phase_active,
+  input      [0:0]    io_config_phase_precharge,
+  input      [0:0]    io_config_phase_read,
+  input      [0:0]    io_config_phase_write,
+  output              io_refresh_valid,
+  input               io_refresh_ready,
+  input               clkout_system,
+  input               systemCdCtrl_logic_outputReset
+);
+
+  reg        [15:0]   value;
+  wire                hit;
+  wire                when_Refresher_l17;
+  reg                 pending;
+  wire                when_Refresher_l21;
+
+  assign hit = (value == 16'h0);
+  assign when_Refresher_l17 = (hit || (! io_config_autoRefresh));
+  assign when_Refresher_l21 = (! io_config_autoRefresh);
+  assign io_refresh_valid = pending;
+  always @(posedge clkout_system) begin
+    if(systemCdCtrl_logic_outputReset) begin
+      value <= 16'h0;
+      pending <= 1'b0;
+    end else begin
+      value <= (value - 16'h0001);
+      if(when_Refresher_l17) begin
+        value <= io_config_REF;
+      end
+      if(io_refresh_ready) begin
+        pending <= 1'b0;
+      end
+      if(hit) begin
+        pending <= 1'b1;
+      end
+      if(when_Refresher_l21) begin
+        pending <= 1'b0;
+      end
+    end
+  end
+
+
+endmodule
+
+module StreamFifoLowLatency_3 (
+  input               io_push_valid,
+  output              io_push_ready,
+  input      [31:0]   io_push_payload_data,
+  input      [3:0]    io_push_payload_mask,
+  output              io_pop_valid,
+  input               io_pop_ready,
+  output     [31:0]   io_pop_payload_data,
+  output     [3:0]    io_pop_payload_mask,
+  input               io_flush,
+  output     [5:0]    io_occupancy,
+  input               clkout_system,
+  input               systemCdCtrl_logic_outputReset
+);
+
+  wire       [35:0]   _zz_ram_port0;
+  wire       [4:0]    _zz_pushPtr_valueNext;
+  wire       [0:0]    _zz_pushPtr_valueNext_1;
+  wire       [4:0]    _zz_popPtr_valueNext;
+  wire       [0:0]    _zz_popPtr_valueNext_1;
+  wire       [35:0]   _zz_ram_port;
+  reg                 _zz_1;
+  reg                 pushPtr_willIncrement;
+  reg                 pushPtr_willClear;
+  reg        [4:0]    pushPtr_valueNext;
+  reg        [4:0]    pushPtr_value;
+  wire                pushPtr_willOverflowIfInc;
+  wire                pushPtr_willOverflow;
+  reg                 popPtr_willIncrement;
+  reg                 popPtr_willClear;
+  reg        [4:0]    popPtr_valueNext;
+  reg        [4:0]    popPtr_value;
+  wire                popPtr_willOverflowIfInc;
+  wire                popPtr_willOverflow;
+  wire                ptrMatch;
+  reg                 risingOccupancy;
+  wire                empty;
+  wire                full;
+  wire                pushing;
+  wire                popping;
+  wire       [35:0]   _zz_io_pop_payload_data;
+  wire                when_Stream_l1010;
+  wire       [4:0]    ptrDif;
+  (* ram_style = "distributed" *) reg [35:0] ram [0:31];
+
+  assign _zz_pushPtr_valueNext_1 = pushPtr_willIncrement;
+  assign _zz_pushPtr_valueNext = {4'd0, _zz_pushPtr_valueNext_1};
+  assign _zz_popPtr_valueNext_1 = popPtr_willIncrement;
+  assign _zz_popPtr_valueNext = {4'd0, _zz_popPtr_valueNext_1};
+  assign _zz_ram_port = {io_push_payload_mask,io_push_payload_data};
+  assign _zz_ram_port0 = ram[popPtr_value];
+  always @(posedge clkout_system) begin
+    if(_zz_1) begin
+      ram[pushPtr_value] <= _zz_ram_port;
+    end
+  end
+
+  always @(*) begin
+    _zz_1 = 1'b0;
+    if(pushing) begin
+      _zz_1 = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    pushPtr_willIncrement = 1'b0;
+    if(pushing) begin
+      pushPtr_willIncrement = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    pushPtr_willClear = 1'b0;
+    if(io_flush) begin
+      pushPtr_willClear = 1'b1;
+    end
+  end
+
+  assign pushPtr_willOverflowIfInc = (pushPtr_value == 5'h1f);
+  assign pushPtr_willOverflow = (pushPtr_willOverflowIfInc && pushPtr_willIncrement);
+  always @(*) begin
+    pushPtr_valueNext = (pushPtr_value + _zz_pushPtr_valueNext);
+    if(pushPtr_willClear) begin
+      pushPtr_valueNext = 5'h0;
+    end
+  end
+
+  always @(*) begin
+    popPtr_willIncrement = 1'b0;
+    if(popping) begin
+      popPtr_willIncrement = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    popPtr_willClear = 1'b0;
+    if(io_flush) begin
+      popPtr_willClear = 1'b1;
+    end
+  end
+
+  assign popPtr_willOverflowIfInc = (popPtr_value == 5'h1f);
+  assign popPtr_willOverflow = (popPtr_willOverflowIfInc && popPtr_willIncrement);
+  always @(*) begin
+    popPtr_valueNext = (popPtr_value + _zz_popPtr_valueNext);
+    if(popPtr_willClear) begin
+      popPtr_valueNext = 5'h0;
+    end
+  end
+
+  assign ptrMatch = (pushPtr_value == popPtr_value);
+  assign empty = (ptrMatch && (! risingOccupancy));
+  assign full = (ptrMatch && risingOccupancy);
+  assign pushing = (io_push_valid && io_push_ready);
+  assign popping = (io_pop_valid && io_pop_ready);
+  assign io_push_ready = (! full);
+  assign io_pop_valid = (! empty);
+  assign _zz_io_pop_payload_data = _zz_ram_port0;
+  assign io_pop_payload_data = _zz_io_pop_payload_data[31 : 0];
+  assign io_pop_payload_mask = _zz_io_pop_payload_data[35 : 32];
+  assign when_Stream_l1010 = (pushing != popping);
+  assign ptrDif = (pushPtr_value - popPtr_value);
+  assign io_occupancy = {(risingOccupancy && ptrMatch),ptrDif};
+  always @(posedge clkout_system) begin
+    if(systemCdCtrl_logic_outputReset) begin
+      pushPtr_value <= 5'h0;
+      popPtr_value <= 5'h0;
+      risingOccupancy <= 1'b0;
+    end else begin
+      pushPtr_value <= pushPtr_valueNext;
+      popPtr_value <= popPtr_valueNext;
+      if(when_Stream_l1010) begin
+        risingOccupancy <= pushing;
+      end
+      if(io_flush) begin
+        risingOccupancy <= 1'b0;
+      end
+    end
+  end
+
+
+endmodule
+
+module StreamFifoLowLatency_2 (
+  input               io_push_valid,
+  output              io_push_ready,
+  input               io_push_payload_last,
+  input      [31:0]   io_push_payload_fragment_data,
+  input      [3:0]    io_push_payload_fragment_context,
+  output              io_pop_valid,
+  input               io_pop_ready,
+  output              io_pop_payload_last,
+  output     [31:0]   io_pop_payload_fragment_data,
+  output     [3:0]    io_pop_payload_fragment_context,
+  input               io_flush,
+  output     [5:0]    io_occupancy,
+  input               clkout_system,
+  input               systemCdCtrl_logic_outputReset
+);
+
+  wire       [36:0]   _zz_ram_port0;
+  wire       [4:0]    _zz_pushPtr_valueNext;
+  wire       [0:0]    _zz_pushPtr_valueNext_1;
+  wire       [4:0]    _zz_popPtr_valueNext;
+  wire       [0:0]    _zz_popPtr_valueNext_1;
+  wire       [36:0]   _zz_ram_port;
+  reg                 _zz_1;
+  reg                 pushPtr_willIncrement;
+  reg                 pushPtr_willClear;
+  reg        [4:0]    pushPtr_valueNext;
+  reg        [4:0]    pushPtr_value;
+  wire                pushPtr_willOverflowIfInc;
+  wire                pushPtr_willOverflow;
+  reg                 popPtr_willIncrement;
+  reg                 popPtr_willClear;
+  reg        [4:0]    popPtr_valueNext;
+  reg        [4:0]    popPtr_value;
+  wire                popPtr_willOverflowIfInc;
+  wire                popPtr_willOverflow;
+  wire                ptrMatch;
+  reg                 risingOccupancy;
+  wire                empty;
+  wire                full;
+  wire                pushing;
+  wire                popping;
+  wire       [36:0]   _zz_io_pop_payload_last;
+  wire       [35:0]   _zz_io_pop_payload_fragment_data;
+  wire                when_Stream_l1010;
+  wire       [4:0]    ptrDif;
+  (* ram_style = "distributed" *) reg [36:0] ram [0:31];
+
+  assign _zz_pushPtr_valueNext_1 = pushPtr_willIncrement;
+  assign _zz_pushPtr_valueNext = {4'd0, _zz_pushPtr_valueNext_1};
+  assign _zz_popPtr_valueNext_1 = popPtr_willIncrement;
+  assign _zz_popPtr_valueNext = {4'd0, _zz_popPtr_valueNext_1};
+  assign _zz_ram_port = {{io_push_payload_fragment_context,io_push_payload_fragment_data},io_push_payload_last};
+  assign _zz_ram_port0 = ram[popPtr_value];
+  always @(posedge clkout_system) begin
+    if(_zz_1) begin
+      ram[pushPtr_value] <= _zz_ram_port;
+    end
+  end
+
+  always @(*) begin
+    _zz_1 = 1'b0;
+    if(pushing) begin
+      _zz_1 = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    pushPtr_willIncrement = 1'b0;
+    if(pushing) begin
+      pushPtr_willIncrement = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    pushPtr_willClear = 1'b0;
+    if(io_flush) begin
+      pushPtr_willClear = 1'b1;
+    end
+  end
+
+  assign pushPtr_willOverflowIfInc = (pushPtr_value == 5'h1f);
+  assign pushPtr_willOverflow = (pushPtr_willOverflowIfInc && pushPtr_willIncrement);
+  always @(*) begin
+    pushPtr_valueNext = (pushPtr_value + _zz_pushPtr_valueNext);
+    if(pushPtr_willClear) begin
+      pushPtr_valueNext = 5'h0;
+    end
+  end
+
+  always @(*) begin
+    popPtr_willIncrement = 1'b0;
+    if(popping) begin
+      popPtr_willIncrement = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    popPtr_willClear = 1'b0;
+    if(io_flush) begin
+      popPtr_willClear = 1'b1;
+    end
+  end
+
+  assign popPtr_willOverflowIfInc = (popPtr_value == 5'h1f);
+  assign popPtr_willOverflow = (popPtr_willOverflowIfInc && popPtr_willIncrement);
+  always @(*) begin
+    popPtr_valueNext = (popPtr_value + _zz_popPtr_valueNext);
+    if(popPtr_willClear) begin
+      popPtr_valueNext = 5'h0;
+    end
+  end
+
+  assign ptrMatch = (pushPtr_value == popPtr_value);
+  assign empty = (ptrMatch && (! risingOccupancy));
+  assign full = (ptrMatch && risingOccupancy);
+  assign pushing = (io_push_valid && io_push_ready);
+  assign popping = (io_pop_valid && io_pop_ready);
+  assign io_push_ready = (! full);
+  assign io_pop_valid = (! empty);
+  assign _zz_io_pop_payload_last = _zz_ram_port0;
+  assign _zz_io_pop_payload_fragment_data = _zz_io_pop_payload_last[36 : 1];
+  assign io_pop_payload_last = _zz_io_pop_payload_last[0];
+  assign io_pop_payload_fragment_data = _zz_io_pop_payload_fragment_data[31 : 0];
+  assign io_pop_payload_fragment_context = _zz_io_pop_payload_fragment_data[35 : 32];
+  assign when_Stream_l1010 = (pushing != popping);
+  assign ptrDif = (pushPtr_value - popPtr_value);
+  assign io_occupancy = {(risingOccupancy && ptrMatch),ptrDif};
+  always @(posedge clkout_system) begin
+    if(systemCdCtrl_logic_outputReset) begin
+      pushPtr_value <= 5'h0;
+      popPtr_value <= 5'h0;
+      risingOccupancy <= 1'b0;
+    end else begin
+      pushPtr_value <= pushPtr_valueNext;
+      popPtr_value <= popPtr_valueNext;
+      if(when_Stream_l1010) begin
+        risingOccupancy <= pushing;
+      end
+      if(io_flush) begin
+        risingOccupancy <= 1'b0;
+      end
+    end
+  end
+
+
+endmodule
+
+module StreamFifoLowLatency_1 (
+  input               io_push_valid,
+  output              io_push_ready,
+  input               io_push_payload_write,
+  input      [24:0]   io_push_payload_address,
+  input      [3:0]    io_push_payload_context,
+  input               io_push_payload_burstLast,
+  input      [3:0]    io_push_payload_length,
+  output              io_pop_valid,
+  input               io_pop_ready,
+  output              io_pop_payload_write,
+  output     [24:0]   io_pop_payload_address,
+  output     [3:0]    io_pop_payload_context,
+  output              io_pop_payload_burstLast,
+  output     [3:0]    io_pop_payload_length,
+  input               io_flush,
+  output     [4:0]    io_occupancy,
+  input               clkout_system,
+  input               systemCdCtrl_logic_outputReset
+);
+
+  wire       [34:0]   _zz_ram_port0;
+  wire       [3:0]    _zz_pushPtr_valueNext;
+  wire       [0:0]    _zz_pushPtr_valueNext_1;
+  wire       [3:0]    _zz_popPtr_valueNext;
+  wire       [0:0]    _zz_popPtr_valueNext_1;
+  wire       [34:0]   _zz_ram_port;
+  reg                 _zz_1;
+  reg                 pushPtr_willIncrement;
+  reg                 pushPtr_willClear;
+  reg        [3:0]    pushPtr_valueNext;
+  reg        [3:0]    pushPtr_value;
+  wire                pushPtr_willOverflowIfInc;
+  wire                pushPtr_willOverflow;
+  reg                 popPtr_willIncrement;
+  reg                 popPtr_willClear;
+  reg        [3:0]    popPtr_valueNext;
+  reg        [3:0]    popPtr_value;
+  wire                popPtr_willOverflowIfInc;
+  wire                popPtr_willOverflow;
+  wire                ptrMatch;
+  reg                 risingOccupancy;
+  wire                empty;
+  wire                full;
+  wire                pushing;
+  wire                popping;
+  wire       [34:0]   _zz_io_pop_payload_write;
+  wire                when_Stream_l1010;
+  wire       [3:0]    ptrDif;
+  (* ram_style = "distributed" *) reg [34:0] ram [0:15];
+
+  assign _zz_pushPtr_valueNext_1 = pushPtr_willIncrement;
+  assign _zz_pushPtr_valueNext = {3'd0, _zz_pushPtr_valueNext_1};
+  assign _zz_popPtr_valueNext_1 = popPtr_willIncrement;
+  assign _zz_popPtr_valueNext = {3'd0, _zz_popPtr_valueNext_1};
+  assign _zz_ram_port = {io_push_payload_length,{io_push_payload_burstLast,{io_push_payload_context,{io_push_payload_address,io_push_payload_write}}}};
+  assign _zz_ram_port0 = ram[popPtr_value];
+  always @(posedge clkout_system) begin
+    if(_zz_1) begin
+      ram[pushPtr_value] <= _zz_ram_port;
+    end
+  end
+
+  always @(*) begin
+    _zz_1 = 1'b0;
+    if(pushing) begin
+      _zz_1 = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    pushPtr_willIncrement = 1'b0;
+    if(pushing) begin
+      pushPtr_willIncrement = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    pushPtr_willClear = 1'b0;
+    if(io_flush) begin
+      pushPtr_willClear = 1'b1;
+    end
+  end
+
+  assign pushPtr_willOverflowIfInc = (pushPtr_value == 4'b1111);
+  assign pushPtr_willOverflow = (pushPtr_willOverflowIfInc && pushPtr_willIncrement);
+  always @(*) begin
+    pushPtr_valueNext = (pushPtr_value + _zz_pushPtr_valueNext);
+    if(pushPtr_willClear) begin
+      pushPtr_valueNext = 4'b0000;
+    end
+  end
+
+  always @(*) begin
+    popPtr_willIncrement = 1'b0;
+    if(popping) begin
+      popPtr_willIncrement = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    popPtr_willClear = 1'b0;
+    if(io_flush) begin
+      popPtr_willClear = 1'b1;
+    end
+  end
+
+  assign popPtr_willOverflowIfInc = (popPtr_value == 4'b1111);
+  assign popPtr_willOverflow = (popPtr_willOverflowIfInc && popPtr_willIncrement);
+  always @(*) begin
+    popPtr_valueNext = (popPtr_value + _zz_popPtr_valueNext);
+    if(popPtr_willClear) begin
+      popPtr_valueNext = 4'b0000;
+    end
+  end
+
+  assign ptrMatch = (pushPtr_value == popPtr_value);
+  assign empty = (ptrMatch && (! risingOccupancy));
+  assign full = (ptrMatch && risingOccupancy);
+  assign pushing = (io_push_valid && io_push_ready);
+  assign popping = (io_pop_valid && io_pop_ready);
+  assign io_push_ready = (! full);
+  assign io_pop_valid = (! empty);
+  assign _zz_io_pop_payload_write = _zz_ram_port0;
+  assign io_pop_payload_write = _zz_io_pop_payload_write[0];
+  assign io_pop_payload_address = _zz_io_pop_payload_write[25 : 1];
+  assign io_pop_payload_context = _zz_io_pop_payload_write[29 : 26];
+  assign io_pop_payload_burstLast = _zz_io_pop_payload_write[30];
+  assign io_pop_payload_length = _zz_io_pop_payload_write[34 : 31];
+  assign when_Stream_l1010 = (pushing != popping);
+  assign ptrDif = (pushPtr_value - popPtr_value);
+  assign io_occupancy = {(risingOccupancy && ptrMatch),ptrDif};
+  always @(posedge clkout_system) begin
+    if(systemCdCtrl_logic_outputReset) begin
+      pushPtr_value <= 4'b0000;
+      popPtr_value <= 4'b0000;
+      risingOccupancy <= 1'b0;
+    end else begin
+      pushPtr_value <= pushPtr_valueNext;
+      popPtr_value <= popPtr_valueNext;
+      if(when_Stream_l1010) begin
+        risingOccupancy <= pushing;
+      end
+      if(io_flush) begin
+        risingOccupancy <= 1'b0;
+      end
+    end
+  end
+
+
+endmodule
+
+module BmbToCorePort (
+  input               io_input_cmd_valid,
+  output reg          io_input_cmd_ready,
+  input               io_input_cmd_payload_last,
+  input      [0:0]    io_input_cmd_payload_fragment_opcode,
+  input      [24:0]   io_input_cmd_payload_fragment_address,
+  input      [4:0]    io_input_cmd_payload_fragment_length,
+  input      [31:0]   io_input_cmd_payload_fragment_data,
+  input      [3:0]    io_input_cmd_payload_fragment_mask,
+  input      [3:0]    io_input_cmd_payload_fragment_context,
+  output              io_input_rsp_valid,
+  input               io_input_rsp_ready,
+  output              io_input_rsp_payload_last,
+  output     [0:0]    io_input_rsp_payload_fragment_opcode,
+  output     [31:0]   io_input_rsp_payload_fragment_data,
+  output     [3:0]    io_input_rsp_payload_fragment_context,
+  input               io_inputBurstLast,
+  output              io_output_cmd_valid,
+  input               io_output_cmd_ready,
+  output              io_output_cmd_payload_write,
+  output     [24:0]   io_output_cmd_payload_address,
+  output     [3:0]    io_output_cmd_payload_context,
+  output              io_output_cmd_payload_burstLast,
+  output     [3:0]    io_output_cmd_payload_length,
+  output              io_output_writeData_valid,
+  input               io_output_writeData_ready,
+  output     [31:0]   io_output_writeData_payload_data,
+  output     [3:0]    io_output_writeData_payload_mask,
+  output     [0:0]    io_output_writeDataTocken,
+  input               io_output_rsp_valid,
+  output              io_output_rsp_ready,
+  input               io_output_rsp_payload_last,
+  input      [31:0]   io_output_rsp_payload_fragment_data,
+  input      [3:0]    io_output_rsp_payload_fragment_context,
+  output     [0:0]    io_output_writeDataAdded,
+  input               clkout_system,
+  input               systemCdCtrl_logic_outputReset
+);
+
+  wire       [4:0]    _zz_cmdToRspCount;
+  wire       [4:0]    _zz_cmdToRspCount_1;
+  wire       [1:0]    _zz_cmdToRspCount_2;
+  wire       [5:0]    _zz_rspPendingCounter;
+  wire       [5:0]    _zz_rspPendingCounter_1;
+  wire       [4:0]    _zz_rspPendingCounter_2;
+  wire       [5:0]    _zz_rspPendingCounter_3;
+  wire       [0:0]    _zz_rspPendingCounter_4;
+  wire       [6:0]    _zz_toManyRsp;
+  wire       [6:0]    _zz_toManyRsp_1;
+  wire       [2:0]    _zz_io_output_cmd_payload_length;
+  wire       [4:0]    cmdToRspCount;
+  reg        [5:0]    rspPendingCounter;
+  wire                io_input_cmd_fire;
+  wire                io_output_rsp_fire;
+  wire                toManyRsp;
+  wire                when_Xdr_l423;
+  wire       [3:0]    cmdContext_input;
+  wire                io_input_cmd_fire_1;
+  wire                io_input_cmd_fire_2;
+  reg                 io_input_cmd_payload_first;
+  wire                io_input_cmd_fire_3;
+  wire       [3:0]    rspContext_input;
+
+  assign _zz_cmdToRspCount = ({1'b0,io_output_cmd_payload_length} + _zz_cmdToRspCount_1);
+  assign _zz_cmdToRspCount_2 = {1'b0,1'b1};
+  assign _zz_cmdToRspCount_1 = {3'd0, _zz_cmdToRspCount_2};
+  assign _zz_rspPendingCounter = (rspPendingCounter + _zz_rspPendingCounter_1);
+  assign _zz_rspPendingCounter_2 = ((io_input_cmd_fire && io_input_cmd_payload_last) ? cmdToRspCount : 5'h0);
+  assign _zz_rspPendingCounter_1 = {1'd0, _zz_rspPendingCounter_2};
+  assign _zz_rspPendingCounter_4 = io_output_rsp_fire;
+  assign _zz_rspPendingCounter_3 = {5'd0, _zz_rspPendingCounter_4};
+  assign _zz_toManyRsp = ({1'b0,rspPendingCounter} + _zz_toManyRsp_1);
+  assign _zz_toManyRsp_1 = {2'd0, cmdToRspCount};
+  assign _zz_io_output_cmd_payload_length = (io_input_cmd_payload_fragment_length >>> 2);
+  assign cmdToRspCount = (io_output_cmd_payload_write ? 5'h01 : _zz_cmdToRspCount);
+  assign io_input_cmd_fire = (io_input_cmd_valid && io_input_cmd_ready);
+  assign io_output_rsp_fire = (io_output_rsp_valid && io_output_rsp_ready);
+  assign toManyRsp = (7'h20 < _zz_toManyRsp);
+  always @(*) begin
+    io_input_cmd_ready = (io_output_cmd_ready && (! toManyRsp));
+    if(when_Xdr_l423) begin
+      io_input_cmd_ready = 1'b0;
+    end
+  end
+
+  assign when_Xdr_l423 = (! io_output_writeData_ready);
+  assign cmdContext_input = io_input_cmd_payload_fragment_context;
+  assign io_input_cmd_fire_1 = (io_input_cmd_valid && io_input_cmd_ready);
+  assign io_input_cmd_fire_2 = (io_input_cmd_valid && io_input_cmd_ready);
+  assign io_output_cmd_valid = (io_input_cmd_fire_1 && io_input_cmd_payload_first);
+  assign io_output_cmd_payload_write = (io_input_cmd_payload_fragment_opcode == 1'b1);
+  assign io_output_cmd_payload_address = io_input_cmd_payload_fragment_address;
+  assign io_output_cmd_payload_length = {1'd0, _zz_io_output_cmd_payload_length};
+  assign io_output_cmd_payload_context = cmdContext_input;
+  assign io_output_cmd_payload_burstLast = io_inputBurstLast;
+  assign io_input_cmd_fire_3 = (io_input_cmd_valid && io_input_cmd_ready);
+  assign io_output_writeData_valid = (io_input_cmd_fire_3 && (io_input_cmd_payload_fragment_opcode == 1'b1));
+  assign io_output_writeData_payload_data = io_input_cmd_payload_fragment_data;
+  assign io_output_writeData_payload_mask = io_input_cmd_payload_fragment_mask;
+  assign rspContext_input = io_output_rsp_payload_fragment_context[3 : 0];
+  assign io_input_rsp_valid = io_output_rsp_valid;
+  assign io_output_rsp_ready = io_input_rsp_ready;
+  assign io_input_rsp_payload_fragment_opcode = 1'b0;
+  assign io_input_rsp_payload_last = io_output_rsp_payload_last;
+  assign io_input_rsp_payload_fragment_data = io_output_rsp_payload_fragment_data;
+  assign io_input_rsp_payload_fragment_context = rspContext_input;
+  always @(posedge clkout_system) begin
+    if(systemCdCtrl_logic_outputReset) begin
+      rspPendingCounter <= 6'h0;
+      io_input_cmd_payload_first <= 1'b1;
+    end else begin
+      rspPendingCounter <= (_zz_rspPendingCounter - _zz_rspPendingCounter_3);
+      if(io_input_cmd_fire_2) begin
+        io_input_cmd_payload_first <= io_input_cmd_payload_last;
+      end
+    end
+  end
+
+
+endmodule
+
+module BmbAlignedSpliter (
+  input               io_input_cmd_valid,
+  output              io_input_cmd_ready,
+  input               io_input_cmd_payload_last,
+  input      [0:0]    io_input_cmd_payload_fragment_source,
+  input      [0:0]    io_input_cmd_payload_fragment_opcode,
+  input      [24:0]   io_input_cmd_payload_fragment_address,
+  input      [4:0]    io_input_cmd_payload_fragment_length,
+  input      [31:0]   io_input_cmd_payload_fragment_data,
+  input      [3:0]    io_input_cmd_payload_fragment_mask,
+  input      [0:0]    io_input_cmd_payload_fragment_context,
+  output              io_input_rsp_valid,
+  input               io_input_rsp_ready,
+  output              io_input_rsp_payload_last,
+  output     [0:0]    io_input_rsp_payload_fragment_source,
+  output     [0:0]    io_input_rsp_payload_fragment_opcode,
+  output     [31:0]   io_input_rsp_payload_fragment_data,
+  output     [0:0]    io_input_rsp_payload_fragment_context,
+  output              io_output_cmd_valid,
+  input               io_output_cmd_ready,
+  output              io_output_cmd_payload_last,
+  output     [0:0]    io_output_cmd_payload_fragment_opcode,
+  output     [24:0]   io_output_cmd_payload_fragment_address,
+  output     [4:0]    io_output_cmd_payload_fragment_length,
+  output     [31:0]   io_output_cmd_payload_fragment_data,
+  output     [3:0]    io_output_cmd_payload_fragment_mask,
+  output     [3:0]    io_output_cmd_payload_fragment_context,
+  input               io_output_rsp_valid,
+  output reg          io_output_rsp_ready,
+  input               io_output_rsp_payload_last,
+  input      [0:0]    io_output_rsp_payload_fragment_opcode,
+  input      [31:0]   io_output_rsp_payload_fragment_data,
+  input      [3:0]    io_output_rsp_payload_fragment_context,
+  output              io_outputBurstLast,
+  input               clkout_system,
+  input               systemCdCtrl_logic_outputReset
+);
+
+  wire       [5:0]    _zz_cmdLogic_lastAddress;
+  wire       [4:0]    _zz_cmdLogic_lastAddress_1;
+  wire       [3:0]    _zz_cmdLogic_beatsInSplit;
+  wire       [2:0]    _zz_cmdLogic_beatsInSplit_1;
+  wire       [3:0]    _zz_io_output_cmd_payload_last;
+  wire       [3:0]    _zz_io_output_cmd_payload_last_1;
+  wire       [11:0]   _zz_io_output_cmd_payload_fragment_address;
+  wire       [11:0]   _zz_io_output_cmd_payload_fragment_address_1;
+  wire       [11:0]   _zz_io_output_cmd_payload_fragment_address_2;
+  wire       [11:0]   _zz_io_output_cmd_payload_fragment_address_3;
+  wire       [4:0]    _zz_io_output_cmd_payload_fragment_address_4;
+  wire       [2:0]    _zz_cmdLogic_beatCounter;
+  wire       [0:0]    _zz_cmdLogic_beatCounter_1;
+  reg        [2:0]    cmdLogic_beatCounter;
+  wire       [4:0]    cmdLogic_headLenghtMax;
+  wire       [5:0]    cmdLogic_lastAddress;
+  wire       [4:0]    cmdLogic_tailLength;
+  wire       [0:0]    cmdLogic_splitCount;
+  reg                 cmdLogic_firstSplit;
+  wire                io_output_cmd_fire;
+  wire                when_BmbSpecificBridges_l256;
+  wire                cmdLogic_lastSplit;
+  reg        [24:0]   cmdLogic_addressBase;
+  wire                when_BmbSpecificBridges_l260;
+  wire       [3:0]    cmdLogic_beatsInSplit;
+  wire       [0:0]    cmdLogic_context_source;
+  wire                cmdLogic_context_last;
+  wire                cmdLogic_context_write;
+  wire       [0:0]    cmdLogic_context_input;
+  wire       [1:0]    switch_Misc_l202;
+  reg        [4:0]    _zz_io_output_cmd_payload_fragment_length;
+  wire                io_output_cmd_fire_1;
+  wire                io_input_cmd_fire;
+  wire                when_BmbSpecificBridges_l296;
+  wire       [0:0]    rspLogic_context_source;
+  wire                rspLogic_context_last;
+  wire                rspLogic_context_write;
+  wire       [0:0]    rspLogic_context_input;
+  wire       [3:0]    _zz_rspLogic_context_source;
+  wire                when_Stream_l408;
+  reg                 io_output_rsp_thrown_valid;
+  wire                io_output_rsp_thrown_ready;
+  wire                io_output_rsp_thrown_payload_last;
+  wire       [0:0]    io_output_rsp_thrown_payload_fragment_opcode;
+  wire       [31:0]   io_output_rsp_thrown_payload_fragment_data;
+  wire       [3:0]    io_output_rsp_thrown_payload_fragment_context;
+
+  assign _zz_cmdLogic_lastAddress_1 = io_input_cmd_payload_fragment_address[4 : 0];
+  assign _zz_cmdLogic_lastAddress = {1'd0, _zz_cmdLogic_lastAddress_1};
+  assign _zz_cmdLogic_beatsInSplit_1 = (cmdLogic_firstSplit ? io_input_cmd_payload_fragment_address[4 : 2] : 3'b000);
+  assign _zz_cmdLogic_beatsInSplit = {1'd0, _zz_cmdLogic_beatsInSplit_1};
+  assign _zz_io_output_cmd_payload_last = {1'd0, cmdLogic_beatCounter};
+  assign _zz_io_output_cmd_payload_last_1 = (cmdLogic_beatsInSplit - 4'b0001);
+  assign _zz_io_output_cmd_payload_fragment_address = (_zz_io_output_cmd_payload_fragment_address_1 + _zz_io_output_cmd_payload_fragment_address_3);
+  assign _zz_io_output_cmd_payload_fragment_address_2 = cmdLogic_addressBase[11 : 0];
+  assign _zz_io_output_cmd_payload_fragment_address_1 = _zz_io_output_cmd_payload_fragment_address_2;
+  assign _zz_io_output_cmd_payload_fragment_address_4 = 5'h0;
+  assign _zz_io_output_cmd_payload_fragment_address_3 = {7'd0, _zz_io_output_cmd_payload_fragment_address_4};
+  assign _zz_cmdLogic_beatCounter_1 = (io_input_cmd_payload_fragment_opcode == 1'b1);
+  assign _zz_cmdLogic_beatCounter = {2'd0, _zz_cmdLogic_beatCounter_1};
+  assign cmdLogic_headLenghtMax = (5'h1f - io_input_cmd_payload_fragment_address[4 : 0]);
+  assign cmdLogic_lastAddress = (_zz_cmdLogic_lastAddress + {1'b0,io_input_cmd_payload_fragment_length});
+  assign cmdLogic_tailLength = cmdLogic_lastAddress[4 : 0];
+  assign cmdLogic_splitCount = (cmdLogic_lastAddress >>> 5);
+  assign io_output_cmd_fire = (io_output_cmd_valid && io_output_cmd_ready);
+  assign when_BmbSpecificBridges_l256 = (io_output_cmd_fire && io_output_cmd_payload_last);
+  assign cmdLogic_lastSplit = (1'b0 == cmdLogic_splitCount);
+  always @(*) begin
+    cmdLogic_addressBase = io_input_cmd_payload_fragment_address;
+    if(when_BmbSpecificBridges_l260) begin
+      cmdLogic_addressBase[4 : 0] = 5'h0;
+    end
+  end
+
+  assign when_BmbSpecificBridges_l260 = (! cmdLogic_firstSplit);
+  assign cmdLogic_beatsInSplit = (4'b1000 - _zz_cmdLogic_beatsInSplit);
+  assign cmdLogic_context_input = io_input_cmd_payload_fragment_context;
+  assign cmdLogic_context_last = cmdLogic_lastSplit;
+  assign cmdLogic_context_write = (io_input_cmd_payload_fragment_opcode == 1'b1);
+  assign cmdLogic_context_source = io_input_cmd_payload_fragment_source;
+  assign io_output_cmd_valid = io_input_cmd_valid;
+  assign io_output_cmd_payload_last = (io_input_cmd_payload_last || (_zz_io_output_cmd_payload_last == _zz_io_output_cmd_payload_last_1));
+  assign io_output_cmd_payload_fragment_address = {cmdLogic_addressBase[24 : 12],_zz_io_output_cmd_payload_fragment_address};
+  assign io_output_cmd_payload_fragment_context = {cmdLogic_context_input,{cmdLogic_context_write,{cmdLogic_context_last,cmdLogic_context_source}}};
+  assign io_output_cmd_payload_fragment_opcode = io_input_cmd_payload_fragment_opcode;
+  assign switch_Misc_l202 = {cmdLogic_firstSplit,cmdLogic_lastSplit};
+  always @(*) begin
+    case(switch_Misc_l202)
+      2'b10 : begin
+        _zz_io_output_cmd_payload_fragment_length = cmdLogic_headLenghtMax;
+      end
+      2'b00 : begin
+        _zz_io_output_cmd_payload_fragment_length = 5'h1f;
+      end
+      2'b01 : begin
+        _zz_io_output_cmd_payload_fragment_length = cmdLogic_tailLength;
+      end
+      default : begin
+        _zz_io_output_cmd_payload_fragment_length = io_input_cmd_payload_fragment_length;
+      end
+    endcase
+  end
+
+  assign io_output_cmd_payload_fragment_length = _zz_io_output_cmd_payload_fragment_length;
+  assign io_output_cmd_payload_fragment_data = io_input_cmd_payload_fragment_data;
+  assign io_output_cmd_payload_fragment_mask = io_input_cmd_payload_fragment_mask;
+  assign io_outputBurstLast = cmdLogic_context_last;
+  assign io_input_cmd_ready = (io_output_cmd_ready && ((io_input_cmd_payload_fragment_opcode == 1'b1) || cmdLogic_context_last));
+  assign io_output_cmd_fire_1 = (io_output_cmd_valid && io_output_cmd_ready);
+  assign io_input_cmd_fire = (io_input_cmd_valid && io_input_cmd_ready);
+  assign when_BmbSpecificBridges_l296 = (io_input_cmd_fire && io_input_cmd_payload_last);
+  assign _zz_rspLogic_context_source = io_output_rsp_payload_fragment_context;
+  assign rspLogic_context_source = _zz_rspLogic_context_source[0 : 0];
+  assign rspLogic_context_last = _zz_rspLogic_context_source[1];
+  assign rspLogic_context_write = _zz_rspLogic_context_source[2];
+  assign rspLogic_context_input = _zz_rspLogic_context_source[3 : 3];
+  assign when_Stream_l408 = (! ((! rspLogic_context_write) || (rspLogic_context_last && io_output_rsp_payload_last)));
+  always @(*) begin
+    io_output_rsp_thrown_valid = io_output_rsp_valid;
+    if(when_Stream_l408) begin
+      io_output_rsp_thrown_valid = 1'b0;
+    end
+  end
+
+  always @(*) begin
+    io_output_rsp_ready = io_output_rsp_thrown_ready;
+    if(when_Stream_l408) begin
+      io_output_rsp_ready = 1'b1;
+    end
+  end
+
+  assign io_output_rsp_thrown_payload_last = io_output_rsp_payload_last;
+  assign io_output_rsp_thrown_payload_fragment_opcode = io_output_rsp_payload_fragment_opcode;
+  assign io_output_rsp_thrown_payload_fragment_data = io_output_rsp_payload_fragment_data;
+  assign io_output_rsp_thrown_payload_fragment_context = io_output_rsp_payload_fragment_context;
+  assign io_input_rsp_valid = io_output_rsp_thrown_valid;
+  assign io_output_rsp_thrown_ready = io_input_rsp_ready;
+  assign io_input_rsp_payload_last = (io_output_rsp_payload_last && rspLogic_context_last);
+  assign io_input_rsp_payload_fragment_source = rspLogic_context_source;
+  assign io_input_rsp_payload_fragment_opcode = io_output_rsp_payload_fragment_opcode;
+  assign io_input_rsp_payload_fragment_data = io_output_rsp_payload_fragment_data;
+  assign io_input_rsp_payload_fragment_context = rspLogic_context_input;
+  always @(posedge clkout_system) begin
+    if(systemCdCtrl_logic_outputReset) begin
+      cmdLogic_beatCounter <= 3'b000;
+      cmdLogic_firstSplit <= 1'b1;
+    end else begin
+      if(when_BmbSpecificBridges_l256) begin
+        cmdLogic_firstSplit <= 1'b0;
+      end
+      if(io_output_cmd_fire_1) begin
+        cmdLogic_beatCounter <= (cmdLogic_beatCounter + _zz_cmdLogic_beatCounter);
+        if(io_output_cmd_payload_last) begin
+          cmdLogic_beatCounter <= 3'b000;
+        end
+      end
+      if(when_BmbSpecificBridges_l296) begin
+        cmdLogic_firstSplit <= 1'b1;
+      end
+    end
+  end
+
+
+endmodule
+
+module BmbAligner (
+  input               io_input_cmd_valid,
+  output              io_input_cmd_ready,
+  input               io_input_cmd_payload_last,
+  input      [0:0]    io_input_cmd_payload_fragment_source,
+  input      [0:0]    io_input_cmd_payload_fragment_opcode,
+  input      [24:0]   io_input_cmd_payload_fragment_address,
+  input      [4:0]    io_input_cmd_payload_fragment_length,
+  input      [31:0]   io_input_cmd_payload_fragment_data,
+  input      [3:0]    io_input_cmd_payload_fragment_mask,
+  input      [0:0]    io_input_cmd_payload_fragment_context,
+  output              io_input_rsp_valid,
+  input               io_input_rsp_ready,
+  output              io_input_rsp_payload_last,
+  output     [0:0]    io_input_rsp_payload_fragment_source,
+  output     [0:0]    io_input_rsp_payload_fragment_opcode,
+  output     [31:0]   io_input_rsp_payload_fragment_data,
+  output     [0:0]    io_input_rsp_payload_fragment_context,
+  output              io_output_cmd_valid,
+  input               io_output_cmd_ready,
+  output              io_output_cmd_payload_last,
+  output     [0:0]    io_output_cmd_payload_fragment_source,
+  output     [0:0]    io_output_cmd_payload_fragment_opcode,
+  output reg [24:0]   io_output_cmd_payload_fragment_address,
+  output reg [4:0]    io_output_cmd_payload_fragment_length,
+  output     [31:0]   io_output_cmd_payload_fragment_data,
+  output     [3:0]    io_output_cmd_payload_fragment_mask,
+  output     [0:0]    io_output_cmd_payload_fragment_context,
+  input               io_output_rsp_valid,
+  output              io_output_rsp_ready,
+  input               io_output_rsp_payload_last,
+  input      [0:0]    io_output_rsp_payload_fragment_source,
+  input      [0:0]    io_output_rsp_payload_fragment_opcode,
+  input      [31:0]   io_output_rsp_payload_fragment_data,
+  input      [0:0]    io_output_rsp_payload_fragment_context,
+  input               clkout_system,
+  input               systemCdCtrl_logic_outputReset
+);
+
+
+  assign io_output_cmd_valid = io_input_cmd_valid;
+  assign io_input_cmd_ready = io_output_cmd_ready;
+  assign io_input_rsp_valid = io_output_rsp_valid;
+  assign io_output_rsp_ready = io_input_rsp_ready;
+  assign io_output_cmd_payload_last = io_input_cmd_payload_last;
+  assign io_input_rsp_payload_last = io_output_rsp_payload_last;
+  assign io_output_cmd_payload_fragment_source = io_input_cmd_payload_fragment_source;
+  assign io_output_cmd_payload_fragment_opcode = io_input_cmd_payload_fragment_opcode;
+  always @(*) begin
+    io_output_cmd_payload_fragment_address = io_input_cmd_payload_fragment_address;
+    io_output_cmd_payload_fragment_address[1 : 0] = 2'b00;
+  end
+
+  always @(*) begin
+    io_output_cmd_payload_fragment_length = io_input_cmd_payload_fragment_length;
+    io_output_cmd_payload_fragment_length[1 : 0] = 2'b11;
+  end
+
+  assign io_output_cmd_payload_fragment_data = io_input_cmd_payload_fragment_data;
+  assign io_output_cmd_payload_fragment_mask = io_input_cmd_payload_fragment_mask;
+  assign io_output_cmd_payload_fragment_context = io_input_cmd_payload_fragment_context;
+  assign io_input_rsp_payload_fragment_source = io_output_rsp_payload_fragment_source;
+  assign io_input_rsp_payload_fragment_opcode = io_output_rsp_payload_fragment_opcode;
+  assign io_input_rsp_payload_fragment_data = io_output_rsp_payload_fragment_data;
+  assign io_input_rsp_payload_fragment_context = io_output_rsp_payload_fragment_context;
+
+endmodule
+
 module BufferCC_1 (
   input               io_dataIn,
   output              io_dataOut,
-  input               debugCdCtrl_external_clk,
+  input               clkout_system,
   input               debugCdCtrl_logic_outputReset
 );
 
@@ -11816,7 +18076,7 @@ module BufferCC_1 (
   (* async_reg = "true" *) reg                 buffers_1;
 
   assign io_dataOut = buffers_1;
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     buffers_0 <= io_dataIn;
     buffers_1 <= buffers_0;
   end
@@ -11827,7 +18087,7 @@ endmodule
 module BufferCC (
   input               io_dataIn,
   output              io_dataOut,
-  input               debugCdCtrl_external_clk,
+  input               clkout_system,
   input               systemCdCtrl_logic_outputReset
 );
 
@@ -11835,13 +18095,159 @@ module BufferCC (
   (* async_reg = "true" *) reg                 buffers_1;
 
   assign io_dataOut = buffers_1;
-  always @(posedge debugCdCtrl_external_clk) begin
+  always @(posedge clkout_system) begin
     if(systemCdCtrl_logic_outputReset) begin
       buffers_0 <= 1'b0;
       buffers_1 <= 1'b0;
     end else begin
       buffers_0 <= io_dataIn;
       buffers_1 <= buffers_0;
+    end
+  end
+
+
+endmodule
+
+module StreamFifoLowLatency (
+  input               io_push_valid,
+  output              io_push_ready,
+  input               io_push_payload_write,
+  input               io_push_payload_last,
+  input      [3:0]    io_push_payload_context,
+  output              io_pop_valid,
+  input               io_pop_ready,
+  output              io_pop_payload_write,
+  output              io_pop_payload_last,
+  output     [3:0]    io_pop_payload_context,
+  input               io_flush,
+  output     [3:0]    io_occupancy,
+  input               clkout_system,
+  input               systemCdCtrl_logic_outputReset
+);
+
+  wire       [5:0]    _zz_ram_port0;
+  wire       [2:0]    _zz_pushPtr_valueNext;
+  wire       [0:0]    _zz_pushPtr_valueNext_1;
+  wire       [2:0]    _zz_popPtr_valueNext;
+  wire       [0:0]    _zz_popPtr_valueNext_1;
+  wire       [5:0]    _zz_ram_port;
+  reg                 _zz_1;
+  reg                 pushPtr_willIncrement;
+  reg                 pushPtr_willClear;
+  reg        [2:0]    pushPtr_valueNext;
+  reg        [2:0]    pushPtr_value;
+  wire                pushPtr_willOverflowIfInc;
+  wire                pushPtr_willOverflow;
+  reg                 popPtr_willIncrement;
+  reg                 popPtr_willClear;
+  reg        [2:0]    popPtr_valueNext;
+  reg        [2:0]    popPtr_value;
+  wire                popPtr_willOverflowIfInc;
+  wire                popPtr_willOverflow;
+  wire                ptrMatch;
+  reg                 risingOccupancy;
+  wire                empty;
+  wire                full;
+  wire                pushing;
+  wire                popping;
+  wire       [5:0]    _zz_io_pop_payload_write;
+  wire                when_Stream_l1010;
+  wire       [2:0]    ptrDif;
+  (* ram_style = "distributed" *) reg [5:0] ram [0:7];
+
+  assign _zz_pushPtr_valueNext_1 = pushPtr_willIncrement;
+  assign _zz_pushPtr_valueNext = {2'd0, _zz_pushPtr_valueNext_1};
+  assign _zz_popPtr_valueNext_1 = popPtr_willIncrement;
+  assign _zz_popPtr_valueNext = {2'd0, _zz_popPtr_valueNext_1};
+  assign _zz_ram_port = {io_push_payload_context,{io_push_payload_last,io_push_payload_write}};
+  assign _zz_ram_port0 = ram[popPtr_value];
+  always @(posedge clkout_system) begin
+    if(_zz_1) begin
+      ram[pushPtr_value] <= _zz_ram_port;
+    end
+  end
+
+  always @(*) begin
+    _zz_1 = 1'b0;
+    if(pushing) begin
+      _zz_1 = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    pushPtr_willIncrement = 1'b0;
+    if(pushing) begin
+      pushPtr_willIncrement = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    pushPtr_willClear = 1'b0;
+    if(io_flush) begin
+      pushPtr_willClear = 1'b1;
+    end
+  end
+
+  assign pushPtr_willOverflowIfInc = (pushPtr_value == 3'b111);
+  assign pushPtr_willOverflow = (pushPtr_willOverflowIfInc && pushPtr_willIncrement);
+  always @(*) begin
+    pushPtr_valueNext = (pushPtr_value + _zz_pushPtr_valueNext);
+    if(pushPtr_willClear) begin
+      pushPtr_valueNext = 3'b000;
+    end
+  end
+
+  always @(*) begin
+    popPtr_willIncrement = 1'b0;
+    if(popping) begin
+      popPtr_willIncrement = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    popPtr_willClear = 1'b0;
+    if(io_flush) begin
+      popPtr_willClear = 1'b1;
+    end
+  end
+
+  assign popPtr_willOverflowIfInc = (popPtr_value == 3'b111);
+  assign popPtr_willOverflow = (popPtr_willOverflowIfInc && popPtr_willIncrement);
+  always @(*) begin
+    popPtr_valueNext = (popPtr_value + _zz_popPtr_valueNext);
+    if(popPtr_willClear) begin
+      popPtr_valueNext = 3'b000;
+    end
+  end
+
+  assign ptrMatch = (pushPtr_value == popPtr_value);
+  assign empty = (ptrMatch && (! risingOccupancy));
+  assign full = (ptrMatch && risingOccupancy);
+  assign pushing = (io_push_valid && io_push_ready);
+  assign popping = (io_pop_valid && io_pop_ready);
+  assign io_push_ready = (! full);
+  assign io_pop_valid = (! empty);
+  assign _zz_io_pop_payload_write = _zz_ram_port0;
+  assign io_pop_payload_write = _zz_io_pop_payload_write[0];
+  assign io_pop_payload_last = _zz_io_pop_payload_write[1];
+  assign io_pop_payload_context = _zz_io_pop_payload_write[5 : 2];
+  assign when_Stream_l1010 = (pushing != popping);
+  assign ptrDif = (pushPtr_value - popPtr_value);
+  assign io_occupancy = {(risingOccupancy && ptrMatch),ptrDif};
+  always @(posedge clkout_system) begin
+    if(systemCdCtrl_logic_outputReset) begin
+      pushPtr_value <= 3'b000;
+      popPtr_value <= 3'b000;
+      risingOccupancy <= 1'b0;
+    end else begin
+      pushPtr_value <= pushPtr_valueNext;
+      popPtr_value <= popPtr_valueNext;
+      if(when_Stream_l1010) begin
+        risingOccupancy <= pushing;
+      end
+      if(io_flush) begin
+        risingOccupancy <= 1'b0;
+      end
     end
   end
 

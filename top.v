@@ -10,16 +10,16 @@ module top(
 	// input wire spiflash_mosi,
 	// input wire spiflash_miso,
 
-	// output wire sdram_clock,
-	// output wire [12:0] sdram_a,
-	// inout wire [15:0] sdram_dq,
-	// output wire sdram_we_n,
-	// output wire sdram_ras_n,
-	// output wire sdram_cas_n,
-	// output wire sdram_cs_n,
-	// output wire sdram_cke,
-	// output wire [1:0] sdram_ba,
-	// output wire [1:0] sdram_dm,
+	output wire sdram_clock,
+	output wire [12:0] sdram_a,
+	inout wire [15:0] sdram_dq,
+	output wire sdram_we_n,
+	output wire sdram_ras_n,
+	output wire sdram_cas_n,
+	output wire sdram_cs_n,
+	output wire sdram_cke,
+	output wire [1:0] sdram_ba,
+	output wire [1:0] sdram_dm,
 
 	output wire gpdi_clk_p,
 	output wire gpdi_data0_p,
@@ -50,34 +50,9 @@ module top(
 
 reg lcdclk;
 reg[19:0] counter; // RESET COUNTER
-wire locked;
-
-EHXPLLL #(
-  .CLKFB_DIV(5'd16),
-  .CLKI_DIV(1'd1),
-  .CLKOP_CPHASE(4'd9), // 7
-  .CLKOP_FPHASE(1'd0),
-  .CLKOP_DIV(4'd8),
-  .CLKOP_ENABLE("ENABLED"),
-  .CLKOS3_CPHASE(5'd23),
-  .CLKOS3_DIV(1'd1),
-  .CLKOS3_ENABLE("ENABLED"),
-  .CLKOS3_FPHASE(1'd0),
-  .CLKOS_CPHASE(4'd7), // 9
-  .CLKOS_FPHASE(1'd0),
-  .CLKOS_DIV(4'd8),
-  .CLKOS_ENABLE("ENABLED"),
-  .FEEDBK_PATH("INT_OS3")
-) EHXPLLL (
-  .CLKI(clk25),
-  .RST(1'b0),
-  .CLKOP(clk),
-  .CLKOS(sdram_clock),
-  .LOCK(locked)
-);
 
 // Reset Logic
-always @(posedge clk) begin
+always @(posedge clk25) begin
   if (!cpu_reset_n) begin
     counter <= 20'b0 ;
     reset <= 1'b0;
@@ -98,27 +73,6 @@ assign	gpdi_data0_p = 1'b0;
 assign	gpdi_data1_p = 1'b0;
 assign	gpdi_data2_p = 1'b0;
 
-// SDRAM
-// wire[15:0] io_sdram_DQ_write;
-// wire[15:0] io_sdram_DQ_writeEnable;
-
-// assign sdram_dq[0]  = io_sdram_DQ_writeEnable[0]  ? io_sdram_DQ_write[0]  : 1'bz;
-// assign sdram_dq[1]  = io_sdram_DQ_writeEnable[1]  ? io_sdram_DQ_write[1]  : 1'bz;
-// assign sdram_dq[2]  = io_sdram_DQ_writeEnable[2]  ? io_sdram_DQ_write[2]  : 1'bz;
-// assign sdram_dq[3]  = io_sdram_DQ_writeEnable[3]  ? io_sdram_DQ_write[3]  : 1'bz;
-// assign sdram_dq[4]  = io_sdram_DQ_writeEnable[4]  ? io_sdram_DQ_write[4]  : 1'bz;
-// assign sdram_dq[5]  = io_sdram_DQ_writeEnable[5]  ? io_sdram_DQ_write[5]  : 1'bz;
-// assign sdram_dq[6]  = io_sdram_DQ_writeEnable[6]  ? io_sdram_DQ_write[6]  : 1'bz;
-// assign sdram_dq[7]  = io_sdram_DQ_writeEnable[7]  ? io_sdram_DQ_write[7]  : 1'bz;
-// assign sdram_dq[8]  = io_sdram_DQ_writeEnable[8]  ? io_sdram_DQ_write[8]  : 1'bz;
-// assign sdram_dq[9]  = io_sdram_DQ_writeEnable[9]  ? io_sdram_DQ_write[9]  : 1'bz;
-// assign sdram_dq[10] = io_sdram_DQ_writeEnable[10] ? io_sdram_DQ_write[10] : 1'bz;
-// assign sdram_dq[11] = io_sdram_DQ_writeEnable[11] ? io_sdram_DQ_write[11] : 1'bz;
-// assign sdram_dq[12] = io_sdram_DQ_writeEnable[12] ? io_sdram_DQ_write[12] : 1'bz;
-// assign sdram_dq[13] = io_sdram_DQ_writeEnable[13] ? io_sdram_DQ_write[13] : 1'bz;
-// assign sdram_dq[14] = io_sdram_DQ_writeEnable[14] ? io_sdram_DQ_write[14] : 1'bz;
-// assign sdram_dq[15] = io_sdram_DQ_writeEnable[15] ? io_sdram_DQ_write[15] : 1'bz;
-
 // wire[31:0] io_gpioA_read;
 //wire[31:0] io_gpioA_write;
 //assign led[2:0] = io_gpioA_write[2:0] ;
@@ -133,13 +87,24 @@ assign	gpdi_data2_p = 1'b0;
 // wire [4:0]io_vga_color_b;
 
 ICESugarProMinimal u_saxon (
-  .debugCdCtrl_external_clk(clk25),
-  .debugCdCtrl_external_reset(reset),
+  .clocking_clk25m(clk25),
+  .clocking_resetn(reset),
+  .clocking_sdram_clk(sdram_clock), //out
 
   .system_cpu_jtag_tms(io_jtag_tms),
   .system_cpu_jtag_tdi(io_jtag_tdi),
   .system_cpu_jtag_tdo(io_jtag_tdo),
   .system_cpu_jtag_tck(io_jtag_tck),
+
+  .system_phyA_sdram_ADDR(sdram_a),
+  .system_phyA_sdram_BA(sdram_ba),
+  .system_phyA_sdram_DQM(sdram_dm),
+  .system_phyA_sdram_CASn(sdram_cas_n),
+  .system_phyA_sdram_CKE(sdram_cke),
+  .system_phyA_sdram_CSn(sdram_cs_n),
+  .system_phyA_sdram_RASn(sdram_ras_n),
+  .system_phyA_sdram_WEn(sdram_we_n),
+  .system_phyA_sdram_DQ(sdram_dq),
 
   .system_uartA_uart_txd(serial_tx),
   .system_uartA_uart_rxd(serial_rx),
