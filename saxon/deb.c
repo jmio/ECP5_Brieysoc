@@ -4,23 +4,28 @@
 */
 
 #include <ctype.h>
-#include "murax.h"
-#include "xprintf.h"
 #include "ff.h"
+
+#include "bsp/bsp.h"
+#include "bsp/gpio.h"
+#include "bsp/uart.h"
+
+#include "xprintf.h"
+
 
 
 #define	NULL ((void *)0)
 
 char	getcon() {
 	int c;
-	while ((c = uart_read(UART)) < 0) {
+	while ((c = uart_read(BSP_UART_TERMINAL)) < 0) {
 	}
 	return c;
 }
 
 uint32_t	consts() 
 { 
-	return (uart_readOccupancy(UART));
+	return (uart_readOccupancy(BSP_UART_TERMINAL));
 }
 
 uint32_t	col;
@@ -464,37 +469,37 @@ L_EOF:
 }
 
 
-void	xtptest()
-{
-	UINT tpx,tpy; // DUMMY
-	UINT TPREADZ1;
-	UINT TPREADX;
-	UINT TPREADY;
+// void	xtptest()
+// {
+// 	UINT tpx,tpy; // DUMMY
+// 	UINT TPREADZ1;
+// 	UINT TPREADX;
+// 	UINT TPREADY;
 
-#define TPXS (176)
-#define TPXE (3904)
-#define TPYS (336)
-#define TPYE (3940)
-#define SENSE (120)
-	xprintf("\nTP TEST\n");
-	for (;;) {
-		sensebrk();
-		TPREADZ1 = NS2009_DATAZ1;
-		TPREADX  = NS2009_DATAX;
-		TPREADY  = NS2009_DATAY;
-		if (TPREADZ1 > SENSE) {
-			if ((TPREADX < TPXS) || (TPREADX > TPXE)) {
-				continue;
-			}			
-			if ((TPREADY < TPYS) || (TPREADY > TPYE)) {
-				continue;
-			}			
-			tpx      = (TPREADX - TPXS) * 800.0 / (TPXE - TPXS);
-			tpy      = (TPREADY - TPYS) * 480.0 / (TPYE - TPYS);
-			xprintf("(%d,%d)  : %04X,%04X,%04X\n",tpx,tpy,TPREADX,TPREADY,TPREADZ1);
-		}
-	}
-}
+// #define TPXS (176)
+// #define TPXE (3904)
+// #define TPYS (336)
+// #define TPYE (3940)
+// #define SENSE (120)
+// 	xprintf("\nTP TEST\n");
+// 	for (;;) {
+// 		sensebrk();
+// 		TPREADZ1 = NS2009_DATAZ1;
+// 		TPREADX  = NS2009_DATAX;
+// 		TPREADY  = NS2009_DATAY;
+// 		if (TPREADZ1 > SENSE) {
+// 			if ((TPREADX < TPXS) || (TPREADX > TPXE)) {
+// 				continue;
+// 			}			
+// 			if ((TPREADY < TPYS) || (TPREADY > TPYE)) {
+// 				continue;
+// 			}			
+// 			tpx      = (TPREADX - TPXS) * 800.0 / (TPXE - TPXS);
+// 			tpy      = (TPREADY - TPYS) * 480.0 / (TPYE - TPYS);
+// 			xprintf("(%d,%d)  : %04X,%04X,%04X\n",tpx,tpy,TPREADX,TPREADY,TPREADZ1);
+// 		}
+// 	}
+// }
 
 
 const char* HelpMsg =
@@ -533,7 +538,7 @@ TBENTRY	comtbl[] = {
 	{'=', xdir},
 	{'!', xsdread},
 	{'?', xhelp},
-	{'T', xtptest},
+//	{'T', xtptest},
 	{'\0', _error}
 };
 
@@ -545,22 +550,23 @@ void	_main()
 {
 	TBENTRY	*p;
 	char	c;
-	uint32_t lastirqcount = irqCount;
+//	uint32_t lastirqcount = irqCount;
 
 	xprintf("*** VexRiscv Monitor ***");
 	
 	for (;;) {
-		xprintf("\n%d(ms)>",irqCount-lastirqcount);
+//		xprintf("\n%d(ms)>",irqCount-lastirqcount);
+		xprintf("\n>>>");
 		getline();
 		if (line[0] == '\0') {
-			lastirqcount = irqCount;
+			//lastirqcount = irqCount;
 			continue;
 		}
 		lp = &line[1];
 		for (p = comtbl;(c = p->mnemo) > 0;  p++)
 			if (c == line[0])
 				break;
-		lastirqcount = irqCount;
+		//lastirqcount = irqCount;
 		(*p->func)();
 	}
 }

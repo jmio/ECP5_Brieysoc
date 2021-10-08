@@ -8144,41 +8144,41 @@ Generating RTLIL representation for module `\$__ECP5_PDPW16KD'.
 Successfully finished Verilog frontend.
 
 4.28.2. Continuing TECHMAP pass.
-Using template $paramod$2d37beec6bb4d04cbf025d2b5979771fc5df4915\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$39b443dd2024d272d46fe0c976b9603e89e06d7a\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$97ecc38aa63f201beb8f843ac9232641831a85ed\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$5fccbdefd1cc8a8d4fb22a127362744e2559777a\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
 Using template $paramod$3be384f458d0537a27afbd79f48b29b3c25e4b9a\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$9a655816bcda00df0909324923518512d82ab2c6\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$3a08512b4c5ce7a0d71b42965fdcfdca338d9e80\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$379dedd0821dae1cf95273fb93cc13092f463b88\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$3459fc64981a8f7e134c268ecb0d128f6bdb686b\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$15d8e6df0d1fdb09b08818d49e0d8e0c7b05b457\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$c43acb1bbbb041aa32521a14ff5c858d19a2e392\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$d2ffee4441c2c5ee23bfed4b1581cc9dd81a2c74\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$ced3be55f8f98fb68fff7cf9d9718a6c76aee5a5\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$45376127c3e655b2ca1ad02370b65cde843af407\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$9399c4fb1788349b6e2a5c44cd53d1cbe6b7ae26\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$d6eb768ca59d9bbfa93ba59298b54964dd6688ff\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$f8f5a0e8b3d412423e9142f656a3f8074d9b2537\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$a45738bb0fde8817acb79ce52176107108441ae1\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$c85960d4815346a47e5c013ff4bb4c27c426c00c\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$5d91c76f87a64382b587838b11543ae465653358\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$0b0aa99065e15dc75c53e1597196e06067ac3143\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$c5d7a9fa4f0f5787b8782657f3a28012050d03f1\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$0e7d3720ebf0857b94ce16fdc005636d02f0125e\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$9f55743dd36ca5fc43fc7d5897eb5950fd5eb77a\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$a1d7cc8f48d26bd2a06759e78db4938927394b7a\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$5069dbcdcb6555559ed12c5a721eeb5beea4c817\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$5923ee6b7bc44dee21d1c4e05ef14a53279b87c5\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$58a742561cb78c03eb494ed01eec1c23df73b1ec\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$6a4606de50abe9df620fd26072fd50461ca6687d\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$7b0acd83d7717d70980809b1fa0626b0be768fc2\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$ec1b193103f22c794c83e23fc09eb8f67761f48b\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$243859cb64ad19114e1460d1325e16383331ca92\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$ca704029702301dcbd4d20582f7ac25a6d479fc1\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$620c60a18b8c69eb0008c4d8e8b13118a05791be\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$366340d7eaba56ba31b62435fa9a65ca21459eeb\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$1ce03a5e69c00c5e59b5e22dc0f46780a1e697bd\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$bfa0734bb7412a9fb04e16486d21eed1eb8e29a8\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$4c6bce78ed453fa1bcfc3cd9d306abcf11b35b7c\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$899d0bee630d4be7b258f04048c37c104771331d\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$99ec9e64adeba9547867f1f19787f7ea08529634\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$6b864fef74ef99a4fc8dcfe2bfab0f60559e741b\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$3e0a38f8c700ba7ee1c2f4017d68524114b9f33f\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$f7cc4bbd6c3fed09d74cc83c862c1b0ea0dee5a0\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$1f12ed6786cb172b6bafbcbcc7a5b7d3a36ad119\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$d629d33d39a8297bb13514976b94cfd60cb814a8\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
 Using template $paramod$0a019bf6356ccccf899399d072352b73127d7d6e\$__ECP5_PDPW16KD for cells of type $__ECP5_PDPW16KD.
-Using template $paramod$29798e705196a962ab0e07e5b66ea4de524703f3\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$c060f06fee01c85d30973859f8d71020ffd17768\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$a140ecfc71eb7ef52268a5283b8794cce05ba106\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$8bec4e70c2470129f9f91b5b9061c4be9a06ec69\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$adb70317114a254429afa5360cc0bad8b91251b5\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$b936b7761797ca0bbdcc06df645ef31cd698fa47\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$9c7ee4c9bb84d48854a1c99942d2870800795a88\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$5a64c629e5e397982a80ade33aeba7de10b76810\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$cd1cf961176c191063d880fc40f23e163cba1bb3\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$550e5b4e8c3d0bba6c50255be0f69e94a7d0f70b\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$3888a591459e668b68f77dc28406cea9724df837\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$f5697b7b638efb01c04f9a5e8d53f5fe0c8dce15\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$9626c27ca31f9af54f2ff96aa2c7f53a5d364ef6\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$471fccdafb876173422db1e0fb515c7617a69a6e\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$ec353534151fee04840be1b665e82eb4c80f020c\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$be69ad9318ec20ce75468b03facef78f3e304a1e\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
 Using template $paramod$b157aff6d2bdbffdef68870d3c5e969676ef457c\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$bebd153b3bca51779e1a4e74e2d6b32c4c0d872b\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
-Using template $paramod$c28a2cebc5486b1a84610cd242bdd11603a440d1\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$1146ae3b151ae7e25f9259179d50cc2f86667bfa\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
+Using template $paramod$51796d97ef938c7c488e11111dd1744f4d67a268\$__ECP5_DP16KD for cells of type $__ECP5_DP16KD.
 No more expansions possible.
 <suppressed ~835 debug messages>
 
@@ -9036,7 +9036,7 @@ ABC: Participating nodes from the first network   =    2437. (  73.80 % of nodes
 ABC: Participating nodes from the second network  =    2743. (  83.07 % of nodes)
 ABC: Node pairs (any polarity)                    =    2437. (  73.80 % of names can be moved)
 ABC: Node pairs (same polarity)                   =    1920. (  58.15 % of names can be moved)
-ABC: Total runtime =     0.20 sec
+ABC: Total runtime =     0.19 sec
 ABC: + write_blif <abc-temp-dir>/output.blif 
 
 4.45.1.2. Re-integrating ABC results.
@@ -10760,6 +10760,6 @@ Found and reported 0 problems.
 4.52. Executing JSON backend.
 
 Warnings: 15 unique messages, 15 total
-End of script. Logfile hash: 127303f497, CPU: user 21.48s system 1.12s, MEM: 2367.38 MB peak
+End of script. Logfile hash: 67a9ec5d70, CPU: user 21.45s system 0.91s, MEM: 2367.01 MB peak
 Yosys 0.9+4245 (git sha1 2e421feb, clang 10.0.0-4ubuntu1 -fPIC -Os)
-Time spent: 37% 8x techmap (9 sec), 15% 33x opt_clean (3 sec), ...
+Time spent: 37% 8x techmap (8 sec), 15% 33x opt_clean (3 sec), ...

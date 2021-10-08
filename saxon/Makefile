@@ -14,7 +14,7 @@ CC_OPT          = -O0
 GDBFLAGS        = -g -ggdb
 #GDBFLAGS        =
 
-OBJ_FILES       = crt.o uart.o vga.o console.o sdmm.o ff.o deb.o symtable.o traphandler.o xprintf.o main.o
+OBJ_FILES       = crt.o vga.o console.o sdmm.o ff.o deb.o symtable.o traphandler.o xprintf.o main.o
 
 #TOOLS_PREFIX    = /opt/riscv32im/bin/
 #TOOLS_PREFIX     = ~/litex/riscv64-*/bin/

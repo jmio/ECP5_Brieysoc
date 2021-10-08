@@ -1,13 +1,13 @@
 Archive member included to satisfy reference by file (symbol)
 
 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
-                              deb.o (__divdf3)
+                              traphandler.o (__divdf3)
 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(muldf3.o)
-                              deb.o (__muldf3)
+                              traphandler.o (__muldf3)
 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(fixunsdfsi.o)
-                              deb.o (__fixunsdfsi)
+                              traphandler.o (__fixunsdfsi)
 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(floatunsidf.o)
-                              deb.o (__floatunsidf)
+                              traphandler.o (__floatunsidf)
 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(muldi3.o)
                               ff.o (__mulsi3)
 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(div.o)
@@ -60,43 +60,6 @@ timerPending        0x4               traphandler.o
 Discarded input sections
 
  .bss           0x0000000000000000        0x0 crt.o
- .text          0x0000000000000000        0x0 uart.o
- .data          0x0000000000000000        0x0 uart.o
- .bss           0x0000000000000000        0x0 uart.o
- .rodata        0x0000000000000000       0x80 uart.o
- .text.uart_writeAvailability
-                0x0000000000000000       0x1e uart.o
- .text.uart_readOccupancy
-                0x0000000000000000       0x1a uart.o
- .text.uart_write
-                0x0000000000000000       0x36 uart.o
- .text.uart_read
-                0x0000000000000000       0x3c uart.o
- .text.uart_applyConfig
-                0x0000000000000000       0x46 uart.o
- .text.uart_init
-                0x0000000000000000       0x3a uart.o
- .text.uart_pollrx
-                0x0000000000000000        0xe uart.o
- .text.uart_polltx
-                0x0000000000000000        0xe uart.o
- .text.uart_getc
-                0x0000000000000000       0x20 uart.o
- .text.uart_putc
-                0x0000000000000000       0x36 uart.o
- .text.uart_puts
-                0x0000000000000000       0x4e uart.o
- .text._uart_wait
-                0x0000000000000000       0x24 uart.o
- .debug_info    0x0000000000000000      0x41b uart.o
- .debug_abbrev  0x0000000000000000      0x1eb uart.o
- .debug_aranges
-                0x0000000000000000       0x78 uart.o
- .debug_ranges  0x0000000000000000       0x68 uart.o
- .debug_line    0x0000000000000000      0x385 uart.o
- .debug_str     0x0000000000000000      0x308 uart.o
- .comment       0x0000000000000000       0x3a uart.o
- .debug_frame   0x0000000000000000      0x1ac uart.o
  .text          0x0000000000000000        0x0 vga.o
  .data          0x0000000000000000        0x0 vga.o
  .bss           0x0000000000000000        0x0 vga.o
@@ -147,166 +110,43 @@ Discarded input sections
  .debug_frame   0x0000000000000000       0xe0 console.o
  .text          0x0000000000000000        0x0 sdmm.o
  .data          0x0000000000000000        0x0 sdmm.o
- .bss           0x0000000000000000        0x1 sdmm.o
  .rodata        0x0000000000000000       0x80 sdmm.o
- .text.dly_us   0x0000000000000000       0x2c sdmm.o
- .sdata         0x0000000000000000        0x1 sdmm.o
- .text.xmit_mmc
-                0x0000000000000000       0xf6 sdmm.o
- .text.rcvr_mmc
-                0x0000000000000000       0xfe sdmm.o
- .text.wait_ready
-                0x0000000000000000       0x64 sdmm.o
- .text.deselect
-                0x0000000000000000       0x3a sdmm.o
- .text.select   0x0000000000000000       0x54 sdmm.o
- .text.rcvr_datablock
-                0x0000000000000000       0x92 sdmm.o
  .text.xmit_datablock
                 0x0000000000000000       0x94 sdmm.o
- .text.send_cmd
-                0x0000000000000000      0x14c sdmm.o
- .text.disk_status
-                0x0000000000000000       0x26 sdmm.o
- .text.disk_initialize
-                0x0000000000000000      0x266 sdmm.o
- .text.disk_read
-                0x0000000000000000       0xe2 sdmm.o
  .text.disk_write
                 0x0000000000000000      0x11e sdmm.o
  .text.disk_ioctl
                 0x0000000000000000      0x17a sdmm.o
- .debug_info    0x0000000000000000      0x6dd sdmm.o
- .debug_abbrev  0x0000000000000000      0x200 sdmm.o
- .debug_aranges
-                0x0000000000000000       0x88 sdmm.o
- .debug_ranges  0x0000000000000000       0x78 sdmm.o
- .debug_line    0x0000000000000000      0xd9a sdmm.o
- .debug_str     0x0000000000000000      0x30f sdmm.o
- .comment       0x0000000000000000       0x3a sdmm.o
- .debug_frame   0x0000000000000000      0x208 sdmm.o
  .text          0x0000000000000000        0x0 ff.o
  .data          0x0000000000000000        0x0 ff.o
- .bss           0x0000000000000000        0x6 ff.o
- .rodata        0x0000000000000000       0x26 ff.o
- .text.ld_word  0x0000000000000000       0x46 ff.o
- .text.ld_dword
-                0x0000000000000000       0x64 ff.o
- .text.mem_cpy  0x0000000000000000       0x60 ff.o
- .text.mem_set  0x0000000000000000       0x4a ff.o
- .text.mem_cmp  0x0000000000000000       0x72 ff.o
- .text.chk_chr  0x0000000000000000       0x46 ff.o
- .text.dbc_1st  0x0000000000000000       0x4e ff.o
- .text.dbc_2nd  0x0000000000000000       0x66 ff.o
- .text.move_window
-                0x0000000000000000       0x72 ff.o
- .text.clst2sect
-                0x0000000000000000       0x5c ff.o
- .text.get_fat  0x0000000000000000      0x1ca ff.o
- .text.dir_sdi  0x0000000000000000      0x160 ff.o
- .text.dir_next
-                0x0000000000000000      0x14a ff.o
- .text.ld_clust
-                0x0000000000000000       0x60 ff.o
- .text.dir_read
-                0x0000000000000000      0x102 ff.o
- .text.dir_find
-                0x0000000000000000       0xe8 ff.o
- .text.get_fileinfo
-                0x0000000000000000      0x134 ff.o
- .text.get_achar
-                0x0000000000000000       0xa8 ff.o
- .text.pattern_matching
-                0x0000000000000000      0x16e ff.o
- .text.create_name
-                0x0000000000000000      0x242 ff.o
- .text.follow_path
-                0x0000000000000000      0x134 ff.o
- .text.get_ldnumber
-                0x0000000000000000       0xda ff.o
- .text.check_fs
-                0x0000000000000000       0xec ff.o
- .text.find_volume
-                0x0000000000000000      0x10c ff.o
- .text.mount_volume
-                0x0000000000000000      0x47c ff.o
- .text.validate
-                0x0000000000000000       0x88 ff.o
- .text.f_mount  0x0000000000000000       0xb6 ff.o
- .text.f_open   0x0000000000000000      0x12a ff.o
- .text.f_read   0x0000000000000000      0x2d2 ff.o
- .text.f_close  0x0000000000000000       0x40 ff.o
  .text.f_lseek  0x0000000000000000      0x262 ff.o
- .text.f_opendir
-                0x0000000000000000       0xf6 ff.o
- .text.f_closedir
-                0x0000000000000000       0x40 ff.o
- .text.f_readdir
-                0x0000000000000000       0xac ff.o
- .text.f_findnext
-                0x0000000000000000       0x6c ff.o
- .text.f_findfirst
-                0x0000000000000000       0x5e ff.o
  .text.f_stat   0x0000000000000000       0x88 ff.o
- .debug_info    0x0000000000000000     0x1414 ff.o
- .debug_abbrev  0x0000000000000000      0x1f6 ff.o
- .debug_aranges
-                0x0000000000000000      0x140 ff.o
- .debug_ranges  0x0000000000000000      0x130 ff.o
- .debug_line    0x0000000000000000     0x28cc ff.o
- .debug_str     0x0000000000000000      0x590 ff.o
- .comment       0x0000000000000000       0x3a ff.o
- .debug_frame   0x0000000000000000      0x554 ff.o
  .text          0x0000000000000000        0x0 deb.o
- .data          0x0000000000000000       0x50 deb.o
  .bss           0x0000000000000000        0x0 deb.o
- .rodata        0x0000000000000000      0x238 deb.o
- .text.getcon   0x0000000000000000       0x34 deb.o
- .text.consts   0x0000000000000000       0x20 deb.o
- .text.putch    0x0000000000000000       0x56 deb.o
- .text.putcrlf  0x0000000000000000       0x26 deb.o
- .text.putback  0x0000000000000000       0x32 deb.o
- .text._error   0x0000000000000000       0x26 deb.o
- .text.getline  0x0000000000000000      0x12c deb.o
- .text.inhex    0x0000000000000000       0x56 deb.o
- .text.gethex   0x0000000000000000       0x66 deb.o
- .text.getdata  0x0000000000000000       0x3e deb.o
- .text.ogetdata
-                0x0000000000000000       0x3c deb.o
- .text.puthex   0x0000000000000000       0x4c deb.o
- .text.puthxb   0x0000000000000000       0x38 deb.o
+ .text.write_u32
+                0x0000000000000000       0x20 deb.o
+ .text.uart_writeAvailability
+                0x0000000000000000       0x2e deb.o
+ .text.uart_write
+                0x0000000000000000       0x40 deb.o
+ .text.uart_writeStr
+                0x0000000000000000       0x44 deb.o
+ .text.uart_writeHex
+                0x0000000000000000       0x82 deb.o
+ .text.uart_applyConfig
+                0x0000000000000000       0x62 deb.o
+ .text.clint_getTimeLow
+                0x0000000000000000       0x2c deb.o
+ .text.clint_getTimeHigh
+                0x0000000000000000       0x2c deb.o
+ .text.clint_setCmp
+                0x0000000000000000       0x84 deb.o
+ .text.clint_getTime
+                0x0000000000000000       0x90 deb.o
+ .text.clint_uDelay
+                0x0000000000000000       0x7e deb.o
  .text.puthxw   0x0000000000000000       0x3c deb.o
- .text.puthxww  0x0000000000000000       0x60 deb.o
  .text.comma    0x0000000000000000       0x3a deb.o
- .text.xdump    0x0000000000000000      0x1e8 deb.o
- .text.xsubst   0x0000000000000000      0x10c deb.o
- .text.xfill    0x0000000000000000       0xcc deb.o
- .text.hx1      0x0000000000000000       0x3e deb.o
- .text.hxbyte   0x0000000000000000       0x5c deb.o
- .text.hxword   0x0000000000000000       0x38 deb.o
- .sdata         0x0000000000000000        0x8 deb.o
- .text.xread    0x0000000000000000      0x15a deb.o
- .text.hx1lp    0x0000000000000000       0x4c deb.o
- .text.hxbytelp
-                0x0000000000000000       0x5c deb.o
- .text.hxwordlp
-                0x0000000000000000       0x38 deb.o
- .text.xdir     0x0000000000000000       0xc8 deb.o
- .text.xsdread  0x0000000000000000      0x34a deb.o
- .text.xtptest  0x0000000000000000      0x17e deb.o
- .text.xhelp    0x0000000000000000       0x24 deb.o
- .text.xgo      0x0000000000000000       0x1c deb.o
- .text._main    0x0000000000000000       0xca deb.o
- .debug_info    0x0000000000000000      0xd7d deb.o
- .debug_abbrev  0x0000000000000000      0x35d deb.o
- .debug_aranges
-                0x0000000000000000      0x118 deb.o
- .debug_ranges  0x0000000000000000      0x108 deb.o
- .debug_line    0x0000000000000000     0x132a deb.o
- .debug_str     0x0000000000000000      0x5c6 deb.o
- .comment       0x0000000000000000       0x3a deb.o
- .debug_frame   0x0000000000000000      0x4ac deb.o
- COMMON         0x0000000000000000      0x28c deb.o
  .text          0x0000000000000000        0x0 symtable.o
  .data          0x0000000000000000        0x0 symtable.o
  .bss           0x0000000000000000        0x0 symtable.o
@@ -335,16 +175,24 @@ Discarded input sections
  .text          0x0000000000000000        0x0 main.o
  .data          0x0000000000000000        0x0 main.o
  .bss           0x0000000000000000        0x0 main.o
+ .text.uart_readOccupancy
+                0x0000000000000000       0x2a main.o
  .text.uart_writeHex
                 0x0000000000000000       0x82 main.o
+ .text.uart_read
+                0x0000000000000000       0x3a main.o
  .text.uart_applyConfig
                 0x0000000000000000       0x62 main.o
+ .text.clint_getTimeLow
+                0x0000000000000000       0x2c main.o
  .text.clint_getTimeHigh
                 0x0000000000000000       0x2c main.o
  .text.clint_setCmp
                 0x0000000000000000       0x84 main.o
  .text.clint_getTime
                 0x0000000000000000       0x90 main.o
+ .text.clint_uDelay
+                0x0000000000000000       0x7e main.o
  COMMON         0x0000000000000000      0x800 main.o
  .text          0x0000000000000000        0x0 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
  .data          0x0000000000000000        0x0 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
@@ -377,27 +225,15 @@ Discarded input sections
                 0x0000000000000000       0x2c c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-locale.o)
  .text.__locale_ctype_ptr_l
                 0x0000000000000000        0x8 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-locale.o)
- .text.__locale_ctype_ptr
-                0x0000000000000000       0x2c c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-locale.o)
  .text.setlocale
                 0x0000000000000000       0x1c c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-locale.o)
- .data.__global_locale
-                0x0000000000000000      0x16c c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-locale.o)
- .rodata._setlocale_r.str1.4
-                0x0000000000000000        0xd c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-locale.o)
- .rodata.str1.4
-                0x0000000000000000        0x2 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-locale.o)
  .sbss._PathLocale
                 0x0000000000000000        0x4 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-locale.o)
- .debug_frame   0x0000000000000000       0x78 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-locale.o)
  .text          0x0000000000000000        0x0 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-mbtowc_r.o)
  .data          0x0000000000000000        0x0 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-mbtowc_r.o)
  .bss           0x0000000000000000        0x0 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-mbtowc_r.o)
  .text._mbtowc_r
                 0x0000000000000000       0x2c c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-mbtowc_r.o)
- .text.__ascii_mbtowc
-                0x0000000000000000       0x68 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-mbtowc_r.o)
- .debug_frame   0x0000000000000000       0x40 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-mbtowc_r.o)
  .text          0x0000000000000000      0x17c c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-strcmp.o)
  .data          0x0000000000000000        0x0 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-strcmp.o)
  .bss           0x0000000000000000        0x0 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-strcmp.o)
@@ -421,21 +257,12 @@ Discarded input sections
  .bss           0x0000000000000000        0x0 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-wctomb_r.o)
  .text._wctomb_r
                 0x0000000000000000       0x2c c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-wctomb_r.o)
- .text.__ascii_wctomb
-                0x0000000000000000       0x30 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-wctomb_r.o)
- .debug_frame   0x0000000000000000       0x30 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-wctomb_r.o)
  .text          0x0000000000000000        0x0 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-ctype_.o)
  .data          0x0000000000000000        0x0 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-ctype_.o)
  .bss           0x0000000000000000        0x0 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-ctype_.o)
- .rodata._ctype_
-                0x0000000000000000      0x101 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-ctype_.o)
  .text          0x0000000000000000        0x0 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-impure.o)
  .data          0x0000000000000000        0x0 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-impure.o)
  .bss           0x0000000000000000        0x0 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-impure.o)
- .data.impure_data
-                0x0000000000000000      0x428 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-impure.o)
- .sdata._impure_ptr
-                0x0000000000000000        0x4 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-impure.o)
  .sdata2._global_impure_ptr
                 0x0000000000000000        0x4 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-impure.o)
 
@@ -477,170 +304,560 @@ Linker script and memory map
                 0x000000008000028c                __modsi3
                 0x00000000800002bc                end = .
 
-.text.irqCallback
-                0x00000000800002bc      0x1bc
- .text.irqCallback
-                0x00000000800002bc      0x1bc traphandler.o
-                0x00000000800002bc                irqCallback
+.text.dly_us    0x00000000800002bc       0x2c
+ .text.dly_us   0x00000000800002bc       0x2c sdmm.o
 
-.text.sysCallback
-                0x0000000080000478       0xc2
- .text.sysCallback
-                0x0000000080000478       0xc2 traphandler.o
-                0x0000000080000478                sysCallback
+.text.xmit_mmc  0x00000000800002e8       0xf6
+ .text.xmit_mmc
+                0x00000000800002e8       0xf6 sdmm.o
 
-.text.xputc     0x000000008000053a       0x6c
- .text.xputc    0x000000008000053a       0x6c xprintf.o
-                0x000000008000053a                xputc
+.text.rcvr_mmc  0x00000000800003de       0xfe
+ .text.rcvr_mmc
+                0x00000000800003de       0xfe sdmm.o
 
-.text.xputs     0x00000000800005a6       0x3c
- .text.xputs    0x00000000800005a6       0x3c xprintf.o
-                0x00000000800005a6                xputs
+.text.wait_ready
+                0x00000000800004dc       0x64
+ .text.wait_ready
+                0x00000000800004dc       0x64 sdmm.o
 
-.text.xvprintf  0x00000000800005e2      0x47e
- .text.xvprintf
-                0x00000000800005e2      0x47e xprintf.o
+.text.deselect  0x0000000080000540       0x3a
+ .text.deselect
+                0x0000000080000540       0x3a sdmm.o
 
-.text.xprintf   0x0000000080000a60       0x44
- .text.xprintf  0x0000000080000a60       0x44 xprintf.o
-                0x0000000080000a60                xprintf
+.text.select    0x000000008000057a       0x54
+ .text.select   0x000000008000057a       0x54 sdmm.o
 
-.text.read_u32  0x0000000080000aa4       0x18
+.text.rcvr_datablock
+                0x00000000800005ce       0x92
+ .text.rcvr_datablock
+                0x00000000800005ce       0x92 sdmm.o
+
+.text.send_cmd  0x0000000080000660      0x14c
+ .text.send_cmd
+                0x0000000080000660      0x14c sdmm.o
+
+.text.disk_status
+                0x00000000800007ac       0x26
+ .text.disk_status
+                0x00000000800007ac       0x26 sdmm.o
+                0x00000000800007ac                disk_status
+
+.text.disk_initialize
+                0x00000000800007d2      0x266
+ .text.disk_initialize
+                0x00000000800007d2      0x266 sdmm.o
+                0x00000000800007d2                disk_initialize
+
+.text.disk_read
+                0x0000000080000a38       0xe2
+ .text.disk_read
+                0x0000000080000a38       0xe2 sdmm.o
+                0x0000000080000a38                disk_read
+
+.text.ld_word   0x0000000080000b1a       0x46
+ .text.ld_word  0x0000000080000b1a       0x46 ff.o
+
+.text.ld_dword  0x0000000080000b60       0x64
+ .text.ld_dword
+                0x0000000080000b60       0x64 ff.o
+
+.text.mem_cpy   0x0000000080000bc4       0x60
+ .text.mem_cpy  0x0000000080000bc4       0x60 ff.o
+
+.text.mem_set   0x0000000080000c24       0x4a
+ .text.mem_set  0x0000000080000c24       0x4a ff.o
+
+.text.mem_cmp   0x0000000080000c6e       0x72
+ .text.mem_cmp  0x0000000080000c6e       0x72 ff.o
+
+.text.chk_chr   0x0000000080000ce0       0x46
+ .text.chk_chr  0x0000000080000ce0       0x46 ff.o
+
+.text.dbc_1st   0x0000000080000d26       0x4e
+ .text.dbc_1st  0x0000000080000d26       0x4e ff.o
+
+.text.dbc_2nd   0x0000000080000d74       0x66
+ .text.dbc_2nd  0x0000000080000d74       0x66 ff.o
+
+.text.move_window
+                0x0000000080000dda       0x72
+ .text.move_window
+                0x0000000080000dda       0x72 ff.o
+
+.text.clst2sect
+                0x0000000080000e4c       0x5c
+ .text.clst2sect
+                0x0000000080000e4c       0x5c ff.o
+
+.text.get_fat   0x0000000080000ea8      0x1ca
+ .text.get_fat  0x0000000080000ea8      0x1ca ff.o
+
+.text.dir_sdi   0x0000000080001072      0x160
+ .text.dir_sdi  0x0000000080001072      0x160 ff.o
+
+.text.dir_next  0x00000000800011d2      0x14a
+ .text.dir_next
+                0x00000000800011d2      0x14a ff.o
+
+.text.ld_clust  0x000000008000131c       0x60
+ .text.ld_clust
+                0x000000008000131c       0x60 ff.o
+
+.text.dir_read  0x000000008000137c      0x102
+ .text.dir_read
+                0x000000008000137c      0x102 ff.o
+
+.text.dir_find  0x000000008000147e       0xe8
+ .text.dir_find
+                0x000000008000147e       0xe8 ff.o
+
+.text.get_fileinfo
+                0x0000000080001566      0x134
+ .text.get_fileinfo
+                0x0000000080001566      0x134 ff.o
+
+.text.get_achar
+                0x000000008000169a       0xa8
+ .text.get_achar
+                0x000000008000169a       0xa8 ff.o
+
+.text.pattern_matching
+                0x0000000080001742      0x16e
+ .text.pattern_matching
+                0x0000000080001742      0x16e ff.o
+
+.text.create_name
+                0x00000000800018b0      0x242
+ .text.create_name
+                0x00000000800018b0      0x242 ff.o
+
+.text.follow_path
+                0x0000000080001af2      0x134
+ .text.follow_path
+                0x0000000080001af2      0x134 ff.o
+
+.text.get_ldnumber
+                0x0000000080001c26       0xda
+ .text.get_ldnumber
+                0x0000000080001c26       0xda ff.o
+
+.text.check_fs  0x0000000080001d00       0xec
+ .text.check_fs
+                0x0000000080001d00       0xec ff.o
+
+.text.find_volume
+                0x0000000080001dec      0x10c
+ .text.find_volume
+                0x0000000080001dec      0x10c ff.o
+
+.text.mount_volume
+                0x0000000080001ef8      0x47c
+ .text.mount_volume
+                0x0000000080001ef8      0x47c ff.o
+
+.text.validate  0x0000000080002374       0x88
+ .text.validate
+                0x0000000080002374       0x88 ff.o
+
+.text.f_mount   0x00000000800023fc       0xb6
+ .text.f_mount  0x00000000800023fc       0xb6 ff.o
+                0x00000000800023fc                f_mount
+
+.text.f_open    0x00000000800024b2      0x12a
+ .text.f_open   0x00000000800024b2      0x12a ff.o
+                0x00000000800024b2                f_open
+
+.text.f_read    0x00000000800025dc      0x2d2
+ .text.f_read   0x00000000800025dc      0x2d2 ff.o
+                0x00000000800025dc                f_read
+
+.text.f_close   0x00000000800028ae       0x40
+ .text.f_close  0x00000000800028ae       0x40 ff.o
+                0x00000000800028ae                f_close
+
+.text.f_opendir
+                0x00000000800028ee       0xf6
+ .text.f_opendir
+                0x00000000800028ee       0xf6 ff.o
+                0x00000000800028ee                f_opendir
+
+.text.f_closedir
+                0x00000000800029e4       0x40
+ .text.f_closedir
+                0x00000000800029e4       0x40 ff.o
+                0x00000000800029e4                f_closedir
+
+.text.f_readdir
+                0x0000000080002a24       0xac
+ .text.f_readdir
+                0x0000000080002a24       0xac ff.o
+                0x0000000080002a24                f_readdir
+
+.text.f_findnext
+                0x0000000080002ad0       0x6c
+ .text.f_findnext
+                0x0000000080002ad0       0x6c ff.o
+                0x0000000080002ad0                f_findnext
+
+.text.f_findfirst
+                0x0000000080002b3c       0x5e
+ .text.f_findfirst
+                0x0000000080002b3c       0x5e ff.o
+                0x0000000080002b3c                f_findfirst
+
+.text.read_u32  0x0000000080002b9a       0x30
  .text.read_u32
-                0x0000000080000aa4       0x18 main.o
-
-.text.write_u32
-                0x0000000080000abc       0x20
- .text.write_u32
-                0x0000000080000abc       0x20 main.o
-
-.text.uart_writeAvailability
-                0x0000000080000adc       0x2e
- .text.uart_writeAvailability
-                0x0000000080000adc       0x2e main.o
+                0x0000000080002b9a       0x18 deb.o
+ .text.read_u32
+                0x0000000080002bb2       0x18 main.o
 
 .text.uart_readOccupancy
-                0x0000000080000b0a       0x2a
+                0x0000000080002bca       0x2a
  .text.uart_readOccupancy
-                0x0000000080000b0a       0x2a main.o
-
-.text.uart_write
-                0x0000000080000b34       0x40
- .text.uart_write
-                0x0000000080000b34       0x40 main.o
-
-.text.uart_writeStr
-                0x0000000080000b74       0x44
- .text.uart_writeStr
-                0x0000000080000b74       0x44 main.o
+                0x0000000080002bca       0x2a deb.o
 
 .text.uart_read
-                0x0000000080000bb8       0x3a
+                0x0000000080002bf4       0x3a
  .text.uart_read
-                0x0000000080000bb8       0x3a main.o
+                0x0000000080002bf4       0x3a deb.o
 
-.text.clint_getTimeLow
-                0x0000000080000bf2       0x2c
- .text.clint_getTimeLow
-                0x0000000080000bf2       0x2c main.o
+.text.getcon    0x0000000080002c2e       0x2e
+ .text.getcon   0x0000000080002c2e       0x2e deb.o
+                0x0000000080002c2e                getcon
 
-.text.clint_uDelay
-                0x0000000080000c1e       0x7e
- .text.clint_uDelay
-                0x0000000080000c1e       0x7e main.o
+.text.consts    0x0000000080002c5c       0x20
+ .text.consts   0x0000000080002c5c       0x20 deb.o
+                0x0000000080002c5c                consts
 
-.text.gpio_getOutput
-                0x0000000080000c9c       0x28
- .text.gpio_getOutput
-                0x0000000080000c9c       0x28 main.o
+.text.putch     0x0000000080002c7c       0x56
+ .text.putch    0x0000000080002c7c       0x56 deb.o
+                0x0000000080002c7c                putch
+
+.text.putcrlf   0x0000000080002cd2       0x26
+ .text.putcrlf  0x0000000080002cd2       0x26 deb.o
+                0x0000000080002cd2                putcrlf
+
+.text.putback   0x0000000080002cf8       0x32
+ .text.putback  0x0000000080002cf8       0x32 deb.o
+                0x0000000080002cf8                putback
+
+.text._error    0x0000000080002d2a       0x26
+ .text._error   0x0000000080002d2a       0x26 deb.o
+                0x0000000080002d2a                _error
+
+.text.getline   0x0000000080002d50      0x12c
+ .text.getline  0x0000000080002d50      0x12c deb.o
+                0x0000000080002d50                getline
+
+.text.inhex     0x0000000080002e7c       0x56
+ .text.inhex    0x0000000080002e7c       0x56 deb.o
+                0x0000000080002e7c                inhex
+
+.text.gethex    0x0000000080002ed2       0x66
+ .text.gethex   0x0000000080002ed2       0x66 deb.o
+                0x0000000080002ed2                gethex
+
+.text.getdata   0x0000000080002f38       0x3e
+ .text.getdata  0x0000000080002f38       0x3e deb.o
+                0x0000000080002f38                getdata
+
+.text.ogetdata  0x0000000080002f76       0x3c
+ .text.ogetdata
+                0x0000000080002f76       0x3c deb.o
+                0x0000000080002f76                ogetdata
+
+.text.puthex    0x0000000080002fb2       0x4c
+ .text.puthex   0x0000000080002fb2       0x4c deb.o
+                0x0000000080002fb2                puthex
+
+.text.puthxb    0x0000000080002ffe       0x38
+ .text.puthxb   0x0000000080002ffe       0x38 deb.o
+                0x0000000080002ffe                puthxb
+
+.text.puthxww   0x0000000080003036       0x60
+ .text.puthxww  0x0000000080003036       0x60 deb.o
+                0x0000000080003036                puthxww
+
+.text.xdump     0x0000000080003096      0x1e8
+ .text.xdump    0x0000000080003096      0x1e8 deb.o
+                0x0000000080003096                xdump
+
+.text.xsubst    0x000000008000327e      0x10c
+ .text.xsubst   0x000000008000327e      0x10c deb.o
+                0x000000008000327e                xsubst
+
+.text.xfill     0x000000008000338a       0xcc
+ .text.xfill    0x000000008000338a       0xcc deb.o
+                0x000000008000338a                xfill
+
+.text.hx1       0x0000000080003456       0x3e
+ .text.hx1      0x0000000080003456       0x3e deb.o
+                0x0000000080003456                hx1
+
+.text.hxbyte    0x0000000080003494       0x5c
+ .text.hxbyte   0x0000000080003494       0x5c deb.o
+                0x0000000080003494                hxbyte
+
+.text.hxword    0x00000000800034f0       0x38
+ .text.hxword   0x00000000800034f0       0x38 deb.o
+                0x00000000800034f0                hxword
+
+.text.xread     0x0000000080003528      0x15a
+ .text.xread    0x0000000080003528      0x15a deb.o
+                0x0000000080003528                xread
+
+.text.hx1lp     0x0000000080003682       0x4c
+ .text.hx1lp    0x0000000080003682       0x4c deb.o
+                0x0000000080003682                hx1lp
+
+.text.hxbytelp  0x00000000800036ce       0x5c
+ .text.hxbytelp
+                0x00000000800036ce       0x5c deb.o
+                0x00000000800036ce                hxbytelp
+
+.text.hxwordlp  0x000000008000372a       0x38
+ .text.hxwordlp
+                0x000000008000372a       0x38 deb.o
+                0x000000008000372a                hxwordlp
+
+.text.xdir      0x0000000080003762       0xc8
+ .text.xdir     0x0000000080003762       0xc8 deb.o
+                0x0000000080003762                xdir
+
+.text.xsdread   0x000000008000382a      0x34a
+ .text.xsdread  0x000000008000382a      0x34a deb.o
+                0x000000008000382a                xsdread
+
+.text.xhelp     0x0000000080003b74       0x24
+ .text.xhelp    0x0000000080003b74       0x24 deb.o
+                0x0000000080003b74                xhelp
+
+.text.xgo       0x0000000080003b98       0x1c
+ .text.xgo      0x0000000080003b98       0x1c deb.o
+                0x0000000080003b98                xgo
+
+.text._main     0x0000000080003bb4       0x96
+ .text._main    0x0000000080003bb4       0x96 deb.o
+                0x0000000080003bb4                _main
+
+.text.irqCallback
+                0x0000000080003c4a      0x1bc
+ .text.irqCallback
+                0x0000000080003c4a      0x1bc traphandler.o
+                0x0000000080003c4a                irqCallback
+
+.text.sysCallback
+                0x0000000080003e06       0xc2
+ .text.sysCallback
+                0x0000000080003e06       0xc2 traphandler.o
+                0x0000000080003e06                sysCallback
+
+.text.xputc     0x0000000080003ec8       0x6c
+ .text.xputc    0x0000000080003ec8       0x6c xprintf.o
+                0x0000000080003ec8                xputc
+
+.text.xputs     0x0000000080003f34       0x3c
+ .text.xputs    0x0000000080003f34       0x3c xprintf.o
+                0x0000000080003f34                xputs
+
+.text.xvprintf  0x0000000080003f70      0x47e
+ .text.xvprintf
+                0x0000000080003f70      0x47e xprintf.o
+
+.text.xprintf   0x00000000800043ee       0x44
+ .text.xprintf  0x00000000800043ee       0x44 xprintf.o
+                0x00000000800043ee                xprintf
+
+.text.write_u32
+                0x0000000080004432       0x20
+ .text.write_u32
+                0x0000000080004432       0x20 main.o
+
+.text.uart_writeAvailability
+                0x0000000080004452       0x2e
+ .text.uart_writeAvailability
+                0x0000000080004452       0x2e main.o
+
+.text.uart_write
+                0x0000000080004480       0x40
+ .text.uart_write
+                0x0000000080004480       0x40 main.o
+
+.text.uart_writeStr
+                0x00000000800044c0       0x44
+ .text.uart_writeStr
+                0x00000000800044c0       0x44 main.o
 
 .text.gpio_setOutput
-                0x0000000080000cc4       0x2e
+                0x0000000080004504       0x2e
  .text.gpio_setOutput
-                0x0000000080000cc4       0x2e main.o
+                0x0000000080004504       0x2e main.o
 
 .text.gpio_setOutputEnable
-                0x0000000080000cf2       0x2e
+                0x0000000080004532       0x2e
  .text.gpio_setOutputEnable
-                0x0000000080000cf2       0x2e main.o
+                0x0000000080004532       0x2e main.o
 
-.text.main      0x0000000080000d20       0xac
- .text.main     0x0000000080000d20       0xac main.o
-                0x0000000080000d20                main
+.text.putcon    0x0000000080004560       0x2a
+ .text.putcon   0x0000000080004560       0x2a main.o
+                0x0000000080004560                putcon
 
-.text.__divdf3  0x0000000080000dcc      0x904
+.text.main      0x000000008000458a       0x5c
+ .text.main     0x000000008000458a       0x5c main.o
+                0x000000008000458a                main
+
+.text.__divdf3  0x00000000800045e8      0x904
  .text.__divdf3
-                0x0000000080000dcc      0x904 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
-                0x0000000080000dcc                __divdf3
+                0x00000000800045e8      0x904 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
+                0x00000000800045e8                __divdf3
 
-.text.__muldf3  0x00000000800016d0      0x764
+.text.__muldf3  0x0000000080004eec      0x764
  .text.__muldf3
-                0x00000000800016d0      0x764 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(muldf3.o)
-                0x00000000800016d0                __muldf3
+                0x0000000080004eec      0x764 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(muldf3.o)
+                0x0000000080004eec                __muldf3
 
 .text.__fixunsdfsi
-                0x0000000080001e34       0x78
+                0x0000000080005650       0x78
  .text.__fixunsdfsi
-                0x0000000080001e34       0x78 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(fixunsdfsi.o)
-                0x0000000080001e34                __fixunsdfsi
+                0x0000000080005650       0x78 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(fixunsdfsi.o)
+                0x0000000080005650                __fixunsdfsi
 
 .text.__floatunsidf
-                0x0000000080001eac       0xb4
+                0x00000000800056c8       0xb4
  .text.__floatunsidf
-                0x0000000080001eac       0xb4 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(floatunsidf.o)
-                0x0000000080001eac                __floatunsidf
+                0x00000000800056c8       0xb4 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(floatunsidf.o)
+                0x00000000800056c8                __floatunsidf
 
-.text.__clzsi2  0x0000000080001f60       0x94
+.text.__clzsi2  0x000000008000577c       0x94
  .text.__clzsi2
-                0x0000000080001f60       0x94 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(_clzsi2.o)
-                0x0000000080001f60                __clzsi2
+                0x000000008000577c       0x94 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(_clzsi2.o)
+                0x000000008000577c                __clzsi2
 
-.rela.dyn       0x0000000080001ff4        0x0
- .rela.text     0x0000000080001ff4        0x0 crt.o
+.text.__locale_ctype_ptr
+                0x0000000080005810       0x2c
+ .text.__locale_ctype_ptr
+                0x0000000080005810       0x2c c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-locale.o)
+                0x0000000080005810                __locale_ctype_ptr
+
+.text.__ascii_mbtowc
+                0x000000008000583c       0x68
+ .text.__ascii_mbtowc
+                0x000000008000583c       0x68 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-mbtowc_r.o)
+                0x000000008000583c                __ascii_mbtowc
+
+.text.__ascii_wctomb
+                0x00000000800058a4       0x30
+ .text.__ascii_wctomb
+                0x00000000800058a4       0x30 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-wctomb_r.o)
+                0x00000000800058a4                __ascii_wctomb
+
+.rela.dyn       0x00000000800058d4        0x0
+ .rela.text     0x00000000800058d4        0x0 crt.o
+ .rela.text.putch
+                0x00000000800058d4        0x0 crt.o
+ .rela.text.getline
+                0x00000000800058d4        0x0 crt.o
+ .rela.text.gethex
+                0x00000000800058d4        0x0 crt.o
+ .rela.text.getdata
+                0x00000000800058d4        0x0 crt.o
+ .rela.text.ogetdata
+                0x00000000800058d4        0x0 crt.o
+ .rela.text.xdump
+                0x00000000800058d4        0x0 crt.o
+ .rela.text.xsubst
+                0x00000000800058d4        0x0 crt.o
+ .rela.text.xfill
+                0x00000000800058d4        0x0 crt.o
+ .rela.text.hxbyte
+                0x00000000800058d4        0x0 crt.o
+ .rela.text.xread
+                0x00000000800058d4        0x0 crt.o
+ .rela.text.hx1lp
+                0x00000000800058d4        0x0 crt.o
+ .rela.text.hxbytelp
+                0x00000000800058d4        0x0 crt.o
+ .rela.text.xdir
+                0x00000000800058d4        0x0 crt.o
+ .rela.text.xsdread
+                0x00000000800058d4        0x0 crt.o
+ .rela.text._main
+                0x00000000800058d4        0x0 crt.o
  .rela.text.irqCallback
-                0x0000000080001ff4        0x0 crt.o
+                0x00000000800058d4        0x0 crt.o
  .rela.text.sysCallback
-                0x0000000080001ff4        0x0 crt.o
+                0x00000000800058d4        0x0 crt.o
  .rela.text.xputc
-                0x0000000080001ff4        0x0 crt.o
+                0x00000000800058d4        0x0 crt.o
+ .rela.text.main
+                0x00000000800058d4        0x0 crt.o
 
-.data           0x0000000080002000      0x2e8
+.data           0x00000000800058e0      0xb88
  *(.rdata)
  *(.rodata .rodata.*)
- .rodata        0x0000000080002000       0xb0 traphandler.o
- .rodata        0x00000000800020b0       0x7b xprintf.o
- *fill*         0x000000008000212b        0x1 
- .rodata        0x000000008000212c       0x18 main.o
+ .rodata        0x00000000800058e0       0x26 ff.o
+ *fill*         0x0000000080005906        0x2 
+ .rodata        0x0000000080005908      0x169 deb.o
+ *fill*         0x0000000080005a71        0x7 
+ .rodata        0x0000000080005a78       0xb0 traphandler.o
+ .rodata        0x0000000080005b28       0x7b xprintf.o
+ *fill*         0x0000000080005ba3        0x1 
+ .rodata        0x0000000080005ba4       0x18 main.o
  .rodata.__divdf3
-                0x0000000080002144       0x40 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
+                0x0000000080005bbc       0x40 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
  .rodata.__muldf3
-                0x0000000080002184       0x40 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(muldf3.o)
+                0x0000000080005bfc       0x40 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(muldf3.o)
  .rodata.__clz_tab
-                0x00000000800021c4      0x100 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(_clz.o)
-                0x00000000800021c4                __clz_tab
+                0x0000000080005c3c      0x100 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(_clz.o)
+                0x0000000080005c3c                __clz_tab
+ .rodata._setlocale_r.str1.4
+                0x0000000080005d3c        0xd c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-locale.o)
+ *fill*         0x0000000080005d49        0x3 
+ .rodata.str1.4
+                0x0000000080005d4c        0x4 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-locale.o)
+                                          0x2 (size before relaxing)
+ .rodata._ctype_
+                0x0000000080005d50      0x101 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-ctype_.o)
+                0x0000000080005d50                _ctype_
  *(.gnu.linkonce.r.*)
  *(.data .data.*)
- *fill*         0x00000000800022c4        0xc 
- .data          0x00000000800022d0       0x18 crt.o
-                0x00000000800022d0                sys_mcause
-                0x00000000800022d4                sys_mepc
-                0x00000000800022d8                sys_ucause
-                0x00000000800022dc                sys_uepc
-                0x00000000800022e0                sys_irqcause
-                0x00000000800022e4                sys_irqpc
+ *fill*         0x0000000080005e51        0xf 
+ .data          0x0000000080005e60       0x18 crt.o
+                0x0000000080005e60                sys_mcause
+                0x0000000080005e64                sys_mepc
+                0x0000000080005e68                sys_ucause
+                0x0000000080005e6c                sys_uepc
+                0x0000000080005e70                sys_irqcause
+                0x0000000080005e74                sys_irqpc
+ .data          0x0000000080005e78       0x48 deb.o
+                0x0000000080005e78                comtbl
+ .data.__global_locale
+                0x0000000080005ec0      0x16c c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-locale.o)
+                0x0000000080005ec0                __global_locale
+ *fill*         0x000000008000602c        0x4 
+ .data.impure_data
+                0x0000000080006030      0x428 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-impure.o)
  *(.gnu.linkonce.d.*)
-                0x00000000800022e8                . = ALIGN (0x8)
+                0x0000000080006458                . = ALIGN (0x8)
                 [!provide]                        PROVIDE (__global_pointer$ = (. + 0x800))
  *(.sdata .sdata.*)
+ .sdata         0x0000000080006458        0x1 sdmm.o
+ *fill*         0x0000000080006459        0x3 
+ .sdata         0x000000008000645c        0x8 deb.o
+                0x000000008000645c                STARTADDR
+                0x0000000080006460                HelpMsg
+ .sdata._impure_ptr
+                0x0000000080006464        0x4 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-impure.o)
+                0x0000000080006464                _impure_ptr
  *(.gnu.linkonce.s.*)
-                0x00000000800022e8                . = ALIGN (0x8)
+                0x0000000080006468                . = ALIGN (0x8)
  *(.srodata.cst16)
  *(.srodata.cst8)
  *(.srodata.cst4)
  *(.srodata.cst2)
  *(.srodata .srodata.*)
 
-.bss            0x0000000080008000       0x34
+.bss            0x0000000080008000      0x2cc
                 0x0000000080008000                . = ALIGN (0x4)
                 0x0000000080008000                _bss_start = .
  *(.sbss*)
@@ -649,34 +866,46 @@ Linker script and memory map
                 0x0000000080008004                syscallCount
  *(.gnu.linkonce.sb.*)
  *(.bss .bss.*)
- .bss           0x0000000080008008        0x4 xprintf.o
+ .bss           0x0000000080008008        0x1 sdmm.o
+ *fill*         0x0000000080008009        0x3 
+ .bss           0x000000008000800c        0x6 ff.o
+ *fill*         0x0000000080008012        0x2 
+ .bss           0x0000000080008014        0x4 xprintf.o
  *(.gnu.linkonce.b.*)
  *(COMMON)
- COMMON         0x000000008000800c        0x4 symtable.o
-                0x000000008000800c                SYMTABLETOP
- COMMON         0x0000000080008010       0x20 traphandler.o
-                0x0000000080008010                traparg2
-                0x0000000080008014                traparg3
-                0x0000000080008018                irqcause
-                0x000000008000801c                traparg1
-                0x0000000080008020                irqpc
-                0x0000000080008024                trapcause
-                0x0000000080008028                trappc
-                0x000000008000802c                timerPending
- COMMON         0x0000000080008030        0x4 xprintf.o
-                0x0000000080008030                xfunc_out
-                0x0000000080008034                . = ALIGN (0x4)
-                0x0000000080008034                _bss_end = .
+ COMMON         0x0000000080008018      0x28c deb.o
+                0x0000000080008018                lp
+                0x000000008000801c                FatFs
+                0x0000000080008244                line
+                0x0000000080008294                col
+                0x0000000080008298                datap
+                0x000000008000829c                Sum
+                0x00000000800082a0                codep
+ COMMON         0x00000000800082a4        0x4 symtable.o
+                0x00000000800082a4                SYMTABLETOP
+ COMMON         0x00000000800082a8       0x20 traphandler.o
+                0x00000000800082a8                traparg2
+                0x00000000800082ac                traparg3
+                0x00000000800082b0                irqcause
+                0x00000000800082b4                traparg1
+                0x00000000800082b8                irqpc
+                0x00000000800082bc                trapcause
+                0x00000000800082c0                trappc
+                0x00000000800082c4                timerPending
+ COMMON         0x00000000800082c8        0x4 xprintf.o
+                0x00000000800082c8                xfunc_out
+                0x00000000800082cc                . = ALIGN (0x4)
+                0x00000000800082cc                _bss_end = .
 
 .rodata
  *(.rdata)
  *(.rodata .rodata.*)
  *(.gnu.linkonce.r.*)
 
-.noinit         0x0000000080008034        0x0
-                0x0000000080008034                . = ALIGN (0x4)
+.noinit         0x00000000800082cc        0x0
+                0x00000000800082cc                . = ALIGN (0x4)
  *(.noinit .noinit.*)
-                0x0000000080008034                . = ALIGN (0x4)
+                0x00000000800082cc                . = ALIGN (0x4)
 
 .tvram          0x00000000f0040000        0x0
                 0x00000000f0040000                . = ALIGN (0x4)
@@ -687,14 +916,14 @@ Linker script and memory map
 .appram         0x0000000040200000        0x0
                 0x0000000040200000                . = ALIGN (0x4)
 
-.ctors          0x00000000800022e8        0x0
-                0x00000000800022e8                . = ALIGN (0x4)
-                0x00000000800022e8                _ctors_start = .
+.ctors          0x0000000080006468        0x0
+                0x0000000080006468                . = ALIGN (0x4)
+                0x0000000080006468                _ctors_start = .
  *(.init_array*)
  *(SORT_BY_NAME(.ctors.*))
  *(.ctors)
-                0x00000000800022e8                . = ALIGN (0x4)
-                0x00000000800022e8                _ctors_end = .
+                0x0000000080006468                . = ALIGN (0x4)
+                0x0000000080006468                _ctors_end = .
                 [!provide]                        PROVIDE (END_OF_SW_IMAGE = .)
 
 ._user_heap     0x0000000040100000   0x100000
@@ -707,18 +936,17 @@ Linker script and memory map
                 0x0000000040200000                . = ALIGN (0x8)
                 [!provide]                        PROVIDE (_heap_end = .)
 
-._stack         0x0000000080008034     0x340c
-                0x0000000080008040                . = ALIGN (0x10)
- *fill*         0x0000000080008034        0xc 
+._stack         0x00000000800082cc     0x3404
+                0x00000000800082d0                . = ALIGN (0x10)
+ *fill*         0x00000000800082cc        0x4 
                 [!provide]                        PROVIDE (_stack_end = .)
-                0x000000008000b440                . = (. + _stack_size)
- *fill*         0x0000000080008040     0x3400 
-                0x000000008000b440                . = ALIGN (0x10)
-                0x000000008000b440                PROVIDE (_stack_start = .)
+                0x000000008000b6d0                . = (. + _stack_size)
+ *fill*         0x00000000800082d0     0x3400 
+                0x000000008000b6d0                . = ALIGN (0x10)
+                0x000000008000b6d0                PROVIDE (_stack_start = .)
 START GROUP
 END GROUP
 LOAD crt.o
-LOAD uart.o
 LOAD vga.o
 LOAD console.o
 LOAD sdmm.o
@@ -737,64 +965,97 @@ END GROUP
 LOAD c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a
 OUTPUT(progmem.elf elf32-littleriscv)
 
-.debug_info     0x0000000000000000     0x21d2
- .debug_info    0x0000000000000000      0xb58 symtable.o
- .debug_info    0x0000000000000b58      0x37b traphandler.o
- .debug_info    0x0000000000000ed3      0x407 xprintf.o
- .debug_info    0x00000000000012da      0xef8 main.o
+.debug_info     0x0000000000000000     0x4cb9
+ .debug_info    0x0000000000000000      0x6dd sdmm.o
+ .debug_info    0x00000000000006dd     0x1414 ff.o
+ .debug_info    0x0000000000001af1      0xfff deb.o
+ .debug_info    0x0000000000002af0      0xb58 symtable.o
+ .debug_info    0x0000000000003648      0x37b traphandler.o
+ .debug_info    0x00000000000039c3      0x407 xprintf.o
+ .debug_info    0x0000000000003dca      0xeef main.o
 
-.debug_abbrev   0x0000000000000000      0x7e6
- .debug_abbrev  0x0000000000000000      0x259 symtable.o
- .debug_abbrev  0x0000000000000259      0x139 traphandler.o
- .debug_abbrev  0x0000000000000392      0x183 xprintf.o
- .debug_abbrev  0x0000000000000515      0x2d1 main.o
+.debug_abbrev   0x0000000000000000      0xfef
+ .debug_abbrev  0x0000000000000000      0x200 sdmm.o
+ .debug_abbrev  0x0000000000000200      0x1f6 ff.o
+ .debug_abbrev  0x00000000000003f6      0x3e8 deb.o
+ .debug_abbrev  0x00000000000007de      0x259 symtable.o
+ .debug_abbrev  0x0000000000000a37      0x139 traphandler.o
+ .debug_abbrev  0x0000000000000b70      0x183 xprintf.o
+ .debug_abbrev  0x0000000000000cf3      0x2fc main.o
 
-.debug_aranges  0x0000000000000000      0x168
+.debug_aranges  0x0000000000000000      0x4b0
  .debug_aranges
-                0x0000000000000000       0x38 symtable.o
+                0x0000000000000000       0x88 sdmm.o
  .debug_aranges
-                0x0000000000000038       0x28 traphandler.o
+                0x0000000000000088      0x140 ff.o
  .debug_aranges
-                0x0000000000000060       0x60 xprintf.o
+                0x00000000000001c8      0x180 deb.o
  .debug_aranges
-                0x00000000000000c0       0xa8 main.o
+                0x0000000000000348       0x38 symtable.o
+ .debug_aranges
+                0x0000000000000380       0x28 traphandler.o
+ .debug_aranges
+                0x00000000000003a8       0x60 xprintf.o
+ .debug_aranges
+                0x0000000000000408       0xa8 main.o
 
-.debug_ranges   0x0000000000000000      0x128
- .debug_ranges  0x0000000000000000       0x28 symtable.o
- .debug_ranges  0x0000000000000028       0x18 traphandler.o
- .debug_ranges  0x0000000000000040       0x50 xprintf.o
- .debug_ranges  0x0000000000000090       0x98 main.o
+.debug_ranges   0x0000000000000000      0x440
+ .debug_ranges  0x0000000000000000       0x78 sdmm.o
+ .debug_ranges  0x0000000000000078      0x130 ff.o
+ .debug_ranges  0x00000000000001a8      0x170 deb.o
+ .debug_ranges  0x0000000000000318       0x28 symtable.o
+ .debug_ranges  0x0000000000000340       0x18 traphandler.o
+ .debug_ranges  0x0000000000000358       0x50 xprintf.o
+ .debug_ranges  0x00000000000003a8       0x98 main.o
 
-.debug_line     0x0000000000000000     0x1453
- .debug_line    0x0000000000000000      0x331 symtable.o
- .debug_line    0x0000000000000331      0x296 traphandler.o
- .debug_line    0x00000000000005c7      0x85c xprintf.o
- .debug_line    0x0000000000000e23      0x630 main.o
+.debug_line     0x0000000000000000     0x60da
+ .debug_line    0x0000000000000000      0xd9a sdmm.o
+ .debug_line    0x0000000000000d9a     0x28cc ff.o
+ .debug_line    0x0000000000003666     0x164f deb.o
+ .debug_line    0x0000000000004cb5      0x331 symtable.o
+ .debug_line    0x0000000000004fe6      0x296 traphandler.o
+ .debug_line    0x000000000000527c      0x85c xprintf.o
+ .debug_line    0x0000000000005ad8      0x602 main.o
 
-.debug_str      0x0000000000000000      0x8e3
- .debug_str     0x0000000000000000      0x5a9 symtable.o
+.debug_str      0x0000000000000000      0xedd
+ .debug_str     0x0000000000000000      0x2a8 sdmm.o
+                                        0x30f (size before relaxing)
+ .debug_str     0x00000000000002a8      0x3ce ff.o
+                                        0x590 (size before relaxing)
+ .debug_str     0x0000000000000676      0x2c0 deb.o
+                                        0x651 (size before relaxing)
+ .debug_str     0x0000000000000936      0x3fa symtable.o
                                         0x620 (size before relaxing)
- .debug_str     0x00000000000005a9       0xc9 traphandler.o
+ .debug_str     0x0000000000000d30       0xbf traphandler.o
                                         0x2e6 (size before relaxing)
- .debug_str     0x0000000000000672       0x88 xprintf.o
+ .debug_str     0x0000000000000def       0x83 xprintf.o
                                         0x175 (size before relaxing)
- .debug_str     0x00000000000006fa      0x1e9 main.o
-                                        0x765 (size before relaxing)
+ .debug_str     0x0000000000000e72       0x6b main.o
+                                        0x75d (size before relaxing)
 
 .comment        0x0000000000000000       0x39
- .comment       0x0000000000000000       0x39 symtable.o
+ .comment       0x0000000000000000       0x39 sdmm.o
                                          0x3a (size before relaxing)
+ .comment       0x0000000000000039       0x3a ff.o
+ .comment       0x0000000000000039       0x3a deb.o
+ .comment       0x0000000000000039       0x3a symtable.o
  .comment       0x0000000000000039       0x3a traphandler.o
  .comment       0x0000000000000039       0x3a xprintf.o
  .comment       0x0000000000000039       0x3a main.o
 
-.debug_frame    0x0000000000000000      0x63c
- .debug_frame   0x0000000000000000       0x98 symtable.o
- .debug_frame   0x0000000000000098       0x60 traphandler.o
- .debug_frame   0x00000000000000f8      0x164 xprintf.o
- .debug_frame   0x000000000000025c      0x2b4 main.o
- .debug_frame   0x0000000000000510       0x60 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
- .debug_frame   0x0000000000000570       0x54 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(muldf3.o)
- .debug_frame   0x00000000000005c4       0x20 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(fixunsdfsi.o)
- .debug_frame   0x00000000000005e4       0x38 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(floatunsidf.o)
- .debug_frame   0x000000000000061c       0x20 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(_clzsi2.o)
+.debug_frame    0x0000000000000000     0x1528
+ .debug_frame   0x0000000000000000      0x208 sdmm.o
+ .debug_frame   0x0000000000000208      0x554 ff.o
+ .debug_frame   0x000000000000075c      0x6a0 deb.o
+ .debug_frame   0x0000000000000dfc       0x98 symtable.o
+ .debug_frame   0x0000000000000e94       0x60 traphandler.o
+ .debug_frame   0x0000000000000ef4      0x164 xprintf.o
+ .debug_frame   0x0000000000001058      0x2bc main.o
+ .debug_frame   0x0000000000001314       0x60 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
+ .debug_frame   0x0000000000001374       0x54 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(muldf3.o)
+ .debug_frame   0x00000000000013c8       0x20 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(fixunsdfsi.o)
+ .debug_frame   0x00000000000013e8       0x38 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(floatunsidf.o)
+ .debug_frame   0x0000000000001420       0x20 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32i/ilp32\libgcc.a(_clzsi2.o)
+ .debug_frame   0x0000000000001440       0x78 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-locale.o)
+ .debug_frame   0x00000000000014b8       0x40 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-mbtowc_r.o)
+ .debug_frame   0x00000000000014f8       0x30 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-wctomb_r.o)

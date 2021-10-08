@@ -1,8 +1,6 @@
-//#include "stddefs.h"
 #include <stdint.h>
 #include <malloc.h>
 
-//#include "murax.h"
 #include "bsp/bsp.h"
 #include "bsp/gpio.h"
 #include "bsp/uart.h"
@@ -23,6 +21,12 @@ extern uint32_t sys_irqcause,sys_irqpc;
 
 extern void _main();
 
+/// put char
+void putcon(char i)
+{
+	uart_write(BSP_UART_TERMINAL,i);
+}
+
 int main() 
 {
 	int i;
@@ -39,16 +43,16 @@ int main()
     gpio_setOutput(BSP_LED_GPIO, 0x00000000);
 
 	uart_writeStr(BSP_UART_TERMINAL, "*** SaxonSoc Booted...\n");
-    while(1){
-        gpio_setOutput(BSP_LED_GPIO, gpio_getOutput(BSP_LED_GPIO) ^ BSP_LED_MASK);
+    // while(1){
+    //     gpio_setOutput(BSP_LED_GPIO, gpio_getOutput(BSP_LED_GPIO) ^ BSP_LED_MASK);
 
-        while(uart_readOccupancy(BSP_UART_TERMINAL)){
-            uart_write(BSP_UART_TERMINAL, uart_read(BSP_UART_TERMINAL));
-        }
+    //     while(uart_readOccupancy(BSP_UART_TERMINAL)){
+    //         uart_write(BSP_UART_TERMINAL, uart_read(BSP_UART_TERMINAL));
+    //     }
 
-		i++;
-        bsp_uDelay(LOOP_UDELAY);
-    }
+	// 	i++;
+    //     bsp_uDelay(LOOP_UDELAY);
+    // }
 	
 	// VGA SETTING
 	//vga_init();
@@ -58,7 +62,7 @@ int main()
 	//console_clear();
 
 	// xprintf setup
-	//xdev_out(putcon);
+	xdev_out(putcon);
 
 	// symtable setup
 	// symt_init(_SYMTABLE);
@@ -90,7 +94,7 @@ int main()
 	// xprintf("SYSCALL(%d) = %08X\n",MY_SYSCALL_GETSYMPTR,res);
 
 	// // JUMP TO DEBUG MONITOR
-	// _main();
+	_main();
 
 #if 0
 	unsigned char itoh[] = "0123456789ABCDEF";

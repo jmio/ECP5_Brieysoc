@@ -3,7 +3,6 @@
 # 1 "<built-in>"
 # 1 "<command-line>"
 # 1 "main.c"
-
 # 1 "c:\\gccriscv\\8.2.0\\riscv-none-embed\\include\\stdint.h" 1 3
 # 12 "c:\\gccriscv\\8.2.0\\riscv-none-embed\\include\\stdint.h" 3
 # 1 "c:\\gccriscv\\8.2.0\\riscv-none-embed\\include\\machine\\_default_types.h" 1 3
@@ -196,7 +195,7 @@ typedef __uint_least64_t uint_least64_t;
 # 81 "c:\\gccriscv\\8.2.0\\riscv-none-embed\\include\\stdint.h" 3
   typedef long long int int_fast64_t;
   typedef long long unsigned int uint_fast64_t;
-# 3 "main.c" 2
+# 2 "main.c" 2
 # 1 "c:\\gccriscv\\8.2.0\\riscv-none-embed\\include\\malloc.h" 1 3
 
 
@@ -777,8 +776,7 @@ extern void mstats (char *);
 extern void _mstats_r (struct _reent *, char *);
 # 166 "c:\\gccriscv\\8.2.0\\riscv-none-embed\\include\\malloc.h" 3
 extern void cfree (void *);
-# 4 "main.c" 2
-
+# 3 "main.c" 2
 
 # 1 "bsp/bsp.h" 1
        
@@ -925,7 +923,7 @@ static void clint_uDelay(u32 usec, u32 hz, u32 reg){
     while((int32_t)(limit-(clint_getTimeLow(reg))) >= 0);
 }
 # 6 "bsp/bsp.h" 2
-# 7 "main.c" 2
+# 5 "main.c" 2
 # 1 "bsp/gpio.h" 1
        
 # 15 "bsp/gpio.h"
@@ -939,7 +937,7 @@ static inline void gpio_setInterruptRiseEnable(u32 reg, u32 value){ write_u32(va
 static inline void gpio_setInterruptFallEnable(u32 reg, u32 value){ write_u32(value, reg + 0x24); }
 static inline void gpio_setInterruptHighEnable(u32 reg, u32 value){ write_u32(value, reg + 0x28); }
 static inline void gpio_setInterruptLowEnable(u32 reg, u32 value){ write_u32(value, reg + 0x2c); }
-# 8 "main.c" 2
+# 6 "main.c" 2
 
 
 # 1 "xprintf.h" 1
@@ -953,7 +951,7 @@ void xprintf (const char* fmt, ...);
 void xsprintf (char* buff, const char* fmt, ...);
 void xfprintf (void (*func)(unsigned char), const char* fmt, ...);
 void put_dump (const void* buff, unsigned long addr, int len, int width);
-# 11 "main.c" 2
+# 9 "main.c" 2
 # 1 "symtable.h" 1
 
 
@@ -972,7 +970,7 @@ void symt_init(SYMTABLE *s);
 void symt_clear();
 SYMTABLE* symt_get(char *n);
 SYMTABLE* symt_put(char *n,unsigned int a);
-# 12 "main.c" 2
+# 10 "main.c" 2
 
 
 
@@ -986,6 +984,12 @@ extern uint32_t sys_ucause,sys_uepc;
 extern uint32_t sys_irqcause,sys_irqpc;
 
 extern void _main();
+
+
+void putcon(char i)
+{
+ uart_write(0xf0010000,i);
+}
 
 int main()
 {
@@ -1003,15 +1007,9 @@ int main()
     gpio_setOutput(0xf0000000, 0x00000000);
 
  uart_writeStr(0xf0010000, "*** SaxonSoc Booted...\n");
-    while(1){
-        gpio_setOutput(0xf0000000, gpio_getOutput(0xf0000000) ^ 0x01);
-
-        while(uart_readOccupancy(0xf0010000)){
-            uart_write(0xf0010000, uart_read(0xf0010000));
-        }
-
-  i++;
-        clint_uDelay(100000, 25000000, 0xf0b00000);;
-    }
-# 155 "main.c"
+# 65 "main.c"
+ xfunc_out = (void(*)(unsigned char))(putcon);
+# 97 "main.c"
+ _main();
+# 159 "main.c"
 }

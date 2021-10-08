@@ -168,10 +168,11 @@ extern const char _ctype_[];
 
 
 # 7 "deb.c" 2
-# 1 "murax.h" 1
-
-
-
+# 1 "ff.h" 1
+# 29 "ff.h"
+# 1 "ffconf.h" 1
+# 30 "ff.h" 2
+# 44 "ff.h"
 # 1 "c:\\gccriscv\\8.2.0\\riscv-none-embed\\include\\stdint.h" 1 3
 # 13 "c:\\gccriscv\\8.2.0\\riscv-none-embed\\include\\stdint.h" 3
 # 1 "c:\\gccriscv\\8.2.0\\riscv-none-embed\\include\\sys\\_intsup.h" 1 3
@@ -296,176 +297,8 @@ typedef __uint_least64_t uint_least64_t;
 # 81 "c:\\gccriscv\\8.2.0\\riscv-none-embed\\include\\stdint.h" 3
   typedef long long int int_fast64_t;
   typedef long long unsigned int uint_fast64_t;
-# 5 "murax.h" 2
-# 14 "murax.h"
+# 45 "ff.h" 2
 
-# 14 "murax.h"
-typedef struct
-{
-  volatile uint32_t CLEARS_TICKS;
-  volatile uint32_t LIMIT;
-  volatile uint32_t VALUE;
-} Timer_Reg;
-typedef struct
-{
-  volatile uint32_t LIMIT;
-} Prescaler_Reg;
-
-
-typedef struct
-{
-  volatile uint32_t PENDINGS;
-  volatile uint32_t MASKS;
-} InterruptCtrl_Reg;
-
-
-
-typedef struct
-{
-  volatile uint32_t INPUT;
-  volatile uint32_t OUTPUT;
-  volatile uint32_t OUTPUT_ENABLE;
-} Gpio_Reg;
-
-
-
-enum UartParity {NONE = 0,EVEN = 1,ODD = 2};
-enum UartStop {ONE = 0,TWO = 1};
-
-typedef struct
-{
-  volatile uint32_t DATA;
-  volatile uint32_t STATUS;
-  volatile uint32_t CLOCK_DIVIDER;
-  volatile uint32_t FRAME_CONFIG;
-} Uart_Reg;
-
-typedef struct {
- uint32_t dataLength;
- enum UartParity parity;
- enum UartStop stop;
- uint32_t clockDivider;
-} Uart_Config;
-
-uint32_t uart_writeAvailability(Uart_Reg *reg);
-uint32_t uart_readOccupancy(Uart_Reg *reg);
-void uart_write(Uart_Reg *reg, uint32_t data);
-int uart_read(Uart_Reg *reg);
-void uart_applyConfig(Uart_Reg *reg, Uart_Config *config);
-
-
-void uart_init();
-void uart_pollrx();
-void uart_polltx();
-int uart_getc();
-int uart_putc(char c);
-char uart_puts(unsigned char *s);
-void _uart_wait();
-
-
-
-
-
-
-
-typedef struct {
- uint32_t hSyncStart ,hSyncEnd;
- uint32_t hColorStart,hColorEnd;
-
- uint32_t vSyncStart ,vSyncEnd;
- uint32_t vColorStart,vColorEnd;
-}Vga_Timing;
-
-static const Vga_Timing vga_h800_v480_r60 = {
-    .hSyncStart = 61,
-    .hSyncEnd = 857 + 80,
-    .hColorStart = 119,
-    .hColorEnd = 839 + 80,
-    .vSyncStart = 5,
-    .vSyncEnd = 525,
-    .vColorStart = 35,
-    .vColorEnd = 515
-};
-
-static const Vga_Timing vga_h640_v480_r60 = {
-    .hSyncStart = 96,
-    .hSyncEnd = 800,
-    .hColorStart = 96 + 16,
-    .hColorEnd = 800 - 48,
-    .vSyncStart = 2,
-    .vSyncEnd = 525,
-    .vColorStart = 2 + 10,
-    .vColorEnd = 525 - 33
-};
-
-static const Vga_Timing vga_simRes = {
-    .hSyncStart = 8,
-    .hSyncEnd = 70,
-    .hColorStart = 16,
-    .hColorEnd = 64,
-    .vSyncStart = 2,
-    .vSyncEnd = 48,
-    .vColorStart = 8,
-    .vColorEnd = 40
-};
-
-static const Vga_Timing vga_simRes_h160_v120 = {
- .hSyncStart = 8,
- .hSyncEnd = 24+160,
- .hColorStart = 16,
- .hColorEnd = 16+160,
- .vSyncStart = 2,
- .vSyncEnd = 10+120,
- .vColorStart = 6,
- .vColorEnd = 6+120
-};
-
-typedef struct
-{
-  volatile uint32_t STATUS;
-  volatile uint32_t FRAME_SIZE;
-  volatile uint32_t FRAME_BASE;
-  volatile uint32_t DUMMY0[13];
-  volatile Vga_Timing TIMING;
-} Vga_Reg;
-
-uint32_t vga_isBusy(Vga_Reg *reg);
-void vga_run(Vga_Reg *reg);
-void vga_stop(Vga_Reg *reg);
-void vga_init();
-void vga_clear();
-# 160 "murax.h"
-void console_clear();
-void console_scroll();
-void console_putc(unsigned char c) ;
-void console_puts(unsigned char *c) ;
-# 180 "murax.h"
-extern int syscall0(int callno);
-
-
-extern void flushDataCache(uint32_t dummy);
-
-
-void putcon(char c) ;
-
-extern volatile uint32_t irqCount;
-# 8 "deb.c" 2
-# 1 "xprintf.h" 1
-# 19 "xprintf.h"
-extern void (*xfunc_out)(unsigned char);
-void xputc (char c);
-void xfputc (void (*func)(unsigned char), char c);
-void xputs (const char* str);
-void xfputs (void (*func)(unsigned char), const char* str);
-void xprintf (const char* fmt, ...);
-void xsprintf (char* buff, const char* fmt, ...);
-void xfprintf (void (*func)(unsigned char), const char* fmt, ...);
-void put_dump (const void* buff, unsigned long addr, int len, int width);
-# 9 "deb.c" 2
-# 1 "ff.h" 1
-# 29 "ff.h"
-# 1 "ffconf.h" 1
-# 30 "ff.h" 2
 # 45 "ff.h"
 typedef unsigned int UINT;
 typedef unsigned char BYTE;
@@ -651,21 +484,195 @@ int f_putc (TCHAR c, FIL* fp);
 int f_puts (const TCHAR* str, FIL* cp);
 int f_printf (FIL* fp, const TCHAR* str, ...);
 TCHAR* f_gets (TCHAR* buff, int len, FIL* fp);
+# 8 "deb.c" 2
+
+# 1 "bsp/bsp.h" 1
+       
+
+# 1 "bsp/soc.h" 1
+# 4 "bsp/bsp.h" 2
+# 1 "bsp/uart.h" 1
+       
+
+# 1 "bsp/type.h" 1
+
+
+
+
+
+typedef uint64_t u64;
+typedef int64_t s64;
+
+typedef uint32_t u32;
+typedef int32_t s32;
+
+typedef uint16_t u16;
+typedef int16_t s16;
+
+typedef uint8_t u8;
+typedef int8_t s8;
+# 4 "bsp/uart.h" 2
+# 1 "bsp/io.h" 1
+       
+
+
+
+
+static inline u32 read_u32(u32 address){
+    return *((volatile u32*) address);
+}
+
+static inline void write_u32(u32 data, u32 address){
+    *((volatile u32*) address) = data;
+}
+
+static inline u16 read_u16(u32 address){
+    return *((volatile u16*) address);
+}
+
+static inline void write_u16(u16 data, u32 address){
+    *((volatile u16*) address) = data;
+}
+
+static inline u8 read_u8(u32 address){
+    return *((volatile u8*) address);
+}
+
+static inline void write_u8(u8 data, u32 address){
+    *((volatile u8*) address) = data;
+}
+
+static inline void write_u32_ad(u32 address, u32 data){
+    *((volatile u32*) address) = data;
+}
+# 5 "bsp/uart.h" 2
+
+
+
+
+
+
+enum UartDataLength {BITS_8 = 8};
+enum UartParity {NONE = 0,EVEN = 1,ODD = 2};
+enum UartStop {ONE = 0,TWO = 1};
+
+typedef struct {
+    enum UartDataLength dataLength;
+    enum UartParity parity;
+    enum UartStop stop;
+    u32 clockDivider;
+} Uart_Config;
+
+static u32 uart_writeAvailability(u32 reg){
+    return (read_u32(reg + 0x04) >> 16) & 0xFF;
+}
+static u32 uart_readOccupancy(u32 reg){
+    return read_u32(reg + 0x04) >> 24;
+}
+
+static void uart_write(u32 reg, char data){
+    while(uart_writeAvailability(reg) == 0);
+    write_u32(data, reg + 0x00);
+}
+
+static void uart_writeStr(u32 reg, const char* str){
+    while(*str) uart_write(reg, *str++);
+}
+
+static void uart_writeHex(u32 reg, int value){
+    for(int i = 7; i >= 0; i--){
+        int hex = (value >> i*4) & 0xF;
+        uart_write(reg, hex > 9 ? 'A' + hex - 10 : '0' + hex);
+    }
+}
+
+static char uart_read(u32 reg){
+    while(uart_readOccupancy(reg) == 0);
+    return read_u32(reg + 0x00);
+}
+
+static void uart_applyConfig(u32 reg, Uart_Config *config){
+    write_u32(config->clockDivider, reg + 0x08);
+    write_u32(((config->dataLength-1) << 0) | (config->parity << 8) | (config->stop << 16), reg + 0x0C);
+}
+# 5 "bsp/bsp.h" 2
+# 1 "bsp/clint.h" 1
+       
+# 10 "bsp/clint.h"
+static inline u32 clint_getTimeLow(u32 reg){ return read_u32(reg + 0xBFF8); }
+static inline u32 clint_getTimeHigh(u32 reg){ return read_u32(reg + 0xBFF8 +4); }
+
+
+static void clint_setCmp(u32 p, u64 cmp, u32 hart_id){
+    p += 0x4000 + hart_id*8;
+    write_u32(0xFFFFFFFF, p + 4);
+    write_u32(cmp, p + 0);
+    write_u32(cmp >> 32, p + 4);
+}
+
+static u64 clint_getTime(u32 p){
+    u32 lo, hi;
+
+
+    do {
+        hi = clint_getTimeHigh(p);
+        lo = clint_getTimeLow(p);
+    } while (clint_getTimeHigh(p) != hi);
+
+    return (((u64)hi) << 32) | lo;
+}
+
+
+static void clint_uDelay(u32 usec, u32 hz, u32 reg){
+    u32 mTimePerUsec = hz/1000000;
+    u32 limit = clint_getTimeLow(reg) + usec*mTimePerUsec;
+    while((int32_t)(limit-(clint_getTimeLow(reg))) >= 0);
+}
+# 6 "bsp/bsp.h" 2
 # 10 "deb.c" 2
+# 1 "bsp/gpio.h" 1
+       
+# 15 "bsp/gpio.h"
+static inline u32 gpio_getInput(u32 reg){ return read_u32(reg + 0x00); }
+static inline u32 gpio_getOutput(u32 reg){ return read_u32(reg + 0x04); }
+static inline void gpio_setOutput(u32 reg, u32 value){ write_u32(value, reg + 0x04); }
+static inline u32 gpio_getOutputEnable(u32 reg){ return read_u32(reg + 0x08); }
+static inline void gpio_setOutputEnable(u32 reg, u32 value){ write_u32(value, reg + 0x08); }
+
+static inline void gpio_setInterruptRiseEnable(u32 reg, u32 value){ write_u32(value, reg + 0x20); }
+static inline void gpio_setInterruptFallEnable(u32 reg, u32 value){ write_u32(value, reg + 0x24); }
+static inline void gpio_setInterruptHighEnable(u32 reg, u32 value){ write_u32(value, reg + 0x28); }
+static inline void gpio_setInterruptLowEnable(u32 reg, u32 value){ write_u32(value, reg + 0x2c); }
+# 11 "deb.c" 2
+
+
+# 1 "xprintf.h" 1
+# 19 "xprintf.h"
+extern void (*xfunc_out)(unsigned char);
+void xputc (char c);
+void xfputc (void (*func)(unsigned char), char c);
+void xputs (const char* str);
+void xfputs (void (*func)(unsigned char), const char* str);
+void xprintf (const char* fmt, ...);
+void xsprintf (char* buff, const char* fmt, ...);
+void xfprintf (void (*func)(unsigned char), const char* fmt, ...);
+void put_dump (const void* buff, unsigned long addr, int len, int width);
+# 14 "deb.c" 2
+
 
 
 
 
 char getcon() {
  int c;
- while ((c = uart_read(((Uart_Reg*)(0xF0010000)))) < 0) {
+ while ((c = uart_read(0xf0010000)) < 0) {
  }
  return c;
 }
 
 uint32_t consts()
 {
- return (uart_readOccupancy(((Uart_Reg*)(0xF0010000))));
+ return (uart_readOccupancy(0xf0010000));
 }
 
 uint32_t col;
@@ -726,17 +733,17 @@ void getline()
   default:
    if (c >= ' ') {
     *p++ = 
-# 83 "deb.c" 3
+# 88 "deb.c" 3
           __extension__ ({ __typeof__ (
-# 83 "deb.c"
+# 88 "deb.c"
           c
-# 83 "deb.c" 3
+# 88 "deb.c" 3
           ) __x = (
-# 83 "deb.c"
+# 88 "deb.c"
           c
-# 83 "deb.c" 3
+# 88 "deb.c" 3
           ); (((((__locale_ctype_ptr ())+sizeof(""[__x]))[(int)(__x)])&(01|02))==02) ? (int) __x - 'a' + 'A' : (int) __x;})
-# 83 "deb.c"
+# 88 "deb.c"
                     ;
     ct++;
     putch(c);
@@ -786,7 +793,7 @@ uint32_t ogetdata(uint32_t p)
   return (getdata());
  }
 }
-# 141 "deb.c"
+# 146 "deb.c"
 void puthex(uint32_t n)
 {
  putch(n < 10 ? n + '0' : n + 'A' - 10);
@@ -1111,41 +1118,7 @@ L_EOF:
   xprintf("SUM=%08X\n",sum);
  }
 }
-
-
-void xtptest()
-{
- UINT tpx,tpy;
- UINT TPREADZ1;
- UINT TPREADX;
- UINT TPREADY;
-
-
-
-
-
-
- xprintf("\nTP TEST\n");
- for (;;) {
-  { if (consts()) { getcon(); return; }};
-  TPREADZ1 = (*(volatile uint32_t *)0xF00500AC);
-  TPREADX = (*(volatile uint32_t *)0xF00500A4);
-  TPREADY = (*(volatile uint32_t *)0xF00500A8);
-  if (TPREADZ1 > (120)) {
-   if ((TPREADX < (176)) || (TPREADX > (3904))) {
-    continue;
-   }
-   if ((TPREADY < (336)) || (TPREADY > (3940))) {
-    continue;
-   }
-   tpx = (TPREADX - (176)) * 800.0 / ((3904) - (176));
-   tpy = (TPREADY - (336)) * 480.0 / ((3940) - (336));
-   xprintf("(%d,%d)  : %04X,%04X,%04X\n",tpx,tpy,TPREADX,TPREADY,TPREADZ1);
-  }
- }
-}
-
-
+# 505 "deb.c"
 const char* HelpMsg =
  "D:Dump     - D(Begin),(End)\n"
  "F:Fill     - F(Begin),(End),(Val)\n"
@@ -1182,7 +1155,7 @@ TBENTRY comtbl[] = {
  {'=', xdir},
  {'!', xsdread},
  {'?', xhelp},
- {'T', xtptest},
+
  {'\0', _error}
 };
 
@@ -1194,22 +1167,23 @@ void _main()
 {
  TBENTRY *p;
  char c;
- uint32_t lastirqcount = irqCount;
+
 
  xprintf("*** VexRiscv Monitor ***");
 
  for (;;) {
-  xprintf("\n%d(ms)>",irqCount-lastirqcount);
+
+  xprintf("\n>>>");
   getline();
   if (line[0] == '\0') {
-   lastirqcount = irqCount;
+
    continue;
   }
   lp = &line[1];
   for (p = comtbl;(c = p->mnemo) > 0; p++)
    if (c == line[0])
     break;
-  lastirqcount = irqCount;
+
   (*p->func)();
  }
 }
