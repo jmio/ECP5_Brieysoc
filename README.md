@@ -109,9 +109,9 @@ Replace the $readmem section of the generated ICESugarProMinimal.v with the foll
 
 ```
     initial begin
-        $readmemh("briey/progmem0.hex",ram_symbol0);
-        $readmemh("briey/progmem1.hex",ram_symbol1);
-        $readmemh("briey/progmem2.hex",ram_symbol2);
-        $readmemh("briey/progmem3.hex",ram_symbol3);
+        $readmemh("saxon/progmem0.hex",ram_symbol0);
+        $readmemh("saxon/progmem1.hex",ram_symbol1);
+        $readmemh("saxon/progmem2.hex",ram_symbol2);
+        $readmemh("saxon/progmem3.hex",ram_symbol3);
     end
 ```
