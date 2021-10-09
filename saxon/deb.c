@@ -12,7 +12,7 @@
 
 #include "xprintf.h"
 
-
+extern volatile uint32_t irqCount;
 
 #define	NULL ((void *)0)
 
@@ -38,7 +38,7 @@ void	putch(char c)
 		col = 0;
 	if (c >= ' ')
 		col++;
-	putcon(c);
+	uart_putc(c);
 }
 
 #define	getch()		getcon()
@@ -550,23 +550,22 @@ void	_main()
 {
 	TBENTRY	*p;
 	char	c;
-//	uint32_t lastirqcount = irqCount;
+	uint32_t lastirqcount = irqCount;
 
 	xprintf("*** VexRiscv Monitor ***");
 	
 	for (;;) {
-//		xprintf("\n%d(ms)>",irqCount-lastirqcount);
-		xprintf("\n>>>");
+		xprintf("\n%d(ms)>",irqCount-lastirqcount);
 		getline();
 		if (line[0] == '\0') {
-			//lastirqcount = irqCount;
+			lastirqcount = irqCount;
 			continue;
 		}
 		lp = &line[1];
 		for (p = comtbl;(c = p->mnemo) > 0;  p++)
 			if (c == line[0])
 				break;
-		//lastirqcount = irqCount;
+		lastirqcount = irqCount;
 		(*p->func)();
 	}
 }

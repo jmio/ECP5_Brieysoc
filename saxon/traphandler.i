@@ -7,10 +7,6 @@
 
 
 
-# 1 "murax.h" 1
-
-
-
 # 1 "c:\\gccriscv\\8.2.0\\riscv-none-embed\\include\\stdint.h" 1 3
 # 12 "c:\\gccriscv\\8.2.0\\riscv-none-embed\\include\\stdint.h" 3
 # 1 "c:\\gccriscv\\8.2.0\\riscv-none-embed\\include\\machine\\_default_types.h" 1 3
@@ -203,160 +199,176 @@ typedef __uint_least64_t uint_least64_t;
 # 81 "c:\\gccriscv\\8.2.0\\riscv-none-embed\\include\\stdint.h" 3
   typedef long long int int_fast64_t;
   typedef long long unsigned int uint_fast64_t;
-# 5 "murax.h" 2
-# 14 "murax.h"
-
-# 14 "murax.h"
-typedef struct
-{
-  volatile uint32_t CLEARS_TICKS;
-  volatile uint32_t LIMIT;
-  volatile uint32_t VALUE;
-} Timer_Reg;
-typedef struct
-{
-  volatile uint32_t LIMIT;
-} Prescaler_Reg;
-
-
-typedef struct
-{
-  volatile uint32_t PENDINGS;
-  volatile uint32_t MASKS;
-} InterruptCtrl_Reg;
-
-
-
-typedef struct
-{
-  volatile uint32_t INPUT;
-  volatile uint32_t OUTPUT;
-  volatile uint32_t OUTPUT_ENABLE;
-} Gpio_Reg;
-
-
-
-enum UartParity {NONE = 0,EVEN = 1,ODD = 2};
-enum UartStop {ONE = 0,TWO = 1};
-
-typedef struct
-{
-  volatile uint32_t DATA;
-  volatile uint32_t STATUS;
-  volatile uint32_t CLOCK_DIVIDER;
-  volatile uint32_t FRAME_CONFIG;
-} Uart_Reg;
-
-typedef struct {
- uint32_t dataLength;
- enum UartParity parity;
- enum UartStop stop;
- uint32_t clockDivider;
-} Uart_Config;
-
-uint32_t uart_writeAvailability(Uart_Reg *reg);
-uint32_t uart_readOccupancy(Uart_Reg *reg);
-void uart_write(Uart_Reg *reg, uint32_t data);
-int uart_read(Uart_Reg *reg);
-void uart_applyConfig(Uart_Reg *reg, Uart_Config *config);
-
-
-void uart_init();
-void uart_pollrx();
-void uart_polltx();
-int uart_getc();
-int uart_putc(char c);
-char uart_puts(unsigned char *s);
-void _uart_wait();
-
-
-
-
-
-
-
-typedef struct {
- uint32_t hSyncStart ,hSyncEnd;
- uint32_t hColorStart,hColorEnd;
-
- uint32_t vSyncStart ,vSyncEnd;
- uint32_t vColorStart,vColorEnd;
-}Vga_Timing;
-
-static const Vga_Timing vga_h800_v480_r60 = {
-    .hSyncStart = 61,
-    .hSyncEnd = 857 + 80,
-    .hColorStart = 119,
-    .hColorEnd = 839 + 80,
-    .vSyncStart = 5,
-    .vSyncEnd = 525,
-    .vColorStart = 35,
-    .vColorEnd = 515
-};
-
-static const Vga_Timing vga_h640_v480_r60 = {
-    .hSyncStart = 96,
-    .hSyncEnd = 800,
-    .hColorStart = 96 + 16,
-    .hColorEnd = 800 - 48,
-    .vSyncStart = 2,
-    .vSyncEnd = 525,
-    .vColorStart = 2 + 10,
-    .vColorEnd = 525 - 33
-};
-
-static const Vga_Timing vga_simRes = {
-    .hSyncStart = 8,
-    .hSyncEnd = 70,
-    .hColorStart = 16,
-    .hColorEnd = 64,
-    .vSyncStart = 2,
-    .vSyncEnd = 48,
-    .vColorStart = 8,
-    .vColorEnd = 40
-};
-
-static const Vga_Timing vga_simRes_h160_v120 = {
- .hSyncStart = 8,
- .hSyncEnd = 24+160,
- .hColorStart = 16,
- .hColorEnd = 16+160,
- .vSyncStart = 2,
- .vSyncEnd = 10+120,
- .vColorStart = 6,
- .vColorEnd = 6+120
-};
-
-typedef struct
-{
-  volatile uint32_t STATUS;
-  volatile uint32_t FRAME_SIZE;
-  volatile uint32_t FRAME_BASE;
-  volatile uint32_t DUMMY0[13];
-  volatile Vga_Timing TIMING;
-} Vga_Reg;
-
-uint32_t vga_isBusy(Vga_Reg *reg);
-void vga_run(Vga_Reg *reg);
-void vga_stop(Vga_Reg *reg);
-void vga_init();
-void vga_clear();
-# 160 "murax.h"
-void console_clear();
-void console_scroll();
-void console_putc(unsigned char c) ;
-void console_puts(unsigned char *c) ;
-# 180 "murax.h"
-extern int syscall0(int callno);
-
-
-extern void flushDataCache(uint32_t dummy);
-
-
-void putcon(char c) ;
-
-extern volatile uint32_t irqCount;
 # 6 "traphandler.c" 2
+# 1 "bsp/riscv.h" 1
+       
+# 136 "bsp/riscv.h"
+
+# 136 "bsp/riscv.h"
+asm(".set regnum_x0  ,  0");
+asm(".set regnum_x1  ,  1");
+asm(".set regnum_x2  ,  2");
+asm(".set regnum_x3  ,  3");
+asm(".set regnum_x4  ,  4");
+asm(".set regnum_x5  ,  5");
+asm(".set regnum_x6  ,  6");
+asm(".set regnum_x7  ,  7");
+asm(".set regnum_x8  ,  8");
+asm(".set regnum_x9  ,  9");
+asm(".set regnum_x10 , 10");
+asm(".set regnum_x11 , 11");
+asm(".set regnum_x12 , 12");
+asm(".set regnum_x13 , 13");
+asm(".set regnum_x14 , 14");
+asm(".set regnum_x15 , 15");
+asm(".set regnum_x16 , 16");
+asm(".set regnum_x17 , 17");
+asm(".set regnum_x18 , 18");
+asm(".set regnum_x19 , 19");
+asm(".set regnum_x20 , 20");
+asm(".set regnum_x21 , 21");
+asm(".set regnum_x22 , 22");
+asm(".set regnum_x23 , 23");
+asm(".set regnum_x24 , 24");
+asm(".set regnum_x25 , 25");
+asm(".set regnum_x26 , 26");
+asm(".set regnum_x27 , 27");
+asm(".set regnum_x28 , 28");
+asm(".set regnum_x29 , 29");
+asm(".set regnum_x30 , 30");
+asm(".set regnum_x31 , 31");
+
+asm(".set regnum_zero,  0");
+asm(".set regnum_ra  ,  1");
+asm(".set regnum_sp  ,  2");
+asm(".set regnum_gp  ,  3");
+asm(".set regnum_tp  ,  4");
+asm(".set regnum_t0  ,  5");
+asm(".set regnum_t1  ,  6");
+asm(".set regnum_t2  ,  7");
+asm(".set regnum_s0  ,  8");
+asm(".set regnum_s1  ,  9");
+asm(".set regnum_a0  , 10");
+asm(".set regnum_a1  , 11");
+asm(".set regnum_a2  , 12");
+asm(".set regnum_a3  , 13");
+asm(".set regnum_a4  , 14");
+asm(".set regnum_a5  , 15");
+asm(".set regnum_a6  , 16");
+asm(".set regnum_a7  , 17");
+asm(".set regnum_s2  , 18");
+asm(".set regnum_s3  , 19");
+asm(".set regnum_s4  , 20");
+asm(".set regnum_s5  , 21");
+asm(".set regnum_s6  , 22");
+asm(".set regnum_s7  , 23");
+asm(".set regnum_s8  , 24");
+asm(".set regnum_s9  , 25");
+asm(".set regnum_s10 , 26");
+asm(".set regnum_s11 , 27");
+asm(".set regnum_t3  , 28");
+asm(".set regnum_t4  , 29");
+asm(".set regnum_t5  , 30");
+asm(".set regnum_t6  , 31");
+
+asm(".set CUSTOM0  , 0x0B");
+asm(".set CUSTOM1  , 0x2B");
+# 7 "traphandler.c" 2
+# 1 "bsp/clint.h" 1
+       
+
+# 1 "bsp/type.h" 1
+
+
+
+
+
+typedef uint64_t u64;
+typedef int64_t s64;
+
+typedef uint32_t u32;
+typedef int32_t s32;
+
+typedef uint16_t u16;
+typedef int16_t s16;
+
+typedef uint8_t u8;
+typedef int8_t s8;
+# 4 "bsp/clint.h" 2
+# 1 "bsp/io.h" 1
+       
+
+
+# 1 "bsp/soc.h" 1
+# 5 "bsp/io.h" 2
+
+static inline u32 read_u32(u32 address){
+    return *((volatile u32*) address);
+}
+
+static inline void write_u32(u32 data, u32 address){
+    *((volatile u32*) address) = data;
+}
+
+static inline u16 read_u16(u32 address){
+    return *((volatile u16*) address);
+}
+
+static inline void write_u16(u16 data, u32 address){
+    *((volatile u16*) address) = data;
+}
+
+static inline u8 read_u8(u32 address){
+    return *((volatile u8*) address);
+}
+
+static inline void write_u8(u8 data, u32 address){
+    *((volatile u8*) address) = data;
+}
+
+static inline void write_u32_ad(u32 address, u32 data){
+    *((volatile u32*) address) = data;
+}
+# 5 "bsp/clint.h" 2
+
+
+
+
+
+static inline u32 clint_getTimeLow(u32 reg){ return read_u32(reg + 0xBFF8); }
+static inline u32 clint_getTimeHigh(u32 reg){ return read_u32(reg + 0xBFF8 +4); }
+
+
+static void clint_setCmp(u32 p, u64 cmp, u32 hart_id){
+    p += 0x4000 + hart_id*8;
+    write_u32(0xFFFFFFFF, p + 4);
+    write_u32(cmp, p + 0);
+    write_u32(cmp >> 32, p + 4);
+}
+
+static u64 clint_getTime(u32 p){
+    u32 lo, hi;
+
+
+    do {
+        hi = clint_getTimeHigh(p);
+        lo = clint_getTimeLow(p);
+    } while (clint_getTimeHigh(p) != hi);
+
+    return (((u64)hi) << 32) | lo;
+}
+
+
+static void clint_uDelay(u32 usec, u32 hz, u32 reg){
+    u32 mTimePerUsec = hz/1000000;
+    u32 limit = clint_getTimeLow(reg) + usec*mTimePerUsec;
+    while((int32_t)(limit-(clint_getTimeLow(reg))) >= 0);
+}
+# 8 "traphandler.c" 2
+
+
+
+
 # 1 "symtable.h" 1
 
 
@@ -375,7 +387,7 @@ void symt_init(SYMTABLE *s);
 void symt_clear();
 SYMTABLE* symt_get(char *n);
 SYMTABLE* symt_put(char *n,unsigned int a);
-# 7 "traphandler.c" 2
+# 13 "traphandler.c" 2
 # 1 "xprintf.h" 1
 # 19 "xprintf.h"
 extern void (*xfunc_out)(unsigned char);
@@ -387,8 +399,9 @@ void xprintf (const char* fmt, ...);
 void xsprintf (char* buff, const char* fmt, ...);
 void xfprintf (void (*func)(unsigned char), const char* fmt, ...);
 void put_dump (const void* buff, unsigned long addr, int len, int width);
-# 8 "traphandler.c" 2
+# 14 "traphandler.c" 2
 
+extern uint32_t sys_irqcause,sys_irqpc;
 extern uint32_t sys_mcause,sys_mepc;
 
 volatile uint32_t irqCount = 0;
@@ -401,49 +414,37 @@ volatile uint32_t trappc;
 volatile uint32_t irqcause;
 volatile uint32_t irqpc;
 
+uint64_t timerCmp;
+
+void initTimer(){
+    timerCmp = clint_getTime(0xf0b00000);
+    scheduleTimer();
+}
+
+void scheduleTimer(){
+    timerCmp += 50000;
+    clint_setCmp(0xf0b00000, timerCmp, 0);
+}
+
 
 void irqCallback(){
 
- irqcause = sys_mcause;
- irqpc = sys_mepc;
+ irqcause = sys_irqcause;
+ irqpc = sys_irqpc;
 
-
+    int32_t cause = irqcause & 0xF;
  {
+        switch(cause){
+        case 7:
 
-  uint32_t TPREADZ1;
-  uint32_t TPREADX;
-  uint32_t TPREADY;
-  uint32_t TPOK ;
-
-
-
-
-
-
-
-  TPREADZ1 = (*(volatile uint32_t *)0xF00500AC);
-  TPREADX = (*(volatile uint32_t *)0xF00500A4);
-  TPREADY = (*(volatile uint32_t *)0xF00500A8);
-  TPOK = 0;
-  if (TPREADZ1 > (120)) {
-   if ((TPREADX > (176)) && (TPREADX < (3904))) {
-    if ((TPREADY > (336)) && (TPREADY < (3940))) {
-     (*(volatile uint32_t *)0xF0050010) = (TPREADX - (176)) * 800.0 / ((3904) - (176));
-     (*(volatile uint32_t *)0xF0050018) = (TPREADY - (336)) * 480.0 / ((3940) - (336));
-     TPOK = 1;
-    }
-   }
-  }
-  (*(volatile uint32_t *)0xF0050020) = TPOK;
-
-  (*(volatile uint32_t *)0xF00500A0) = 0;
-
-
-  irqCount++ ;
-
-
-  timerPending = ((InterruptCtrl_Reg*)0xF0020010)->PENDINGS;
-  ((InterruptCtrl_Reg*)0xF0020010)->PENDINGS = timerPending;
+   irqCount++ ;
+   scheduleTimer();
+   break;
+        case 11:
+   break;
+        default:
+   break;
+        }
  }
 }
 

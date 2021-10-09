@@ -2,10 +2,17 @@
    traphandler.c
 */
 
-#include "murax.h"
+#include <stdint.h>
+#include "bsp/riscv.h"
+#include "bsp/clint.h"
+
+// System Call Entry
+#define MY_SYSCALL_GETSYMPTR (4000) // Only Supported
+
 #include "symtable.h"
 #include "xprintf.h"
 
+extern uint32_t sys_irqcause,sys_irqpc;
 extern uint32_t sys_mcause,sys_mepc;
 
 volatile uint32_t irqCount = 0;
@@ -18,49 +25,37 @@ volatile uint32_t trappc;
 volatile uint32_t irqcause;
 volatile uint32_t irqpc;
 
+uint64_t timerCmp; //Store the next interrupt time
+
+void initTimer(){
+    timerCmp = clint_getTime(SYSTEM_CLINT_CTRL);
+    scheduleTimer();
+}
+
+void scheduleTimer(){
+    timerCmp += 50000; // 1ms
+    clint_setCmp(SYSTEM_CLINT_CTRL, timerCmp, 0);
+}
+
 /* Irq Handler */
 void irqCallback(){
 	//
-	irqcause  = sys_mcause;
-	irqpc     = sys_mepc;
+	irqcause  = sys_irqcause;
+	irqpc     = sys_irqpc;
 	//
-	// Timer IRQ
+    int32_t cause     = irqcause & 0xF;	
 	{
-		// TP SHOW
-		uint32_t TPREADZ1;
-		uint32_t TPREADX;
-		uint32_t TPREADY;
-		uint32_t TPOK ;
-
-#define TPXS (176)
-#define TPXE (3904)
-#define TPYS (336)
-#define TPYE (3940)
-#define SENSE (120)
-
-		TPREADZ1 = NS2009_DATAZ1;
-		TPREADX  = NS2009_DATAX;
-		TPREADY  = NS2009_DATAY;
-		TPOK     = 0;
-		if (TPREADZ1 > SENSE) {
-			if ((TPREADX > TPXS) && (TPREADX < TPXE)) {
-				if ((TPREADY > TPYS) && (TPREADY < TPYE)) {
-					TPX      = (TPREADX - TPXS) * 800.0 / (TPXE - TPXS);
-					TPY      = (TPREADY - TPYS) * 480.0 / (TPYE - TPYS);
-					TPOK     = 1;
-				}
-			}
-		}
-		TPEN = TPOK;
-		// TP NEXT TRIGGER
-		NS2009_STATE = 0;
-
-		// Timer Int Count
-		irqCount++ ;
-		
-		// END Timer Int
-		timerPending = TIMER_INTERRUPT->PENDINGS;
-		TIMER_INTERRUPT->PENDINGS = timerPending;
+        switch(cause){
+        case CAUSE_MACHINE_TIMER:
+			// Timer Int Count
+			irqCount++ ;
+			scheduleTimer();
+			break;
+        case CAUSE_MACHINE_EXTERNAL:
+			break;
+        default:
+			break;
+        }
 	}
 }
 

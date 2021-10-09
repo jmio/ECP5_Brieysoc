@@ -778,6 +778,80 @@ extern void _mstats_r (struct _reent *, char *);
 extern void cfree (void *);
 # 3 "main.c" 2
 
+# 1 "bsp/riscv.h" 1
+       
+# 136 "bsp/riscv.h"
+
+# 136 "bsp/riscv.h"
+asm(".set regnum_x0  ,  0");
+asm(".set regnum_x1  ,  1");
+asm(".set regnum_x2  ,  2");
+asm(".set regnum_x3  ,  3");
+asm(".set regnum_x4  ,  4");
+asm(".set regnum_x5  ,  5");
+asm(".set regnum_x6  ,  6");
+asm(".set regnum_x7  ,  7");
+asm(".set regnum_x8  ,  8");
+asm(".set regnum_x9  ,  9");
+asm(".set regnum_x10 , 10");
+asm(".set regnum_x11 , 11");
+asm(".set regnum_x12 , 12");
+asm(".set regnum_x13 , 13");
+asm(".set regnum_x14 , 14");
+asm(".set regnum_x15 , 15");
+asm(".set regnum_x16 , 16");
+asm(".set regnum_x17 , 17");
+asm(".set regnum_x18 , 18");
+asm(".set regnum_x19 , 19");
+asm(".set regnum_x20 , 20");
+asm(".set regnum_x21 , 21");
+asm(".set regnum_x22 , 22");
+asm(".set regnum_x23 , 23");
+asm(".set regnum_x24 , 24");
+asm(".set regnum_x25 , 25");
+asm(".set regnum_x26 , 26");
+asm(".set regnum_x27 , 27");
+asm(".set regnum_x28 , 28");
+asm(".set regnum_x29 , 29");
+asm(".set regnum_x30 , 30");
+asm(".set regnum_x31 , 31");
+
+asm(".set regnum_zero,  0");
+asm(".set regnum_ra  ,  1");
+asm(".set regnum_sp  ,  2");
+asm(".set regnum_gp  ,  3");
+asm(".set regnum_tp  ,  4");
+asm(".set regnum_t0  ,  5");
+asm(".set regnum_t1  ,  6");
+asm(".set regnum_t2  ,  7");
+asm(".set regnum_s0  ,  8");
+asm(".set regnum_s1  ,  9");
+asm(".set regnum_a0  , 10");
+asm(".set regnum_a1  , 11");
+asm(".set regnum_a2  , 12");
+asm(".set regnum_a3  , 13");
+asm(".set regnum_a4  , 14");
+asm(".set regnum_a5  , 15");
+asm(".set regnum_a6  , 16");
+asm(".set regnum_a7  , 17");
+asm(".set regnum_s2  , 18");
+asm(".set regnum_s3  , 19");
+asm(".set regnum_s4  , 20");
+asm(".set regnum_s5  , 21");
+asm(".set regnum_s6  , 22");
+asm(".set regnum_s7  , 23");
+asm(".set regnum_s8  , 24");
+asm(".set regnum_s9  , 25");
+asm(".set regnum_s10 , 26");
+asm(".set regnum_s11 , 27");
+asm(".set regnum_t3  , 28");
+asm(".set regnum_t4  , 29");
+asm(".set regnum_t5  , 30");
+asm(".set regnum_t6  , 31");
+
+asm(".set CUSTOM0  , 0x0B");
+asm(".set CUSTOM1  , 0x2B");
+# 5 "main.c" 2
 # 1 "bsp/bsp.h" 1
        
 
@@ -792,8 +866,6 @@ extern void cfree (void *);
 
 
 
-
-# 6 "bsp/type.h"
 typedef uint64_t u64;
 typedef int64_t s64;
 
@@ -923,7 +995,7 @@ static void clint_uDelay(u32 usec, u32 hz, u32 reg){
     while((int32_t)(limit-(clint_getTimeLow(reg))) >= 0);
 }
 # 6 "bsp/bsp.h" 2
-# 5 "main.c" 2
+# 6 "main.c" 2
 # 1 "bsp/gpio.h" 1
        
 # 15 "bsp/gpio.h"
@@ -937,8 +1009,44 @@ static inline void gpio_setInterruptRiseEnable(u32 reg, u32 value){ write_u32(va
 static inline void gpio_setInterruptFallEnable(u32 reg, u32 value){ write_u32(value, reg + 0x24); }
 static inline void gpio_setInterruptHighEnable(u32 reg, u32 value){ write_u32(value, reg + 0x28); }
 static inline void gpio_setInterruptLowEnable(u32 reg, u32 value){ write_u32(value, reg + 0x2c); }
-# 6 "main.c" 2
+# 7 "main.c" 2
 
+# 1 "bsp/machineTimer.h" 1
+
+
+
+
+
+
+static inline u32 machineTimer_getTimeLow(u32 reg){ return read_u32(reg + 0x00); }
+static inline u32 machineTimer_getTimeHigh(u32 reg){ return read_u32(reg + 0x04); }
+
+
+static void machineTimer_setCmp(u32 p, u64 cmp){
+    write_u32(0xFFFFFFFF, p + 0xC);
+    write_u32(cmp, p + 0x8);
+    write_u32(cmp >> 32, p + 0xC);
+}
+
+static u64 machineTimer_getTime(u32 p){
+    u32 lo, hi;
+
+
+    do {
+        hi = machineTimer_getTimeHigh(p);
+        lo = machineTimer_getTimeLow(p);
+    } while (read_u32(p + 0x4) != hi);
+
+    return (((u64)hi) << 32) | lo;
+}
+
+
+static void machineTimer_uDelay(u32 usec, u32 hz, u32 reg){
+    u32 mTimePerUsec = hz/1000000;
+    u32 limit = machineTimer_getTimeLow(reg) + usec*mTimePerUsec;
+    while((int32_t)(limit-(machineTimer_getTimeLow(reg))) >= 0);
+}
+# 9 "main.c" 2
 
 # 1 "xprintf.h" 1
 # 19 "xprintf.h"
@@ -951,7 +1059,7 @@ void xprintf (const char* fmt, ...);
 void xsprintf (char* buff, const char* fmt, ...);
 void xfprintf (void (*func)(unsigned char), const char* fmt, ...);
 void put_dump (const void* buff, unsigned long addr, int len, int width);
-# 9 "main.c" 2
+# 11 "main.c" 2
 # 1 "symtable.h" 1
 
 
@@ -970,7 +1078,7 @@ void symt_init(SYMTABLE *s);
 void symt_clear();
 SYMTABLE* symt_get(char *n);
 SYMTABLE* symt_put(char *n,unsigned int a);
-# 10 "main.c" 2
+# 12 "main.c" 2
 # 1 "bsp/sdram.h" 1
 # 65 "bsp/sdram.h"
 typedef struct
@@ -1289,7 +1397,10 @@ static void sdram_phy_s7(u32 core, u32 phy, u32 mem){
         if(!sdram_phy_s7_scan(core,phy,mem)) break;
     }
 }
-# 11 "main.c" 2
+# 13 "main.c" 2
+
+
+
 
 
 
@@ -1304,29 +1415,104 @@ extern uint32_t sys_irqcause,sys_irqpc;
 
 extern void _main();
 
-
-void putcon(char i)
+int uart_getc()
 {
- uart_write(0xf0010000,i);
+ return uart_read(0xf0010000);
 }
+
+int uart_putc(char c)
+{
+ while(uart_writeAvailability(0xf0010000) == 0);
+ uart_write(0xf0010000,c);
+ return 0;
+}
+
+
+char uart_puts(unsigned char *s)
+{
+  unsigned char t;
+  while((t = *s) != 0) {
+    uart_putc(t);
+    s++ ;
+  }
+  return 0 ;
+}
+
+void _uart_wait()
+{
+ while(uart_writeAvailability(0xf0010000) == 0);
+}
+
+
+int getcon_nowait(void)
+{
+ if (uart_readOccupancy(0xf0010000)) {
+  int i = uart_read(0xf0010000) & 0xFF;
+  return i;
+ } else {
+  return -1 ;
+ }
+}
+
+
+void dummy()
+{
+}
+
+int returnerr(void)
+{
+ return -1;
+}
+
+void initTimer();
 
 int main()
 {
  int i;
 
-
-
-
-
-
-
     {};
+
+ initTimer();
+    ({ unsigned long __v = (unsigned long)((1 << 7)); __asm__ __volatile__ ("csrs " "mie" ", %0" : : "rK" (__v)); });
+    ({ unsigned long __v = (unsigned long)(0x00001800 | 0x00000008); __asm__ __volatile__ ("csrw " "mstatus" ", %0" : : "rK" (__v)); });
 
     gpio_setOutputEnable(0xf0000000, 0x01);
     gpio_setOutput(0xf0000000, 0x00000000);
 
- uart_writeStr(0xf0010000, "*** SaxonSoc Booted...\n");
-# 57 "main.c"
+
+ xfunc_out = (void(*)(unsigned char))(uart_putc);
+
+ xprintf("*** SaxonSoc Booted...\n");
+
+ xprintf("sys_mepc = %08X\n",sys_mepc);
+ xprintf("sys_mcause = %08X\n",sys_mcause);
+ xprintf("sys_uepc = %08X\n",sys_uepc);
+ xprintf("sys_ucause = %08X\n",sys_ucause);
+
+
+ symt_init(_SYMTABLE);
+ symt_clear();
+
+ symt_put("malloc",(uint32_t)&malloc);
+ symt_put("xprintf",(uint32_t)&xprintf);
+ symt_put("console_clear",(uint32_t)&dummy);
+ symt_put("console_scroll",(uint32_t)&dummy);
+ symt_put("console_putc",(uint32_t)&dummy);
+ symt_put("console_puts",(uint32_t)&dummy);
+ symt_put("pollkey",(uint32_t)&dummy);
+ symt_put("key_getc",(uint32_t)&returnerr);
+ symt_put("pollrx",(uint32_t)&dummy);
+ symt_put("polltx",(uint32_t)&dummy);
+ symt_put("uart_init",(uint32_t)&dummy);
+ symt_put("uart_getc",(uint32_t)&getcon_nowait);
+ symt_put("uart_putc",(uint32_t)&uart_putc);
+ symt_put("uart_puts",(uint32_t)&uart_puts);
+ symt_put("_uart_wait",(uint32_t)&_uart_wait);
+
+
+ int res = syscall0((4000));
+ xprintf("SYSCALL(%d) = %08X\n",(4000),res);
+# 137 "main.c"
     sdram_init(
         0xf0100000,
         3,
@@ -1343,9 +1529,7 @@ int main()
         1,
         2
     );
-# 94 "main.c"
- xfunc_out = (void(*)(unsigned char))(putcon);
-# 126 "main.c"
+# 174 "main.c"
  _main();
-# 188 "main.c"
+# 236 "main.c"
 }

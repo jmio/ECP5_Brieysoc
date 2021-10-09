@@ -1,13 +1,18 @@
 #include <stdint.h>
 #include <malloc.h>
 
+#include "bsp/riscv.h"
 #include "bsp/bsp.h"
 #include "bsp/gpio.h"
 #include "bsp/uart.h"
+#include "bsp/machineTimer.h"
 
 #include "xprintf.h"
 #include "symtable.h"
 #include "bsp/sdram.h"
+
+// System Call Entry
+#define MY_SYSCALL_GETSYMPTR (4000) // Only Supported
 
 #define LOOP_UDELAY 100000
 
@@ -22,28 +27,103 @@ extern uint32_t sys_irqcause,sys_irqpc;
 
 extern void _main();
 
-/// put char
-void putcon(char i)
+int uart_getc()
 {
-	uart_write(BSP_UART_TERMINAL,i);
+	return uart_read(BSP_UART_TERMINAL);
 }
+
+int uart_putc(char c)
+{
+	while(uart_writeAvailability(BSP_UART_TERMINAL) == 0);
+	uart_write(BSP_UART_TERMINAL,c);
+	return 0;
+}
+
+/* put strings to send buffer */
+char uart_puts(unsigned char *s)
+{
+  unsigned char t;
+  while((t = *s) != 0) {
+    uart_putc(t);
+    s++ ;
+  }
+  return 0 ; /* Normal End */
+}
+
+void _uart_wait()
+{
+	while(uart_writeAvailability(BSP_UART_TERMINAL) == 0);
+}
+
+
+int getcon_nowait(void)
+{
+	if (uart_readOccupancy(BSP_UART_TERMINAL)) {
+		int i = uart_read(BSP_UART_TERMINAL) & 0xFF;
+		return i;
+	} else {
+		return -1 ;
+	}
+}	
+
+
+void dummy() 
+{ 
+}
+
+int returnerr(void)
+{
+	return -1;
+}
+
+void initTimer();
 
 int main() 
 {
 	int i;
-	// UART SETTING
-	//uart_init();
-
-	// GPIO SETTING
-    //GPIO_A->OUTPUT_ENABLE = 0x0000000F;
-	//GPIO_A->OUTPUT = 0x0000000F;
 
     bsp_init();
+
+	initTimer();
+    csr_set(mie, MIE_MTIE); //Enable machine timer
+    csr_write(mstatus, MSTATUS_MPP | MSTATUS_MIE);
 
     gpio_setOutputEnable(BSP_LED_GPIO, BSP_LED_MASK);
     gpio_setOutput(BSP_LED_GPIO, 0x00000000);
 
-	uart_writeStr(BSP_UART_TERMINAL, "*** SaxonSoc Booted...\n");
+	// xprintf setup
+	xdev_out(uart_putc);
+
+	xprintf("*** SaxonSoc Booted...\n");
+	
+	xprintf("sys_mepc = %08X\n",sys_mepc);
+	xprintf("sys_mcause = %08X\n",sys_mcause);
+	xprintf("sys_uepc = %08X\n",sys_uepc);
+	xprintf("sys_ucause = %08X\n",sys_ucause);
+
+	// symtable setup
+	symt_init(_SYMTABLE);
+	symt_clear();
+
+	symt_put("malloc",(uint32_t)&malloc);
+	symt_put("xprintf",(uint32_t)&xprintf);		
+	symt_put("console_clear",(uint32_t)&dummy);
+	symt_put("console_scroll",(uint32_t)&dummy);
+	symt_put("console_putc",(uint32_t)&dummy);
+	symt_put("console_puts",(uint32_t)&dummy);
+	symt_put("pollkey",(uint32_t)&dummy); // dummy
+	symt_put("key_getc",(uint32_t)&returnerr); // dummy
+	symt_put("pollrx",(uint32_t)&dummy);
+	symt_put("polltx",(uint32_t)&dummy);
+	symt_put("uart_init",(uint32_t)&dummy);
+	symt_put("uart_getc",(uint32_t)&getcon_nowait);
+	symt_put("uart_putc",(uint32_t)&uart_putc);
+	symt_put("uart_puts",(uint32_t)&uart_puts);
+	symt_put("_uart_wait",(uint32_t)&_uart_wait);
+
+	// SYSCALL TEST
+	int res = syscall0(MY_SYSCALL_GETSYMPTR);
+	xprintf("SYSCALL(%d) = %08X\n",MY_SYSCALL_GETSYMPTR,res);
 
 #define SDRAM_CTRL SYSTEM_SDRAM_A_CTRL
 #define SDRAM_PHY  SDRAM_DOMAIN_PHY_A_CTRL
@@ -89,38 +169,6 @@ int main()
 
 	// CLEAR TEXT SCREEN
 	//console_clear();
-
-	// xprintf setup
-	xdev_out(putcon);
-
-	// symtable setup
-	// symt_init(_SYMTABLE);
-	// symt_clear();
-
-	// symt_put("malloc",(uint32_t)&malloc);
-	// symt_put("xprintf",(uint32_t)&xprintf);		
-	// symt_put("console_clear",(uint32_t)&console_clear);
-	// symt_put("console_scroll",(uint32_t)&console_scroll);
-	// symt_put("console_putc",(uint32_t)&console_putc);
-	// symt_put("console_puts",(uint32_t)&console_puts);
-	// symt_put("pollkey",(uint32_t)&uart_pollrx); // dummy
-	// symt_put("key_getc",(uint32_t)&returnerr); // dummy
-	// symt_put("pollrx",(uint32_t)&uart_pollrx);
-	// symt_put("polltx",(uint32_t)&uart_polltx);
-	// symt_put("uart_init",(uint32_t)&uart_init);
-	// symt_put("uart_getc",(uint32_t)&uart_getc);
-	// symt_put("uart_putc",(uint32_t)&uart_putc);
-	// symt_put("uart_puts",(uint32_t)&uart_puts);
-	// symt_put("_uart_wait",(uint32_t)&_uart_wait);
-
-	// xprintf("sys_mepc = %08X\n",sys_mepc);
-	// xprintf("sys_mcause = %08X\n",sys_mcause);
-	// xprintf("sys_uepc = %08X\n",sys_uepc);
-	// xprintf("sys_ucause = %08X\n",sys_ucause);
-
-	// // SYSCALL TEST
-	// int res = syscall0(MY_SYSCALL_GETSYMPTR);
-	// xprintf("SYSCALL(%d) = %08X\n",MY_SYSCALL_GETSYMPTR,res);
 
 	// // JUMP TO DEBUG MONITOR
 	_main();

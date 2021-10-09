@@ -11,8 +11,7 @@ OUTPUT_ARCH(riscv)
 ENTRY(crtStart)
 
 MEMORY {
-  RAM  (wrx) /*(RX)*/ : ORIGIN = 0x80000000, LENGTH = 32K
-  RAM2 (wrx) /*(RX)*/ : ORIGIN = 0x80008000, LENGTH = 16K
+  RAM  (wrx) /*(RX)*/ : ORIGIN = 0x80000000, LENGTH = 64K
   TVRAM (wrx) /*(RX)*/ : ORIGIN = 0xF0040000, LENGTH = 16K
   FRAMEBUF (wrx) : ORIGIN = 0x40000000, LENGTH = 1M
   HEAPRAM (wrx) : ORIGIN = 0x40100000, LENGTH = 1M
@@ -63,7 +62,7 @@ SECTIONS {
     *(COMMON)
 		. = ALIGN(4);
 		_bss_end = .;
-  } > RAM2
+  } > RAM
 
 
   .rodata         :
@@ -77,7 +76,7 @@ SECTIONS {
       . = ALIGN(4);
       *(.noinit .noinit.*)
       . = ALIGN(4);
-  } > RAM2
+  } > RAM
 
   .tvram (NOLOAD):
   {
@@ -124,6 +123,6 @@ SECTIONS {
     . = . + _stack_size;
     . = ALIGN(16);
     PROVIDE (_stack_start = .);
-  } > RAM2
+  } > RAM
 
 }

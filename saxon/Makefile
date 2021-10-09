@@ -9,7 +9,7 @@ MEM_WORDS       = 8192  #1024
 MEM_BYTES       = 32768 #4096
 
 MARCH           = rv32ic
-CPU_FREQ_MHZ    = 25
+CPU_FREQ_MHZ    = 50
 CC_OPT          = -O0
 GDBFLAGS        = -g -ggdb
 #GDBFLAGS        =

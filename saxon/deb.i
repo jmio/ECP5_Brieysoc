@@ -659,7 +659,7 @@ void xfprintf (void (*func)(unsigned char), const char* fmt, ...);
 void put_dump (const void* buff, unsigned long addr, int len, int width);
 # 14 "deb.c" 2
 
-
+extern volatile uint32_t irqCount;
 
 
 
@@ -685,7 +685,7 @@ void putch(char c)
   col = 0;
  if (c >= ' ')
   col++;
- putcon(c);
+ uart_putc(c);
 }
 
 
@@ -1167,23 +1167,22 @@ void _main()
 {
  TBENTRY *p;
  char c;
-
+ uint32_t lastirqcount = irqCount;
 
  xprintf("*** VexRiscv Monitor ***");
 
  for (;;) {
-
-  xprintf("\n>>>");
+  xprintf("\n%d(ms)>",irqCount-lastirqcount);
   getline();
   if (line[0] == '\0') {
-
+   lastirqcount = irqCount;
    continue;
   }
   lp = &line[1];
   for (p = comtbl;(c = p->mnemo) > 0; p++)
    if (c == line[0])
     break;
-
+  lastirqcount = irqCount;
   (*p->func)();
  }
 }
