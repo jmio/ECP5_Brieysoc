@@ -1398,6 +1398,241 @@ static void sdram_phy_s7(u32 core, u32 phy, u32 mem){
     }
 }
 # 13 "main.c" 2
+# 1 "bsp/vga.h" 1
+       
+
+
+
+
+typedef struct {
+ u32 hSyncStart ,hSyncEnd;
+ u32 hColorStart,hColorEnd;
+
+ u32 vSyncStart ,vSyncEnd;
+ u32 vColorStart,vColorEnd;
+
+ u32 polarities;
+}Vga_Timing;
+
+static const Vga_Timing vga_h640_v480_r60 = {
+    .hSyncStart = 96,
+    .hSyncEnd = 800,
+    .hColorStart = 96 + 16,
+    .hColorEnd = 800 - 48,
+    .vSyncStart = 2,
+    .vSyncEnd = 525,
+    .vColorStart = 2 + 10,
+    .vColorEnd = 525 - 33,
+    .polarities = 0,
+};
+
+static const Vga_Timing vga_h800_v600_r72 = {
+    .hSyncStart = 120,
+    .hSyncEnd = 1040,
+    .hColorStart = 120 + 56,
+    .hColorEnd = 1040 - 64,
+    .vSyncStart = 6,
+    .vSyncEnd = 666,
+    .vColorStart = 6 + 37,
+    .vColorEnd = 666 - 23,
+    .polarities = 3,
+};
+
+static const Vga_Timing vga_h800_v600_r60 = {
+    .hSyncStart = 127,
+    .hSyncEnd = 1055,
+    .hColorStart = 215,
+    .hColorEnd = 1015,
+    .vSyncStart = 3,
+    .vSyncEnd = 627,
+    .vColorStart = 26,
+    .vColorEnd = 626,
+    .polarities = 3,
+};
+
+static const Vga_Timing vga_h1024_v768_r60 = {
+    .hSyncStart = 135,
+    .hSyncEnd = 1343,
+    .hColorStart = 295,
+    .hColorEnd = 1319,
+    .vSyncStart = 5,
+    .vSyncEnd = 805,
+    .vColorStart = 34,
+    .vColorEnd = 802,
+    .polarities = 0
+};
+
+static const Vga_Timing vga_h1920_v1080_r60 = {
+    .hSyncStart = 43,
+    .hSyncEnd = 2199,
+    .hColorStart = 191,
+    .hColorEnd = 2111,
+    .vSyncStart = 4,
+    .vSyncEnd = 1124,
+    .vColorStart = 40,
+    .vColorEnd = 1120,
+    .polarities = 3,
+};
+
+
+static const Vga_Timing vga_simRes = {
+    .hSyncStart = 8,
+    .hSyncEnd = 70,
+    .hColorStart = 16,
+    .hColorEnd = 64,
+    .vSyncStart = 2,
+    .vSyncEnd = 48,
+    .vColorStart = 8,
+    .vColorEnd = 40,
+    .polarities = 0,
+};
+
+static const Vga_Timing vga_simRes_h160_v120 = {
+ .hSyncStart = 8,
+ .hSyncEnd = 24+160,
+ .hColorStart = 16,
+ .hColorEnd = 16+160,
+ .vSyncStart = 2,
+ .vSyncEnd = 10+120,
+ .vColorStart = 6,
+ .vColorEnd = 6+120,
+    .polarities = 0,
+};
+
+static void vga_start(u32 base){
+    write_u32(1 , base);
+}
+static void vga_stop(u32 base){
+    write_u32(0 , base);
+}
+
+static void vga_set_timing(u32 base, Vga_Timing t){
+    write_u32(t.hSyncStart , base + 0x40);
+    write_u32(t.hSyncEnd , base + 0x44);
+    write_u32(t.hColorStart , base + 0x48);
+    write_u32(t.hColorEnd , base + 0x4C);
+    write_u32(t.vSyncStart , base + 0x50);
+    write_u32(t.vSyncEnd , base + 0x54);
+    write_u32(t.vColorStart , base + 0x58);
+    write_u32(t.vColorEnd , base + 0x5C);
+    write_u32(t.polarities , base + 0x60);
+}
+# 14 "main.c" 2
+# 1 "bsp/dmasg.h" 1
+       
+# 66 "bsp/dmasg.h"
+struct dmasg_descriptor {
+
+
+   u32 status;
+
+   u32 control;
+
+   u64 from;
+
+   u64 to;
+
+   u64 next;
+};
+
+
+static void dmasg_input_memory(u32 base, u32 channel, u32 address, u32 byte_per_burst){
+    u32 ca = (base + channel*0x80);
+    write_u32(address, ca + 0x00);
+    write_u32((1 << 12) | (byte_per_burst-1 & 0xFFF), ca + 0x0C);
+}
+
+
+static void dmasg_output_memory(u32 base, u32 channel, u32 address, u32 byte_per_burst){
+    u32 ca = (base + channel*0x80);
+    write_u32(address, ca + 0x10);
+    write_u32((1 << 12) | (byte_per_burst-1 & 0xFFF), ca + 0x1C);
+}
+
+
+
+
+static void dmasg_input_stream(u32 base, u32 channel, u32 port, u32 wait_on_packet, u32 completion_on_packet){
+    u32 ca = (base + channel*0x80);
+    write_u32(port << 0, ca + 0x08);
+    write_u32(0 | (completion_on_packet ? (1 << 13) : 0) | (wait_on_packet ? (1 << 14) : 0), ca + 0x0C);
+}
+
+
+
+
+
+static void dmasg_output_stream(u32 base, u32 channel, u32 port, u32 source, u32 sink, u32 last){
+    u32 ca = (base + channel*0x80);
+    write_u32(port << 0 | source << 8 | sink << 16, ca + 0x18);
+    write_u32(0 | (last ? (1 << 13) : 0), ca + 0x1C);
+}
+
+
+
+
+
+static void dmasg_direct_start(u32 base, u32 channel, u32 bytes, u32 self_restart){
+    u32 ca = (base + channel*0x80);
+    write_u32(bytes-1, ca + 0x20);
+    write_u32((1 << 0) | (self_restart ? (1 << 1) : 0), ca + 0x2C);
+}
+
+
+
+
+static void dmasg_linked_list_start(u32 base, u32 channel, u32 head){
+    u32 ca = (base + channel*0x80);
+    write_u32((u32) head, ca + 0x70);
+    write_u32((1 << 4), ca + 0x2C);
+}
+
+
+
+static void dmasg_stop(u32 base, u32 channel){
+    u32 ca = (base + channel*0x80);
+    write_u32((1 << 2), ca + 0x2C);
+}
+
+
+
+
+static void dmasg_interrupt_config(u32 base, u32 channel, u32 mask){
+    u32 ca = (base + channel*0x80);
+    write_u32(0xFFFFFFFF, ca+0x54);
+    write_u32(mask, ca+0x50);
+}
+
+
+static void dmasg_interrupt_pending_clear(u32 base, u32 channel, u32 mask){
+    u32 ca = (base + channel*0x80);
+    write_u32(mask, ca+0x54);
+}
+
+
+static u32 dmasg_busy(u32 base, u32 channel){
+    u32 ca = (base + channel*0x80);
+    return read_u32(ca + 0x2C) & (1 << 0);
+}
+
+
+
+static void dmasg_buffer(u32 base, u32 channel, u32 fifo_base, u32 fifo_bytes){
+    u32 ca = (base + channel*0x80);
+    write_u32(fifo_base << 0 | fifo_bytes-1 << 16, ca+0x40);
+}
+
+static void dmasg_priority(u32 base, u32 channel, u32 priority){
+    u32 ca = (base + channel*0x80);
+    write_u32(priority, ca+0x44);
+}
+
+
+static u32 dmasg_progress_bytes(u32 base, u32 channel){
+    u32 ca = (base + channel*0x80);
+    return read_u32(ca + 0x60);
+}
+# 15 "main.c" 2
 
 
 
@@ -1480,6 +1715,15 @@ int main()
     gpio_setOutput(0xf0000000, 0x00000000);
 
 
+ vga_set_timing(0xf0090000,vga_h800_v600_r60);
+ vga_start(0xf0090000);
+
+
+ dmasg_input_memory(0xf0080000,0,(void *)0x40000000,0);
+ dmasg_output_stream(0xf0080000, 0, 0, 0, 0, 0);
+ dmasg_direct_start(0xf0080000,0,800*600*2,1);
+
+
  xfunc_out = (void(*)(unsigned char))(uart_putc);
 
  xprintf("*** SaxonSoc Booted...\n");
@@ -1512,7 +1756,7 @@ int main()
 
  int res = syscall0((4000));
  xprintf("SYSCALL(%d) = %08X\n",(4000),res);
-# 137 "main.c"
+# 148 "main.c"
     sdram_init(
         0xf0100000,
         3,
@@ -1529,7 +1773,7 @@ int main()
         1,
         2
     );
-# 174 "main.c"
+# 185 "main.c"
  _main();
-# 236 "main.c"
+# 247 "main.c"
 }

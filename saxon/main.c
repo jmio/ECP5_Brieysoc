@@ -10,6 +10,8 @@
 #include "xprintf.h"
 #include "symtable.h"
 #include "bsp/sdram.h"
+#include "bsp/vga.h"
+#include "bsp/dmasg.h"
 
 // System Call Entry
 #define MY_SYSCALL_GETSYMPTR (4000) // Only Supported
@@ -90,6 +92,15 @@ int main()
 
     gpio_setOutputEnable(BSP_LED_GPIO, BSP_LED_MASK);
     gpio_setOutput(BSP_LED_GPIO, 0x00000000);
+
+	// VGA OUTPUT
+	vga_set_timing(SYSTEM_VGA_CTRL,vga_h800_v600_r60);
+	vga_start(SYSTEM_VGA_CTRL);
+
+	// DMA SETUP
+	dmasg_input_memory(SYSTEM_DMA_CTRL,0,(void *)0x40000000,0);
+	dmasg_output_stream(SYSTEM_DMA_CTRL, 0, 0, 0, 0, 0);
+	dmasg_direct_start(SYSTEM_DMA_CTRL,0,800*600*2,1);
 
 	// xprintf setup
 	xdev_out(uart_putc);

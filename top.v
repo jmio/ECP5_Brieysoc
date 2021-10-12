@@ -21,10 +21,9 @@ module top(
 	output wire [1:0] sdram_ba,
 	output wire [1:0] sdram_dm,
 
-	output wire gpdi_clk_p,
-	output wire gpdi_data0_p,
-	output wire gpdi_data1_p,
-	output wire gpdi_data2_p,
+
+  output wire [3:0] gpdi_dp, 
+  output wire [3:0] gpdi_dn, 
 
  //  //inout wire sd_d2,
  //  inout wire sd_d3_cs,
@@ -66,12 +65,8 @@ always @(posedge clk25) begin
   lcdclk <= !lcdclk;
 end
 
-// HDMI (NOT USED)
+
 assign  LCD_CLK     = lcdclk ;
-assign	gpdi_clk_p = 1'b0;
-assign	gpdi_data0_p = 1'b0;
-assign	gpdi_data1_p = 1'b0;
-assign	gpdi_data2_p = 1'b0;
 
 // wire[31:0] io_gpioA_read;
 //wire[31:0] io_gpioA_write;
@@ -105,6 +100,9 @@ ICESugarProMinimal u_saxon (
   .system_phyA_sdram_RASn(sdram_ras_n),
   .system_phyA_sdram_WEn(sdram_we_n),
   .system_phyA_sdram_DQ(sdram_dq),
+
+  .system_hdmiPhy_gpdi_dp(gpdi_dp),
+  .system_hdmiPhy_gpdi_dn(gpdi_dn),
 
   .system_uartA_uart_txd(serial_tx),
   .system_uartA_uart_rxd(serial_rx),

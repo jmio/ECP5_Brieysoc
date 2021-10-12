@@ -138,18 +138,25 @@ IOBUF PORT "sdram_dm[0]" SLEWRATE=FAST;
 LOCATE COMP "sdram_dm[1]" SITE "T15";
 IOBUF PORT "sdram_dm[1]" IO_TYPE=LVCMOS33;
 IOBUF PORT "sdram_dm[1]" SLEWRATE=FAST;
-LOCATE COMP "gpdi_clk_p" SITE "E2";
-IOBUF PORT "gpdi_clk_p" IO_TYPE=LVCMOS33;
-IOBUF PORT "gpdi_clk_p" DRIVE=4;
-LOCATE COMP "gpdi_data0_p" SITE "G1";
-IOBUF PORT "gpdi_data0_p" IO_TYPE=LVCMOS33;
-IOBUF PORT "gpdi_data0_p" DRIVE=4;
-LOCATE COMP "gpdi_data1_p" SITE "J1";
-IOBUF PORT "gpdi_data1_p" IO_TYPE=LVCMOS33;
-IOBUF PORT "gpdi_data1_p" DRIVE=4;
-LOCATE COMP "gpdi_data2_p" SITE "L1";
-IOBUF PORT "gpdi_data2_p" IO_TYPE=LVCMOS33;
-IOBUF PORT "gpdi_data2_p" DRIVE=4;
+
+#iCESugar-pro HDMI
+LOCATE COMP "gpdi_dp[0]" SITE "G1"; # Blue +
+LOCATE COMP "gpdi_dn[0]" SITE "F1"; # Blue -
+LOCATE COMP "gpdi_dp[1]" SITE "J1"; # Green +
+LOCATE COMP "gpdi_dn[1]" SITE "H2"; # Green -
+LOCATE COMP "gpdi_dp[2]" SITE "L1"; # Red +
+LOCATE COMP "gpdi_dn[2]" SITE "K2"; # Red -
+LOCATE COMP "gpdi_dp[3]" SITE "E2"; # Clock +
+LOCATE COMP "gpdi_dn[3]" SITE "D3"; # Clock -
+
+IOBUF PORT "gpdi_dp[0]" IO_TYPE=LVCMOS33 DRIVE=4;
+IOBUF PORT "gpdi_dn[0]" IO_TYPE=LVCMOS33 DRIVE=4;
+IOBUF PORT "gpdi_dp[1]" IO_TYPE=LVCMOS33 DRIVE=4;
+IOBUF PORT "gpdi_dn[1]" IO_TYPE=LVCMOS33 DRIVE=4;
+IOBUF PORT "gpdi_dp[2]" IO_TYPE=LVCMOS33 DRIVE=4;
+IOBUF PORT "gpdi_dn[2]" IO_TYPE=LVCMOS33 DRIVE=4;
+IOBUF PORT "gpdi_dp[3]" IO_TYPE=LVCMOS33 DRIVE=4;
+IOBUF PORT "gpdi_dn[3]" IO_TYPE=LVCMOS33 DRIVE=4;
 
 LOCATE COMP "sd_clk" SITE "J12";
 IOBUF PORT "sd_clk" SLEWRATE=FAST;
