@@ -4370,23 +4370,23 @@ main:
 	li	a0,-268435456
 	call	gpio_setOutput
 	.loc 9 97 2
-	lui	a5,%hi(vga_h800_v600_r60)
-	lw	t1,%lo(vga_h800_v600_r60)(a5)
-	addi	a4,a5,%lo(vga_h800_v600_r60)
+	lui	a5,%hi(vga_h640_v480_r60)
+	lw	t1,%lo(vga_h640_v480_r60)(a5)
+	addi	a4,a5,%lo(vga_h640_v480_r60)
 	lw	a7,4(a4)
-	addi	a4,a5,%lo(vga_h800_v600_r60)
+	addi	a4,a5,%lo(vga_h640_v480_r60)
 	lw	a6,8(a4)
-	addi	a4,a5,%lo(vga_h800_v600_r60)
+	addi	a4,a5,%lo(vga_h640_v480_r60)
 	lw	a0,12(a4)
-	addi	a4,a5,%lo(vga_h800_v600_r60)
+	addi	a4,a5,%lo(vga_h640_v480_r60)
 	lw	a1,16(a4)
-	addi	a4,a5,%lo(vga_h800_v600_r60)
+	addi	a4,a5,%lo(vga_h640_v480_r60)
 	lw	a2,20(a4)
-	addi	a4,a5,%lo(vga_h800_v600_r60)
+	addi	a4,a5,%lo(vga_h640_v480_r60)
 	lw	a3,24(a4)
-	addi	a4,a5,%lo(vga_h800_v600_r60)
+	addi	a4,a5,%lo(vga_h640_v480_r60)
 	lw	a4,28(a4)
-	addi	a5,a5,%lo(vga_h800_v600_r60)
+	addi	a5,a5,%lo(vga_h640_v480_r60)
 	lw	a5,32(a5)
 	sw	t1,-80(s0)
 	sw	a7,-76(s0)
@@ -4411,7 +4411,7 @@ main:
 	li	a0,-267911168
 	call	dmasg_input_memory
 	.loc 9 102 2
-	li	a5,0
+	li	a5,1
 	li	a4,0
 	li	a3,0
 	li	a2,0
@@ -4420,8 +4420,7 @@ main:
 	call	dmasg_output_stream
 	.loc 9 103 2
 	li	a3,1
-	li	a5,958464
-	addi	a2,a5,1536
+	li	a2,614400
 	li	a1,0
 	li	a0,-267911168
 	call	dmasg_direct_start

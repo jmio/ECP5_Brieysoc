@@ -933,152 +933,152 @@ Linker script and memory map
                 0x000000008000548e       0x10 main.o
                 0x000000008000548e                returnerr
 
-.text.main      0x000000008000549e      0x41c
- .text.main     0x000000008000549e      0x41c main.o
+.text.main      0x000000008000549e      0x418
+ .text.main     0x000000008000549e      0x418 main.o
                 0x000000008000549e                main
 
 .text.__locale_ctype_ptr
-                0x00000000800058bc       0x2c
+                0x00000000800058b8       0x2c
  .text.__locale_ctype_ptr
-                0x00000000800058bc       0x2c c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-locale.o)
-                0x00000000800058bc                __locale_ctype_ptr
+                0x00000000800058b8       0x2c c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-locale.o)
+                0x00000000800058b8                __locale_ctype_ptr
 
-.text.malloc    0x00000000800058e8       0x18
- .text.malloc   0x00000000800058e8       0x18 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-malloc.o)
-                0x00000000800058e8                malloc
+.text.malloc    0x00000000800058e4       0x18
+ .text.malloc   0x00000000800058e4       0x18 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-malloc.o)
+                0x00000000800058e4                malloc
 
 .text._malloc_r
-                0x0000000080005900      0x870
+                0x00000000800058fc      0x870
  .text._malloc_r
-                0x0000000080005900      0x870 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-mallocr.o)
-                0x0000000080005900                _malloc_r
+                0x00000000800058fc      0x870 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-mallocr.o)
+                0x00000000800058fc                _malloc_r
 
 .text.__ascii_mbtowc
-                0x0000000080006170       0x68
+                0x000000008000616c       0x68
  .text.__ascii_mbtowc
-                0x0000000080006170       0x68 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-mbtowc_r.o)
-                0x0000000080006170                __ascii_mbtowc
+                0x000000008000616c       0x68 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-mbtowc_r.o)
+                0x000000008000616c                __ascii_mbtowc
 
 .text.__malloc_lock
-                0x00000000800061d8       0x10
+                0x00000000800061d4       0x10
  .text.__malloc_lock
-                0x00000000800061d8       0x10 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-mlock.o)
-                0x00000000800061d8                __malloc_lock
+                0x00000000800061d4       0x10 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-mlock.o)
+                0x00000000800061d4                __malloc_lock
 
 .text.__malloc_unlock
-                0x00000000800061e8       0x10
+                0x00000000800061e4       0x10
  .text.__malloc_unlock
-                0x00000000800061e8       0x10 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-mlock.o)
-                0x00000000800061e8                __malloc_unlock
+                0x00000000800061e4       0x10 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-mlock.o)
+                0x00000000800061e4                __malloc_unlock
 
-.text._sbrk_r   0x00000000800061f8       0x60
- .text._sbrk_r  0x00000000800061f8       0x60 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-sbrkr.o)
-                0x00000000800061f8                _sbrk_r
+.text._sbrk_r   0x00000000800061f4       0x60
+ .text._sbrk_r  0x00000000800061f4       0x60 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-sbrkr.o)
+                0x00000000800061f4                _sbrk_r
 
-.text.strlen    0x0000000080006258       0x8c
- .text.strlen   0x0000000080006258       0x8c c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-strlen.o)
-                0x0000000080006258                strlen
+.text.strlen    0x0000000080006254       0x8c
+ .text.strlen   0x0000000080006254       0x8c c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-strlen.o)
+                0x0000000080006254                strlen
 
-.text.strncmp   0x00000000800062e4       0xf0
- .text.strncmp  0x00000000800062e4       0xf0 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-strncmp.o)
-                0x00000000800062e4                strncmp
+.text.strncmp   0x00000000800062e0       0xf0
+ .text.strncmp  0x00000000800062e0       0xf0 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-strncmp.o)
+                0x00000000800062e0                strncmp
 
-.text.strncpy   0x00000000800063d4       0xcc
- .text.strncpy  0x00000000800063d4       0xcc c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-strncpy.o)
-                0x00000000800063d4                strncpy
+.text.strncpy   0x00000000800063d0       0xcc
+ .text.strncpy  0x00000000800063d0       0xcc c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-strncpy.o)
+                0x00000000800063d0                strncpy
 
 .text.__ascii_wctomb
-                0x00000000800064a0       0x30
+                0x000000008000649c       0x30
  .text.__ascii_wctomb
-                0x00000000800064a0       0x30 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-wctomb_r.o)
-                0x00000000800064a0                __ascii_wctomb
+                0x000000008000649c       0x30 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-wctomb_r.o)
+                0x000000008000649c                __ascii_wctomb
 
 .text._malloc_trim_r
-                0x00000000800064d0      0x154
+                0x00000000800064cc      0x154
  .text._malloc_trim_r
-                0x00000000800064d0      0x154 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-freer.o)
-                0x00000000800064d0                _malloc_trim_r
+                0x00000000800064cc      0x154 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-freer.o)
+                0x00000000800064cc                _malloc_trim_r
 
-.text._free_r   0x0000000080006624      0x330
- .text._free_r  0x0000000080006624      0x330 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-freer.o)
-                0x0000000080006624                _free_r
+.text._free_r   0x0000000080006620      0x330
+ .text._free_r  0x0000000080006620      0x330 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-freer.o)
+                0x0000000080006620                _free_r
 
 .text.__retarget_lock_acquire_recursive
-                0x0000000080006954        0x4
+                0x0000000080006950        0x4
  .text.__retarget_lock_acquire_recursive
-                0x0000000080006954        0x4 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-lock.o)
-                0x0000000080006954                __retarget_lock_acquire_recursive
+                0x0000000080006950        0x4 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-lock.o)
+                0x0000000080006950                __retarget_lock_acquire_recursive
 
 .text.__retarget_lock_release_recursive
-                0x0000000080006958        0x4
+                0x0000000080006954        0x4
  .text.__retarget_lock_release_recursive
-                0x0000000080006958        0x4 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-lock.o)
-                0x0000000080006958                __retarget_lock_release_recursive
+                0x0000000080006954        0x4 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libc.a(lib_a-lock.o)
+                0x0000000080006954                __retarget_lock_release_recursive
 
-.text._sbrk     0x000000008000695c       0x40
- .text._sbrk    0x000000008000695c       0x40 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libsim.a(sim-sys_sbrk.o)
-                0x000000008000695c                _sbrk
+.text._sbrk     0x0000000080006958       0x40
+ .text._sbrk    0x0000000080006958       0x40 c:/gccriscv/8.2.0/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32i/ilp32\libsim.a(sim-sys_sbrk.o)
+                0x0000000080006958                _sbrk
 
-.rela.dyn       0x000000008000699c        0x0
- .rela.text     0x000000008000699c        0x0 crt.o
+.rela.dyn       0x0000000080006998        0x0
+ .rela.text     0x0000000080006998        0x0 crt.o
  .rela.text.putch
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text.getline
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text.gethex
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text.getdata
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text.ogetdata
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text.xdump
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text.xsubst
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text.xfill
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text.hxbyte
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text.xread
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text.hx1lp
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text.hxbytelp
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text.xdir
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text.xsdread
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text._main
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text.symt_init
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text.symt_clear
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text.symt_get
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text.symt_put
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text.initTimer
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text.scheduleTimer
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text.irqCallback
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text.sysCallback
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text.xputc
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text.main
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text.__malloc_lock
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text.__malloc_unlock
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text._sbrk_r
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
  .rela.text._sbrk
-                0x000000008000699c        0x0 crt.o
+                0x0000000080006998        0x0 crt.o
 
 .data           0x00000000800069a0     0x1078
  *(.rdata)

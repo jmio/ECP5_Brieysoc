@@ -94,13 +94,13 @@ int main()
     gpio_setOutput(BSP_LED_GPIO, 0x00000000);
 
 	// VGA OUTPUT
-	vga_set_timing(SYSTEM_VGA_CTRL,vga_h800_v600_r60);
+	vga_set_timing(SYSTEM_VGA_CTRL,vga_h640_v480_r60);
 	vga_start(SYSTEM_VGA_CTRL);
 
 	// DMA SETUP
 	dmasg_input_memory(SYSTEM_DMA_CTRL,0,(void *)0x40000000,0);
-	dmasg_output_stream(SYSTEM_DMA_CTRL, 0, 0, 0, 0, 0);
-	dmasg_direct_start(SYSTEM_DMA_CTRL,0,800*600*2,1);
+	dmasg_output_stream(SYSTEM_DMA_CTRL, 0, 0, 0, 0, 1);
+	dmasg_direct_start(SYSTEM_DMA_CTRL,0,640*480*2,1);
 
 	// xprintf setup
 	xdev_out(uart_putc);

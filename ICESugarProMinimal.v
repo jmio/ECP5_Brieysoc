@@ -1,6 +1,6 @@
 // Generator : SpinalHDL v1.6.1    git head : 8434600e3b32dc561f4e361e99a6085b79085453
 // Component : ICESugarProMinimal
-// Git hash  : 382e5ab2af23c7d08f31b782689346414a29092b
+// Git hash  : 184629e6a11ea096a00efe3d2ba89c1cfa344082
 
 
 
@@ -41,8 +41,8 @@ module ICESugarProMinimal (
   wire                clocking_pll_clkout_sdram;
   wire                clocking_pll_clkout_system;
   wire                clocking_pll_clkout_hdmi;
+  wire                clocking_pll_clkout_vga;
   wire                clocking_pll_locked;
-  wire                clocking_pll_clkout_sdram_DCCA_CLKO;
   wire                clocking_bb_Q;
   wire       [15:0]   system_phyA_logic_io_ctrl_phases_0_DQr_0;
   wire       [15:0]   system_phyA_logic_io_ctrl_phases_1_DQr_0;
@@ -57,7 +57,7 @@ module ICESugarProMinimal (
   wire                system_phyA_logic_io_sdram_WEn;
   wire       [15:0]   system_phyA_logic_io_sdram_DQ_write;
   wire       [15:0]   system_phyA_logic_io_sdram_DQ_writeEnable;
-  wire                bufferCC_7_io_dataOut;
+  wire                bufferCC_10_io_dataOut;
   wire                system_dma_logic_io_read_cmd_valid;
   wire                system_dma_logic_io_read_cmd_payload_last;
   wire       [0:0]    system_dma_logic_io_read_cmd_payload_fragment_opcode;
@@ -76,8 +76,9 @@ module ICESugarProMinimal (
   wire       [0:0]    system_dma_logic_io_ctrl_rsp_payload_fragment_opcode;
   wire       [31:0]   system_dma_logic_io_ctrl_rsp_payload_fragment_data;
   wire       [14:0]   system_dma_logic_io_ctrl_rsp_payload_fragment_context;
-  wire                bufferCC_8_io_dataOut;
-  wire                bufferCC_9_io_dataOut;
+  wire                bufferCC_11_io_dataOut;
+  wire                bufferCC_12_io_dataOut;
+  wire                bufferCC_13_io_dataOut;
   wire                system_cpu_logic_cpu_dBus_cmd_valid;
   wire                system_cpu_logic_cpu_dBus_cmd_payload_wr;
   wire                system_cpu_logic_cpu_dBus_cmd_payload_uncached;
@@ -92,6 +93,8 @@ module ICESugarProMinimal (
   wire                system_cpu_logic_cpu_iBus_cmd_valid;
   wire       [31:0]   system_cpu_logic_cpu_iBus_cmd_payload_address;
   wire       [2:0]    system_cpu_logic_cpu_iBus_cmd_payload_size;
+  wire       [3:0]    system_hdmiPhy_bridge_io_gpdi_dp;
+  wire       [3:0]    system_hdmiPhy_bridge_io_gpdi_dn;
   wire                jtagBridge_1_io_jtag_tdo;
   wire                jtagBridge_1_io_remote_cmd_valid;
   wire                jtagBridge_1_io_remote_cmd_payload_last;
@@ -106,9 +109,7 @@ module ICESugarProMinimal (
   wire       [31:0]   systemDebugger_1_io_mem_cmd_payload_data;
   wire                systemDebugger_1_io_mem_cmd_payload_wr;
   wire       [1:0]    systemDebugger_1_io_mem_cmd_payload_size;
-  wire       [3:0]    system_hdmiPhy_bridge_io_gpdi_dp;
-  wire       [3:0]    system_hdmiPhy_bridge_io_gpdi_dn;
-  wire                bufferCC_10_io_dataOut;
+  wire                bufferCC_14_io_dataOut;
   wire                system_cpu_iBus_decoder_io_input_cmd_ready;
   wire                system_cpu_iBus_decoder_io_input_rsp_valid;
   wire                system_cpu_iBus_decoder_io_input_rsp_payload_last;
@@ -374,6 +375,13 @@ module ICESugarProMinimal (
   wire       [5:0]    system_dma_read_decoder_io_outputs_0_cmd_payload_fragment_length;
   wire       [10:0]   system_dma_read_decoder_io_outputs_0_cmd_payload_fragment_context;
   wire                system_dma_read_decoder_io_outputs_0_rsp_ready;
+  wire                system_dma_logic_io_outputs_0_queue_io_push_ready;
+  wire                system_dma_logic_io_outputs_0_queue_io_pop_valid;
+  wire       [31:0]   system_dma_logic_io_outputs_0_queue_io_pop_payload_data;
+  wire       [3:0]    system_dma_logic_io_outputs_0_queue_io_pop_payload_mask;
+  wire                system_dma_logic_io_outputs_0_queue_io_pop_payload_last;
+  wire       [7:0]    system_dma_logic_io_outputs_0_queue_io_pushOccupancy;
+  wire       [7:0]    system_dma_logic_io_outputs_0_queue_io_popOccupancy;
   reg                 _zz_system_gpioA_gpio;
   reg                 _zz_system_gpioA_gpio_1;
   reg                 _zz_system_gpioA_gpio_2;
@@ -408,11 +416,16 @@ module ICESugarProMinimal (
   reg        [5:0]    hdmiCd_logic_holdingLogic_resetCounter;
   wire                when_ClockDomainGenerator_l77_1;
   reg                 hdmiCd_logic_outputReset;
+  reg                 vgaCd_logic_inputResetTrigger;
+  reg                 vgaCd_logic_outputResetUnbuffered;
+  reg        [5:0]    vgaCd_logic_holdingLogic_resetCounter;
+  wire                when_ClockDomainGenerator_l77_2;
+  reg                 vgaCd_logic_outputReset;
   wire                debugCdCtrl_logic_inputResetAdapter_stuff_syncTrigger;
   reg                 systemCdCtrl_logic_inputResetTrigger;
   reg                 systemCdCtrl_logic_outputResetUnbuffered;
   reg        [5:0]    systemCdCtrl_logic_holdingLogic_resetCounter;
-  wire                when_ClockDomainGenerator_l77_2;
+  wire                when_ClockDomainGenerator_l77_3;
   reg                 systemCdCtrl_logic_outputReset;
   wire                system_cpu_iBus_cmd_valid;
   wire                system_cpu_iBus_cmd_ready;
@@ -1015,19 +1028,15 @@ module ICESugarProMinimal (
     .clkout_sdram     (clocking_pll_clkout_sdram   ), //o
     .clkout_system    (clocking_pll_clkout_system  ), //o
     .clkout_hdmi      (clocking_pll_clkout_hdmi    ), //o
+    .clkout_vga       (clocking_pll_clkout_vga     ), //o
     .locked           (clocking_pll_locked         )  //o
   );
-  DCCA clocking_pll_clkout_sdram_DCCA (
-    .CLKI    (clocking_pll_clkout_sdram            ), //i
-    .CE      (1'b1                                 ), //i
-    .CLKO    (clocking_pll_clkout_sdram_DCCA_CLKO  )  //o
-  );
   ODDRX1F clocking_bb (
-    .SCLK    (clocking_pll_clkout_sdram_DCCA_CLKO  ), //i
-    .RST     (1'b0                                 ), //i
-    .D0      (1'b1                                 ), //i
-    .D1      (1'b0                                 ), //i
-    .Q       (clocking_bb_Q                        )  //o
+    .SCLK    (clocking_pll_clkout_sdram  ), //i
+    .RST     (1'b0                       ), //i
+    .D0      (1'b1                       ), //i
+    .D1      (1'b0                       ), //i
+    .Q       (clocking_bb_Q              )  //o
   );
   Ecp5Sdrx2Phy system_phyA_logic (
     .io_ctrl_phases_0_CASn             (system_sdramA_logic_io_phy_phases_0_CASn         ), //i
@@ -1065,9 +1074,9 @@ module ICESugarProMinimal (
     .systemCdCtrl_logic_outputReset    (systemCdCtrl_logic_outputReset                   ), //i
     .clkout_system                     (clocking_pll_clkout_system                       )  //i
   );
-  BufferCC_3 bufferCC_7 (
+  BufferCC_5 bufferCC_10 (
     .io_dataIn          (1'b0                        ), //i
-    .io_dataOut         (bufferCC_7_io_dataOut       ), //o
+    .io_dataOut         (bufferCC_10_io_dataOut      ), //o
     .clkout_system      (clocking_pll_clkout_system  ), //i
     .clocking_resetn    (clocking_resetn             )  //i
   );
@@ -1086,7 +1095,7 @@ module ICESugarProMinimal (
     .io_read_rsp_payload_fragment_data       (_zz_io_read_rsp_payload_fragment_data[31:0]                                                ), //i
     .io_read_rsp_payload_fragment_context    (_zz_io_read_rsp_payload_fragment_context[10:0]                                             ), //i
     .io_outputs_0_valid                      (system_dma_logic_io_outputs_0_valid                                                        ), //o
-    .io_outputs_0_ready                      (system_vga_logic_io_input_ready                                                            ), //i
+    .io_outputs_0_ready                      (system_dma_logic_io_outputs_0_queue_io_push_ready                                          ), //i
     .io_outputs_0_payload_data               (system_dma_logic_io_outputs_0_payload_data[31:0]                                           ), //o
     .io_outputs_0_payload_mask               (system_dma_logic_io_outputs_0_payload_mask[3:0]                                            ), //o
     .io_outputs_0_payload_last               (system_dma_logic_io_outputs_0_payload_last                                                 ), //o
@@ -1108,16 +1117,22 @@ module ICESugarProMinimal (
     .clkout_system                           (clocking_pll_clkout_system                                                                 ), //i
     .systemCdCtrl_logic_outputReset          (systemCdCtrl_logic_outputReset                                                             )  //i
   );
-  BufferCC_4 bufferCC_8 (
+  BufferCC_6 bufferCC_11 (
     .io_dataIn                        (1'b0                           ), //i
-    .io_dataOut                       (bufferCC_8_io_dataOut          ), //o
+    .io_dataOut                       (bufferCC_11_io_dataOut         ), //o
     .clkout_system                    (clocking_pll_clkout_system     ), //i
     .debugCdCtrl_logic_outputReset    (debugCdCtrl_logic_outputReset  )  //i
   );
-  BufferCC_5 bufferCC_9 (
+  BufferCC_7 bufferCC_12 (
     .io_dataIn                        (1'b0                           ), //i
-    .io_dataOut                       (bufferCC_9_io_dataOut          ), //o
+    .io_dataOut                       (bufferCC_12_io_dataOut         ), //o
     .clkout_hdmi                      (clocking_pll_clkout_hdmi       ), //i
+    .debugCdCtrl_logic_outputReset    (debugCdCtrl_logic_outputReset  )  //i
+  );
+  BufferCC_8 bufferCC_13 (
+    .io_dataIn                        (1'b0                           ), //i
+    .io_dataOut                       (bufferCC_13_io_dataOut         ), //o
+    .clkout_vga                       (clocking_pll_clkout_vga        ), //i
     .debugCdCtrl_logic_outputReset    (debugCdCtrl_logic_outputReset  )  //i
   );
   VexRiscv system_cpu_logic_cpu (
@@ -1155,6 +1170,20 @@ module ICESugarProMinimal (
     .systemCdCtrl_logic_outputReset    (systemCdCtrl_logic_outputReset                                        ), //i
     .debugCdCtrl_logic_outputReset     (debugCdCtrl_logic_outputReset                                         )  //i
   );
+  VgaToHdmiEcp5 system_hdmiPhy_bridge (
+    .io_vga_vSync                (system_vga_logic_io_vga_vSync              ), //i
+    .io_vga_hSync                (system_vga_logic_io_vga_hSync              ), //i
+    .io_vga_colorEn              (system_vga_logic_io_vga_colorEn            ), //i
+    .io_vga_color_r              (system_hdmiPhy_bridge_io_vga_color_r[7:0]  ), //i
+    .io_vga_color_g              (system_hdmiPhy_bridge_io_vga_color_g[7:0]  ), //i
+    .io_vga_color_b              (system_hdmiPhy_bridge_io_vga_color_b[7:0]  ), //i
+    .io_gpdi_dp                  (system_hdmiPhy_bridge_io_gpdi_dp[3:0]      ), //o
+    .io_gpdi_dn                  (system_hdmiPhy_bridge_io_gpdi_dn[3:0]      ), //o
+    .hdmiCd_logic_outputReset    (hdmiCd_logic_outputReset                   ), //i
+    .clkout_hdmi                 (clocking_pll_clkout_hdmi                   ), //i
+    .clkout_vga                  (clocking_pll_clkout_vga                    ), //i
+    .vgaCd_logic_outputReset     (vgaCd_logic_outputReset                    )  //i
+  );
   JtagBridge jtagBridge_1 (
     .io_jtag_tms                       (system_cpu_jtag_tms                                ), //i
     .io_jtag_tdi                       (system_cpu_jtag_tdi                                ), //i
@@ -1191,23 +1220,9 @@ module ICESugarProMinimal (
     .clkout_system                     (clocking_pll_clkout_system                         ), //i
     .debugCdCtrl_logic_outputReset     (debugCdCtrl_logic_outputReset                      )  //i
   );
-  VgaToHdmiEcp5 system_hdmiPhy_bridge (
-    .io_vga_vSync                      (system_vga_logic_io_vga_vSync              ), //i
-    .io_vga_hSync                      (system_vga_logic_io_vga_hSync              ), //i
-    .io_vga_colorEn                    (system_vga_logic_io_vga_colorEn            ), //i
-    .io_vga_color_r                    (system_hdmiPhy_bridge_io_vga_color_r[7:0]  ), //i
-    .io_vga_color_g                    (system_hdmiPhy_bridge_io_vga_color_g[7:0]  ), //i
-    .io_vga_color_b                    (system_hdmiPhy_bridge_io_vga_color_b[7:0]  ), //i
-    .io_gpdi_dp                        (system_hdmiPhy_bridge_io_gpdi_dp[3:0]      ), //o
-    .io_gpdi_dn                        (system_hdmiPhy_bridge_io_gpdi_dn[3:0]      ), //o
-    .hdmiCd_logic_outputReset          (hdmiCd_logic_outputReset                   ), //i
-    .clkout_hdmi                       (clocking_pll_clkout_hdmi                   ), //i
-    .clkout_system                     (clocking_pll_clkout_system                 ), //i
-    .systemCdCtrl_logic_outputReset    (systemCdCtrl_logic_outputReset             )  //i
-  );
-  BufferCC_6 bufferCC_10 (
+  BufferCC_9 bufferCC_14 (
     .io_dataIn                (1'b0                        ), //i
-    .io_dataOut               (bufferCC_10_io_dataOut      ), //o
+    .io_dataOut               (bufferCC_14_io_dataOut      ), //o
     .clkout_system            (clocking_pll_clkout_system  ), //i
     .system_cpu_debugReset    (system_cpu_debugReset       )  //i
   );
@@ -1707,11 +1722,11 @@ module ICESugarProMinimal (
     .systemCdCtrl_logic_outputReset         (systemCdCtrl_logic_outputReset                                                               )  //i
   );
   BmbVgaCtrl system_vga_logic (
-    .io_input_valid                          (system_dma_logic_io_outputs_0_valid                                                        ), //i
+    .io_input_valid                          (system_dma_logic_io_outputs_0_queue_io_pop_valid                                           ), //i
     .io_input_ready                          (system_vga_logic_io_input_ready                                                            ), //o
-    .io_input_payload_data                   (system_dma_logic_io_outputs_0_payload_data[31:0]                                           ), //i
-    .io_input_payload_mask                   (system_dma_logic_io_outputs_0_payload_mask[3:0]                                            ), //i
-    .io_input_payload_last                   (system_dma_logic_io_outputs_0_payload_last                                                 ), //i
+    .io_input_payload_data                   (system_dma_logic_io_outputs_0_queue_io_pop_payload_data[31:0]                              ), //i
+    .io_input_payload_mask                   (system_dma_logic_io_outputs_0_queue_io_pop_payload_mask[3:0]                               ), //i
+    .io_input_payload_last                   (system_dma_logic_io_outputs_0_queue_io_pop_payload_last                                    ), //i
     .io_ctrl_cmd_valid                       (system_vga_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_valid                           ), //i
     .io_ctrl_cmd_ready                       (system_vga_logic_io_ctrl_cmd_ready                                                         ), //o
     .io_ctrl_cmd_payload_last                (system_vga_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_payload_last                    ), //i
@@ -1733,7 +1748,9 @@ module ICESugarProMinimal (
     .io_vga_color_g                          (system_vga_logic_io_vga_color_g[5:0]                                                       ), //o
     .io_vga_color_b                          (system_vga_logic_io_vga_color_b[4:0]                                                       ), //o
     .clkout_system                           (clocking_pll_clkout_system                                                                 ), //i
-    .systemCdCtrl_logic_outputReset          (systemCdCtrl_logic_outputReset                                                             )  //i
+    .systemCdCtrl_logic_outputReset          (systemCdCtrl_logic_outputReset                                                             ), //i
+    .clkout_vga                              (clocking_pll_clkout_vga                                                                    ), //i
+    .vgaCd_logic_outputReset                 (vgaCd_logic_outputReset                                                                    )  //i
   );
   BmbDecoder_3 system_dma_read_decoder (
     .io_input_cmd_valid                           (system_dma_logic_io_read_cmd_halfPipe_valid                               ), //i
@@ -1762,6 +1779,24 @@ module ICESugarProMinimal (
     .io_outputs_0_rsp_payload_fragment_opcode     (system_dBus32_bmb_arbiter_io_inputs_2_rsp_payload_fragment_opcode         ), //i
     .io_outputs_0_rsp_payload_fragment_data       (system_dBus32_bmb_arbiter_io_inputs_2_rsp_payload_fragment_data[31:0]     ), //i
     .io_outputs_0_rsp_payload_fragment_context    (system_dBus32_bmb_arbiter_io_inputs_2_rsp_payload_fragment_context[10:0]  )  //i
+  );
+  StreamFifoCC system_dma_logic_io_outputs_0_queue (
+    .io_push_valid                     (system_dma_logic_io_outputs_0_valid                            ), //i
+    .io_push_ready                     (system_dma_logic_io_outputs_0_queue_io_push_ready              ), //o
+    .io_push_payload_data              (system_dma_logic_io_outputs_0_payload_data[31:0]               ), //i
+    .io_push_payload_mask              (system_dma_logic_io_outputs_0_payload_mask[3:0]                ), //i
+    .io_push_payload_last              (system_dma_logic_io_outputs_0_payload_last                     ), //i
+    .io_pop_valid                      (system_dma_logic_io_outputs_0_queue_io_pop_valid               ), //o
+    .io_pop_ready                      (system_vga_logic_io_input_ready                                ), //i
+    .io_pop_payload_data               (system_dma_logic_io_outputs_0_queue_io_pop_payload_data[31:0]  ), //o
+    .io_pop_payload_mask               (system_dma_logic_io_outputs_0_queue_io_pop_payload_mask[3:0]   ), //o
+    .io_pop_payload_last               (system_dma_logic_io_outputs_0_queue_io_pop_payload_last        ), //o
+    .io_pushOccupancy                  (system_dma_logic_io_outputs_0_queue_io_pushOccupancy[7:0]      ), //o
+    .io_popOccupancy                   (system_dma_logic_io_outputs_0_queue_io_popOccupancy[7:0]       ), //o
+    .clkout_system                     (clocking_pll_clkout_system                                     ), //i
+    .systemCdCtrl_logic_outputReset    (systemCdCtrl_logic_outputReset                                 ), //i
+    .clkout_vga                        (clocking_pll_clkout_vga                                        ), //i
+    .vgaCd_logic_outputReset           (vgaCd_logic_outputReset                                        )  //i
   );
   assign system_phyA_sdram_DQ[0] = _zz_system_phyA_sdram_DQ_15 ? _zz_system_phyA_sdram_DQ_16[0] : 1'bz;
   assign system_phyA_sdram_DQ[1] = _zz_system_phyA_sdram_DQ_14 ? _zz_system_phyA_sdram_DQ_16[1] : 1'bz;
@@ -1973,7 +2008,7 @@ module ICESugarProMinimal (
   assign when_ClockDomainGenerator_l77 = (debugCdCtrl_logic_holdingLogic_resetCounter != 12'hfff);
   always @(*) begin
     hdmiCd_logic_inputResetTrigger = 1'b0;
-    if(bufferCC_9_io_dataOut) begin
+    if(bufferCC_12_io_dataOut) begin
       hdmiCd_logic_inputResetTrigger = 1'b1;
     end
   end
@@ -1986,25 +2021,40 @@ module ICESugarProMinimal (
   end
 
   assign when_ClockDomainGenerator_l77_1 = (hdmiCd_logic_holdingLogic_resetCounter != 6'h3f);
-  assign debugCdCtrl_logic_inputResetAdapter_stuff_syncTrigger = bufferCC_7_io_dataOut;
+  always @(*) begin
+    vgaCd_logic_inputResetTrigger = 1'b0;
+    if(bufferCC_13_io_dataOut) begin
+      vgaCd_logic_inputResetTrigger = 1'b1;
+    end
+  end
+
+  always @(*) begin
+    vgaCd_logic_outputResetUnbuffered = 1'b0;
+    if(when_ClockDomainGenerator_l77_2) begin
+      vgaCd_logic_outputResetUnbuffered = 1'b1;
+    end
+  end
+
+  assign when_ClockDomainGenerator_l77_2 = (vgaCd_logic_holdingLogic_resetCounter != 6'h3f);
+  assign debugCdCtrl_logic_inputResetAdapter_stuff_syncTrigger = bufferCC_10_io_dataOut;
   always @(*) begin
     systemCdCtrl_logic_inputResetTrigger = 1'b0;
-    if(bufferCC_8_io_dataOut) begin
+    if(bufferCC_11_io_dataOut) begin
       systemCdCtrl_logic_inputResetTrigger = 1'b1;
     end
-    if(bufferCC_10_io_dataOut) begin
+    if(bufferCC_14_io_dataOut) begin
       systemCdCtrl_logic_inputResetTrigger = 1'b1;
     end
   end
 
   always @(*) begin
     systemCdCtrl_logic_outputResetUnbuffered = 1'b0;
-    if(when_ClockDomainGenerator_l77_2) begin
+    if(when_ClockDomainGenerator_l77_3) begin
       systemCdCtrl_logic_outputResetUnbuffered = 1'b1;
     end
   end
 
-  assign when_ClockDomainGenerator_l77_2 = (systemCdCtrl_logic_holdingLogic_resetCounter != 6'h3f);
+  assign when_ClockDomainGenerator_l77_3 = (systemCdCtrl_logic_holdingLogic_resetCounter != 6'h3f);
   assign system_cpu_iBus_cmd_valid = system_cpu_logic_cpu_iBus_cmd_valid;
   assign system_cpu_iBus_cmd_payload_fragment_opcode = 1'b0;
   assign system_cpu_iBus_cmd_payload_fragment_address = system_cpu_logic_cpu_iBus_cmd_payload_address;
@@ -2715,8 +2765,18 @@ module ICESugarProMinimal (
     hdmiCd_logic_outputReset <= hdmiCd_logic_outputResetUnbuffered;
   end
 
-  always @(posedge clocking_pll_clkout_system) begin
+  always @(posedge clocking_pll_clkout_vga) begin
     if(when_ClockDomainGenerator_l77_2) begin
+      vgaCd_logic_holdingLogic_resetCounter <= (vgaCd_logic_holdingLogic_resetCounter + 6'h01);
+    end
+    if(vgaCd_logic_inputResetTrigger) begin
+      vgaCd_logic_holdingLogic_resetCounter <= 6'h0;
+    end
+    vgaCd_logic_outputReset <= vgaCd_logic_outputResetUnbuffered;
+  end
+
+  always @(posedge clocking_pll_clkout_system) begin
+    if(when_ClockDomainGenerator_l77_3) begin
       systemCdCtrl_logic_holdingLogic_resetCounter <= (systemCdCtrl_logic_holdingLogic_resetCounter + 6'h01);
     end
     if(systemCdCtrl_logic_inputResetTrigger) begin
@@ -2960,6 +3020,176 @@ module ICESugarProMinimal (
 
 endmodule
 
+module StreamFifoCC (
+  input               io_push_valid,
+  output              io_push_ready,
+  input      [31:0]   io_push_payload_data,
+  input      [3:0]    io_push_payload_mask,
+  input               io_push_payload_last,
+  output              io_pop_valid,
+  input               io_pop_ready,
+  output     [31:0]   io_pop_payload_data,
+  output     [3:0]    io_pop_payload_mask,
+  output              io_pop_payload_last,
+  output     [7:0]    io_pushOccupancy,
+  output     [7:0]    io_popOccupancy,
+  input               clkout_system,
+  input               systemCdCtrl_logic_outputReset,
+  input               clkout_vga,
+  input               vgaCd_logic_outputReset
+);
+
+  reg        [36:0]   _zz_ram_port1;
+  wire       [7:0]    popToPushGray_buffercc_io_dataOut;
+  wire       [7:0]    pushToPopGray_buffercc_io_dataOut;
+  wire       [7:0]    _zz_pushCC_pushPtrGray;
+  wire       [6:0]    _zz_ram_port;
+  wire       [36:0]   _zz_ram_port_1;
+  wire       [7:0]    _zz_popCC_popPtrGray;
+  wire       [6:0]    _zz_ram_port_2;
+  wire                _zz_ram_port_3;
+  wire       [6:0]    _zz__zz_io_pop_payload_data_1;
+  wire                _zz__zz_io_pop_payload_data_1_1;
+  reg                 _zz_1;
+  wire       [7:0]    popToPushGray;
+  wire       [7:0]    pushToPopGray;
+  reg        [7:0]    pushCC_pushPtr;
+  wire       [7:0]    pushCC_pushPtrPlus;
+  wire                io_push_fire;
+  reg        [7:0]    pushCC_pushPtrGray;
+  wire       [7:0]    pushCC_popPtrGray;
+  wire                pushCC_full;
+  wire                io_push_fire_1;
+  wire                _zz_io_pushOccupancy;
+  wire                _zz_io_pushOccupancy_1;
+  wire                _zz_io_pushOccupancy_2;
+  wire                _zz_io_pushOccupancy_3;
+  wire                _zz_io_pushOccupancy_4;
+  wire                _zz_io_pushOccupancy_5;
+  wire                _zz_io_pushOccupancy_6;
+  reg        [7:0]    popCC_popPtr;
+  wire       [7:0]    popCC_popPtrPlus;
+  wire                io_pop_fire;
+  reg        [7:0]    popCC_popPtrGray;
+  wire       [7:0]    popCC_pushPtrGray;
+  wire                popCC_empty;
+  wire                io_pop_fire_1;
+  wire       [7:0]    _zz_io_pop_payload_data;
+  wire       [36:0]   _zz_io_pop_payload_data_1;
+  wire                io_pop_fire_2;
+  wire                _zz_io_popOccupancy;
+  wire                _zz_io_popOccupancy_1;
+  wire                _zz_io_popOccupancy_2;
+  wire                _zz_io_popOccupancy_3;
+  wire                _zz_io_popOccupancy_4;
+  wire                _zz_io_popOccupancy_5;
+  wire                _zz_io_popOccupancy_6;
+  reg [36:0] ram [0:127];
+
+  assign _zz_pushCC_pushPtrGray = (pushCC_pushPtrPlus >>> 1'b1);
+  assign _zz_ram_port = pushCC_pushPtr[6:0];
+  assign _zz_popCC_popPtrGray = (popCC_popPtrPlus >>> 1'b1);
+  assign _zz__zz_io_pop_payload_data_1 = _zz_io_pop_payload_data[6:0];
+  assign _zz_ram_port_1 = {io_push_payload_last,{io_push_payload_mask,io_push_payload_data}};
+  assign _zz__zz_io_pop_payload_data_1_1 = 1'b1;
+  always @(posedge clkout_system) begin
+    if(_zz_1) begin
+      ram[_zz_ram_port] <= _zz_ram_port_1;
+    end
+  end
+
+  always @(posedge clkout_vga) begin
+    if(_zz__zz_io_pop_payload_data_1_1) begin
+      _zz_ram_port1 <= ram[_zz__zz_io_pop_payload_data_1];
+    end
+  end
+
+  BufferCC_3 popToPushGray_buffercc (
+    .io_dataIn                         (popToPushGray[7:0]                      ), //i
+    .io_dataOut                        (popToPushGray_buffercc_io_dataOut[7:0]  ), //o
+    .clkout_system                     (clkout_system                           ), //i
+    .systemCdCtrl_logic_outputReset    (systemCdCtrl_logic_outputReset          )  //i
+  );
+  BufferCC_4 pushToPopGray_buffercc (
+    .io_dataIn                  (pushToPopGray[7:0]                      ), //i
+    .io_dataOut                 (pushToPopGray_buffercc_io_dataOut[7:0]  ), //o
+    .clkout_vga                 (clkout_vga                              ), //i
+    .vgaCd_logic_outputReset    (vgaCd_logic_outputReset                 )  //i
+  );
+  always @(*) begin
+    _zz_1 = 1'b0;
+    if(io_push_fire_1) begin
+      _zz_1 = 1'b1;
+    end
+  end
+
+  assign pushCC_pushPtrPlus = (pushCC_pushPtr + 8'h01);
+  assign io_push_fire = (io_push_valid && io_push_ready);
+  assign pushCC_popPtrGray = popToPushGray_buffercc_io_dataOut;
+  assign pushCC_full = ((pushCC_pushPtrGray[7 : 6] == (~ pushCC_popPtrGray[7 : 6])) && (pushCC_pushPtrGray[5 : 0] == pushCC_popPtrGray[5 : 0]));
+  assign io_push_ready = (! pushCC_full);
+  assign io_push_fire_1 = (io_push_valid && io_push_ready);
+  assign _zz_io_pushOccupancy = (pushCC_popPtrGray[1] ^ _zz_io_pushOccupancy_1);
+  assign _zz_io_pushOccupancy_1 = (pushCC_popPtrGray[2] ^ _zz_io_pushOccupancy_2);
+  assign _zz_io_pushOccupancy_2 = (pushCC_popPtrGray[3] ^ _zz_io_pushOccupancy_3);
+  assign _zz_io_pushOccupancy_3 = (pushCC_popPtrGray[4] ^ _zz_io_pushOccupancy_4);
+  assign _zz_io_pushOccupancy_4 = (pushCC_popPtrGray[5] ^ _zz_io_pushOccupancy_5);
+  assign _zz_io_pushOccupancy_5 = (pushCC_popPtrGray[6] ^ _zz_io_pushOccupancy_6);
+  assign _zz_io_pushOccupancy_6 = pushCC_popPtrGray[7];
+  assign io_pushOccupancy = (pushCC_pushPtr - {_zz_io_pushOccupancy_6,{_zz_io_pushOccupancy_5,{_zz_io_pushOccupancy_4,{_zz_io_pushOccupancy_3,{_zz_io_pushOccupancy_2,{_zz_io_pushOccupancy_1,{_zz_io_pushOccupancy,(pushCC_popPtrGray[0] ^ _zz_io_pushOccupancy)}}}}}}});
+  assign popCC_popPtrPlus = (popCC_popPtr + 8'h01);
+  assign io_pop_fire = (io_pop_valid && io_pop_ready);
+  assign popCC_pushPtrGray = pushToPopGray_buffercc_io_dataOut;
+  assign popCC_empty = (popCC_popPtrGray == popCC_pushPtrGray);
+  assign io_pop_valid = (! popCC_empty);
+  assign io_pop_fire_1 = (io_pop_valid && io_pop_ready);
+  assign _zz_io_pop_payload_data = (io_pop_fire_1 ? popCC_popPtrPlus : popCC_popPtr);
+  assign _zz_io_pop_payload_data_1 = _zz_ram_port1;
+  assign io_pop_payload_data = _zz_io_pop_payload_data_1[31 : 0];
+  assign io_pop_payload_mask = _zz_io_pop_payload_data_1[35 : 32];
+  assign io_pop_payload_last = _zz_io_pop_payload_data_1[36];
+  assign io_pop_fire_2 = (io_pop_valid && io_pop_ready);
+  assign _zz_io_popOccupancy = (popCC_pushPtrGray[1] ^ _zz_io_popOccupancy_1);
+  assign _zz_io_popOccupancy_1 = (popCC_pushPtrGray[2] ^ _zz_io_popOccupancy_2);
+  assign _zz_io_popOccupancy_2 = (popCC_pushPtrGray[3] ^ _zz_io_popOccupancy_3);
+  assign _zz_io_popOccupancy_3 = (popCC_pushPtrGray[4] ^ _zz_io_popOccupancy_4);
+  assign _zz_io_popOccupancy_4 = (popCC_pushPtrGray[5] ^ _zz_io_popOccupancy_5);
+  assign _zz_io_popOccupancy_5 = (popCC_pushPtrGray[6] ^ _zz_io_popOccupancy_6);
+  assign _zz_io_popOccupancy_6 = popCC_pushPtrGray[7];
+  assign io_popOccupancy = ({_zz_io_popOccupancy_6,{_zz_io_popOccupancy_5,{_zz_io_popOccupancy_4,{_zz_io_popOccupancy_3,{_zz_io_popOccupancy_2,{_zz_io_popOccupancy_1,{_zz_io_popOccupancy,(popCC_pushPtrGray[0] ^ _zz_io_popOccupancy)}}}}}}} - popCC_popPtr);
+  assign pushToPopGray = pushCC_pushPtrGray;
+  assign popToPushGray = popCC_popPtrGray;
+  always @(posedge clkout_system) begin
+    if(systemCdCtrl_logic_outputReset) begin
+      pushCC_pushPtr <= 8'h0;
+      pushCC_pushPtrGray <= 8'h0;
+    end else begin
+      if(io_push_fire) begin
+        pushCC_pushPtrGray <= (_zz_pushCC_pushPtrGray ^ pushCC_pushPtrPlus);
+      end
+      if(io_push_fire_1) begin
+        pushCC_pushPtr <= pushCC_pushPtrPlus;
+      end
+    end
+  end
+
+  always @(posedge clkout_vga) begin
+    if(vgaCd_logic_outputReset) begin
+      popCC_popPtr <= 8'h0;
+      popCC_popPtrGray <= 8'h0;
+    end else begin
+      if(io_pop_fire) begin
+        popCC_popPtrGray <= (_zz_popCC_popPtrGray ^ popCC_popPtrPlus);
+      end
+      if(io_pop_fire_2) begin
+        popCC_popPtr <= popCC_popPtrPlus;
+      end
+    end
+  end
+
+
+endmodule
+
 module BmbDecoder_3 (
   input               io_input_cmd_valid,
   output              io_input_cmd_ready,
@@ -3033,7 +3263,9 @@ module BmbVgaCtrl (
   output     [5:0]    io_vga_color_g,
   output     [4:0]    io_vga_color_b,
   input               clkout_system,
-  input               systemCdCtrl_logic_outputReset
+  input               systemCdCtrl_logic_outputReset,
+  input               clkout_vga,
+  input               vgaCd_logic_outputReset
 );
 
   wire                vga_ctrl_io_softReset;
@@ -3130,38 +3362,38 @@ module BmbVgaCtrl (
   reg                 _zz_io_timings_v_polarity;
 
   BufferCC_2 run_buffercc (
-    .io_dataIn                         (run                             ), //i
-    .io_dataOut                        (run_buffercc_io_dataOut         ), //o
-    .clkout_system                     (clkout_system                   ), //i
-    .systemCdCtrl_logic_outputReset    (systemCdCtrl_logic_outputReset  )  //i
+    .io_dataIn                  (run                      ), //i
+    .io_dataOut                 (run_buffercc_io_dataOut  ), //o
+    .clkout_vga                 (clkout_vga               ), //i
+    .vgaCd_logic_outputReset    (vgaCd_logic_outputReset  )  //i
   );
   VgaCtrl vga_ctrl (
-    .io_softReset                      (vga_ctrl_io_softReset                         ), //i
-    .io_timings_h_syncStart            (_zz_io_timings_h_syncStart[11:0]              ), //i
-    .io_timings_h_syncEnd              (_zz_io_timings_h_syncEnd[11:0]                ), //i
-    .io_timings_h_colorStart           (_zz_io_timings_h_colorStart[11:0]             ), //i
-    .io_timings_h_colorEnd             (_zz_io_timings_h_colorEnd[11:0]               ), //i
-    .io_timings_h_polarity             (_zz_io_timings_h_polarity                     ), //i
-    .io_timings_v_syncStart            (_zz_io_timings_v_syncStart[11:0]              ), //i
-    .io_timings_v_syncEnd              (_zz_io_timings_v_syncEnd[11:0]                ), //i
-    .io_timings_v_colorStart           (_zz_io_timings_v_colorStart[11:0]             ), //i
-    .io_timings_v_colorEnd             (_zz_io_timings_v_colorEnd[11:0]               ), //i
-    .io_timings_v_polarity             (_zz_io_timings_v_polarity                     ), //i
-    .io_frameStart                     (vga_ctrl_io_frameStart                        ), //o
-    .io_pixels_valid                   (vga_ctrl_io_pixels_valid                      ), //i
-    .io_pixels_ready                   (vga_ctrl_io_pixels_ready                      ), //o
-    .io_pixels_payload_r               (vga_adapted_translated_thrown_payload_r[4:0]  ), //i
-    .io_pixels_payload_g               (vga_adapted_translated_thrown_payload_g[5:0]  ), //i
-    .io_pixels_payload_b               (vga_adapted_translated_thrown_payload_b[4:0]  ), //i
-    .io_vga_vSync                      (vga_ctrl_io_vga_vSync                         ), //o
-    .io_vga_hSync                      (vga_ctrl_io_vga_hSync                         ), //o
-    .io_vga_colorEn                    (vga_ctrl_io_vga_colorEn                       ), //o
-    .io_vga_color_r                    (vga_ctrl_io_vga_color_r[4:0]                  ), //o
-    .io_vga_color_g                    (vga_ctrl_io_vga_color_g[5:0]                  ), //o
-    .io_vga_color_b                    (vga_ctrl_io_vga_color_b[4:0]                  ), //o
-    .io_error                          (vga_ctrl_io_error                             ), //o
-    .clkout_system                     (clkout_system                                 ), //i
-    .systemCdCtrl_logic_outputReset    (systemCdCtrl_logic_outputReset                )  //i
+    .io_softReset               (vga_ctrl_io_softReset                         ), //i
+    .io_timings_h_syncStart     (_zz_io_timings_h_syncStart[11:0]              ), //i
+    .io_timings_h_syncEnd       (_zz_io_timings_h_syncEnd[11:0]                ), //i
+    .io_timings_h_colorStart    (_zz_io_timings_h_colorStart[11:0]             ), //i
+    .io_timings_h_colorEnd      (_zz_io_timings_h_colorEnd[11:0]               ), //i
+    .io_timings_h_polarity      (_zz_io_timings_h_polarity                     ), //i
+    .io_timings_v_syncStart     (_zz_io_timings_v_syncStart[11:0]              ), //i
+    .io_timings_v_syncEnd       (_zz_io_timings_v_syncEnd[11:0]                ), //i
+    .io_timings_v_colorStart    (_zz_io_timings_v_colorStart[11:0]             ), //i
+    .io_timings_v_colorEnd      (_zz_io_timings_v_colorEnd[11:0]               ), //i
+    .io_timings_v_polarity      (_zz_io_timings_v_polarity                     ), //i
+    .io_frameStart              (vga_ctrl_io_frameStart                        ), //o
+    .io_pixels_valid            (vga_ctrl_io_pixels_valid                      ), //i
+    .io_pixels_ready            (vga_ctrl_io_pixels_ready                      ), //o
+    .io_pixels_payload_r        (vga_adapted_translated_thrown_payload_r[4:0]  ), //i
+    .io_pixels_payload_g        (vga_adapted_translated_thrown_payload_g[5:0]  ), //i
+    .io_pixels_payload_b        (vga_adapted_translated_thrown_payload_b[4:0]  ), //i
+    .io_vga_vSync               (vga_ctrl_io_vga_vSync                         ), //o
+    .io_vga_hSync               (vga_ctrl_io_vga_hSync                         ), //o
+    .io_vga_colorEn             (vga_ctrl_io_vga_colorEn                       ), //o
+    .io_vga_color_r             (vga_ctrl_io_vga_color_r[4:0]                  ), //o
+    .io_vga_color_g             (vga_ctrl_io_vga_color_g[5:0]                  ), //o
+    .io_vga_color_b             (vga_ctrl_io_vga_color_b[4:0]                  ), //o
+    .io_error                   (vga_ctrl_io_error                             ), //o
+    .clkout_vga                 (clkout_vga                                    ), //i
+    .vgaCd_logic_outputReset    (vgaCd_logic_outputReset                       )  //i
   );
   always @(*) begin
     case(_zz_vga_input_ready_2)
@@ -3296,31 +3528,11 @@ module BmbVgaCtrl (
     if(systemCdCtrl_logic_outputReset) begin
       _zz_io_ctrl_rsp_valid_2 <= 1'b0;
       run <= 1'b0;
-      _zz_vga_input_ready_2 <= 1'b0;
-      when_Stream_l408 <= 1'b0;
-      _zz_vga_adapted_translated_thrown_ready <= 1'b0;
-      vga_adapted_payload_first <= 1'b1;
       _zz_io_timings_h_polarity <= 1'b0;
       _zz_io_timings_v_polarity <= 1'b0;
     end else begin
       if(_zz_ctrl_rsp_ready) begin
         _zz_io_ctrl_rsp_valid_2 <= (ctrl_rsp_valid && _zz_io_ctrl_rsp_valid);
-      end
-      _zz_vga_input_ready_2 <= _zz_vga_input_ready_1;
-      if(vga_adapted_fire_1) begin
-        vga_adapted_payload_first <= vga_adapted_payload_last;
-      end
-      if(vga_ctrl_io_frameStart) begin
-        _zz_vga_adapted_translated_thrown_ready <= 1'b0;
-      end
-      if(when_VgaCtrl_l225) begin
-        when_Stream_l408 <= 1'b0;
-        _zz_vga_adapted_translated_thrown_ready <= when_Stream_l408;
-      end
-      if(when_VgaCtrl_l229) begin
-        if(when_VgaCtrl_l230) begin
-          when_Stream_l408 <= 1'b1;
-        end
       end
       case(io_ctrl_cmd_payload_fragment_address)
         8'h0 : begin
@@ -3346,13 +3558,6 @@ module BmbVgaCtrl (
       _zz_io_ctrl_rsp_payload_fragment_opcode <= ctrl_rsp_payload_fragment_opcode;
       _zz_io_ctrl_rsp_payload_fragment_data <= ctrl_rsp_payload_fragment_data;
       _zz_io_ctrl_rsp_payload_fragment_context <= ctrl_rsp_payload_fragment_context;
-    end
-    vga_run_regNext <= vga_run;
-    if(vga_ctrl_io_frameStart) begin
-      _zz_when_VgaCtrl_l230 <= 1'b1;
-    end
-    if(when_VgaCtrl_l218) begin
-      _zz_when_VgaCtrl_l230 <= 1'b0;
     end
     case(io_ctrl_cmd_payload_fragment_address)
       8'h40 : begin
@@ -3398,6 +3603,42 @@ module BmbVgaCtrl (
       default : begin
       end
     endcase
+  end
+
+  always @(posedge clkout_vga) begin
+    if(vgaCd_logic_outputReset) begin
+      _zz_vga_input_ready_2 <= 1'b0;
+      when_Stream_l408 <= 1'b0;
+      _zz_vga_adapted_translated_thrown_ready <= 1'b0;
+      vga_adapted_payload_first <= 1'b1;
+    end else begin
+      _zz_vga_input_ready_2 <= _zz_vga_input_ready_1;
+      if(vga_adapted_fire_1) begin
+        vga_adapted_payload_first <= vga_adapted_payload_last;
+      end
+      if(vga_ctrl_io_frameStart) begin
+        _zz_vga_adapted_translated_thrown_ready <= 1'b0;
+      end
+      if(when_VgaCtrl_l225) begin
+        when_Stream_l408 <= 1'b0;
+        _zz_vga_adapted_translated_thrown_ready <= when_Stream_l408;
+      end
+      if(when_VgaCtrl_l229) begin
+        if(when_VgaCtrl_l230) begin
+          when_Stream_l408 <= 1'b1;
+        end
+      end
+    end
+  end
+
+  always @(posedge clkout_vga) begin
+    vga_run_regNext <= vga_run;
+    if(vga_ctrl_io_frameStart) begin
+      _zz_when_VgaCtrl_l230 <= 1'b1;
+    end
+    if(when_VgaCtrl_l218) begin
+      _zz_when_VgaCtrl_l230 <= 1'b0;
+    end
   end
 
 
@@ -5555,7 +5796,8 @@ module BmbOnChipRam (
     $readmemh("saxon/progmem0.hex",ram_symbol0);
     $readmemh("saxon/progmem1.hex",ram_symbol1);
     $readmemh("saxon/progmem2.hex",ram_symbol2);
-    $readmemh("saxon/progmem3.hex",ram_symbol3);  end
+    $readmemh("saxon/progmem3.hex",ram_symbol3);
+  end
   always @(*) begin
     _zz_ram_port0 = {_zz_ramsymbol_read_3, _zz_ramsymbol_read_2, _zz_ramsymbol_read_1, _zz_ramsymbol_read};
   end
@@ -6172,7 +6414,7 @@ module BmbDecoder (
 
 endmodule
 
-module BufferCC_6 (
+module BufferCC_9 (
   input               io_dataIn,
   output              io_dataOut,
   input               clkout_system,
@@ -6191,203 +6433,6 @@ module BufferCC_6 (
       buffers_0 <= io_dataIn;
       buffers_1 <= buffers_0;
     end
-  end
-
-
-endmodule
-
-module VgaToHdmiEcp5 (
-  input               io_vga_vSync,
-  input               io_vga_hSync,
-  input               io_vga_colorEn,
-  input      [7:0]    io_vga_color_r,
-  input      [7:0]    io_vga_color_g,
-  input      [7:0]    io_vga_color_b,
-  output reg [3:0]    io_gpdi_dp,
-  output reg [3:0]    io_gpdi_dn,
-  input               hdmiCd_logic_outputReset,
-  input               clkout_hdmi,
-  input               clkout_system,
-  input               systemCdCtrl_logic_outputReset
-);
-
-  wire                ddr3p_D0;
-  wire                ddr3p_D1;
-  wire                ddr2p_D0;
-  wire                ddr2p_D1;
-  wire                ddr1p_D0;
-  wire                ddr1p_D1;
-  wire                ddr0p_D0;
-  wire                ddr0p_D1;
-  wire                ddr3n_D0;
-  wire                ddr3n_D1;
-  wire                ddr2n_D0;
-  wire                ddr2n_D1;
-  wire                ddr1n_D0;
-  wire                ddr1n_D1;
-  wire                ddr0n_D0;
-  wire                ddr0n_D1;
-  wire       [9:0]    encode_R_io_TMDS;
-  wire       [9:0]    encode_G_io_TMDS;
-  wire       [9:0]    encode_B_io_TMDS;
-  wire                ddr3p_Q;
-  wire                ddr2p_Q;
-  wire                ddr1p_Q;
-  wire                ddr0p_Q;
-  wire                ddr3n_Q;
-  wire                ddr2n_Q;
-  wire                ddr1n_Q;
-  wire                ddr0n_Q;
-  wire       [2:0]    _zz_ctr_mod5;
-  wire       [9:0]    _zz_shift_R;
-  wire       [7:0]    _zz_shift_R_1;
-  wire       [9:0]    _zz_shift_G;
-  wire       [7:0]    _zz_shift_G_1;
-  wire       [9:0]    _zz_shift_B;
-  wire       [7:0]    _zz_shift_B_1;
-  wire       [9:0]    _zz_shift_C;
-  wire       [7:0]    _zz_shift_C_1;
-  wire       [9:0]    TMDS_red;
-  wire       [9:0]    TMDS_green;
-  wire       [9:0]    TMDS_blue;
-  wire       [1:0]    bCd;
-  reg        [2:0]    ctr_mod5 = 3'b000;
-  reg                 shift_ld = 0;
-  reg        [9:0]    shift_R;
-  reg        [9:0]    shift_G;
-  reg        [9:0]    shift_B;
-  reg        [9:0]    shift_C;
-
-  assign _zz_ctr_mod5 = (ctr_mod5 + 3'b001);
-  assign _zz_shift_R_1 = shift_R[9 : 2];
-  assign _zz_shift_R = {2'd0, _zz_shift_R_1};
-  assign _zz_shift_G_1 = shift_G[9 : 2];
-  assign _zz_shift_G = {2'd0, _zz_shift_G_1};
-  assign _zz_shift_B_1 = shift_B[9 : 2];
-  assign _zz_shift_B = {2'd0, _zz_shift_B_1};
-  assign _zz_shift_C_1 = shift_C[9 : 2];
-  assign _zz_shift_C = {2'd0, _zz_shift_C_1};
-  TmdsEncoder encode_R (
-    .io_VD                             (io_vga_color_r[7:0]             ), //i
-    .io_CD                             (2'b00                           ), //i
-    .io_VDE                            (io_vga_colorEn                  ), //i
-    .io_TMDS                           (encode_R_io_TMDS[9:0]           ), //o
-    .clkout_system                     (clkout_system                   ), //i
-    .systemCdCtrl_logic_outputReset    (systemCdCtrl_logic_outputReset  )  //i
-  );
-  TmdsEncoder encode_G (
-    .io_VD                             (io_vga_color_g[7:0]             ), //i
-    .io_CD                             (2'b00                           ), //i
-    .io_VDE                            (io_vga_colorEn                  ), //i
-    .io_TMDS                           (encode_G_io_TMDS[9:0]           ), //o
-    .clkout_system                     (clkout_system                   ), //i
-    .systemCdCtrl_logic_outputReset    (systemCdCtrl_logic_outputReset  )  //i
-  );
-  TmdsEncoder encode_B (
-    .io_VD                             (io_vga_color_b[7:0]             ), //i
-    .io_CD                             (bCd[1:0]                        ), //i
-    .io_VDE                            (io_vga_colorEn                  ), //i
-    .io_TMDS                           (encode_B_io_TMDS[9:0]           ), //o
-    .clkout_system                     (clkout_system                   ), //i
-    .systemCdCtrl_logic_outputReset    (systemCdCtrl_logic_outputReset  )  //i
-  );
-  ODDRX1F ddr3p (
-    .SCLK    (clkout_hdmi               ), //i
-    .RST     (hdmiCd_logic_outputReset  ), //i
-    .D0      (ddr3p_D0                  ), //i
-    .D1      (ddr3p_D1                  ), //i
-    .Q       (ddr3p_Q                   )  //o
-  );
-  ODDRX1F ddr2p (
-    .SCLK    (clkout_hdmi               ), //i
-    .RST     (hdmiCd_logic_outputReset  ), //i
-    .D0      (ddr2p_D0                  ), //i
-    .D1      (ddr2p_D1                  ), //i
-    .Q       (ddr2p_Q                   )  //o
-  );
-  ODDRX1F ddr1p (
-    .SCLK    (clkout_hdmi               ), //i
-    .RST     (hdmiCd_logic_outputReset  ), //i
-    .D0      (ddr1p_D0                  ), //i
-    .D1      (ddr1p_D1                  ), //i
-    .Q       (ddr1p_Q                   )  //o
-  );
-  ODDRX1F ddr0p (
-    .SCLK    (clkout_hdmi               ), //i
-    .RST     (hdmiCd_logic_outputReset  ), //i
-    .D0      (ddr0p_D0                  ), //i
-    .D1      (ddr0p_D1                  ), //i
-    .Q       (ddr0p_Q                   )  //o
-  );
-  ODDRX1F ddr3n (
-    .SCLK    (clkout_hdmi               ), //i
-    .RST     (hdmiCd_logic_outputReset  ), //i
-    .D0      (ddr3n_D0                  ), //i
-    .D1      (ddr3n_D1                  ), //i
-    .Q       (ddr3n_Q                   )  //o
-  );
-  ODDRX1F ddr2n (
-    .SCLK    (clkout_hdmi               ), //i
-    .RST     (hdmiCd_logic_outputReset  ), //i
-    .D0      (ddr2n_D0                  ), //i
-    .D1      (ddr2n_D1                  ), //i
-    .Q       (ddr2n_Q                   )  //o
-  );
-  ODDRX1F ddr1n (
-    .SCLK    (clkout_hdmi               ), //i
-    .RST     (hdmiCd_logic_outputReset  ), //i
-    .D0      (ddr1n_D0                  ), //i
-    .D1      (ddr1n_D1                  ), //i
-    .Q       (ddr1n_Q                   )  //o
-  );
-  ODDRX1F ddr0n (
-    .SCLK    (clkout_hdmi               ), //i
-    .RST     (hdmiCd_logic_outputReset  ), //i
-    .D0      (ddr0n_D0                  ), //i
-    .D1      (ddr0n_D1                  ), //i
-    .Q       (ddr0n_Q                   )  //o
-  );
-  assign bCd = {io_vga_vSync,io_vga_hSync};
-  assign TMDS_red = encode_R_io_TMDS;
-  assign TMDS_green = encode_G_io_TMDS;
-  assign TMDS_blue = encode_B_io_TMDS;
-  assign ddr3p_D0 = shift_C[0];
-  assign ddr3p_D1 = shift_C[1];
-  always @(*) begin
-    io_gpdi_dp[3] = ddr3p_Q;
-    io_gpdi_dp[2] = ddr2p_Q;
-    io_gpdi_dp[1] = ddr1p_Q;
-    io_gpdi_dp[0] = ddr0p_Q;
-  end
-
-  assign ddr2p_D0 = shift_R[0];
-  assign ddr2p_D1 = shift_R[1];
-  assign ddr1p_D0 = shift_G[0];
-  assign ddr1p_D1 = shift_G[1];
-  assign ddr0p_D0 = shift_B[0];
-  assign ddr0p_D1 = shift_B[1];
-  assign ddr3n_D0 = (! shift_C[0]);
-  assign ddr3n_D1 = (! shift_C[1]);
-  always @(*) begin
-    io_gpdi_dn[3] = ddr3n_Q;
-    io_gpdi_dn[2] = ddr2n_Q;
-    io_gpdi_dn[1] = ddr1n_Q;
-    io_gpdi_dn[0] = ddr0n_Q;
-  end
-
-  assign ddr2n_D0 = (! shift_R[0]);
-  assign ddr2n_D1 = (! shift_R[1]);
-  assign ddr1n_D0 = (! shift_G[0]);
-  assign ddr1n_D1 = (! shift_G[1]);
-  assign ddr0n_D0 = (! shift_B[0]);
-  assign ddr0n_D1 = (! shift_B[1]);
-  always @(posedge clkout_hdmi) begin
-    shift_ld <= (ctr_mod5 == 3'b100);
-    ctr_mod5 <= ((ctr_mod5 == 3'b100) ? 3'b000 : _zz_ctr_mod5);
-    shift_R <= (shift_ld ? TMDS_red : _zz_shift_R);
-    shift_G <= (shift_ld ? TMDS_green : _zz_shift_G);
-    shift_B <= (shift_ld ? TMDS_blue : _zz_shift_B);
-    shift_C <= (shift_ld ? 10'h3e0 : _zz_shift_C);
   end
 
 
@@ -6793,6 +6838,203 @@ module JtagBridge (
 
   always @(negedge io_jtag_tck) begin
     jtag_tap_tdoUnbufferd_regNext <= jtag_tap_tdoUnbufferd;
+  end
+
+
+endmodule
+
+module VgaToHdmiEcp5 (
+  input               io_vga_vSync,
+  input               io_vga_hSync,
+  input               io_vga_colorEn,
+  input      [7:0]    io_vga_color_r,
+  input      [7:0]    io_vga_color_g,
+  input      [7:0]    io_vga_color_b,
+  output reg [3:0]    io_gpdi_dp,
+  output reg [3:0]    io_gpdi_dn,
+  input               hdmiCd_logic_outputReset,
+  input               clkout_hdmi,
+  input               clkout_vga,
+  input               vgaCd_logic_outputReset
+);
+
+  wire                ddr3p_D0;
+  wire                ddr3p_D1;
+  wire                ddr2p_D0;
+  wire                ddr2p_D1;
+  wire                ddr1p_D0;
+  wire                ddr1p_D1;
+  wire                ddr0p_D0;
+  wire                ddr0p_D1;
+  wire                ddr3n_D0;
+  wire                ddr3n_D1;
+  wire                ddr2n_D0;
+  wire                ddr2n_D1;
+  wire                ddr1n_D0;
+  wire                ddr1n_D1;
+  wire                ddr0n_D0;
+  wire                ddr0n_D1;
+  wire       [9:0]    encode_R_io_TMDS;
+  wire       [9:0]    encode_G_io_TMDS;
+  wire       [9:0]    encode_B_io_TMDS;
+  wire                ddr3p_Q;
+  wire                ddr2p_Q;
+  wire                ddr1p_Q;
+  wire                ddr0p_Q;
+  wire                ddr3n_Q;
+  wire                ddr2n_Q;
+  wire                ddr1n_Q;
+  wire                ddr0n_Q;
+  wire       [2:0]    _zz_ctr_mod5;
+  wire       [9:0]    _zz_shift_R;
+  wire       [7:0]    _zz_shift_R_1;
+  wire       [9:0]    _zz_shift_G;
+  wire       [7:0]    _zz_shift_G_1;
+  wire       [9:0]    _zz_shift_B;
+  wire       [7:0]    _zz_shift_B_1;
+  wire       [9:0]    _zz_shift_C;
+  wire       [7:0]    _zz_shift_C_1;
+  wire       [9:0]    TMDS_red;
+  wire       [9:0]    TMDS_green;
+  wire       [9:0]    TMDS_blue;
+  wire       [1:0]    bCd;
+  reg        [2:0]    ctr_mod5 = 3'b000;
+  reg                 shift_ld = 0;
+  reg        [9:0]    shift_R;
+  reg        [9:0]    shift_G;
+  reg        [9:0]    shift_B;
+  reg        [9:0]    shift_C;
+
+  assign _zz_ctr_mod5 = (ctr_mod5 + 3'b001);
+  assign _zz_shift_R_1 = shift_R[9 : 2];
+  assign _zz_shift_R = {2'd0, _zz_shift_R_1};
+  assign _zz_shift_G_1 = shift_G[9 : 2];
+  assign _zz_shift_G = {2'd0, _zz_shift_G_1};
+  assign _zz_shift_B_1 = shift_B[9 : 2];
+  assign _zz_shift_B = {2'd0, _zz_shift_B_1};
+  assign _zz_shift_C_1 = shift_C[9 : 2];
+  assign _zz_shift_C = {2'd0, _zz_shift_C_1};
+  TmdsEncoder encode_R (
+    .io_VD                      (io_vga_color_r[7:0]      ), //i
+    .io_CD                      (2'b00                    ), //i
+    .io_VDE                     (io_vga_colorEn           ), //i
+    .io_TMDS                    (encode_R_io_TMDS[9:0]    ), //o
+    .clkout_vga                 (clkout_vga               ), //i
+    .vgaCd_logic_outputReset    (vgaCd_logic_outputReset  )  //i
+  );
+  TmdsEncoder encode_G (
+    .io_VD                      (io_vga_color_g[7:0]      ), //i
+    .io_CD                      (2'b00                    ), //i
+    .io_VDE                     (io_vga_colorEn           ), //i
+    .io_TMDS                    (encode_G_io_TMDS[9:0]    ), //o
+    .clkout_vga                 (clkout_vga               ), //i
+    .vgaCd_logic_outputReset    (vgaCd_logic_outputReset  )  //i
+  );
+  TmdsEncoder encode_B (
+    .io_VD                      (io_vga_color_b[7:0]      ), //i
+    .io_CD                      (bCd[1:0]                 ), //i
+    .io_VDE                     (io_vga_colorEn           ), //i
+    .io_TMDS                    (encode_B_io_TMDS[9:0]    ), //o
+    .clkout_vga                 (clkout_vga               ), //i
+    .vgaCd_logic_outputReset    (vgaCd_logic_outputReset  )  //i
+  );
+  ODDRX1F ddr3p (
+    .SCLK    (clkout_hdmi               ), //i
+    .RST     (hdmiCd_logic_outputReset  ), //i
+    .D0      (ddr3p_D0                  ), //i
+    .D1      (ddr3p_D1                  ), //i
+    .Q       (ddr3p_Q                   )  //o
+  );
+  ODDRX1F ddr2p (
+    .SCLK    (clkout_hdmi               ), //i
+    .RST     (hdmiCd_logic_outputReset  ), //i
+    .D0      (ddr2p_D0                  ), //i
+    .D1      (ddr2p_D1                  ), //i
+    .Q       (ddr2p_Q                   )  //o
+  );
+  ODDRX1F ddr1p (
+    .SCLK    (clkout_hdmi               ), //i
+    .RST     (hdmiCd_logic_outputReset  ), //i
+    .D0      (ddr1p_D0                  ), //i
+    .D1      (ddr1p_D1                  ), //i
+    .Q       (ddr1p_Q                   )  //o
+  );
+  ODDRX1F ddr0p (
+    .SCLK    (clkout_hdmi               ), //i
+    .RST     (hdmiCd_logic_outputReset  ), //i
+    .D0      (ddr0p_D0                  ), //i
+    .D1      (ddr0p_D1                  ), //i
+    .Q       (ddr0p_Q                   )  //o
+  );
+  ODDRX1F ddr3n (
+    .SCLK    (clkout_hdmi               ), //i
+    .RST     (hdmiCd_logic_outputReset  ), //i
+    .D0      (ddr3n_D0                  ), //i
+    .D1      (ddr3n_D1                  ), //i
+    .Q       (ddr3n_Q                   )  //o
+  );
+  ODDRX1F ddr2n (
+    .SCLK    (clkout_hdmi               ), //i
+    .RST     (hdmiCd_logic_outputReset  ), //i
+    .D0      (ddr2n_D0                  ), //i
+    .D1      (ddr2n_D1                  ), //i
+    .Q       (ddr2n_Q                   )  //o
+  );
+  ODDRX1F ddr1n (
+    .SCLK    (clkout_hdmi               ), //i
+    .RST     (hdmiCd_logic_outputReset  ), //i
+    .D0      (ddr1n_D0                  ), //i
+    .D1      (ddr1n_D1                  ), //i
+    .Q       (ddr1n_Q                   )  //o
+  );
+  ODDRX1F ddr0n (
+    .SCLK    (clkout_hdmi               ), //i
+    .RST     (hdmiCd_logic_outputReset  ), //i
+    .D0      (ddr0n_D0                  ), //i
+    .D1      (ddr0n_D1                  ), //i
+    .Q       (ddr0n_Q                   )  //o
+  );
+  assign bCd = {io_vga_vSync,io_vga_hSync};
+  assign TMDS_red = encode_R_io_TMDS;
+  assign TMDS_green = encode_G_io_TMDS;
+  assign TMDS_blue = encode_B_io_TMDS;
+  assign ddr3p_D0 = shift_C[0];
+  assign ddr3p_D1 = shift_C[1];
+  always @(*) begin
+    io_gpdi_dp[3] = ddr3p_Q;
+    io_gpdi_dp[2] = ddr2p_Q;
+    io_gpdi_dp[1] = ddr1p_Q;
+    io_gpdi_dp[0] = ddr0p_Q;
+  end
+
+  assign ddr2p_D0 = shift_R[0];
+  assign ddr2p_D1 = shift_R[1];
+  assign ddr1p_D0 = shift_G[0];
+  assign ddr1p_D1 = shift_G[1];
+  assign ddr0p_D0 = shift_B[0];
+  assign ddr0p_D1 = shift_B[1];
+  assign ddr3n_D0 = (! shift_C[0]);
+  assign ddr3n_D1 = (! shift_C[1]);
+  always @(*) begin
+    io_gpdi_dn[3] = ddr3n_Q;
+    io_gpdi_dn[2] = ddr2n_Q;
+    io_gpdi_dn[1] = ddr1n_Q;
+    io_gpdi_dn[0] = ddr0n_Q;
+  end
+
+  assign ddr2n_D0 = (! shift_R[0]);
+  assign ddr2n_D1 = (! shift_R[1]);
+  assign ddr1n_D0 = (! shift_G[0]);
+  assign ddr1n_D1 = (! shift_G[1]);
+  assign ddr0n_D0 = (! shift_B[0]);
+  assign ddr0n_D1 = (! shift_B[1]);
+  always @(posedge clkout_hdmi) begin
+    shift_ld <= (ctr_mod5 == 3'b100);
+    ctr_mod5 <= ((ctr_mod5 == 3'b100) ? 3'b000 : _zz_ctr_mod5);
+    shift_R <= (shift_ld ? TMDS_red : _zz_shift_R);
+    shift_G <= (shift_ld ? TMDS_green : _zz_shift_G);
+    shift_B <= (shift_ld ? TMDS_blue : _zz_shift_B);
+    shift_C <= (shift_ld ? 10'h3e0 : _zz_shift_C);
   end
 
 
@@ -12125,7 +12367,31 @@ module VexRiscv (
 
 endmodule
 
-module BufferCC_5 (
+module BufferCC_8 (
+  input               io_dataIn,
+  output              io_dataOut,
+  input               clkout_vga,
+  input               debugCdCtrl_logic_outputReset
+);
+
+  (* async_reg = "true" *) reg                 buffers_0;
+  (* async_reg = "true" *) reg                 buffers_1;
+
+  assign io_dataOut = buffers_1;
+  always @(posedge clkout_vga or posedge debugCdCtrl_logic_outputReset) begin
+    if(debugCdCtrl_logic_outputReset) begin
+      buffers_0 <= 1'b1;
+      buffers_1 <= 1'b1;
+    end else begin
+      buffers_0 <= io_dataIn;
+      buffers_1 <= buffers_0;
+    end
+  end
+
+
+endmodule
+
+module BufferCC_7 (
   input               io_dataIn,
   output              io_dataOut,
   input               clkout_hdmi,
@@ -12149,7 +12415,7 @@ module BufferCC_5 (
 
 endmodule
 
-module BufferCC_4 (
+module BufferCC_6 (
   input               io_dataIn,
   output              io_dataOut,
   input               clkout_system,
@@ -13097,7 +13363,7 @@ module Core_1 (
 
 endmodule
 
-module BufferCC_3 (
+module BufferCC_5 (
   input               io_dataIn,
   output              io_dataOut,
   input               clkout_system,
@@ -13968,6 +14234,54 @@ module Ecp5Sdrx2Phy (
 
 endmodule
 
+module BufferCC_4 (
+  input      [7:0]    io_dataIn,
+  output     [7:0]    io_dataOut,
+  input               clkout_vga,
+  input               vgaCd_logic_outputReset
+);
+
+  (* async_reg = "true" *) reg        [7:0]    buffers_0;
+  (* async_reg = "true" *) reg        [7:0]    buffers_1;
+
+  assign io_dataOut = buffers_1;
+  always @(posedge clkout_vga) begin
+    if(vgaCd_logic_outputReset) begin
+      buffers_0 <= 8'h0;
+      buffers_1 <= 8'h0;
+    end else begin
+      buffers_0 <= io_dataIn;
+      buffers_1 <= buffers_0;
+    end
+  end
+
+
+endmodule
+
+module BufferCC_3 (
+  input      [7:0]    io_dataIn,
+  output     [7:0]    io_dataOut,
+  input               clkout_system,
+  input               systemCdCtrl_logic_outputReset
+);
+
+  (* async_reg = "true" *) reg        [7:0]    buffers_0;
+  (* async_reg = "true" *) reg        [7:0]    buffers_1;
+
+  assign io_dataOut = buffers_1;
+  always @(posedge clkout_system) begin
+    if(systemCdCtrl_logic_outputReset) begin
+      buffers_0 <= 8'h0;
+      buffers_1 <= 8'h0;
+    end else begin
+      buffers_0 <= io_dataIn;
+      buffers_1 <= buffers_0;
+    end
+  end
+
+
+endmodule
+
 module VgaCtrl (
   input               io_softReset,
   input      [11:0]   io_timings_h_syncStart,
@@ -13993,8 +14307,8 @@ module VgaCtrl (
   output     [5:0]    io_vga_color_g,
   output     [4:0]    io_vga_color_b,
   output              io_error,
-  input               clkout_system,
-  input               systemCdCtrl_logic_outputReset
+  input               clkout_vga,
+  input               vgaCd_logic_outputReset
 );
 
   wire                when_VgaCtrl_l183;
@@ -14033,8 +14347,8 @@ module VgaCtrl (
   assign io_vga_color_r = io_pixels_payload_r;
   assign io_vga_color_g = io_pixels_payload_g;
   assign io_vga_color_b = io_pixels_payload_b;
-  always @(posedge clkout_system) begin
-    if(systemCdCtrl_logic_outputReset) begin
+  always @(posedge clkout_vga) begin
+    if(vgaCd_logic_outputReset) begin
       h_counter <= 12'h0;
       h_sync <= 1'b0;
       h_colorEn <= 1'b0;
@@ -14097,15 +14411,15 @@ endmodule
 module BufferCC_2 (
   input               io_dataIn,
   output              io_dataOut,
-  input               clkout_system,
-  input               systemCdCtrl_logic_outputReset
+  input               clkout_vga,
+  input               vgaCd_logic_outputReset
 );
 
   (* async_reg = "true" *) reg                 buffers_0;
   (* async_reg = "true" *) reg                 buffers_1;
 
   assign io_dataOut = buffers_1;
-  always @(posedge clkout_system) begin
+  always @(posedge clkout_vga) begin
     buffers_0 <= io_dataIn;
     buffers_1 <= buffers_0;
   end
@@ -15379,6 +15693,72 @@ module StreamArbiter (
 
 endmodule
 
+module FlowCCByToggle (
+  input               io_input_valid,
+  input               io_input_payload_last,
+  input      [0:0]    io_input_payload_fragment,
+  output              io_output_valid,
+  output              io_output_payload_last,
+  output     [0:0]    io_output_payload_fragment,
+  input               io_jtag_tck,
+  input               clkout_system,
+  input               debugCdCtrl_logic_outputReset
+);
+
+  wire                inputArea_target_buffercc_io_dataOut;
+  wire                outHitSignal;
+  reg                 inputArea_target = 0;
+  reg                 inputArea_data_last;
+  reg        [0:0]    inputArea_data_fragment;
+  wire                outputArea_target;
+  reg                 outputArea_hit;
+  wire                outputArea_flow_valid;
+  wire                outputArea_flow_payload_last;
+  wire       [0:0]    outputArea_flow_payload_fragment;
+  reg                 outputArea_flow_m2sPipe_valid;
+  reg                 outputArea_flow_m2sPipe_payload_last;
+  reg        [0:0]    outputArea_flow_m2sPipe_payload_fragment;
+
+  BufferCC_1 inputArea_target_buffercc (
+    .io_dataIn                        (inputArea_target                      ), //i
+    .io_dataOut                       (inputArea_target_buffercc_io_dataOut  ), //o
+    .clkout_system                    (clkout_system                         ), //i
+    .debugCdCtrl_logic_outputReset    (debugCdCtrl_logic_outputReset         )  //i
+  );
+  assign outputArea_target = inputArea_target_buffercc_io_dataOut;
+  assign outputArea_flow_valid = (outputArea_target != outputArea_hit);
+  assign outputArea_flow_payload_last = inputArea_data_last;
+  assign outputArea_flow_payload_fragment = inputArea_data_fragment;
+  assign io_output_valid = outputArea_flow_m2sPipe_valid;
+  assign io_output_payload_last = outputArea_flow_m2sPipe_payload_last;
+  assign io_output_payload_fragment = outputArea_flow_m2sPipe_payload_fragment;
+  always @(posedge io_jtag_tck) begin
+    if(io_input_valid) begin
+      inputArea_target <= (! inputArea_target);
+      inputArea_data_last <= io_input_payload_last;
+      inputArea_data_fragment <= io_input_payload_fragment;
+    end
+  end
+
+  always @(posedge clkout_system) begin
+    outputArea_hit <= outputArea_target;
+    if(outputArea_flow_valid) begin
+      outputArea_flow_m2sPipe_payload_last <= outputArea_flow_payload_last;
+      outputArea_flow_m2sPipe_payload_fragment <= outputArea_flow_payload_fragment;
+    end
+  end
+
+  always @(posedge clkout_system) begin
+    if(debugCdCtrl_logic_outputReset) begin
+      outputArea_flow_m2sPipe_valid <= 1'b0;
+    end else begin
+      outputArea_flow_m2sPipe_valid <= outputArea_flow_valid;
+    end
+  end
+
+
+endmodule
+
 //TmdsEncoder replaced by TmdsEncoder
 
 //TmdsEncoder replaced by TmdsEncoder
@@ -15388,8 +15768,8 @@ module TmdsEncoder (
   input      [1:0]    io_CD,
   input               io_VDE,
   output reg [9:0]    io_TMDS,
-  input               clkout_system,
-  input               systemCdCtrl_logic_outputReset
+  input               clkout_vga,
+  input               vgaCd_logic_outputReset
 );
 
   wire       [3:0]    _zz_ones;
@@ -15532,75 +15912,9 @@ module TmdsEncoder (
   assign dc_bias_d = (inv_dw ? _zz_dc_bias_d : _zz_dc_bias_d_1);
   assign TMDS_data = {{inv_dw,dw_8},({dw_7,{dw_6,{dw_5,{dw_4,{dw_3,{dw_2,{_zz_TMDS_data,_zz_TMDS_data_1}}}}}}} ^ (inv_dw ? 8'hff : 8'h0))};
   assign TMDS_code = (io_CD[1] ? (io_CD[0] ? 10'h2ab : 10'h154) : (io_CD[0] ? 10'h0ab : 10'h354));
-  always @(posedge clkout_system) begin
+  always @(posedge clkout_vga) begin
     io_TMDS <= (io_VDE ? TMDS_data : TMDS_code);
     dc_bias <= (io_VDE ? dc_bias_d : 4'b0000);
-  end
-
-
-endmodule
-
-module FlowCCByToggle (
-  input               io_input_valid,
-  input               io_input_payload_last,
-  input      [0:0]    io_input_payload_fragment,
-  output              io_output_valid,
-  output              io_output_payload_last,
-  output     [0:0]    io_output_payload_fragment,
-  input               io_jtag_tck,
-  input               clkout_system,
-  input               debugCdCtrl_logic_outputReset
-);
-
-  wire                inputArea_target_buffercc_io_dataOut;
-  wire                outHitSignal;
-  reg                 inputArea_target = 0;
-  reg                 inputArea_data_last;
-  reg        [0:0]    inputArea_data_fragment;
-  wire                outputArea_target;
-  reg                 outputArea_hit;
-  wire                outputArea_flow_valid;
-  wire                outputArea_flow_payload_last;
-  wire       [0:0]    outputArea_flow_payload_fragment;
-  reg                 outputArea_flow_m2sPipe_valid;
-  reg                 outputArea_flow_m2sPipe_payload_last;
-  reg        [0:0]    outputArea_flow_m2sPipe_payload_fragment;
-
-  BufferCC_1 inputArea_target_buffercc (
-    .io_dataIn                        (inputArea_target                      ), //i
-    .io_dataOut                       (inputArea_target_buffercc_io_dataOut  ), //o
-    .clkout_system                    (clkout_system                         ), //i
-    .debugCdCtrl_logic_outputReset    (debugCdCtrl_logic_outputReset         )  //i
-  );
-  assign outputArea_target = inputArea_target_buffercc_io_dataOut;
-  assign outputArea_flow_valid = (outputArea_target != outputArea_hit);
-  assign outputArea_flow_payload_last = inputArea_data_last;
-  assign outputArea_flow_payload_fragment = inputArea_data_fragment;
-  assign io_output_valid = outputArea_flow_m2sPipe_valid;
-  assign io_output_payload_last = outputArea_flow_m2sPipe_payload_last;
-  assign io_output_payload_fragment = outputArea_flow_m2sPipe_payload_fragment;
-  always @(posedge io_jtag_tck) begin
-    if(io_input_valid) begin
-      inputArea_target <= (! inputArea_target);
-      inputArea_data_last <= io_input_payload_last;
-      inputArea_data_fragment <= io_input_payload_fragment;
-    end
-  end
-
-  always @(posedge clkout_system) begin
-    outputArea_hit <= outputArea_target;
-    if(outputArea_flow_valid) begin
-      outputArea_flow_m2sPipe_payload_last <= outputArea_flow_payload_last;
-      outputArea_flow_m2sPipe_payload_fragment <= outputArea_flow_payload_fragment;
-    end
-  end
-
-  always @(posedge clkout_system) begin
-    if(debugCdCtrl_logic_outputReset) begin
-      outputArea_flow_m2sPipe_valid <= 1'b0;
-    end else begin
-      outputArea_flow_m2sPipe_valid <= outputArea_flow_valid;
-    end
   end
 
 

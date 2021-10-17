@@ -1715,13 +1715,13 @@ int main()
     gpio_setOutput(0xf0000000, 0x00000000);
 
 
- vga_set_timing(0xf0090000,vga_h800_v600_r60);
+ vga_set_timing(0xf0090000,vga_h640_v480_r60);
  vga_start(0xf0090000);
 
 
  dmasg_input_memory(0xf0080000,0,(void *)0x40000000,0);
- dmasg_output_stream(0xf0080000, 0, 0, 0, 0, 0);
- dmasg_direct_start(0xf0080000,0,800*600*2,1);
+ dmasg_output_stream(0xf0080000, 0, 0, 0, 0, 1);
+ dmasg_direct_start(0xf0080000,0,640*480*2,1);
 
 
  xfunc_out = (void(*)(unsigned char))(uart_putc);
