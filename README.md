@@ -1,16 +1,18 @@
 # Saxon SoC on [ICESugar Pro](https://github.com/wuxx/icesugar-pro) (Lattice ECP5)
 
 
-## About Saxon Soc
+## About Saxon Soc and This Implementation
 + The [Saxon SoC](https://github.com/SpinalHDL/SaxonSoc) is a SoC using the [VexRiscv](https://github.com/SpinalHDL/VexRiscv).
++ This is the configuration for using VexRiscv (RV32IMC) on bare metal.
 
 ## Similar Projects
 - [Briey SoC on ECP5](https://github.com/jmio/ECP5_Brieysoc)
 - [Briey SoC on Sipeed Tang Primer](https://github.com/jmio/testvex)
 ## Supported HW
 + UART (Saxon SoC, 115200bps)
-+ JTAG DEBUG @ iCELink 2nd JTAG (VexRiscv)
-+ SDRAM (0x4000000~ @100MHz, I haven't properly tested it yet.)
++ JTAG DEBUG @ iCELink 2nd JTAG (VexRiscv JTAG Port)
++ SDRAM (x2 Clock, 0x4000000- @100MHz)
++ HDMI (Saxon SoC DMA Controller, FrameBuffer@0x40000000-)
 
 ## HW Build Tool
 + [yosys](https://github.com/YosysHQ/yosys)

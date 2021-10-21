@@ -127,6 +127,7 @@ class ICESugarProMinimal extends Component{
     val resetn    = in Bool()
     val clk25m    = in Bool()
     val sdram_clk = out Bool()
+    val vga_clk   = out Bool()
 
     val pll = new BlackBox{
       setDefinitionName("pll_50mhz")
@@ -161,6 +162,8 @@ class ICESugarProMinimal extends Component{
     bb.D0 <> True
     bb.D1 <> False
     bb.Q <> sdram_clk
+
+    pll.clkout_vga <> vga_clk;
   }
 
   val system = systemCd on new ICESugarProMinimalAbstract(){
@@ -168,6 +171,13 @@ class ICESugarProMinimal extends Component{
 
     val phyA = Ecp5Sdrx2PhyGenerator().connect(sdramA)
     val hdmiPhy = vga.withHdmiEcp5(hdmiCd.outputClockDomain)
+    // VGA BUS and timing signal for Overlay Text
+    val vgaBus  = Handle(vga.output.toIo)
+    val vga_frameStart = Handle(vga.logic.vga.ctrl.io.frameStart.pull().toIo)
+    val vga_hctr = Handle(vga.logic.vga.ctrl.h.counter.pull().toIo)
+    val vga_vctr = Handle(vga.logic.vga.ctrl.v.counter.pull().toIo)
+    val vga_hstart = Handle(vga.logic.vga.ctrl.io.timings.h.syncStart.pull().toIo)
+    val vga_vstart = Handle(vga.logic.vga.ctrl.io.timings.v.syncStart.pull().toIo)
 
     interconnect.setPipelining(bmbPeripheral.bmb)(cmdHalfRate = true, rspHalfRate = true)
     interconnect.setPipelining(cpu.dBus)(cmdValid = true)

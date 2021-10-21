@@ -1,6 +1,6 @@
 // Generator : SpinalHDL v1.6.1    git head : 8434600e3b32dc561f4e361e99a6085b79085453
 // Component : ICESugarProMinimal
-// Git hash  : 184629e6a11ea096a00efe3d2ba89c1cfa344082
+// Git hash  : dc56b90c31a02d660c43b64c86db9abf8e5c96b6
 
 
 
@@ -8,6 +8,7 @@ module ICESugarProMinimal (
   input               clocking_resetn,
   input               clocking_clk25m,
   output              clocking_sdram_clk,
+  output              clocking_vga_clk,
   input               system_cpu_jtag_tms,
   input               system_cpu_jtag_tdi,
   output              system_cpu_jtag_tdo,
@@ -22,6 +23,17 @@ module ICESugarProMinimal (
   output              system_phyA_sdram_WEn,
   output              system_uartA_uart_txd,
   input               system_uartA_uart_rxd,
+  output              system_vga_frameStart,
+  output     [11:0]   system_vga_hctr,
+  output     [11:0]   system_vga_vctr,
+  output     [11:0]   system_vga_hstart,
+  output     [11:0]   system_vga_vstart,
+  output              system_vgaBus_vSync,
+  output              system_vgaBus_hSync,
+  output              system_vgaBus_colorEn,
+  output     [4:0]    system_vgaBus_color_r,
+  output     [5:0]    system_vgaBus_color_g,
+  output     [4:0]    system_vgaBus_color_b,
   output     [3:0]    system_hdmiPhy_gpdi_dp,
   output     [3:0]    system_hdmiPhy_gpdi_dn,
    inout     [15:0]   system_phyA_sdram_DQ,
@@ -362,6 +374,11 @@ module ICESugarProMinimal (
   wire       [4:0]    system_vga_logic_io_vga_color_r;
   wire       [5:0]    system_vga_logic_io_vga_color_g;
   wire       [4:0]    system_vga_logic_io_vga_color_b;
+  wire                system_vga_logic__zz_system_vga_frameStart;
+  wire       [11:0]   system_vga_logic__zz_system_vga_hctr;
+  wire       [11:0]   system_vga_logic__zz_system_vga_vctr;
+  wire       [11:0]   system_vga_logic__zz_system_vga_hstart;
+  wire       [11:0]   system_vga_logic__zz_system_vga_vstart;
   wire                system_dma_read_decoder_io_input_cmd_ready;
   wire                system_dma_read_decoder_io_input_rsp_valid;
   wire                system_dma_read_decoder_io_input_rsp_payload_last;
@@ -1747,6 +1764,11 @@ module ICESugarProMinimal (
     .io_vga_color_r                          (system_vga_logic_io_vga_color_r[4:0]                                                       ), //o
     .io_vga_color_g                          (system_vga_logic_io_vga_color_g[5:0]                                                       ), //o
     .io_vga_color_b                          (system_vga_logic_io_vga_color_b[4:0]                                                       ), //o
+    ._zz_system_vga_frameStart               (system_vga_logic__zz_system_vga_frameStart                                                 ), //o
+    ._zz_system_vga_hctr                     (system_vga_logic__zz_system_vga_hctr[11:0]                                                 ), //o
+    ._zz_system_vga_vctr                     (system_vga_logic__zz_system_vga_vctr[11:0]                                                 ), //o
+    ._zz_system_vga_hstart                   (system_vga_logic__zz_system_vga_hstart[11:0]                                               ), //o
+    ._zz_system_vga_vstart                   (system_vga_logic__zz_system_vga_vstart[11:0]                                               ), //o
     .clkout_system                           (clocking_pll_clkout_system                                                                 ), //i
     .systemCdCtrl_logic_outputReset          (systemCdCtrl_logic_outputReset                                                             ), //i
     .clkout_vga                              (clocking_pll_clkout_vga                                                                    ), //i
@@ -1991,6 +2013,7 @@ module ICESugarProMinimal (
   end
 
   assign clocking_sdram_clk = clocking_bb_Q;
+  assign clocking_vga_clk = clocking_pll_clkout_vga;
   always @(*) begin
     debugCdCtrl_logic_inputResetTrigger = 1'b0;
     if(debugCdCtrl_logic_inputResetAdapter_stuff_syncTrigger) begin
@@ -2284,6 +2307,11 @@ module ICESugarProMinimal (
   assign system_gpioA_interrupts_7 = system_gpioA_logic_io_interrupt[7];
   assign system_uartA_uart_txd = system_uartA_logic_io_uart_txd;
   assign system_dma_interrupt = (|system_dma_logic_io_interrupts);
+  assign system_vga_frameStart = system_vga_logic__zz_system_vga_frameStart;
+  assign system_vga_hctr = system_vga_logic__zz_system_vga_hctr;
+  assign system_vga_vctr = system_vga_logic__zz_system_vga_vctr;
+  assign system_vga_hstart = system_vga_logic__zz_system_vga_hstart;
+  assign system_vga_vstart = system_vga_logic__zz_system_vga_vstart;
   assign system_clint_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_cmd_ready = system_clint_logic_io_bus_cmd_ready;
   assign system_clint_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_valid = system_clint_logic_io_bus_rsp_valid;
   assign system_clint_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_last = system_clint_logic_io_bus_rsp_payload_last;
@@ -2384,6 +2412,12 @@ module ICESugarProMinimal (
   assign system_vga_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_opcode = system_vga_logic_io_ctrl_rsp_payload_fragment_opcode;
   assign system_vga_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_data = system_vga_logic_io_ctrl_rsp_payload_fragment_data;
   assign system_vga_ctrl_slaveModel_arbiterGen_oneToOne_arbiter_rsp_payload_fragment_context = system_vga_logic_io_ctrl_rsp_payload_fragment_context;
+  assign system_vgaBus_vSync = system_vga_logic_io_vga_vSync;
+  assign system_vgaBus_hSync = system_vga_logic_io_vga_hSync;
+  assign system_vgaBus_colorEn = system_vga_logic_io_vga_colorEn;
+  assign system_vgaBus_color_r = system_vga_logic_io_vga_color_r;
+  assign system_vgaBus_color_g = system_vga_logic_io_vga_color_g;
+  assign system_vgaBus_color_b = system_vga_logic_io_vga_color_b;
   assign system_hdmiPhy_bridge_io_vga_color_r = ({3'd0,system_vga_logic_io_vga_color_r} <<< 3);
   assign system_hdmiPhy_bridge_io_vga_color_g = ({2'd0,system_vga_logic_io_vga_color_g} <<< 2);
   assign system_hdmiPhy_bridge_io_vga_color_b = ({3'd0,system_vga_logic_io_vga_color_b} <<< 3);
@@ -3262,6 +3296,11 @@ module BmbVgaCtrl (
   output     [4:0]    io_vga_color_r,
   output     [5:0]    io_vga_color_g,
   output     [4:0]    io_vga_color_b,
+  output              _zz_system_vga_frameStart,
+  output     [11:0]   _zz_system_vga_hctr,
+  output     [11:0]   _zz_system_vga_vctr,
+  output     [11:0]   _zz_system_vga_hstart,
+  output     [11:0]   _zz_system_vga_vstart,
   input               clkout_system,
   input               systemCdCtrl_logic_outputReset,
   input               clkout_vga,
@@ -3280,6 +3319,8 @@ module BmbVgaCtrl (
   wire       [5:0]    vga_ctrl_io_vga_color_g;
   wire       [4:0]    vga_ctrl_io_vga_color_b;
   wire                vga_ctrl_io_error;
+  wire       [11:0]   vga_ctrl__zz_system_vga_hctr;
+  wire       [11:0]   vga_ctrl__zz_system_vga_vctr;
   reg        [15:0]   _zz_vga_resized_payload_fragment_1;
   wire                ctrl_readHaltTrigger;
   wire                ctrl_writeHaltTrigger;
@@ -3392,6 +3433,8 @@ module BmbVgaCtrl (
     .io_vga_color_g             (vga_ctrl_io_vga_color_g[5:0]                  ), //o
     .io_vga_color_b             (vga_ctrl_io_vga_color_b[4:0]                  ), //o
     .io_error                   (vga_ctrl_io_error                             ), //o
+    ._zz_system_vga_hctr        (vga_ctrl__zz_system_vga_hctr[11:0]            ), //o
+    ._zz_system_vga_vctr        (vga_ctrl__zz_system_vga_vctr[11:0]            ), //o
     .clkout_vga                 (clkout_vga                                    ), //i
     .vgaCd_logic_outputReset    (vgaCd_logic_outputReset                       )  //i
   );
@@ -3524,6 +3567,11 @@ module BmbVgaCtrl (
   assign io_vga_color_r = vga_ctrl_io_vga_color_r;
   assign io_vga_color_g = vga_ctrl_io_vga_color_g;
   assign io_vga_color_b = vga_ctrl_io_vga_color_b;
+  assign _zz_system_vga_frameStart = vga_ctrl_io_frameStart;
+  assign _zz_system_vga_hctr = vga_ctrl__zz_system_vga_hctr;
+  assign _zz_system_vga_vctr = vga_ctrl__zz_system_vga_vctr;
+  assign _zz_system_vga_hstart = _zz_io_timings_h_syncStart;
+  assign _zz_system_vga_vstart = _zz_io_timings_v_syncStart;
   always @(posedge clkout_system) begin
     if(systemCdCtrl_logic_outputReset) begin
       _zz_io_ctrl_rsp_valid_2 <= 1'b0;
@@ -14307,6 +14355,8 @@ module VgaCtrl (
   output     [5:0]    io_vga_color_g,
   output     [4:0]    io_vga_color_b,
   output              io_error,
+  output     [11:0]   _zz_system_vga_hctr,
+  output     [11:0]   _zz_system_vga_vctr,
   input               clkout_vga,
   input               vgaCd_logic_outputReset
 );
@@ -14347,6 +14397,8 @@ module VgaCtrl (
   assign io_vga_color_r = io_pixels_payload_r;
   assign io_vga_color_g = io_pixels_payload_g;
   assign io_vga_color_b = io_pixels_payload_b;
+  assign _zz_system_vga_hctr = h_counter;
+  assign _zz_system_vga_vctr = v_counter;
   always @(posedge clkout_vga) begin
     if(vgaCd_logic_outputReset) begin
       h_counter <= 12'h0;
