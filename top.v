@@ -38,16 +38,16 @@ module top(
 	input wire io_jtag_tck, // input
 
   //lcd
-  // output wire [4:0] LCD_R,
-  // output wire [5:0] LCD_G,
-  // output wire [4:0] LCD_B,
-  // output wire LCD_CLK,
-  // output wire LCD_HSYNC,
-  // output wire LCD_VSYNC,
-  // output wire LCD_DEN
+  output wire [4:0] LCD_R,
+  output wire [5:0] LCD_G,
+  output wire [4:0] LCD_B,
+  output wire LCD_CLK,
+  output wire LCD_HSYNC,
+  output wire LCD_VSYNC,
+  output wire LCD_DEN
 );
 
-reg lcdclk;
+//reg lcdclk;
 reg[19:0] counter; // RESET COUNTER
 
 // Reset Logic
@@ -62,11 +62,11 @@ always @(posedge clk25) begin
       reset <= 1'b1;
     end
   end
-  lcdclk <= !lcdclk;
+  //lcdclk <= !lcdclk;
 end
 
 
-assign  LCD_CLK     = lcdclk ;
+//assign  LCD_CLK     = lcdclk ;
 
 // wire[31:0] io_gpioA_read;
 //wire[31:0] io_gpioA_write;
@@ -85,6 +85,7 @@ ICESugarProMinimal u_saxon (
   .clocking_clk25m(clk25),
   .clocking_resetn(reset),
   .clocking_sdram_clk(sdram_clock), //out
+  .clocking_vga_clk(LCD_CLK),
 
   .system_cpu_jtag_tms(io_jtag_tms),
   .system_cpu_jtag_tdi(io_jtag_tdi),
@@ -100,6 +101,13 @@ ICESugarProMinimal u_saxon (
   .system_phyA_sdram_RASn(sdram_ras_n),
   .system_phyA_sdram_WEn(sdram_we_n),
   .system_phyA_sdram_DQ(sdram_dq),
+
+  .system_vgaBus_vSync(LCD_VSYNC),
+  .system_vgaBus_hSync(LCD_HSYNC),
+  .system_vgaBus_colorEn(LCD_DEN),
+  .system_vgaBus_color_r(LCD_R),
+  .system_vgaBus_color_g(LCD_G),
+  .system_vgaBus_color_b(LCD_B),
 
   .system_hdmiPhy_gpdi_dp(gpdi_dp),
   .system_hdmiPhy_gpdi_dn(gpdi_dn),
